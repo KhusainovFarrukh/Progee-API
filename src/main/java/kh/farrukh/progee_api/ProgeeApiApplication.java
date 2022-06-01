@@ -1,0 +1,13 @@
+package kh.farrukh.progee_api;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ProgeeApiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ProgeeApiApplication.class, args);
+    }
+
+}

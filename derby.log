@@ -1,0 +1,16 @@
+----------------------------------------------------------------
+Wed Jun 01 17:09:35 UZT 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0181-1f2b-d5b8-0000041182d0 
+on database directory memory:/home/farrukh_kh/IdeaProjects/Progee API/f0004d5b-e49a-404d-9ecc-efc67d79582d with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5c8da962 
+Loaded from file:/home/farrukh_kh/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=11.0.15+10
+user.dir=/home/farrukh_kh/IdeaProjects/Progee API
+os.name=Linux
+os.arch=amd64
+os.version=5.9.11-3-MANJARO
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Jun 01 17:16:51 UZT 2022:
+Shutting down instance a816c00e-0181-1f2b-d5b8-0000041182d0 on database directory memory:/home/farrukh_kh/IdeaProjects/Progee API/f0004d5b-e49a-404d-9ecc-efc67d79582d with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5c8da962 
