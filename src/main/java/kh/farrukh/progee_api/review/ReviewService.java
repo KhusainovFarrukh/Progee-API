@@ -26,44 +26,46 @@ public class ReviewService {
     public Review getReviewById(long languageId, long id) {
         checkLanguageId(languageId);
         return reviewRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Review", id)
+                () -> new ResourceNotFoundException("Review", "id", id)
         );
     }
 
-    public void addReview(long languageId, Review review) {
+    public Review addReview(long languageId, Review review) {
         checkLanguageId(languageId);
         review.setLanguageId(languageId);
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     @Transactional
-    public void updateReview(long languageId, long id, Review review) {
+    public Review updateReview(long languageId, long id, Review review) {
         checkLanguageId(languageId);
         review.setLanguageId(languageId);
-        Review reviewToUpdate = reviewRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Review", id)
+        Review existingReview = reviewRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        reviewToUpdate.setAuthor(review.getAuthor());
-        reviewToUpdate.setBody(review.getBody());
-        reviewToUpdate.setDownVotes(review.getDownVotes());
-        reviewToUpdate.setUpVotes(review.getUpVotes());
-        reviewToUpdate.setValue(review.getValue());
-        reviewToUpdate.setCreatedAt(review.getCreatedAt());
-        reviewToUpdate.setLanguageId(review.getLanguage().getId());
+        existingReview.setAuthor(review.getAuthor());
+        existingReview.setBody(review.getBody());
+        existingReview.setDownVotes(review.getDownVotes());
+        existingReview.setUpVotes(review.getUpVotes());
+        existingReview.setValue(review.getValue());
+        existingReview.setCreatedAt(review.getCreatedAt());
+        existingReview.setLanguageId(review.getLanguage().getId());
+
+        return existingReview;
     }
 
     public void deleteReview(long languageId, long id) {
         checkLanguageId(languageId);
         if (!reviewRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Review", id);
+            throw new ResourceNotFoundException("Review", "id", id);
         }
         reviewRepository.deleteById(id);
     }
 
     private void checkLanguageId(long languageId) {
         if (!languageRepository.existsById(languageId)) {
-            throw new ResourceNotFoundException("Language", languageId);
+            throw new ResourceNotFoundException("Language", "id", languageId);
         }
     }
 }

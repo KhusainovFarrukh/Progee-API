@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/languages")
+@RequestMapping("api/v1/languages")
 public class LanguageController {
 
     private final LanguageService languageService;
@@ -37,8 +37,8 @@ public class LanguageController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteLanguage(@PathVariable long id) {
+    public ResponseEntity<Void> deleteLanguage(@PathVariable long id) {
         languageService.deleteLanguage(id);
-        return new ResponseEntity<>("Language deleted successfully", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

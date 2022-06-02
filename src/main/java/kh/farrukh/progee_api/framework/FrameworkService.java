@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.framework;
 
 import kh.farrukh.progee_api.language.LanguageRepository;
-import kh.farrukh.progee_api.utils.exception.ResourceDuplicateNameException;
+import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,43 +27,45 @@ public class FrameworkService {
     public Framework getFrameworkById(long languageId, long id) {
         checkLanguageId(languageId);
         return frameworkRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Framework", id)
+                () -> new ResourceNotFoundException("Framework", "id", id)
         );
     }
 
-    public void addFramework(long languageId, Framework framework) {
+    public Framework addFramework(long languageId, Framework framework) {
         checkLanguageId(languageId);
         if (frameworkRepository.existsByName(framework.getName())) {
-            throw new ResourceDuplicateNameException("Framework", framework.getName());
+            throw new DuplicateResourceException("Framework", "name", framework.getName());
         }
         framework.setLanguageId(languageId);
-        frameworkRepository.save(framework);
+        return frameworkRepository.save(framework);
     }
 
     @Transactional
-    public void updateFramework(long languageId, long id, Framework framework) {
+    public Framework updateFramework(long languageId, long id, Framework framework) {
         checkLanguageId(languageId);
         framework.setLanguageId(languageId);
-        Framework frameworkToUpdate = frameworkRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Framework", id)
+        Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Framework", "id", id)
         );
 
-        frameworkToUpdate.setName(framework.getName());
-        frameworkToUpdate.setDescription(framework.getDescription());
-        frameworkToUpdate.setLanguageId(framework.getLanguage().getId());
+        existingFramework.setName(framework.getName());
+        existingFramework.setDescription(framework.getDescription());
+        existingFramework.setLanguageId(framework.getLanguage().getId());
+
+        return existingFramework;
     }
 
     public void deleteFramework(long languageId, long id) {
         checkLanguageId(languageId);
         if (!frameworkRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Framework", id);
+            throw new ResourceNotFoundException("Framework", "id", id);
         }
         frameworkRepository.deleteById(id);
     }
 
     private void checkLanguageId(long languageId) {
         if (!languageRepository.existsById(languageId)) {
-            throw new ResourceNotFoundException("Language", languageId);
+            throw new ResourceNotFoundException("Language", "id", languageId);
         }
     }
 }

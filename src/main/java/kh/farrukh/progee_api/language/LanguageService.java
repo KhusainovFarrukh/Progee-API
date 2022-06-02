@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.language;
 
-import kh.farrukh.progee_api.utils.exception.ResourceDuplicateNameException;
+import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -22,33 +22,33 @@ public class LanguageService {
 
     public Language getLanguageById(long id) {
         return languageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Language", id)
+                () -> new ResourceNotFoundException("Language", "id", id)
         );
     }
 
     public Language addLanguage(Language language) {
         if (languageRepository.existsByName(language.getName())) {
-            throw new ResourceDuplicateNameException("Language", language.getName());
+            throw new DuplicateResourceException("Language", "name", language.getName());
         }
         return languageRepository.save(language);
     }
 
     @Transactional
     public Language updateLanguage(long id, Language language) {
-        Language languageToUpdate = languageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Language", id)
+        Language existingLanguage = languageRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", id)
         );
 
-        languageToUpdate.setName(language.getName());
-        languageToUpdate.setDescription(language.getDescription());
-        languageToUpdate.setHasSamples(language.getHasSamples());
+        existingLanguage.setName(language.getName());
+        existingLanguage.setDescription(language.getDescription());
+        existingLanguage.setHasSamples(language.getHasSamples());
 
-        return languageToUpdate;
+        return existingLanguage;
     }
 
     public void deleteLanguage(long id) {
         if (!languageRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Language", id);
+            throw new ResourceNotFoundException("Language", "id", id);
         }
         languageRepository.deleteById(id);
     }
