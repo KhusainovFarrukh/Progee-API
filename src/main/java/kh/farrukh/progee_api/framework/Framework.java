@@ -5,6 +5,7 @@ import kh.farrukh.progee_api.language.Language;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "frameworks")
 public class Framework {
 
     @Id

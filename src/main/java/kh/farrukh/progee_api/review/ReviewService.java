@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.review;
 
 import kh.farrukh.progee_api.language.LanguageRepository;
+import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,7 +26,7 @@ public class ReviewService {
     public Review getReviewById(long languageId, long id) {
         checkLanguageId(languageId);
         return reviewRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Review with id " + id + " does not exist")
+                () -> new ResourceNotFoundException("Review", id)
         );
     }
 
@@ -40,7 +41,7 @@ public class ReviewService {
         checkLanguageId(languageId);
         review.setLanguageId(languageId);
         Review reviewToUpdate = reviewRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Review with id " + id + " does not exist")
+                () -> new ResourceNotFoundException("Review", id)
         );
 
         reviewToUpdate.setAuthor(review.getAuthor());
@@ -55,14 +56,14 @@ public class ReviewService {
     public void deleteReview(long languageId, long id) {
         checkLanguageId(languageId);
         if (!reviewRepository.existsById(id)) {
-            throw new IllegalStateException("Review with id " + id + " does not exist");
+            throw new ResourceNotFoundException("Review", id);
         }
         reviewRepository.deleteById(id);
     }
 
     private void checkLanguageId(long languageId) {
         if (!languageRepository.existsById(languageId)) {
-            throw new IllegalStateException("Language with id " + languageId + " does not exist");
+            throw new ResourceNotFoundException("Language", languageId);
         }
     }
 }

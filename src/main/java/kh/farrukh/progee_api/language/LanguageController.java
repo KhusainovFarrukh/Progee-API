@@ -22,8 +22,8 @@ public class LanguageController {
     }
 
     @GetMapping("{id}")
-    public Language getLanguageById(@PathVariable long id) {
-        return languageService.getLanguageById(id);
+    public ResponseEntity<Language> getLanguageById(@PathVariable long id) {
+        return new ResponseEntity<>(languageService.getLanguageById(id), HttpStatus.OK);
     }
 
     @PostMapping
