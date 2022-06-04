@@ -1,11 +1,13 @@
-package kh.farrukh.progee_api.framework;
+package kh.farrukh.progee_api.endpoints.framework;
 
-import kh.farrukh.progee_api.language.Language;
+import kh.farrukh.progee_api.endpoints.language.Language;
 
 import javax.persistence.*;
 
+import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_FRAMEWORK;
+
 @Entity
-@Table(name = "frameworks")
+@Table(name = TABLE_NAME_FRAMEWORK)
 public class Framework {
 
     @Id

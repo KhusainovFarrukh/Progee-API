@@ -1,13 +1,15 @@
-package kh.farrukh.progee_api.review;
+package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kh.farrukh.progee_api.language.Language;
+import kh.farrukh.progee_api.endpoints.language.Language;
 
 import javax.persistence.*;
 import java.util.Date;
 
+import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
+
 @Entity
-@Table(name = "reviews")
+@Table(name = TABLE_NAME_REVIEW)
 public class Review {
 
     @Id

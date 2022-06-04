@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.review;
+package kh.farrukh.progee_api.endpoints.review;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

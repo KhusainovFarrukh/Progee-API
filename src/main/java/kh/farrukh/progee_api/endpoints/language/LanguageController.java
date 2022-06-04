@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.language;
+package kh.farrukh.progee_api.endpoints.language;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LANGUAGE;
+
 @RestController
-@RequestMapping("api/v1/languages")
+@RequestMapping(ENDPOINT_LANGUAGE)
 public class LanguageController {
 
     private final LanguageService languageService;

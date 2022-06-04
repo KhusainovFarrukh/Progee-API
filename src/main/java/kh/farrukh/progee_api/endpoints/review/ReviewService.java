@@ -1,6 +1,6 @@
-package kh.farrukh.progee_api.review;
+package kh.farrukh.progee_api.endpoints.review;
 
-import kh.farrukh.progee_api.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 

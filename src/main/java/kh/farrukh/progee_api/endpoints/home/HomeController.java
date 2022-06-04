@@ -1,11 +1,13 @@
-package kh.farrukh.progee_api.home;
+package kh.farrukh.progee_api.endpoints.home;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_HOME;
+
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping(ENDPOINT_HOME)
 public class HomeController {
 
     @GetMapping

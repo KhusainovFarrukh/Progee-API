@@ -5,7 +5,7 @@ on database directory memory:/home/farrukh_kh/IdeaProjects/Progee API/f0004d5b-e
 Loaded from file:/home/farrukh_kh/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=11.0.15+10
-user.dir=/home/farrukh_kh/IdeaProjects/Progee API
+appUser.dir=/home/farrukh_kh/IdeaProjects/Progee API
 os.name=Linux
 os.arch=amd64
 os.version=5.9.11-3-MANJARO

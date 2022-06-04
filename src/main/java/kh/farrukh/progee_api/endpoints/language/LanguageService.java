@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.language;
+package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;

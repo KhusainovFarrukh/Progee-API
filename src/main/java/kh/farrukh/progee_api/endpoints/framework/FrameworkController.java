@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.framework;
+package kh.farrukh.progee_api.endpoints.framework;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_FRAMEWORK;
+
 @RestController
-@RequestMapping("api/v1/languages/{languageId}/frameworks")
+@RequestMapping(ENDPOINT_FRAMEWORK)
 public class FrameworkController {
 
     private final FrameworkService frameworkService;
@@ -21,7 +23,7 @@ public class FrameworkController {
         return new ResponseEntity<>(frameworkService.getFrameworksByLanguage(languageId), HttpStatus.OK);
     }
 
-    @GetMapping(path = "{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Framework> getFrameworkById(@PathVariable long languageId, @PathVariable long id) {
         return new ResponseEntity<>(frameworkService.getFrameworkById(languageId, id), HttpStatus.OK);
     }
@@ -31,7 +33,7 @@ public class FrameworkController {
         return new ResponseEntity<>(frameworkService.addFramework(languageId, framework), HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Framework> updateFramework(
             @PathVariable long languageId,
             @PathVariable long id,
@@ -40,7 +42,7 @@ public class FrameworkController {
         return new ResponseEntity<>(frameworkService.updateFramework(languageId, id, framework), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteFramework(@PathVariable long languageId, @PathVariable long id) {
         frameworkService.deleteFramework(languageId, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

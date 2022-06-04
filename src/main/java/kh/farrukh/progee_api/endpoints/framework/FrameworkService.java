@@ -1,6 +1,6 @@
-package kh.farrukh.progee_api.framework;
+package kh.farrukh.progee_api.endpoints.framework;
 
-import kh.farrukh.progee_api.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

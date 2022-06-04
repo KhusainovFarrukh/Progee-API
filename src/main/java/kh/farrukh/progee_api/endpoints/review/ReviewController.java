@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.review;
+package kh.farrukh.progee_api.endpoints.review;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
+
 @RestController
-@RequestMapping("api/v1/languages/{languageId}/reviews")
+@RequestMapping(ENDPOINT_REVIEW)
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -21,7 +23,7 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.getReviewsByLanguage(languageId), HttpStatus.OK);
     }
 
-    @GetMapping(path = "{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Review> getReviewById(@PathVariable long languageId, @PathVariable long id) {
         return new ResponseEntity<>(reviewService.getReviewById(languageId, id), HttpStatus.OK);
     }
@@ -31,7 +33,7 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.addReview(languageId, review), HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Review> updateLanguage(
             @PathVariable long languageId,
             @PathVariable long id,
@@ -40,7 +42,7 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.updateReview(languageId, id, review), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteLanguage(@PathVariable long languageId, @PathVariable long id) {
         reviewService.deleteReview(languageId, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

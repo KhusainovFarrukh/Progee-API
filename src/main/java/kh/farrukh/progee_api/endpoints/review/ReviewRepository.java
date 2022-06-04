@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.review;
+package kh.farrukh.progee_api.endpoints.review;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

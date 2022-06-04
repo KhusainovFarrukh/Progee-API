@@ -1,11 +1,13 @@
-package kh.farrukh.progee_api.language;
+package kh.farrukh.progee_api.endpoints.language;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
+import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_LANGUAGE;
+
 @Entity
-@Table(name = "languages")
+@Table(name = TABLE_NAME_LANGUAGE)
 public class Language {
 
     @Id
