@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api.endpoints.user;
 
-import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
@@ -20,12 +19,10 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -44,18 +41,6 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    @Transactional
-    public void addRoleToUser(String roleTitle, String username) {
-        Role role = roleRepository.findByTitle(roleTitle).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "title", roleTitle)
-        );
-        AppUser appUser = userRepository.findByUsername(username).orElseThrow(
-                () -> new ResourceNotFoundException("User", "username", username)
-        );
-
-        appUser.getRoles().add(role);
-    }
-
     public List<AppUser> getUsers() {
         return userRepository.findAll();
     }
@@ -66,25 +51,12 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public AppUser getUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(
-                () -> new ResourceNotFoundException("User", "username", username)
-        );
-    }
-
     public AppUser addUser(AppUser appUser) {
         if (userRepository.existsByUsername(appUser.getUsername())) {
             throw new DuplicateResourceException("User", "username", appUser.getUsername());
         }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
-    }
-
-    public Role addRole(Role role) {
-        if (roleRepository.existsByTitle(role.getTitle())) {
-            throw new DuplicateResourceException("Role", "title", role.getTitle());
-        }
-        return roleRepository.save(role);
     }
 
     @Transactional

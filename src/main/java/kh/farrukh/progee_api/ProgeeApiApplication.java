@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api;
 
+import kh.farrukh.progee_api.endpoints.auth.AuthService;
+import kh.farrukh.progee_api.endpoints.role.RoleService;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.endpoints.role.Role;
@@ -24,22 +26,22 @@ public class ProgeeApiApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserService userService) {
+    CommandLineRunner run(UserService userService, RoleService roleService, AuthService authService) {
         return args -> {
-            userService.addRole(new Role(1, "SUPER_ADMIN"));
-            userService.addRole(new Role(2, "ADMIN"));
-            userService.addRole(new Role(3, "USER"));
+            roleService.addRole(new Role(1, "SUPER_ADMIN"));
+            roleService.addRole(new Role(2, "ADMIN"));
+            roleService.addRole(new Role(3, "USER"));
 
             userService.addUser(new AppUser(1, "Farrukh", "Khusainov", "farrukh@mail.com", "farrukh_kh", "1234", new ArrayList<>()));
             userService.addUser(new AppUser(2, "Hamdam", "Unknown", "hamdam@mail.com", "hamdam_u", "1234", new ArrayList<>()));
             userService.addUser(new AppUser(3, "User", "Userov", "user@mail.com", "user_u", "1234", new ArrayList<>()));
 
-            userService.addRoleToUser("SUPER_ADMIN", "farrukh_kh");
-            userService.addRoleToUser("ADMIN", "farrukh_kh");
-            userService.addRoleToUser("USER", "farrukh_kh");
-            userService.addRoleToUser("ADMIN", "hamdam_u");
-            userService.addRoleToUser("USER", "hamdam_u");
-            userService.addRoleToUser("USER", "user_u");
+            authService.addRoleToUser("SUPER_ADMIN", "farrukh_kh");
+            authService.addRoleToUser("ADMIN", "farrukh_kh");
+            authService.addRoleToUser("USER", "farrukh_kh");
+            authService.addRoleToUser("ADMIN", "hamdam_u");
+            authService.addRoleToUser("USER", "hamdam_u");
+            authService.addRoleToUser("USER", "user_u");
         };
     }
 
