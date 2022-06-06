@@ -16,6 +16,10 @@ import java.io.IOException;
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LOGIN;
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REFRESH_TOKEN;
 
+/**
+ * If the request is not for the login or refresh token endpoints, then decode the JWT and set the authentication in the
+ * security context
+ */
 public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
