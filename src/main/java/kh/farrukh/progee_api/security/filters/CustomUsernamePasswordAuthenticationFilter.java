@@ -1,8 +1,11 @@
 package kh.farrukh.progee_api.security.filters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.security.LoginRequest;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,26 +31,30 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
      * This function is called when the user submits the login form. It takes the username and password from the form,
      * creates a UsernamePasswordAuthenticationToken, and passes it to the AuthenticationManager
      *
-     * @param request The request object that contains the username and password.
+     * @param request  The request object that contains the username and password.
      * @param response The response object that will be used to send the token to the client.
      * @return An Authentication object.
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        LoginRequest loginRequest;
 
+        try {
+            loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+        } catch (IOException e) {
+            throw new AuthenticationServiceException(e.getMessage(), e);
+        }
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, password);
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
     /**
      * If the user is authenticated, generate a JWT token and send it in the response.
      *
-     * @param request The request object
-     * @param response The response object that will be sent to the client.
-     * @param chain The FilterChain object that is used to invoke the next filter in the chain.
+     * @param request        The request object
+     * @param response       The response object that will be sent to the client.
+     * @param chain          The FilterChain object that is used to invoke the next filter in the chain.
      * @param authentication The Authentication object that was created by the AuthenticationManager.
      */
     @Override

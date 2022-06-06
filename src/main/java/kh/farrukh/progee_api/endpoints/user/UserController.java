@@ -21,8 +21,24 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<AppUser> getLanguageById(@PathVariable long id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<AppUser> addUser(@RequestBody AppUser appUser) {
         return new ResponseEntity<>(userService.addUser(appUser), HttpStatus.CREATED);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<AppUser> updateLanguage(@PathVariable long id, @RequestBody AppUser user) {
+        return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteLanguage(@PathVariable long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
