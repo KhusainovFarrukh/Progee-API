@@ -1,26 +1,18 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
 public enum ReviewValue {
     DISLIKE(-1),
     DONT_HAVE_PRACTICE(0),
     WANT_TO_LEARN(1),
     LIKE(2);
 
-    private int value;
-
-    ReviewValue(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
+    private final int value;
 
     @JsonCreator
     public static ReviewValue fromIntValue(int intValue) {

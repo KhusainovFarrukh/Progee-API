@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.security;
 
-import kh.farrukh.progee_api.security.filter.CustomUsernamePasswordAuthenticationFilter;
+import kh.farrukh.progee_api.security.filters.CustomUsernamePasswordAuthenticationFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

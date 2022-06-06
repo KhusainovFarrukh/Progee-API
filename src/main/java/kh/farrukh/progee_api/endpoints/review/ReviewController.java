@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.review;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
 
 @RestController
 @RequestMapping(ENDPOINT_REVIEW)
+@RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
-
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Review>> getReviewsByLanguage(@PathVariable long languageId) {

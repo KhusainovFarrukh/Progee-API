@@ -1,9 +1,11 @@
 package kh.farrukh.progee_api.utils.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+@Getter
 public class DuplicateResourceException extends RuntimeException{
 
     private final String resourceName;
@@ -15,17 +17,5 @@ public class DuplicateResourceException extends RuntimeException{
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public Object getFieldValue() {
-        return fieldValue;
     }
 }

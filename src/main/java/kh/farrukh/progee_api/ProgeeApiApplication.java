@@ -1,10 +1,10 @@
 package kh.farrukh.progee_api;
 
 import kh.farrukh.progee_api.endpoints.auth.AuthService;
+import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleService;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserService;
-import kh.farrukh.progee_api.endpoints.role.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,9 +32,9 @@ public class ProgeeApiApplication {
             roleService.addRole(new Role(2, "ADMIN"));
             roleService.addRole(new Role(3, "USER"));
 
-            userService.addUser(new AppUser(1, "Farrukh", "Khusainov", "farrukh@mail.com", "farrukh_kh", "1234", new ArrayList<>()));
-            userService.addUser(new AppUser(2, "Hamdam", "Unknown", "hamdam@mail.com", "hamdam_u", "1234", new ArrayList<>()));
-            userService.addUser(new AppUser(3, "User", "Userov", "user@mail.com", "user_u", "1234", new ArrayList<>()));
+            userService.addUser(new AppUser(1, "Farrukh", "Khusainov", "farrukh_kh", "1234", new ArrayList<>()));
+            userService.addUser(new AppUser(2, "Hamdam", "Unknown", "hamdam_u", "1234", new ArrayList<>()));
+            userService.addUser(new AppUser(3, "User", "Userov", "user_u", "1234", new ArrayList<>()));
 
             authService.addRoleToUser("SUPER_ADMIN", "farrukh_kh");
             authService.addRoleToUser("ADMIN", "farrukh_kh");

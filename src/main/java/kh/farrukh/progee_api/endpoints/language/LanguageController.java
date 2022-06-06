@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LANGUAG
 
 @RestController
 @RequestMapping(ENDPOINT_LANGUAGE)
+@RequiredArgsConstructor
 public class LanguageController {
 
     private final LanguageService languageService;
-
-    public LanguageController(LanguageService languageService) {
-        this.languageService = languageService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Language>> getLanguages() {

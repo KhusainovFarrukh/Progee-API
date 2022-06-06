@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.role;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,13 +12,10 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_ROLE;
 
 @RestController
 @RequestMapping(ENDPOINT_ROLE)
+@RequiredArgsConstructor
 public class RoleController {
 
     private final RoleService roleService;
-
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
 
     @PostMapping
     public ResponseEntity<Role> addUser(@RequestBody Role role) {

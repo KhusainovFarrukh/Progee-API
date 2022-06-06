@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_FRAMEWO
 
 @RestController
 @RequestMapping(ENDPOINT_FRAMEWORK)
+@RequiredArgsConstructor
 public class FrameworkController {
 
     private final FrameworkService frameworkService;
-
-    public FrameworkController(FrameworkService frameworkService) {
-        this.frameworkService = frameworkService;
-    }
 
     @GetMapping
     public ResponseEntity<List<Framework>> getFrameworksByLanguage(@PathVariable long languageId) {

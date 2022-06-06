@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.security;
 
-import kh.farrukh.progee_api.security.filter.CustomJWTAuthorizationFilter;
+import kh.farrukh.progee_api.security.filters.CustomJWTAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -59,6 +59,5 @@ public class SecurityConfiguration {
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(SUPER_ADMIN);
         http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(SUPER_ADMIN);
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(SUPER_ADMIN);
-
     }
 }

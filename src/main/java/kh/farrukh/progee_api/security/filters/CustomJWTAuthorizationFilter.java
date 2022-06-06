@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.security.filter;
+package kh.farrukh.progee_api.security.filters;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.security.utils.JWTUtils;

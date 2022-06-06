@@ -2,19 +2,17 @@ package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LanguageService {
 
     private final LanguageRepository languageRepository;
-
-    public LanguageService(LanguageRepository languageRepository) {
-        this.languageRepository = languageRepository;
-    }
 
     public List<Language> getLanguages() {
         return languageRepository.findAll();

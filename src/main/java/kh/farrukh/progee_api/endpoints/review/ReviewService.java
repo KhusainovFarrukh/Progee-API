@@ -2,21 +2,18 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final LanguageRepository languageRepository;
-
-    public ReviewService(ReviewRepository reviewRepository, LanguageRepository languageRepository) {
-        this.reviewRepository = reviewRepository;
-        this.languageRepository = languageRepository;
-    }
 
     public List<Review> getReviewsByLanguage(long languageId) {
         checkLanguageId(languageId);
