@@ -9,12 +9,20 @@ import org.springframework.http.HttpStatus;
 public class ApiException extends RuntimeException {
 
     private HttpStatus httpStatus;
+    private String messageId;
+    private Object[] messageArgs;
 
-    public ApiException(String message) {
-        super(message);
+    public ApiException(String message, Throwable cause, HttpStatus httpStatus, String messageId, Object[] messageArgs) {
+        super(message, cause);
+        this.httpStatus = httpStatus;
+        this.messageId = messageId;
+        this.messageArgs = messageArgs;
     }
 
-    public ApiException(String message, Throwable cause) {
-        super(message, cause);
+    public ApiException(String message, HttpStatus httpStatus, String messageId, Object[] messageArgs) {
+        super(message);
+        this.httpStatus = httpStatus;
+        this.messageId = messageId;
+        this.messageArgs = messageArgs;
     }
 }
