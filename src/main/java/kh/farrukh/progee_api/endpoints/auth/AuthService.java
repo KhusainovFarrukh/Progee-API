@@ -6,7 +6,7 @@ import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
-import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

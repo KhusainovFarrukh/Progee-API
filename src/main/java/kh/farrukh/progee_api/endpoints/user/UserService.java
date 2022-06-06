@@ -1,8 +1,7 @@
 package kh.farrukh.progee_api.endpoints.user;
 
-import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
-import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.exception.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

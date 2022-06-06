@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.endpoints.role;
 
-import kh.farrukh.progee_api.utils.exception.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

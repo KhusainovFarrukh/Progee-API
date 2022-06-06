@@ -1,12 +1,12 @@
-package kh.farrukh.progee_api.utils.exception;
+package kh.farrukh.progee_api.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
 @Getter
-public class ResourceNotFoundException extends RuntimeException {
+@JsonIgnoreProperties
+public class ResourceNotFoundException extends ApiException {
 
     private final String resourceName;
     private final String fieldName;
@@ -17,5 +17,6 @@ public class ResourceNotFoundException extends RuntimeException {
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
+        super.setHttpStatus(HttpStatus.NOT_FOUND);
     }
 }

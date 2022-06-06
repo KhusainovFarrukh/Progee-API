@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
-import kh.farrukh.progee_api.utils.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
