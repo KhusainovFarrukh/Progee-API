@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.security;
+package kh.farrukh.progee_api.security.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

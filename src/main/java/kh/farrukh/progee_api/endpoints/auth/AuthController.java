@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
-import kh.farrukh.progee_api.endpoints.role.AddRoleToUserForm;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REFRESH_TOKEN;
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_ROLE_TO_USER;
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,10 +21,9 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping(ENDPOINT_ROLE_TO_USER)
-    public ResponseEntity<Void> addRoleToUser(@RequestBody AddRoleToUserForm addRoleToUserForm) {
-        authService.addRoleToUser(addRoleToUserForm.getRole().getTitle(), addRoleToUserForm.getAppUser().getUsername());
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(ENDPOINT_REGISTRATION)
+    public ResponseEntity<AppUser> register(@RequestBody RegistrationRequest registrationRequest) {
+        return new ResponseEntity<>(authService.register(registrationRequest), HttpStatus.OK);
     }
 
     @GetMapping(ENDPOINT_REFRESH_TOKEN)

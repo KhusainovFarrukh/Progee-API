@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,21 +43,26 @@ public class JWTUtils {
      * @param request The request object is used to get the URL of the request.
      * @return A map of tokens and their expiration dates.
      */
-    public static Map<String, Object> generateTokens(User user, HttpServletRequest request) {
+    public static Map<String, Object> generateTokens(UserDetails user, HttpServletRequest request) {
         long currentMillis = System.currentTimeMillis();
         Date accessExpireDate = new Date(currentMillis + accessValidMillis);
         Date refreshExpireDate = new Date(currentMillis + refreshValidMillis);
 
         // Getting the roles of the user and converting them to a list of strings.
-        List<String> roles = user.getAuthorities()
+        String role = user.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()).stream()
+                .findFirst()
+                .orElseThrow(
+                        // TODO: 6/7/22 custom exception via exception handler
+                        () -> new RuntimeException("User don't have any role")
+                );
 
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(accessExpireDate)
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim(KEY_ROLES, roles)
+                .withClaim(KEY_ROLE, role)
                 .sign(algorithm);
 
         String refreshToken = JWT.create()
@@ -67,7 +72,7 @@ public class JWTUtils {
                 .sign(algorithm);
 
         Map<String, Object> data = new HashMap<>();
-        data.put(KEY_ROLES, roles);
+        data.put(KEY_ROLE, role);
         data.put(KEY_ACCESS_TOKEN, accessToken);
         data.put(KEY_REFRESH_TOKEN, refreshToken);
         data.put(KEY_ACCESS_TOKEN_EXPIRES, formatter.format(accessExpireDate));
@@ -101,12 +106,13 @@ public class JWTUtils {
      */
     public static UsernamePasswordAuthenticationToken getAuthenticationFromDecodedJWT(DecodedJWT decodedJWT) {
         String username = decodedJWT.getSubject();
-        Collection<SimpleGrantedAuthority> authorities = decodedJWT.getClaim(KEY_ROLES)
-                .asList(String.class)
-                .stream().map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        GrantedAuthority authority = new SimpleGrantedAuthority(
+                decodedJWT.getClaim(KEY_ROLE).asString()
+        );
 
-        return new UsernamePasswordAuthenticationToken(username, null, authorities);
+        return new UsernamePasswordAuthenticationToken(
+                username, null, Collections.singletonList(authority)
+        );
     }
 
     /**

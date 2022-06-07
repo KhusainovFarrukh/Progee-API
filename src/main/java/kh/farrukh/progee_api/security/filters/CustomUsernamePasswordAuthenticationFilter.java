@@ -1,15 +1,15 @@
 package kh.farrukh.progee_api.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.security.LoginRequest;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
+import kh.farrukh.progee_api.security.utils.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -59,7 +59,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
-        User user = (User) authentication.getPrincipal();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
         Map<String, Object> data = JWTUtils.generateTokens(user, request);
         JWTUtils.sendTokenInResponse(data, response);
     }

@@ -3,8 +3,6 @@ package kh.farrukh.progee_api.endpoints.user;
 import kh.farrukh.progee_api.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,16 +21,8 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = userRepository.findByUsername(username).orElseThrow(
+        return userRepository.findByEmail(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found in the database")
-        );
-
-        return new User(
-                appUser.getUsername(),
-                appUser.getPassword(),
-                appUser.getRoles().stream().map(
-                        (role) -> new SimpleGrantedAuthority(role.getTitle())
-                ).collect(Collectors.toList())
         );
     }
 
@@ -48,9 +37,7 @@ public class UserService implements UserDetailsService {
     }
 
     public AppUser addUser(AppUser appUser) {
-        if (userRepository.existsByUsername(appUser.getUsername())) {
-            throw new DuplicateResourceException("User", "username", appUser.getUsername());
-        }
+        checkIsUnique(appUser);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
     }
@@ -61,11 +48,13 @@ public class UserService implements UserDetailsService {
                 () -> new ResourceNotFoundException("User", "id", id)
         );
 
-        existingAppUser.setFirstName(appUser.getFirstName());
-        existingAppUser.setLastName(appUser.getLastName());
-        existingAppUser.setUsername(appUser.getUsername());
+        existingAppUser.setName(appUser.getName());
+        existingAppUser.setEmail(appUser.getEmail());
         existingAppUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        existingAppUser.setRoles(appUser.getRoles());
+        existingAppUser.setEnabled(appUser.isEnabled());
+        existingAppUser.setLocked(appUser.isLocked());
+        existingAppUser.setUniqueUsername(appUser.getUniqueUsername());
+        existingAppUser.setRole(appUser.getRole());
 
         return existingAppUser;
     }
@@ -75,5 +64,21 @@ public class UserService implements UserDetailsService {
             throw new ResourceNotFoundException("User", "id", id);
         }
         userRepository.deleteById(id);
+    }
+
+    public AppUser signUpUser(AppUser appUser) {
+        checkIsUnique(appUser);
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        // TODO: 6/7/22 email verification
+        return userRepository.save(appUser);
+    }
+
+    private void checkIsUnique(AppUser appUser) {
+        if (userRepository.existsByUniqueUsername(appUser.getUniqueUsername())) {
+            throw new DuplicateResourceException("User", "username", appUser.getUniqueUsername());
+        }
+        if (userRepository.existsByEmail(appUser.getEmail())) {
+            throw new DuplicateResourceException("User", "email", appUser.getUsername());
+        }
     }
 }
