@@ -33,17 +33,17 @@ public class FrameworkController {
     }
 
     @PostMapping
-    public ResponseEntity<Framework> addFramework(@PathVariable long languageId, @RequestBody Framework framework) {
-        return new ResponseEntity<>(frameworkService.addFramework(languageId, framework), HttpStatus.CREATED);
+    public ResponseEntity<Framework> addFramework(@PathVariable long languageId, @RequestBody FrameworkDTO frameworkDto) {
+        return new ResponseEntity<>(frameworkService.addFramework(languageId, frameworkDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Framework> updateFramework(
             @PathVariable long languageId,
             @PathVariable long id,
-            @RequestBody Framework framework
+            @RequestBody FrameworkDTO frameworkDto
     ) {
-        return new ResponseEntity<>(frameworkService.updateFramework(languageId, id, framework), HttpStatus.OK);
+        return new ResponseEntity<>(frameworkService.updateFramework(languageId, id, frameworkDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

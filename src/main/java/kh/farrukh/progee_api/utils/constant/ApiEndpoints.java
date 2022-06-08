@@ -11,6 +11,7 @@ public class ApiEndpoints {
     public static final String ENDPOINT_FRAMEWORK = "api/v1/languages/{languageId}/frameworks";
     public static final String ENDPOINT_REVIEW = "/api/v1/languages/{languageId}/reviews";
     public static final String ENDPOINT_USER = "/api/v1/users";
+    public static final String ENDPOINT_IMAGE = "/api/v1/images";
 
     public static String withChildEndpoints(String endpoint) {
         return endpoint + "/**";

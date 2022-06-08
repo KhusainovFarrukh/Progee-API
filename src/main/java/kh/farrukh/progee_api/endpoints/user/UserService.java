@@ -46,25 +46,37 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public AppUser addUser(AppUser appUser) {
+    public AppUser addUser(AppUserDTO appUserDto) {
+        AppUser appUser = new AppUser(appUserDto);
         checkIsUnique(appUser);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
     }
 
     @Transactional
-    public AppUser updateUser(long id, AppUser appUser) {
+    public AppUser updateUser(long id, AppUserDTO appUserDto) {
         AppUser existingAppUser = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
         );
 
-        existingAppUser.setName(appUser.getName());
-        existingAppUser.setEmail(appUser.getEmail());
-        existingAppUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        existingAppUser.setEnabled(appUser.isEnabled());
-        existingAppUser.setLocked(appUser.isLocked());
-        existingAppUser.setUniqueUsername(appUser.getUniqueUsername());
-        existingAppUser.setRole(appUser.getRole());
+        if (!appUserDto.getUsername().equals(existingAppUser.getUniqueUsername()) &&
+                userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
+            throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
+        }
+
+        if (!appUserDto.getEmail().equals(existingAppUser.getEmail()) &&
+                userRepository.existsByEmail(appUserDto.getEmail())) {
+            throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
+        }
+
+        existingAppUser.setName(appUserDto.getName());
+        existingAppUser.setEmail(appUserDto.getEmail());
+        existingAppUser.setPassword(passwordEncoder.encode(appUserDto.getPassword()));
+        existingAppUser.setEnabled(appUserDto.isEnabled());
+        existingAppUser.setLocked(appUserDto.isLocked());
+        existingAppUser.setUniqueUsername(appUserDto.getUsername());
+        existingAppUser.setRole(appUserDto.getRole());
+        existingAppUser.setImageId(appUserDto.getImageId());
 
         return existingAppUser;
     }
@@ -74,13 +86,6 @@ public class UserService implements UserDetailsService {
             throw new ResourceNotFoundException("User", "id", id);
         }
         userRepository.deleteById(id);
-    }
-
-    public AppUser signUpUser(AppUser appUser) {
-        checkIsUnique(appUser);
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        // TODO: 6/7/22 email verification
-        return userRepository.save(appUser);
     }
 
     private void checkIsUnique(AppUser appUser) {

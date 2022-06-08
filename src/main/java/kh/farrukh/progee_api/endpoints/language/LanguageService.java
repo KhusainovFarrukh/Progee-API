@@ -34,7 +34,8 @@ public class LanguageService {
         );
     }
 
-    public Language addLanguage(Language language) {
+    public Language addLanguage(LanguageDTO languageDto) {
+        Language language = new Language(languageDto);
         if (languageRepository.existsByName(language.getName())) {
             throw new DuplicateResourceException("Language", "name", language.getName());
         }
@@ -42,13 +43,19 @@ public class LanguageService {
     }
 
     @Transactional
-    public Language updateLanguage(long id, Language language) {
+    public Language updateLanguage(long id, LanguageDTO languageDto) {
         Language existingLanguage = languageRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
 
-        existingLanguage.setName(language.getName());
-        existingLanguage.setDescription(language.getDescription());
+        if (!languageDto.getName().equals(existingLanguage.getName()) &&
+                languageRepository.existsByName(languageDto.getName())) {
+            throw new DuplicateResourceException("Language", "name", languageDto.getName());
+        }
+
+        existingLanguage.setName(languageDto.getName());
+        existingLanguage.setDescription(languageDto.getDescription());
+        existingLanguage.setImageId(languageDto.getImageId());
 
         return existingLanguage;
     }

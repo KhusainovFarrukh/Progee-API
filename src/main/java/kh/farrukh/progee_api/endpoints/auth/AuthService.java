@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
@@ -27,13 +28,17 @@ public class AuthService {
             // TODO: 6/7/22 custom exception via exception handler
             throw new RuntimeException("Email is not valid");
         }
-        return userService.signUpUser(
-                new AppUser(
+        return userService.addUser(
+                new AppUserDTO(
                         registrationRequest.getName(),
                         registrationRequest.getEmail(),
                         registrationRequest.getUsername(),
                         registrationRequest.getPassword(),
-                        UserRole.USER
+                        // TODO: 6/9/22 set default to false and implement email verification
+                        true,
+                        false,
+                        UserRole.USER,
+                        registrationRequest.getImageId()
                 )
         );
     }

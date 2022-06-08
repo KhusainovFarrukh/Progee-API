@@ -33,13 +33,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<AppUser> addUser(@RequestBody AppUser appUser) {
-        return new ResponseEntity<>(userService.addUser(appUser), HttpStatus.CREATED);
+    public ResponseEntity<AppUser> addUser(@RequestBody AppUserDTO appUserDto) {
+        return new ResponseEntity<>(userService.addUser(appUserDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AppUser> updateLanguage(@PathVariable long id, @RequestBody AppUser user) {
-        return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
+    public ResponseEntity<AppUser> updateLanguage(@PathVariable long id, @RequestBody AppUserDTO appUserDto) {
+        return new ResponseEntity<>(userService.updateUser(id, appUserDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

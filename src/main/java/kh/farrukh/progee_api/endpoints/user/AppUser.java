@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.endpoints.image.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,26 +42,46 @@ public class AppUser implements UserDetails {
     private boolean isLocked = false;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    @ManyToOne
+    private Image image;
 
-    public AppUser(String name,
-                   String email,
-                   String uniqueUsername,
-                   String password,
-                   UserRole role) {
+    public AppUser(AppUserDTO appUserDTO) {
+        this.name = appUserDTO.getName();
+        this.email = appUserDTO.getEmail();
+        this.uniqueUsername = appUserDTO.getUsername();
+        this.password = appUserDTO.getPassword();
+        this.role = appUserDTO.getRole();
+        this.isLocked = appUserDTO.isLocked();
+        this.isEnabled = appUserDTO.isEnabled();
+        setImageId(appUserDTO.getImageId());
+    }
+
+    public AppUser(
+            String name,
+            String email,
+            String uniqueUsername,
+            String password,
+            UserRole role,
+            long imageId
+    ) {
         this.name = name;
         this.email = email;
         this.uniqueUsername = uniqueUsername;
         this.password = password;
         this.role = role;
+        setImageId(imageId);
     }
 
-    public AppUser(String name,
-                   String email,
-                   String uniqueUsername,
-                   String password,
-                   boolean isEnabled,
-                   boolean isLocked,
-                   UserRole role) {
+    public AppUser(
+            String name,
+            String email,
+            String uniqueUsername,
+            String password,
+            boolean isEnabled,
+            boolean isLocked,
+            UserRole role,
+            long imageId
+    ) {
         this.name = name;
         this.email = email;
         this.uniqueUsername = uniqueUsername;
@@ -68,6 +89,7 @@ public class AppUser implements UserDetails {
         this.isEnabled = isEnabled;
         this.isLocked = isLocked;
         this.role = role;
+        setImageId(imageId);
     }
 
     @JsonIgnore
@@ -110,5 +132,9 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public void setImageId(long imageId) {
+        this.image = new Image(imageId, "");
     }
 }

@@ -39,7 +39,8 @@ public class FrameworkService {
         );
     }
 
-    public Framework addFramework(long languageId, Framework framework) {
+    public Framework addFramework(long languageId, FrameworkDTO frameworkDto) {
+        Framework framework = new Framework(frameworkDto);
         checkLanguageId(languageId);
         if (frameworkRepository.existsByName(framework.getName())) {
             throw new DuplicateResourceException("Framework", "name", framework.getName());
@@ -49,16 +50,20 @@ public class FrameworkService {
     }
 
     @Transactional
-    public Framework updateFramework(long languageId, long id, Framework framework) {
+    public Framework updateFramework(long languageId, long id, FrameworkDTO frameworkDto) {
         checkLanguageId(languageId);
-        framework.setLanguageId(languageId);
         Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
+        if (!frameworkDto.getName().equals(existingFramework.getName()) &&
+                languageRepository.existsByName(frameworkDto.getName())) {
+            throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
+        }
 
-        existingFramework.setName(framework.getName());
-        existingFramework.setDescription(framework.getDescription());
-        existingFramework.setLanguageId(framework.getLanguage().getId());
+        existingFramework.setLanguageId(languageId);
+        existingFramework.setName(frameworkDto.getName());
+        existingFramework.setDescription(frameworkDto.getDescription());
+        existingFramework.setImageId(frameworkDto.getImageId());
 
         return existingFramework;
     }

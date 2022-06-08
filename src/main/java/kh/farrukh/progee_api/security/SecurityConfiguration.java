@@ -41,6 +41,7 @@ public class SecurityConfiguration {
         ).permitAll();
 
         // Setting security for the other endpoints in the application.
+        setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
         setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
         setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_FRAMEWORK), http);
         setUserEditableEndpoint(withChildEndpoints(ENDPOINT_REVIEW), http);

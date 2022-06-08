@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,4 +13,6 @@ public class RegistrationRequest {
     private String username;
     private String email;
     private String password;
+    @JsonProperty("image_id")
+    private long imageId;
 }

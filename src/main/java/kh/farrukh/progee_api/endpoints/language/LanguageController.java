@@ -33,13 +33,13 @@ public class LanguageController {
     }
 
     @PostMapping
-    public ResponseEntity<Language> addLanguage(@RequestBody Language language) {
-        return new ResponseEntity<>(languageService.addLanguage(language), HttpStatus.CREATED);
+    public ResponseEntity<Language> addLanguage(@RequestBody LanguageDTO languageDto) {
+        return new ResponseEntity<>(languageService.addLanguage(languageDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Language> updateLanguage(@PathVariable long id, @RequestBody Language language) {
-        return new ResponseEntity<>(languageService.updateLanguage(id, language), HttpStatus.OK);
+    public ResponseEntity<Language> updateLanguage(@PathVariable long id, @RequestBody LanguageDTO languageDto) {
+        return new ResponseEntity<>(languageService.updateLanguage(id, languageDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
