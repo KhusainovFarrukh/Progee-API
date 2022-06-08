@@ -3,11 +3,14 @@ package kh.farrukh.progee_api.endpoints.framework;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
+import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +19,17 @@ public class FrameworkService {
     private final FrameworkRepository frameworkRepository;
     private final LanguageRepository languageRepository;
 
-    public List<Framework> getFrameworksByLanguage(long languageId) {
+    public PagingResponse<Framework> getFrameworksByLanguage(
+            long languageId,
+            int page,
+            int pageSize,
+            String sortBy,
+            String orderBy
+    ) {
         checkLanguageId(languageId);
-        return frameworkRepository.findByLanguage_Id(languageId);
+        return new PagingResponse<>(frameworkRepository.findByLanguage_Id(
+                languageId,
+                PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
     }
 
     public Framework getFrameworkById(long languageId, long id) {

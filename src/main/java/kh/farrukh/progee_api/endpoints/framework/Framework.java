@@ -26,14 +26,26 @@ public class Framework {
     @ManyToOne
     private Language language;
 
-    public Framework(long id, String name, String description, Boolean hasSamples, long languageId) {
+    public Framework(long id, String name, String description, long languageId) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.language = new Language(languageId, "", "", false);
+        this.language = new Language(languageId, "", "");
+    }
+
+    public Framework(String name, String description, long languageId) {
+        this.name = name;
+        this.description = description;
+        this.language = new Language(languageId, "", "");
+    }
+
+    public Framework(long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public void setLanguageId(long languageId) {
-        setLanguage(new Language(languageId, "", "", false));
+        setLanguage(new Language(languageId, "", ""));
     }
 }

@@ -2,11 +2,14 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
+import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,9 +18,18 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final LanguageRepository languageRepository;
 
-    public List<Review> getReviewsByLanguage(long languageId) {
+    public PagingResponse<Review> getReviewsByLanguage(
+            long languageId,
+            int page,
+            int pageSize,
+            String sortBy,
+            String orderBy
+    ) {
         checkLanguageId(languageId);
-        return reviewRepository.findByLanguage_Id(languageId);
+        return new PagingResponse<>(reviewRepository.findByLanguage_Id(
+                languageId,
+                PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+        ));
     }
 
     public Review getReviewById(long languageId, long id) {

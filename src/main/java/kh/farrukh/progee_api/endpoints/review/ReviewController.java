@@ -1,11 +1,10 @@
 package kh.farrukh.progee_api.endpoints.review;
 
+import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
 
@@ -17,8 +16,16 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<List<Review>> getReviewsByLanguage(@PathVariable long languageId) {
-        return new ResponseEntity<>(reviewService.getReviewsByLanguage(languageId), HttpStatus.OK);
+    public ResponseEntity<PagingResponse<Review>> getReviewsByLanguage(
+            @PathVariable long languageId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
+            @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
+            @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
+    ) {
+        return new ResponseEntity<>(reviewService.getReviewsByLanguage(
+                languageId, page, pageSize, sortBy, orderBy
+        ), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

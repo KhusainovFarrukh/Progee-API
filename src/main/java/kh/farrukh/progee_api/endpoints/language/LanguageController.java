@@ -1,11 +1,10 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LANGUAGE;
 
@@ -17,8 +16,15 @@ public class LanguageController {
     private final LanguageService languageService;
 
     @GetMapping
-    public ResponseEntity<List<Language>> getLanguages() {
-        return new ResponseEntity<>(languageService.getLanguages(), HttpStatus.OK);
+    public ResponseEntity<PagingResponse<Language>> getLanguages(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
+            @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
+            @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
+    ) {
+        return new ResponseEntity<>(
+                languageService.getLanguages(page, pageSize, sortBy, orderBy), HttpStatus.OK
+        );
     }
 
     @GetMapping("{id}")

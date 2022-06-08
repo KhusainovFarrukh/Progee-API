@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +21,9 @@ public class Language {
     @Column(unique = true)
     private String name;
     private String description;
-    @JsonProperty("has_samples")
-    private Boolean hasSamples;
+
+    public Language(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

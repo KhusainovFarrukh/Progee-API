@@ -28,14 +28,16 @@ public class AppUser implements UserDetails {
     private String name;
     @Column(unique = true)
     private String email;
-    @Column(unique = true)
+    @Column(name = "username", unique = true)
     @JsonProperty("username")
     private String uniqueUsername;
     private String password;
     @JsonProperty("is_enabled")
+    @Column(name = "is_enabled")
     // TODO: 6/7/22 set default to false and implement email verification
     private boolean isEnabled = true;
     @JsonProperty("is_locked")
+    @Column(name = "is_locked")
     private boolean isLocked = false;
     @Enumerated(EnumType.STRING)
     private UserRole role;

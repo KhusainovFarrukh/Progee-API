@@ -2,11 +2,14 @@ package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
+import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,8 +17,15 @@ public class LanguageService {
 
     private final LanguageRepository languageRepository;
 
-    public List<Language> getLanguages() {
-        return languageRepository.findAll();
+    public PagingResponse<Language> getLanguages(
+            int page,
+            int pageSize,
+            String sortBy,
+            String orderBy
+    ) {
+        return new PagingResponse<>(languageRepository.findAll(
+                PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+        ));
     }
 
     public Language getLanguageById(long id) {
@@ -39,7 +49,6 @@ public class LanguageService {
 
         existingLanguage.setName(language.getName());
         existingLanguage.setDescription(language.getDescription());
-        existingLanguage.setHasSamples(language.getHasSamples());
 
         return existingLanguage;
     }

@@ -1,11 +1,10 @@
 package kh.farrukh.progee_api.endpoints.user;
 
+import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_USER;
 
@@ -17,8 +16,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<AppUser>> getUsers() {
-        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    public ResponseEntity<PagingResponse<AppUser>> getUsers(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
+            @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
+            @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
+    ) {
+        return new ResponseEntity<>(
+                userService.getUsers(page, pageSize, sortBy, orderBy), HttpStatus.OK
+        );
     }
 
     @GetMapping("{id}")

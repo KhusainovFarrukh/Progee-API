@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
 
@@ -25,29 +25,43 @@ public class Review {
     private String body;
     private ReviewValue value;
     @JsonProperty("up_votes")
+    @Column(name = "up_votes")
     private int upVotes;
     @JsonProperty("down_votes")
+    @Column(name = "down_votes")
     private int downVotes;
     @Transient
     private int score;
     @JsonProperty("created_at")
-    private Date createdAt;
+    @Column(name = "created_at")
+    private ZonedDateTime createdAt;
 
     @ManyToOne
     private Language language;
 
-    public Review(long id, String author, String body, ReviewValue value, int upVotes, int downVotes, Date createdAt, long languageId) {
-        this.id = id;
+    public Review(String author, String body, ReviewValue value) {
+        this.author = author;
+        this.body = body;
+        this.value = value;
+        this.upVotes = 0;
+        this.downVotes = 0;
+        this.createdAt = ZonedDateTime.now();
+    }
+
+    public Review(String author, String body, ReviewValue value, int upVotes, int downVotes) {
         this.author = author;
         this.body = body;
         this.value = value;
         this.upVotes = upVotes;
         this.downVotes = downVotes;
-        this.createdAt = createdAt;
-        this.language = new Language(languageId, "", "", false);
+        this.createdAt = ZonedDateTime.now();
+    }
+
+    public int getScore() {
+        return this.upVotes - this.downVotes;
     }
 
     public void setLanguageId(long languageId) {
-        setLanguage(new Language(languageId, "", "", false));
+        setLanguage(new Language(languageId, "", ""));
     }
 }

@@ -1,6 +1,13 @@
 package kh.farrukh.progee_api;
 
 import kh.farrukh.progee_api.endpoints.auth.AuthService;
+import kh.farrukh.progee_api.endpoints.framework.Framework;
+import kh.farrukh.progee_api.endpoints.framework.FrameworkService;
+import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.language.LanguageService;
+import kh.farrukh.progee_api.endpoints.review.Review;
+import kh.farrukh.progee_api.endpoints.review.ReviewService;
+import kh.farrukh.progee_api.endpoints.review.ReviewValue;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.endpoints.user.UserService;
@@ -17,12 +24,41 @@ public class ProgeeApiApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserService userService, AuthService authService) {
+    CommandLineRunner run(
+            LanguageService languageService,
+            FrameworkService frameworkService,
+            ReviewService reviewService,
+            UserService userService,
+            AuthService authService
+    ) {
         return args -> {
-            userService.addUser(new AppUser("Farrukh", "farrukh@mail.com", "farrukh_kh", "1234", true, false, UserRole.SUPER_ADMIN));
-            userService.addUser(new AppUser("Hamdam", "hamdam@mail.com", "hamdam_u", "1234", true, false, UserRole.ADMIN));
-            userService.addUser(new AppUser("User", "user@mail.com", "user_u", "1234", true, false, UserRole.USER));
+            userService.addUser(new AppUser(1, "Farrukh", "farrukh@mail.com", "farrukh_kh", "1234", true, false, UserRole.SUPER_ADMIN));
+            userService.addUser(new AppUser(2, "Hamdam", "hamdam@mail.com", "hamdam_u", "1234", true, false, UserRole.ADMIN));
+            userService.addUser(new AppUser(3, "User", "user@mail.com", "user_u", "1234", true, false, UserRole.USER));
+
+            languageService.addLanguage(new Language(1, "Java", "Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible."));
+            languageService.addLanguage(new Language(2, "Kotlin", "A modern programming language that makes developers happier. · Multiplatform Mobile · Server-side · Web Frontend · Android."));
+            languageService.addLanguage(new Language(3, "Python", "Python is a high-level, interpreted, general-purpose programming language."));
+            languageService.addLanguage(new Language(4, "JavaScript", "JavaScript often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS."));
+
+            frameworkService.addFramework(1, new Framework(1, "Spring Boot", "Spring Boot — The Spring Framework is an application framework and inversion of control container for the Java platform."));
+            frameworkService.addFramework(1, new Framework(2, "JRockit", "Java profiling tool for performance Tuning."));
+            frameworkService.addFramework(1, new Framework(3, "JSoup", "Java HTML parser library. Supports extracting and manipulating data using DOM, CSS, and JQuery methods."));
+            frameworkService.addFramework(3, new Framework(4, "Django", "Django is the most popular high-level web application development framework that encourages us to build Python applications very quickly."));
+            frameworkService.addFramework(3, new Framework(5, "CubicWeb", "CubicWeb is an open-source, semantic, and free Python web framework."));
+            frameworkService.addFramework(2, new Framework(6, "Ktor", "Ktor is a framework for quickly creating web applications in Kotlin with minimal effort."));
+            frameworkService.addFramework(2, new Framework(7, "Kweb", "Kweb is a new way to create beautiful, efficient, and scalable websites in Kotlin, quickly"));
+
+            for (int i = 1; i < 50; i++) {
+                reviewService.addReview(1, new Review(userService.getUserById(1L).getName(), "This is " + i + " review for language (like)", ReviewValue.LIKE, i % 3, i % 5));
+                reviewService.addReview(1, new Review(userService.getUserById(2L).getName(), "This is " + i + " review for language (don't have pratice)", ReviewValue.DONT_HAVE_PRACTICE, i % 10, i % 25));
+
+                if (i % 2 == 0) {
+                    reviewService.addReview(4, new Review(userService.getUserById(3L).getName(), "This is " + i + " review for language (dislike)", ReviewValue.DISLIKE));
+                } else {
+                    reviewService.addReview(2, new Review(userService.getUserById(1L).getName(), "This is " + i + " review for language (like)", ReviewValue.LIKE));
+                }
+            }
         };
     }
-
 }
