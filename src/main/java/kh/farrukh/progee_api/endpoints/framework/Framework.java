@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,36 +30,25 @@ public class Framework {
     @ManyToOne
     private Language language;
 
-    public Framework(long id, String name, String description, long languageId) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.language = new Language(languageId, "", "");
-    }
-
-    public Framework(String name, String description, long languageId) {
-        this.name = name;
-        this.description = description;
-        this.language = new Language(languageId, "", "");
-    }
-
-    public Framework(long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
+    @ManyToOne
+    private AppUser author;
 
     public Framework(FrameworkDTO frameworkDto) {
         this.name = frameworkDto.getName();
         this.description = frameworkDto.getDescription();
         setImageId(frameworkDto.getImageId());
+        setAuthorId(frameworkDto.getAuthorId());
     }
 
     public void setLanguageId(long languageId) {
-        setLanguage(new Language(languageId, "", ""));
+        setLanguage(new Language(languageId));
     }
 
     public void setImageId(long imageId) {
         this.image = new Image(imageId, "");
+    }
+
+    public void setAuthorId(long authorId) {
+        setAuthor(new AppUser(authorId));
     }
 }

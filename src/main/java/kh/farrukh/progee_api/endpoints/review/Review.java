@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,6 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String author;
     private String body;
     private ReviewValue value;
     @JsonProperty("up_votes")
@@ -37,10 +37,22 @@ public class Review {
     private ZonedDateTime createdAt;
 
     @ManyToOne
+    private AppUser author;
+
+    @ManyToOne
     private Language language;
 
-    public Review(String author, String body, ReviewValue value) {
-        this.author = author;
+    public Review(ReviewDTO reviewDto) {
+        setAuthorId(reviewDto.getAuthorId());
+        this.body = reviewDto.getBody();
+        this.value = reviewDto.getValue();
+        this.upVotes = reviewDto.getUpVotes();
+        this.downVotes = reviewDto.getDownVotes();
+        this.createdAt = ZonedDateTime.now();
+    }
+
+    public Review(long authorId, String body, ReviewValue value) {
+        setAuthorId(authorId);
         this.body = body;
         this.value = value;
         this.upVotes = 0;
@@ -48,8 +60,8 @@ public class Review {
         this.createdAt = ZonedDateTime.now();
     }
 
-    public Review(String author, String body, ReviewValue value, int upVotes, int downVotes) {
-        this.author = author;
+    public Review(long authorId, String body, ReviewValue value, int upVotes, int downVotes) {
+        setAuthorId(authorId);
         this.body = body;
         this.value = value;
         this.upVotes = upVotes;
@@ -62,6 +74,10 @@ public class Review {
     }
 
     public void setLanguageId(long languageId) {
-        setLanguage(new Language(languageId, "", ""));
+        setLanguage(new Language(languageId));
+    }
+
+    public void setAuthorId(long authorId) {
+        setAuthor(new AppUser(authorId));
     }
 }

@@ -12,4 +12,6 @@ public class LanguageDTO {
     private String description;
     @JsonProperty("image_id")
     private long imageId;
+    @JsonProperty("author_id")
+    private long authorId;
 }

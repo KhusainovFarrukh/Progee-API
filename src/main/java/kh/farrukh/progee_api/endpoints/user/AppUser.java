@@ -72,6 +72,10 @@ public class AppUser implements UserDetails {
         setImageId(imageId);
     }
 
+    public AppUser(long id) {
+        this.id = id;
+    }
+
     public AppUser(
             String name,
             String email,

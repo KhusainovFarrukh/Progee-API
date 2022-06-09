@@ -56,6 +56,7 @@ public class LanguageService {
         existingLanguage.setName(languageDto.getName());
         existingLanguage.setDescription(languageDto.getDescription());
         existingLanguage.setImageId(languageDto.getImageId());
+        existingLanguage.setAuthorId(languageDto.getAuthorId());
 
         return existingLanguage;
     }

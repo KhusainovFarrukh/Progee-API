@@ -39,27 +39,26 @@ public class ReviewService {
         );
     }
 
-    public Review addReview(long languageId, Review review) {
+    public Review addReview(long languageId, ReviewDTO reviewDto) {
+        Review review = new Review(reviewDto);
         checkLanguageId(languageId);
         review.setLanguageId(languageId);
         return reviewRepository.save(review);
     }
 
     @Transactional
-    public Review updateReview(long languageId, long id, Review review) {
+    public Review updateReview(long languageId, long id, ReviewDTO reviewDto) {
         checkLanguageId(languageId);
-        review.setLanguageId(languageId);
         Review existingReview = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        existingReview.setAuthor(review.getAuthor());
-        existingReview.setBody(review.getBody());
-        existingReview.setDownVotes(review.getDownVotes());
-        existingReview.setUpVotes(review.getUpVotes());
-        existingReview.setValue(review.getValue());
-        existingReview.setCreatedAt(review.getCreatedAt());
-        existingReview.setLanguageId(review.getLanguage().getId());
+        existingReview.setAuthorId(reviewDto.getAuthorId());
+        existingReview.setBody(reviewDto.getBody());
+        existingReview.setDownVotes(reviewDto.getDownVotes());
+        existingReview.setUpVotes(reviewDto.getUpVotes());
+        existingReview.setValue(reviewDto.getValue());
+//        existingReview.setLanguageId(reviewDto.getLanguageId());
 
         return existingReview;
     }

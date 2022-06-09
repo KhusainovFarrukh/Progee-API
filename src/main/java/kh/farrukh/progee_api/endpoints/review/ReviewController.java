@@ -34,17 +34,17 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Review> addReview(@PathVariable long languageId, @RequestBody Review review) {
-        return new ResponseEntity<>(reviewService.addReview(languageId, review), HttpStatus.CREATED);
+    public ResponseEntity<Review> addReview(@PathVariable long languageId, @RequestBody ReviewDTO reviewDto) {
+        return new ResponseEntity<>(reviewService.addReview(languageId, reviewDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Review> updateLanguage(
             @PathVariable long languageId,
             @PathVariable long id,
-            @RequestBody Review review
+            @RequestBody ReviewDTO reviewDto
     ) {
-        return new ResponseEntity<>(reviewService.updateReview(languageId, id, review), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.updateReview(languageId, id, reviewDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

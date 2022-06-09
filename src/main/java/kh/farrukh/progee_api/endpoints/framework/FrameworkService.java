@@ -64,6 +64,7 @@ public class FrameworkService {
         existingFramework.setName(frameworkDto.getName());
         existingFramework.setDescription(frameworkDto.getDescription());
         existingFramework.setImageId(frameworkDto.getImageId());
+        existingFramework.setAuthorId(frameworkDto.getAuthorId());
 
         return existingFramework;
     }

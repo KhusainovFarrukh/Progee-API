@@ -12,6 +12,8 @@ public class FrameworkDTO {
     private String description;
     @JsonProperty("image_id")
     private long imageId;
+    @JsonProperty("author_id")
+    private long authorId;
 //    private long languageId;
 
 }
