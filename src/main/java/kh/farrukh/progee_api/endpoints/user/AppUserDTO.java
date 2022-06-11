@@ -21,7 +21,7 @@ public class AppUserDTO {
     @JsonProperty("is_locked")
     private boolean isLocked = false;
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private UserRole role = UserRole.USER;
     @JsonProperty("image_id")
     private long imageId;
 }

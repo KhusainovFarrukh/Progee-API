@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REGISTRATION;
 
 @RestController
 @RequiredArgsConstructor

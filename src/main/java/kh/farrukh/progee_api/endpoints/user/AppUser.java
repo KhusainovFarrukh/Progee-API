@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.base.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,11 +22,8 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_USER;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUser implements UserDetails {
+public class AppUser extends EntityWithId implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String name;
     @Column(unique = true)
     private String email;
@@ -73,7 +71,7 @@ public class AppUser implements UserDetails {
     }
 
     public AppUser(long id) {
-        this.id = id;
+        super.setId(id);
     }
 
     public AppUser(

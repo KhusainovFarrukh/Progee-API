@@ -1,8 +1,8 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.base.entity.EntityWithAuthorAndCreatedAt;
 import kh.farrukh.progee_api.endpoints.language.Language;
-import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +17,8 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Review {
+public class Review extends EntityWithAuthorAndCreatedAt {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
     private String body;
     private ReviewValue value;
     @JsonProperty("up_votes")
@@ -32,12 +29,6 @@ public class Review {
     private int downVotes;
     @Transient
     private int score;
-    @JsonProperty("created_at")
-    @Column(name = "created_at")
-    private ZonedDateTime createdAt;
-
-    @ManyToOne
-    private AppUser author;
 
     @ManyToOne
     private Language language;
@@ -48,25 +39,7 @@ public class Review {
         this.value = reviewDto.getValue();
         this.upVotes = reviewDto.getUpVotes();
         this.downVotes = reviewDto.getDownVotes();
-        this.createdAt = ZonedDateTime.now();
-    }
-
-    public Review(long authorId, String body, ReviewValue value) {
-        setAuthorId(authorId);
-        this.body = body;
-        this.value = value;
-        this.upVotes = 0;
-        this.downVotes = 0;
-        this.createdAt = ZonedDateTime.now();
-    }
-
-    public Review(long authorId, String body, ReviewValue value, int upVotes, int downVotes) {
-        setAuthorId(authorId);
-        this.body = body;
-        this.value = value;
-        this.upVotes = upVotes;
-        this.downVotes = downVotes;
-        this.createdAt = ZonedDateTime.now();
+        super.setCreatedAt(ZonedDateTime.now());
     }
 
     public int getScore() {
@@ -75,9 +48,5 @@ public class Review {
 
     public void setLanguageId(long languageId) {
         setLanguage(new Language(languageId));
-    }
-
-    public void setAuthorId(long authorId) {
-        setAuthor(new AppUser(authorId));
     }
 }
