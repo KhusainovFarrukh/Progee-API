@@ -25,14 +25,24 @@ public class LanguageServiceImpl implements LanguageService {
 
     @Override
     public PagingResponse<Language> getLanguages(
+            ResourceState state,
             int page,
             int pageSize,
             String sortBy,
             String orderBy
     ) {
-        return new PagingResponse<>(languageRepository.findAll(
-                PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
-        ));
+        if (state == null) {
+            return new PagingResponse<>(languageRepository.findAll(
+                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+            ));
+        } else if (!UserUtils.isAdmin()) {
+            throw new RuntimeException("You don't have enough permissions");
+        } else {
+            return new PagingResponse<>(languageRepository.findByState(
+                    state,
+                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+            ));
+        }
     }
 
     @Override

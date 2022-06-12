@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
 import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,14 @@ public class FrameworkController {
     @GetMapping
     public ResponseEntity<PagingResponse<Framework>> getFrameworksByLanguage(
             @PathVariable long languageId,
+            @RequestParam(name = "state", required = false) ResourceState state,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
         return new ResponseEntity<>(frameworkService.getFrameworksByLanguage(
-                languageId, page, pageSize, sortBy, orderBy), HttpStatus.OK);
+                languageId, state, page, pageSize, sortBy, orderBy), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

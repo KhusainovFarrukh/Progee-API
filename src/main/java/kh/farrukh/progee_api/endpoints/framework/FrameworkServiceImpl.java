@@ -28,15 +28,26 @@ public class FrameworkServiceImpl implements FrameworkService {
     @Override
     public PagingResponse<Framework> getFrameworksByLanguage(
             long languageId,
+            ResourceState state,
             int page,
             int pageSize,
             String sortBy,
             String orderBy
     ) {
         checkLanguageId(languageId);
-        return new PagingResponse<>(frameworkRepository.findByLanguage_Id(
-                languageId,
-                PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
+        if (state == null) {
+            return new PagingResponse<>(frameworkRepository.findByLanguage_Id(
+                    languageId,
+                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
+        } else if (!UserUtils.isAdmin()) {
+            throw new RuntimeException("You don't have enough permissions");
+        } else {
+            return new PagingResponse<>(frameworkRepository.findByStateAndLanguage_Id(
+                    state,
+                    languageId,
+                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+            ));
+        }
     }
 
     @Override

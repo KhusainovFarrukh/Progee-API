@@ -22,12 +22,14 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
  */
 public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
 
+    // TODO: 6/12/22 needs comment
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().equals(ENDPOINT_LOGIN) ||
                 request.getServletPath().equals(ENDPOINT_REFRESH_TOKEN) ||
                 (request.getMethod().equals(HttpMethod.GET.name()) &&
-                        request.getServletPath().contains(ENDPOINT_LANGUAGE))) {
+                        request.getServletPath().contains(ENDPOINT_LANGUAGE) &&
+                        request.getParameter("state") == null)) {
             filterChain.doFilter(request, response);
         } else {
             try {
