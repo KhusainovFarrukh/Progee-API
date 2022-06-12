@@ -22,10 +22,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import java.util.Collections;
-
-import static kh.farrukh.progee_api.utils.constant.JWTKeys.KEY_ROLE;
 
 @SpringBootApplication
 public class ProgeeApiApplication {

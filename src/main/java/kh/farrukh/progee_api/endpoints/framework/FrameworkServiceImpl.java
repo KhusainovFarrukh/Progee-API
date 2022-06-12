@@ -34,18 +34,19 @@ public class FrameworkServiceImpl implements FrameworkService {
             String sortBy,
             String orderBy
     ) {
+        checkPageNumber(page);
         checkLanguageId(languageId);
         if (state == null) {
             return new PagingResponse<>(frameworkRepository.findByLanguage_Id(
                     languageId,
-                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
+                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
         } else if (!UserUtils.isAdmin()) {
             throw new RuntimeException("You don't have enough permissions");
         } else {
             return new PagingResponse<>(frameworkRepository.findByStateAndLanguage_Id(
                     state,
                     languageId,
-                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
         }
     }
@@ -120,6 +121,13 @@ public class FrameworkServiceImpl implements FrameworkService {
     private void checkLanguageId(long languageId) {
         if (!languageRepository.existsById(languageId)) {
             throw new ResourceNotFoundException("Language", "id", languageId);
+        }
+    }
+
+    private void checkPageNumber(int page) {
+        if (page < 1) {
+            // TODO: 6/12/22 custom exception with exception handler
+            throw new RuntimeException("Page must be bigger than zero");
         }
     }
 }

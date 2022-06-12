@@ -21,12 +21,12 @@ public class PagingResponse<T> {
 
     public PagingResponse(Page<T> page) {
         if (page.hasNext()) {
-            this.nextPage = page.nextPageable().getPageNumber();
+            this.nextPage = page.nextPageable().getPageNumber() + 1;
         }
         if (page.hasPrevious()) {
-            this.prevPage = page.previousPageable().getPageNumber();
+            this.prevPage = page.previousPageable().getPageNumber() + 1;
         }
-        this.page = page.getPageable().getPageNumber();
+        this.page = page.getPageable().getPageNumber() + 1;
         this.totalPages = page.getTotalPages();
         this.totalItems = page.getTotalElements();
         this.items = page.getContent();

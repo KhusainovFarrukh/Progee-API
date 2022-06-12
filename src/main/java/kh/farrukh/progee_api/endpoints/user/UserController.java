@@ -17,7 +17,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<PagingResponse<AppUser>> getUsers(
-            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy

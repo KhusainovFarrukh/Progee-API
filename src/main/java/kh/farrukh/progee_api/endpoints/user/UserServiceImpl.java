@@ -39,8 +39,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             String sortBy,
             String orderBy
     ) {
+        checkPageNumber(page);
         return new PagingResponse<>(userRepository.findAll(
-                PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
         ));
     }
 
@@ -118,6 +119,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         if (userRepository.existsByEmail(appUserDto.getEmail())) {
             throw new DuplicateResourceException("User", "email", appUserDto.getUsername());
+        }
+    }
+
+    private void checkPageNumber(int page) {
+        if (page < 1) {
+            // TODO: 6/12/22 custom exception with exception handler
+            throw new RuntimeException("Page must be bigger than zero");
         }
     }
 }

@@ -20,7 +20,7 @@ public class LanguageController {
     @GetMapping
     public ResponseEntity<PagingResponse<Language>> getLanguages(
             @RequestParam(name = "state", required = false) ResourceState state,
-            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy

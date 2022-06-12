@@ -31,16 +31,17 @@ public class LanguageServiceImpl implements LanguageService {
             String sortBy,
             String orderBy
     ) {
+        checkPageNumber(page);
         if (state == null) {
             return new PagingResponse<>(languageRepository.findAll(
-                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
         } else if (!UserUtils.isAdmin()) {
             throw new RuntimeException("You don't have enough permissions");
         } else {
             return new PagingResponse<>(languageRepository.findByState(
                     state,
-                    PageRequest.of(page, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
         }
     }
@@ -107,6 +108,13 @@ public class LanguageServiceImpl implements LanguageService {
     private void checkLanguageId(long id) {
         if (!languageRepository.existsById(id)) {
             throw new ResourceNotFoundException("Language", "id", id);
+        }
+    }
+
+    private void checkPageNumber(int page) {
+        if (page < 1) {
+            // TODO: 6/12/22 custom exception with exception handler
+            throw new RuntimeException("Page must be bigger than zero");
         }
     }
 }
