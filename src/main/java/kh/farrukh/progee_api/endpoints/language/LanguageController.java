@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LANGUAGE;
 
 @RestController
@@ -36,12 +38,15 @@ public class LanguageController {
     }
 
     @PostMapping
-    public ResponseEntity<Language> addLanguage(@RequestBody LanguageDTO languageDto) {
+    public ResponseEntity<Language> addLanguage(@Valid @RequestBody LanguageDTO languageDto) {
         return new ResponseEntity<>(languageService.addLanguage(languageDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Language> updateLanguage(@PathVariable long id, @RequestBody LanguageDTO languageDto) {
+    public ResponseEntity<Language> updateLanguage(
+            @PathVariable long id,
+            @Valid @RequestBody LanguageDTO languageDto
+    ) {
         return new ResponseEntity<>(languageService.updateLanguage(id, languageDto), HttpStatus.OK);
     }
 
@@ -54,7 +59,7 @@ public class LanguageController {
     @PutMapping("{id}/state")
     public ResponseEntity<Language> setLanguageState(
             @PathVariable long id,
-            @RequestBody ResourceStateDTO resourceStateDto
+            @Valid @RequestBody ResourceStateDTO resourceStateDto
     ) {
         return new ResponseEntity<>(languageService.setLanguageState(id, resourceStateDto), HttpStatus.OK);
     }

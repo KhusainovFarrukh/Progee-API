@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
 
 @RestController
@@ -34,7 +36,10 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<Review> addReview(@PathVariable long languageId, @RequestBody ReviewDTO reviewDto) {
+    public ResponseEntity<Review> addReview(
+            @PathVariable long languageId,
+            @Valid @RequestBody ReviewDTO reviewDto
+    ) {
         return new ResponseEntity<>(reviewService.addReview(languageId, reviewDto), HttpStatus.CREATED);
     }
 
@@ -42,7 +47,7 @@ public class ReviewController {
     public ResponseEntity<Review> updateLanguage(
             @PathVariable long languageId,
             @PathVariable long id,
-            @RequestBody ReviewDTO reviewDto
+            @Valid @RequestBody ReviewDTO reviewDto
     ) {
         return new ResponseEntity<>(reviewService.updateReview(languageId, id, reviewDto), HttpStatus.OK);
     }

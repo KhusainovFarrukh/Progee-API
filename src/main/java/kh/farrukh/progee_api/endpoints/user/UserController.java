@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_USER;
 
 @RestController
@@ -28,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AppUser> getLanguageById(@PathVariable long id) {
+    public ResponseEntity<AppUser> getUserById(@PathVariable long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
@@ -38,12 +40,12 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<AppUser> updateLanguage(@PathVariable long id, @RequestBody AppUserDTO appUserDto) {
+    public ResponseEntity<AppUser> updateUser(@PathVariable long id, @RequestBody AppUserDTO appUserDto) {
         return new ResponseEntity<>(userService.updateUser(id, appUserDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteLanguage(@PathVariable long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -51,7 +53,7 @@ public class UserController {
     @PutMapping("{id}/role")
     public ResponseEntity<AppUser> setUserRole(
             @PathVariable long id,
-            @RequestBody UserRoleDTO roleDto
+            @Valid @RequestBody UserRoleDTO roleDto
     ) {
         return new ResponseEntity<>(userService.setUserRole(id, roleDto), HttpStatus.OK);
     }

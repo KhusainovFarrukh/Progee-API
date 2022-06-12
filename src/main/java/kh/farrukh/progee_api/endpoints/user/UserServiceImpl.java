@@ -82,10 +82,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         existingAppUser.setName(appUserDto.getName());
         existingAppUser.setEmail(appUserDto.getEmail());
         existingAppUser.setPassword(passwordEncoder.encode(appUserDto.getPassword()));
-        existingAppUser.setEnabled(appUserDto.isEnabled());
-        existingAppUser.setLocked(appUserDto.isLocked());
         existingAppUser.setUniqueUsername(appUserDto.getUsername());
-        existingAppUser.setRole(appUserDto.getRole());
         existingAppUser.setImageId(appUserDto.getImageId());
 
         return existingAppUser;

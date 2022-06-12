@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_FRAMEWORK;
 
 @RestController
@@ -36,7 +38,10 @@ public class FrameworkController {
     }
 
     @PostMapping
-    public ResponseEntity<Framework> addFramework(@PathVariable long languageId, @RequestBody FrameworkDTO frameworkDto) {
+    public ResponseEntity<Framework> addFramework(
+            @PathVariable long languageId,
+            @Valid @RequestBody FrameworkDTO frameworkDto
+    ) {
         return new ResponseEntity<>(frameworkService.addFramework(languageId, frameworkDto), HttpStatus.CREATED);
     }
 
@@ -44,7 +49,7 @@ public class FrameworkController {
     public ResponseEntity<Framework> updateFramework(
             @PathVariable long languageId,
             @PathVariable long id,
-            @RequestBody FrameworkDTO frameworkDto
+            @Valid @RequestBody FrameworkDTO frameworkDto
     ) {
         return new ResponseEntity<>(frameworkService.updateFramework(languageId, id, frameworkDto), HttpStatus.OK);
     }
@@ -59,7 +64,7 @@ public class FrameworkController {
     public ResponseEntity<Framework> setFrameworkState(
             @PathVariable long languageId,
             @PathVariable long id,
-            @RequestBody ResourceStateDTO resourceStateDto
+            @Valid @RequestBody ResourceStateDTO resourceStateDto
     ) {
         return new ResponseEntity<>(frameworkService.setFrameworkState(languageId, id, resourceStateDto), HttpStatus.OK);
     }

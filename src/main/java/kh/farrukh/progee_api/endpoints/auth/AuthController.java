@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REFRESH_TOKEN;
@@ -23,7 +24,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(ENDPOINT_REGISTRATION)
-    public ResponseEntity<AppUser> register(@RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<AppUser> register(@Valid @RequestBody RegistrationRequest registrationRequest) {
         return new ResponseEntity<>(authService.register(registrationRequest), HttpStatus.OK);
     }
 
