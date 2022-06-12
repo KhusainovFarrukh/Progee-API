@@ -47,4 +47,12 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    
+    @PutMapping("{id}/role")
+    public ResponseEntity<AppUser> setUserRole(
+            @PathVariable long id,
+            @RequestBody UserRoleDTO roleDto
+    ) {
+        return new ResponseEntity<>(userService.setUserRole(id, roleDto), HttpStatus.OK);
+    }
 }

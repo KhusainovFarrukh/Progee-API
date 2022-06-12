@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.endpoints.user;
 
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
-public interface UserService  {
+public interface UserService {
 
     PagingResponse<AppUser> getUsers(
             int page,
@@ -18,4 +18,6 @@ public interface UserService  {
     AppUser updateUser(long id, AppUserDTO appUserDto);
 
     void deleteUser(long id);
+
+    AppUser setUserRole(long id, UserRoleDTO roleDto);
 }

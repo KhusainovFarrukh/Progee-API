@@ -92,10 +92,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void deleteUser(long id) {
+        checkUserId(id);
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public AppUser setUserRole(long id, UserRoleDTO roleDto) {
+        AppUser user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+        user.setRole(roleDto.getRole());
+        return user;
+    }
+
+    private void checkUserId(long id) {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException("User", "id", id);
         }
-        userRepository.deleteById(id);
     }
 
     private void checkIsUnique(AppUserDTO appUserDto) {
