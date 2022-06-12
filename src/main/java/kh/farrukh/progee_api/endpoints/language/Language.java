@@ -1,13 +1,13 @@
 package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.base.entity.EntityWithImage;
+import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
+import kh.farrukh.progee_api.base.entity.ResourceState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_LANGUAGE;
@@ -17,7 +17,7 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_LANGUAGE;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Language extends EntityWithImage {
+public class Language extends EntityWithResourceState {
 
     @Column(unique = true)
     private String name;
@@ -33,4 +33,5 @@ public class Language extends EntityWithImage {
         super.setImageId(languageDto.getImageId());
         super.setCreatedAt(ZonedDateTime.now());
         super.setAuthorId(languageDto.getAuthorId());
-    }}
+    }
+}

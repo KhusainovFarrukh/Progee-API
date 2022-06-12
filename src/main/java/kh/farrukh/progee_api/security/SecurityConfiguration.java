@@ -41,10 +41,12 @@ public class SecurityConfiguration {
         ).permitAll();
 
         // Setting security for the other endpoints in the application.
+        setOnlyAdminEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/frameworks/**/state"), http);
+        setOnlyAdminEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/state"), http);
+        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/frameworks"), http);
+        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/reviews"), http);
+        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
         setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
-        setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
-        setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_FRAMEWORK), http);
-        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_REVIEW), http);
         setOnlySuperAdminEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
@@ -58,7 +60,7 @@ public class SecurityConfiguration {
      * This function sets the endpoint to be readable by everyone, but only writable by the super admin and admin.
      *
      * @param endpoint The endpoint you want to set the permissions for.
-     * @param http The HttpSecurity object that is used to configure the security of the application.
+     * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
     private void setEveryoneReadableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
@@ -72,7 +74,7 @@ public class SecurityConfiguration {
      * the SUPER_ADMIN, ADMIN, or USER authority for POST, PUT, and DELETE requests.
      *
      * @param endpoint The endpoint you want to set the permissions for.
-     * @param http The HttpSecurity object that is used to configure the security of the application.
+     * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
     private void setUserEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
@@ -82,10 +84,23 @@ public class SecurityConfiguration {
     }
 
     /**
+     * This function sets the endpoint to be accessible only by admins.
+     *
+     * @param endpoint The endpoint you want to restrict access to.
+     * @param http     The HttpSecurity object that is used to configure the security of the application.
+     */
+    private void setOnlyAdminEndpoint(String endpoint, HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+    }
+
+    /**
      * This function sets the endpoint to be accessible only by the super admin and admin.
      *
      * @param endpoint The endpoint you want to restrict access to.
-     * @param http The HttpSecurity object that is used to configure the security of the application.
+     * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
     private void setOnlySuperAdminEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());

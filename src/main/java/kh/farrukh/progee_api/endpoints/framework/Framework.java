@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
-import kh.farrukh.progee_api.base.entity.EntityWithImage;
+import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_FRAMEWORK;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Framework extends EntityWithImage {
+public class Framework extends EntityWithResourceState {
 
     @Column(unique = true)
     private String name;

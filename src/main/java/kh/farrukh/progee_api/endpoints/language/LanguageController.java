@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,5 +47,13 @@ public class LanguageController {
     public ResponseEntity<Void> deleteLanguage(@PathVariable long id) {
         languageService.deleteLanguage(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("{id}/state")
+    public ResponseEntity<Language> setLanguageState(
+            @PathVariable long id,
+            @RequestBody ResourceStateDTO resourceStateDto
+    ) {
+        return new ResponseEntity<>(languageService.setLanguageState(id, resourceStateDto), HttpStatus.OK);
     }
 }

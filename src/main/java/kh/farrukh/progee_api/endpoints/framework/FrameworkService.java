@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 public interface FrameworkService {
@@ -19,4 +20,6 @@ public interface FrameworkService {
     Framework updateFramework(long languageId, long id, FrameworkDTO frameworkDto);
 
     void deleteFramework(long languageId, long id);
+
+    Framework setFrameworkState(long languageId, long id, ResourceStateDTO resourceStateDto);
 }

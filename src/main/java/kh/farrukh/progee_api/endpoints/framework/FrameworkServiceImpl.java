@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.exception.DuplicateResourceException;
@@ -7,6 +9,7 @@ import kh.farrukh.progee_api.exception.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.image.ImageCheckUtils;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
+import kh.farrukh.progee_api.utils.user.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -52,6 +55,11 @@ public class FrameworkServiceImpl implements FrameworkService {
         }
         ImageCheckUtils.checkImageId(imageRepository, frameworkDto.getImageId());
         Framework framework = new Framework(frameworkDto);
+        if (UserUtils.isAdmin()) {
+            framework.setState(ResourceState.APPROVED);
+        } else {
+            framework.setState(ResourceState.WAITING);
+        }
         framework.setLanguageId(languageId);
         return frameworkRepository.save(framework);
     }
@@ -85,6 +93,17 @@ public class FrameworkServiceImpl implements FrameworkService {
             throw new ResourceNotFoundException("Framework", "id", id);
         }
         frameworkRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Framework setFrameworkState(long languageId, long id, ResourceStateDTO resourceStateDto) {
+        checkLanguageId(languageId);
+        Framework framework = frameworkRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Framework", "id", id)
+        );
+        framework.setState(resourceStateDto.getState());
+        return framework;
     }
 
     private void checkLanguageId(long languageId) {

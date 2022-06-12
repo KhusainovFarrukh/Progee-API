@@ -1,11 +1,14 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.exception.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.image.ImageCheckUtils;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
+import kh.farrukh.progee_api.utils.user.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,6 +49,11 @@ public class LanguageServiceImpl implements LanguageService {
         }
         ImageCheckUtils.checkImageId(imageRepository, languageDto.getImageId());
         Language language = new Language(languageDto);
+        if (UserUtils.isAdmin()) {
+            language.setState(ResourceState.APPROVED);
+        } else {
+            language.setState(ResourceState.WAITING);
+        }
         return languageRepository.save(language);
     }
 
@@ -72,9 +80,23 @@ public class LanguageServiceImpl implements LanguageService {
 
     @Override
     public void deleteLanguage(long id) {
+        checkLanguageId(id);
+        languageRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Language setLanguageState(long id, ResourceStateDTO resourceStateDto) {
+        Language language = languageRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", id)
+        );
+        language.setState(resourceStateDto.getState());
+        return language;
+    }
+
+    private void checkLanguageId(long id) {
         if (!languageRepository.existsById(id)) {
             throw new ResourceNotFoundException("Language", "id", id);
         }
-        languageRepository.deleteById(id);
     }
 }

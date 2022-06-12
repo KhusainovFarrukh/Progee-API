@@ -17,6 +17,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collections;
+
+import static kh.farrukh.progee_api.utils.constant.JWTKeys.KEY_ROLE;
 
 @SpringBootApplication
 public class ProgeeApiApplication {
@@ -40,6 +49,12 @@ public class ProgeeApiApplication {
             userService.addUser(new AppUserDTO("Farrukh", "farrukh@mail.com", "farrukh_kh", "1234", true, false, UserRole.SUPER_ADMIN, 1L));
             userService.addUser(new AppUserDTO("Hamdam", "hamdam@mail.com", "hamdam_u", "1234", true, false, UserRole.ADMIN, 1L));
             userService.addUser(new AppUserDTO("User", "user@mail.com", "user_u", "1234", true, false, UserRole.USER, 1L));
+
+            GrantedAuthority authority = new SimpleGrantedAuthority(UserRole.SUPER_ADMIN.name());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    "farrukh@mail.com", null, Collections.singletonList(authority)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
             languageService.addLanguage(new LanguageDTO("Java", "Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.", 1, 1));
             languageService.addLanguage(new LanguageDTO("Kotlin", "A modern programming language that makes developers happier. · Multiplatform Mobile · Server-side · Web Frontend · Android.", 1, 1));

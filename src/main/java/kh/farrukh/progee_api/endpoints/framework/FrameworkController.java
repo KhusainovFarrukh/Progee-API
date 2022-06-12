@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,5 +52,14 @@ public class FrameworkController {
     public ResponseEntity<Void> deleteFramework(@PathVariable long languageId, @PathVariable long id) {
         frameworkService.deleteFramework(languageId, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("{id}/state")
+    public ResponseEntity<Framework> setFrameworkState(
+            @PathVariable long languageId,
+            @PathVariable long id,
+            @RequestBody ResourceStateDTO resourceStateDto
+    ) {
+        return new ResponseEntity<>(frameworkService.setFrameworkState(languageId, id, resourceStateDto), HttpStatus.OK);
     }
 }
