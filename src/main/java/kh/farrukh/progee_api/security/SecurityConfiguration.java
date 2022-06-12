@@ -41,13 +41,13 @@ public class SecurityConfiguration {
         ).permitAll();
 
         // Setting security for the other endpoints in the application.
-        setOnlyAdminEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/frameworks/**/state"), http);
-        setOnlyAdminEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/state"), http);
-        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/frameworks"), http);
-        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE + "/**/reviews"), http);
-        setUserEditableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
-        setEveryoneReadableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
-        setOnlySuperAdminEndpoint(withChildEndpoints(ENDPOINT_USER), http);
+        setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);
+        setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE), http);
+        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
+        setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
+        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
+        setUserCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
+        setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
         http.apply(customDsl());
@@ -57,39 +57,38 @@ public class SecurityConfiguration {
     }
 
     /**
-     * This function sets the endpoint to be readable by everyone, but only writable by the super admin and admin.
+     * It sets the endpoint to be accessible by all users.
      *
      * @param endpoint The endpoint you want to set the permissions for.
      * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
-    private void setEveryoneReadableEndpoint(String endpoint, HttpSecurity http) throws Exception {
+    private void setUserCreatableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+    }
+
+    /**
+     * It sets the endpoint to be for admin-verified resource (when user created some resource).
+     *
+     * @param endpoint The endpoint you want to set the permissions for.
+     * @param http     The HttpSecurity object that is used to configure the security of the application.
+     */
+    private void setAdminVerifiableEndpoint(String endpoint, HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
         http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
     }
 
     /**
-     * This function sets the endpoint to be accessible by all users for GET requests, and only accessible by users with
-     * the SUPER_ADMIN, ADMIN, or USER authority for POST, PUT, and DELETE requests.
+     * It sets the endpoint to be accessible by only admins.
      *
      * @param endpoint The endpoint you want to set the permissions for.
      * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
-    private void setUserEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-    }
-
-    /**
-     * This function sets the endpoint to be accessible only by admins.
-     *
-     * @param endpoint The endpoint you want to restrict access to.
-     * @param http     The HttpSecurity object that is used to configure the security of the application.
-     */
-    private void setOnlyAdminEndpoint(String endpoint, HttpSecurity http) throws Exception {
+    private void setOnlyAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
@@ -97,12 +96,12 @@ public class SecurityConfiguration {
     }
 
     /**
-     * This function sets the endpoint to be accessible only by the super admin and admin.
+     * It sets the endpoint to be accessible by only super admins (admins can access only GET requests).
      *
-     * @param endpoint The endpoint you want to restrict access to.
+     * @param endpoint The endpoint you want to set the permissions for.
      * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
-    private void setOnlySuperAdminEndpoint(String endpoint, HttpSecurity http) throws Exception {
+    private void setOnlySuperAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
