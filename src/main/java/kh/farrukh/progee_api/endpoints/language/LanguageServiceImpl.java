@@ -3,9 +3,9 @@ package kh.farrukh.progee_api.endpoints.language;
 import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
-import kh.farrukh.progee_api.exception.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.image.ImageCheckUtils;
+import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.image.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.UserUtils;
@@ -15,6 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static kh.farrukh.progee_api.utils.image.Checkers.checkLanguageId;
+import static kh.farrukh.progee_api.utils.image.Checkers.checkPageNumber;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +61,7 @@ public class LanguageServiceImpl implements LanguageService {
         if (languageRepository.existsByName(languageDto.getName())) {
             throw new DuplicateResourceException("Language", "name", languageDto.getName());
         }
-        ImageCheckUtils.checkImageId(imageRepository, languageDto.getImageId());
+        Checkers.checkImageId(imageRepository, languageDto.getImageId());
         Language language = new Language(languageDto);
         if (UserUtils.isAdmin()) {
             language.setState(ResourceState.APPROVED);
@@ -79,7 +82,7 @@ public class LanguageServiceImpl implements LanguageService {
                 languageRepository.existsByName(languageDto.getName())) {
             throw new DuplicateResourceException("Language", "name", languageDto.getName());
         }
-        ImageCheckUtils.checkImageId(imageRepository, languageDto.getImageId());
+        Checkers.checkImageId(imageRepository, languageDto.getImageId());
 
         existingLanguage.setName(languageDto.getName());
         existingLanguage.setDescription(languageDto.getDescription());
@@ -91,7 +94,7 @@ public class LanguageServiceImpl implements LanguageService {
 
     @Override
     public void deleteLanguage(long id) {
-        checkLanguageId(id);
+        checkLanguageId(languageRepository, id);
         languageRepository.deleteById(id);
     }
 
@@ -103,18 +106,5 @@ public class LanguageServiceImpl implements LanguageService {
         );
         language.setState(resourceStateDto.getState());
         return language;
-    }
-
-    private void checkLanguageId(long id) {
-        if (!languageRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Language", "id", id);
-        }
-    }
-
-    private void checkPageNumber(int page) {
-        if (page < 1) {
-            // TODO: 6/12/22 custom exception with exception handler
-            throw new RuntimeException("Page must be bigger than zero");
-        }
     }
 }

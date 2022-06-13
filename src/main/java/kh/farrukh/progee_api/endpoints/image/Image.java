@@ -1,13 +1,15 @@
 package kh.farrukh.progee_api.endpoints.image;
 
 import kh.farrukh.progee_api.base.entity.EntityWithId;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Image extends EntityWithId {
 

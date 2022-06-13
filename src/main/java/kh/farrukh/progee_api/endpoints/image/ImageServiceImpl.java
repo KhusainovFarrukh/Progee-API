@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.image;
 
 import kh.farrukh.progee_api.endpoints.image.file_store.FileStoreRepository;
-import kh.farrukh.progee_api.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,6 @@ public class ImageServiceImpl implements ImageService {
                     new Image(fileStoreRepository.save(multipartImage.getBytes()))
             );
         } catch (Exception exception) {
-            // TODO: 6/8/22 custom exception with exception handler
-            exception.printStackTrace();
             throw new RuntimeException("Error on image upload: " + exception.getMessage());
         }
     }

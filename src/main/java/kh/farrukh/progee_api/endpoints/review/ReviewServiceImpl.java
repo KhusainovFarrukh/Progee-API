@@ -3,7 +3,8 @@ package kh.farrukh.progee_api.endpoints.review;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.ResourceNotFoundException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ReviewVoteException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.UserUtils;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static kh.farrukh.progee_api.utils.image.Checkers.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
             String orderBy
     ) {
         checkPageNumber(page);
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         return new PagingResponse<>(reviewRepository.findByLanguage_Id(
                 languageId,
                 PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
@@ -40,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review getReviewById(long languageId, long id) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         return reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -49,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review addReview(long languageId, ReviewDTO reviewDto) {
         Review review = new Review(reviewDto);
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         review.setLanguageId(languageId);
         return reviewRepository.save(review);
     }
@@ -57,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public Review updateReview(long languageId, long id, ReviewDTO reviewDto) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         Review existingReview = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -72,15 +75,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void deleteReview(long languageId, long id) {
-        checkLanguageId(languageId);
-        checkReviewId(id);
+        checkLanguageId(languageRepository, languageId);
+        checkReviewId(reviewRepository, id);
         reviewRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public Review voteReview(long languageId, long id, ReviewVoteDTO reviewVoteDto) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -92,16 +95,14 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (reviewVoteDto.isVote()) {
             if (review.getUpVotes().contains(user.getId())) {
-                // TODO: 6/13/22 custom exception with exception handler
-                throw new RuntimeException("You have already up-voted this review");
+                throw new ReviewVoteException("up-vote");
             }
 
             review.getUpVotes().add(user.getId());
             review.getDownVotes().remove(user.getId());
         } else {
             if (review.getDownVotes().contains(user.getId())) {
-                // TODO: 6/13/22 custom exception with exception handler
-                throw new RuntimeException("You have already down-voted this review");
+                throw new ReviewVoteException("down-vote");
             }
 
             review.getDownVotes().add(user.getId());
@@ -109,24 +110,5 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return review;
-    }
-
-    private void checkLanguageId(long languageId) {
-        if (!languageRepository.existsById(languageId)) {
-            throw new ResourceNotFoundException("Language", "id", languageId);
-        }
-    }
-
-    private void checkReviewId(long id) {
-        if (!reviewRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Review", "id", id);
-        }
-    }
-
-    private void checkPageNumber(int page) {
-        if (page < 1) {
-            // TODO: 6/12/22 custom exception with exception handler
-            throw new RuntimeException("Page must be bigger than zero");
-        }
     }
 }

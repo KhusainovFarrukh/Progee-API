@@ -1,12 +1,14 @@
 package kh.farrukh.progee_api.base.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class EntityWithResourceState extends EntityWithImage {
 

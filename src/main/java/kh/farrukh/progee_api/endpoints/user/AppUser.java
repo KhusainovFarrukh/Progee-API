@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.base.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,8 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_USER;
 
 @Entity
 @Table(name = TABLE_NAME_USER)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppUser extends EntityWithId implements UserDetails {

@@ -54,8 +54,9 @@ public class JWTUtils {
                 .collect(Collectors.toList()).stream()
                 .findFirst()
                 .orElseThrow(
-                        // TODO: 6/7/22 custom exception via exception handler
-                        () -> new RuntimeException("User don't have any role")
+                        () -> new RuntimeException(
+                                "User don't have any role. Check user in database or add role to user from admin profile"
+                        )
                 );
 
         String accessToken = JWT.create()

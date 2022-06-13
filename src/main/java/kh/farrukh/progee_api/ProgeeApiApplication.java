@@ -38,7 +38,6 @@ public class ProgeeApiApplication {
             FrameworkService frameworkService,
             ReviewService reviewService,
             UserService userService,
-            AuthService authService,
             ImageRepository imageRepository
     ) {
         return args -> {

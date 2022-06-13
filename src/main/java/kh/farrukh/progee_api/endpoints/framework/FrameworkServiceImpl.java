@@ -4,9 +4,9 @@ import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
-import kh.farrukh.progee_api.exception.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.image.ImageCheckUtils;
+import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.image.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.UserUtils;
@@ -16,6 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static kh.farrukh.progee_api.utils.image.Checkers.checkLanguageId;
+import static kh.farrukh.progee_api.utils.image.Checkers.checkPageNumber;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +38,7 @@ public class FrameworkServiceImpl implements FrameworkService {
             String orderBy
     ) {
         checkPageNumber(page);
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         if (state == null) {
             return new PagingResponse<>(frameworkRepository.findByLanguage_Id(
                     languageId,
@@ -53,7 +56,7 @@ public class FrameworkServiceImpl implements FrameworkService {
 
     @Override
     public Framework getFrameworkById(long languageId, long id) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         return frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
@@ -61,11 +64,11 @@ public class FrameworkServiceImpl implements FrameworkService {
 
     @Override
     public Framework addFramework(long languageId, FrameworkDTO frameworkDto) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         if (frameworkRepository.existsByName(frameworkDto.getName())) {
             throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
         }
-        ImageCheckUtils.checkImageId(imageRepository, frameworkDto.getImageId());
+        Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
         Framework framework = new Framework(frameworkDto);
         if (UserUtils.isAdmin()) {
             framework.setState(ResourceState.APPROVED);
@@ -79,7 +82,7 @@ public class FrameworkServiceImpl implements FrameworkService {
     @Override
     @Transactional
     public Framework updateFramework(long languageId, long id, FrameworkDTO frameworkDto) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
@@ -87,7 +90,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                 languageRepository.existsByName(frameworkDto.getName())) {
             throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
         }
-        ImageCheckUtils.checkImageId(imageRepository, frameworkDto.getImageId());
+        Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
 
         existingFramework.setLanguageId(languageId);
         existingFramework.setName(frameworkDto.getName());
@@ -100,7 +103,7 @@ public class FrameworkServiceImpl implements FrameworkService {
 
     @Override
     public void deleteFramework(long languageId, long id) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         if (!frameworkRepository.existsById(id)) {
             throw new ResourceNotFoundException("Framework", "id", id);
         }
@@ -110,24 +113,11 @@ public class FrameworkServiceImpl implements FrameworkService {
     @Override
     @Transactional
     public Framework setFrameworkState(long languageId, long id, ResourceStateDTO resourceStateDto) {
-        checkLanguageId(languageId);
+        checkLanguageId(languageRepository, languageId);
         Framework framework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
         framework.setState(resourceStateDto.getState());
         return framework;
-    }
-
-    private void checkLanguageId(long languageId) {
-        if (!languageRepository.existsById(languageId)) {
-            throw new ResourceNotFoundException("Language", "id", languageId);
-        }
-    }
-
-    private void checkPageNumber(int page) {
-        if (page < 1) {
-            // TODO: 6/12/22 custom exception with exception handler
-            throw new RuntimeException("Page must be bigger than zero");
-        }
     }
 }

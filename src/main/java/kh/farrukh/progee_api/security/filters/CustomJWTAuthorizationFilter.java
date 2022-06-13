@@ -22,9 +22,11 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
  */
 public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
 
-    // TODO: 6/12/22 needs comment
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // This is the main logic of the filter. If the request is for the login/refresh-token endpoints or
+        // simple user request for getting list of languages/frameworks/reviews, then don't check JWT token.
+        // Else decode the JWT and set the authentication in the security context.
         if (request.getServletPath().equals(ENDPOINT_LOGIN) ||
                 request.getServletPath().equals(ENDPOINT_REFRESH_TOKEN) ||
                 (request.getMethod().equals(HttpMethod.GET.name()) &&

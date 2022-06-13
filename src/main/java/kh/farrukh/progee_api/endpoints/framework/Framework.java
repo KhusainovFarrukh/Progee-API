@@ -3,8 +3,9 @@ package kh.farrukh.progee_api.endpoints.framework;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +17,8 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_FRAMEWORK;
 
 @Entity
 @Table(name = TABLE_NAME_FRAMEWORK)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Framework extends EntityWithResourceState {

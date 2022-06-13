@@ -1,9 +1,9 @@
 package kh.farrukh.progee_api.endpoints.user;
 
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
-import kh.farrukh.progee_api.exception.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.image.ImageCheckUtils;
+import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.image.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static kh.farrukh.progee_api.utils.image.Checkers.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +56,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public AppUser addUser(AppUserDTO appUserDto) {
-        checkIsUnique(appUserDto);
-        ImageCheckUtils.checkImageId(imageRepository, appUserDto.getImageId());
+        checkUserIsUnique(userRepository, appUserDto);
+        Checkers.checkImageId(imageRepository, appUserDto.getImageId());
         AppUser appUser = new AppUser(appUserDto);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
@@ -77,7 +79,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 userRepository.existsByEmail(appUserDto.getEmail())) {
             throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
         }
-        ImageCheckUtils.checkImageId(imageRepository, appUserDto.getImageId());
+        Checkers.checkImageId(imageRepository, appUserDto.getImageId());
 
         existingAppUser.setName(appUserDto.getName());
         existingAppUser.setEmail(appUserDto.getEmail());
@@ -90,7 +92,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void deleteUser(long id) {
-        checkUserId(id);
+        checkUserId(userRepository, id);
         userRepository.deleteById(id);
     }
 
@@ -102,27 +104,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
         user.setRole(roleDto.getRole());
         return user;
-    }
-
-    private void checkUserId(long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User", "id", id);
-        }
-    }
-
-    private void checkIsUnique(AppUserDTO appUserDto) {
-        if (userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
-            throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
-        }
-        if (userRepository.existsByEmail(appUserDto.getEmail())) {
-            throw new DuplicateResourceException("User", "email", appUserDto.getUsername());
-        }
-    }
-
-    private void checkPageNumber(int page) {
-        if (page < 1) {
-            // TODO: 6/12/22 custom exception with exception handler
-            throw new RuntimeException("Page must be bigger than zero");
-        }
     }
 }

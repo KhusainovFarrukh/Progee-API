@@ -5,6 +5,7 @@ import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.endpoints.user.UserServiceImpl;
+import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AppUser register(RegistrationRequest registrationRequest) {
         if (!emailValidator.test(registrationRequest.getEmail())) {
-            // TODO: 6/7/22 custom exception via exception handler
-            throw new RuntimeException("Email is not valid");
+            throw new BadRequestException("Email");
         }
         return userService.addUser(
                 new AppUserDTO(
@@ -54,8 +54,7 @@ public class AuthServiceImpl implements AuthService {
                 Map<String, Object> data = JWTUtils.generateTokens(user, request);
                 JWTUtils.sendTokenInResponse(data, response);
             } else {
-                // TODO: 6/7/22 custom exception via exception handler
-                throw new RuntimeException("Refresh token is missing");
+                throw new BadRequestException("Refresh token");
             }
         } catch (Exception exception) {
             exception.printStackTrace();

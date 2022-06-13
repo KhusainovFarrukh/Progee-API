@@ -1,12 +1,16 @@
 package kh.farrukh.progee_api.utils.paging_sorting;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class PagingResponse<T> {
     @JsonProperty("next_page")
     private Integer nextPage = null;

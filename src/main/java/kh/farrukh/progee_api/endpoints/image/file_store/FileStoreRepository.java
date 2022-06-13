@@ -26,9 +26,8 @@ public class FileStoreRepository {
     public FileSystemResource findInFileSystem(String location) {
         try {
             return new FileSystemResource(Paths.get(location));
-        } catch (Exception e) {
-            // TODO: 6/8/22 custom exception with exception handler
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception exception) {
+            throw new RuntimeException("Error on getting image from location: " + exception.getMessage());
         }
     }
 }

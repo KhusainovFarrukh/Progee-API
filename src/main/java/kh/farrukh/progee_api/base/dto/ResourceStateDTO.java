@@ -2,12 +2,12 @@ package kh.farrukh.progee_api.base.dto;
 
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResourceStateDTO {

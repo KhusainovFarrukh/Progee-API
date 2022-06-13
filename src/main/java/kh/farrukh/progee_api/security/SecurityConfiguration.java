@@ -41,11 +41,11 @@ public class SecurityConfiguration {
         ).permitAll();
 
         // Setting security for the other endpoints in the application.
-        setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_BY_LANGUAGE_STATE), http);
+        setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);
         setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE), http);
-        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_BY_LANGUAGE), http);
+        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
         setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
-        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW_BY_LANGUAGE), http);
+        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
         setUserCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 

@@ -10,8 +10,6 @@ import java.util.Optional;
 @Validated
 public interface UserRepository extends JpaRepository<AppUser, Long> {
 
-    Optional<AppUser> findByUniqueUsername(String username);
-
     Optional<AppUser> findByEmail(String email);
 
     boolean existsByUniqueUsername(String username);

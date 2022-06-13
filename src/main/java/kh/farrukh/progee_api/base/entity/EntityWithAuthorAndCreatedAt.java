@@ -2,14 +2,16 @@ package kh.farrukh.progee_api.base.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import java.time.ZonedDateTime;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class EntityWithAuthorAndCreatedAt extends EntityWithId {
 

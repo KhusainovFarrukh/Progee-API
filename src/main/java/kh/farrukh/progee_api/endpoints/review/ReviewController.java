@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW_BY_LANGUAGE;
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
 
 @RestController
-@RequestMapping(ENDPOINT_REVIEW_BY_LANGUAGE)
+@RequestMapping(ENDPOINT_REVIEW)
 @RequiredArgsConstructor
 public class ReviewController {
 

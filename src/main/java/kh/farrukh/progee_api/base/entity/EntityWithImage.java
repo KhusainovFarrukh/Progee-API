@@ -1,12 +1,14 @@
 package kh.farrukh.progee_api.base.entity;
 
 import kh.farrukh.progee_api.endpoints.image.Image;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class EntityWithImage extends EntityWithAuthorAndCreatedAt {
 

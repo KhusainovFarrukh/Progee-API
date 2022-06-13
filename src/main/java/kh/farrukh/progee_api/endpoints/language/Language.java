@@ -1,20 +1,22 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.base.entity.EntityWithImage;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
-import kh.farrukh.progee_api.base.entity.ResourceState;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_LANGUAGE;
 
 @Entity
 @Table(name = TABLE_NAME_LANGUAGE)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Language extends EntityWithResourceState {
