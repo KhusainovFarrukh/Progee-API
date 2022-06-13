@@ -18,4 +18,10 @@ public class UserUtils {
 
         return roles.contains(UserRole.SUPER_ADMIN.name()) || roles.contains(UserRole.ADMIN.name());
     }
+
+    public static String getEmail() {
+        return (String) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
 }

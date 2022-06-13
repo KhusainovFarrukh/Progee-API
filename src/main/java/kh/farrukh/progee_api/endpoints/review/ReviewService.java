@@ -19,4 +19,6 @@ public interface ReviewService {
     Review updateReview(long languageId, long id, ReviewDTO reviewDto);
 
     void deleteReview(long languageId, long id);
+
+    Review voteReview(long languageId, long id, ReviewVoteDTO reviewVoteDto);
 }

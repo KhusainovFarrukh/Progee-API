@@ -9,11 +9,11 @@ public class ApiEndpoints {
 
     public static final String ENDPOINT_LANGUAGE = "/api/v1/languages";
     public static final String SECURITY_ENDPOINT_LANGUAGE_STATE = ENDPOINT_LANGUAGE + "/**/state";
-    public static final String ENDPOINT_FRAMEWORK = "api/v1/languages/{languageId}/frameworks";
-    public static final String SECURITY_ENDPOINT_FRAMEWORK = ENDPOINT_LANGUAGE + "/**/frameworks";
-    public static final String SECURITY_ENDPOINT_FRAMEWORK_STATE = SECURITY_ENDPOINT_FRAMEWORK + "/**/state";
-    public static final String ENDPOINT_REVIEW = "/api/v1/languages/{languageId}/reviews";
-    public static final String SECURITY_ENDPOINT_REVIEW = ENDPOINT_LANGUAGE + "/**/reviews";
+    public static final String ENDPOINT_FRAMEWORK_BY_LANGUAGE = "api/v1/languages/{languageId}/frameworks";
+    public static final String SECURITY_ENDPOINT_FRAMEWORK_BY_LANGUAGE = ENDPOINT_LANGUAGE + "/**/frameworks";
+    public static final String SECURITY_ENDPOINT_FRAMEWORK_BY_LANGUAGE_STATE = SECURITY_ENDPOINT_FRAMEWORK_BY_LANGUAGE + "/**/state";
+    public static final String ENDPOINT_REVIEW_BY_LANGUAGE = "/api/v1/languages/{languageId}/reviews";
+    public static final String SECURITY_ENDPOINT_REVIEW_BY_LANGUAGE = ENDPOINT_LANGUAGE + "/**/reviews";
     public static final String ENDPOINT_USER = "/api/v1/users";
     public static final String ENDPOINT_IMAGE = "/api/v1/images";
 

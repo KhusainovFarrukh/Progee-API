@@ -22,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import java.util.Collections;
 
@@ -69,8 +68,8 @@ public class ProgeeApiApplication {
             frameworkService.addFramework(2, new FrameworkDTO("Kweb", "Kweb is a new way to create beautiful, efficient, and scalable websites in Kotlin, quickly", 1, 2));
 
             for (int i = 1; i < 50; i++) {
-                reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (like)", ReviewValue.LIKE, i % 3, i % 5, 1));
-                reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (don't have pratice)", ReviewValue.DONT_HAVE_PRACTICE, i % 10, i % 25, 2));
+                reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (like)", ReviewValue.LIKE, 1));
+                reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (don't have pratice)", ReviewValue.DONT_HAVE_PRACTICE, 2));
 
                 if (i % 2 == 0) {
                     reviewService.addReview(4, new ReviewDTO("This is " + i + " review for language (dislike)", ReviewValue.DISLIKE, 3));

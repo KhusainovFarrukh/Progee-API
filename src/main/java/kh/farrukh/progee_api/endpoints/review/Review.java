@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Collections;
+import java.util.Set;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
 
@@ -21,12 +23,14 @@ public class Review extends EntityWithAuthorAndCreatedAt {
 
     private String body;
     private ReviewValue value;
+    @ElementCollection
     @JsonProperty("up_votes")
     @Column(name = "up_votes")
-    private int upVotes;
+    private Set<Long> upVotes = Collections.emptySet();
+    @ElementCollection
     @JsonProperty("down_votes")
     @Column(name = "down_votes")
-    private int downVotes;
+    private Set<Long> downVotes = Collections.emptySet();
     @Transient
     private int score;
 
@@ -37,13 +41,11 @@ public class Review extends EntityWithAuthorAndCreatedAt {
         setAuthorId(reviewDto.getAuthorId());
         this.body = reviewDto.getBody();
         this.value = reviewDto.getValue();
-        this.upVotes = reviewDto.getUpVotes();
-        this.downVotes = reviewDto.getDownVotes();
         super.setCreatedAt(ZonedDateTime.now());
     }
 
     public int getScore() {
-        return this.upVotes - this.downVotes;
+        return this.upVotes.size() - this.downVotes.size();
     }
 
     public void setLanguageId(long languageId) {

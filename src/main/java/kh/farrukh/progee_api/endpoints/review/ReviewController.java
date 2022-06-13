@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW_BY_LANGUAGE;
 
 @RestController
-@RequestMapping(ENDPOINT_REVIEW)
+@RequestMapping(ENDPOINT_REVIEW_BY_LANGUAGE)
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -44,7 +44,7 @@ public class ReviewController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Review> updateLanguage(
+    public ResponseEntity<Review> updateReview(
             @PathVariable long languageId,
             @PathVariable long id,
             @Valid @RequestBody ReviewDTO reviewDto
@@ -53,8 +53,17 @@ public class ReviewController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteLanguage(@PathVariable long languageId, @PathVariable long id) {
+    public ResponseEntity<Void> deleteReview(@PathVariable long languageId, @PathVariable long id) {
         reviewService.deleteReview(languageId, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("{id}/vote")
+    public ResponseEntity<Review> voteReview(
+            @PathVariable long languageId,
+            @PathVariable long id,
+            @Valid@RequestBody ReviewVoteDTO reviewVoteDto
+    ) {
+        return new ResponseEntity<>(reviewService.voteReview(languageId, id, reviewVoteDto), HttpStatus.OK);
     }
 }

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_FRAMEWORK;
+import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_FRAMEWORK_BY_LANGUAGE;
 
 @RestController
-@RequestMapping(ENDPOINT_FRAMEWORK)
+@RequestMapping(ENDPOINT_FRAMEWORK_BY_LANGUAGE)
 @RequiredArgsConstructor
 public class FrameworkController {
 
