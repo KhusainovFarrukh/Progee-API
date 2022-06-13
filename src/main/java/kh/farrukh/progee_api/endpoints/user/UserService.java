@@ -2,6 +2,11 @@ package kh.farrukh.progee_api.endpoints.user;
 
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
+/**
+ * A base interface for service of User endpoints
+ *
+ * Methods implemented in UserServiceImpl
+ */
 public interface UserService {
 
     PagingResponse<AppUser> getUsers(

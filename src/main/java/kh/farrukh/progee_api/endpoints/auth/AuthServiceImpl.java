@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * It implements the AuthService interface and uses the EmailValidator and UserServiceImpl classes
+ * to register a new user or refresh the token
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -24,6 +28,12 @@ public class AuthServiceImpl implements AuthService {
     private final EmailValidator emailValidator;
     private final UserServiceImpl userService;
 
+    /**
+     * If the email is valid, add a new user to the database
+     *
+     * @param registrationRequest The request object that contains the user's information.
+     * @return Registered AppUser object
+     */
     @Override
     public AppUser register(RegistrationRequest registrationRequest) {
         if (!emailValidator.test(registrationRequest.getEmail())) {
@@ -44,6 +54,13 @@ public class AuthServiceImpl implements AuthService {
         );
     }
 
+    /**
+     * It takes the refresh token from the request, decodes it, gets the username from it, loads the user from the
+     * database, generates a new access token and refresh token, and sends them back in the response
+     *
+     * @param request The request object containing refresh token in header
+     * @param response The response object that will be used to send the token back to the client.
+     */
     @Override
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {

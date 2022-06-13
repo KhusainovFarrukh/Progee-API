@@ -7,6 +7,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * It's a base class for entities that have a resource state
+ *
+ * WARN: extends from EntityWithImage
+ */
 @Getter
 @Setter
 @MappedSuperclass

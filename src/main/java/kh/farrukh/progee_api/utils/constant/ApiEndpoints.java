@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.utils.constant;
 
+/**
+ * It contains all the endpoints of the application
+ */
 public class ApiEndpoints {
 
     public static final String ENDPOINT_HOME = "/api/v1";

@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * It's a DTO that represents a vote for review
+ */
 @Getter
 @Setter
 @AllArgsConstructor

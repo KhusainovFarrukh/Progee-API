@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+/**
+ * It's a predicate that returns true if the given string is a valid email address
+ */
 @Service
 public class EmailValidator implements Predicate<String> {
 

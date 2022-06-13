@@ -18,6 +18,11 @@ import java.util.Collections;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_USER;
 
+/**
+ * AppUser is a simple entity
+ * <p>
+ * Implements UserDetails to be used in Spring Security logic.
+ */
 @Entity
 @Table(name = TABLE_NAME_USER)
 @Getter
@@ -45,6 +50,9 @@ public class AppUser extends EntityWithId implements UserDetails {
     @ManyToOne
     private Image image;
 
+    // This is a constructor that takes a AppUserDTO object and
+    // sets the values of the current object to the values of
+    // the given object.
     public AppUser(AppUserDTO appUserDTO) {
         this.name = appUserDTO.getName();
         this.email = appUserDTO.getEmail();

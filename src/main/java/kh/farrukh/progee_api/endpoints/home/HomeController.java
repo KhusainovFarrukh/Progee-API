@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_HOME;
 
+/**
+ * It's a controller that handles requests to the root of the application
+ */
 @RestController
 @RequestMapping(ENDPOINT_HOME)
 public class HomeController {

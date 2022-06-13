@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 
+/**
+ * Image is a simple entity
+ */
 @Entity
 @Getter
 @Setter

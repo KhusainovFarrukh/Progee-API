@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.utils.constant;
 
+/**
+ * It's a class that contains all the keys that are used in the JWT
+ */
 public class JWTKeys {
 
     public static final String KEY_ROLE = "role";

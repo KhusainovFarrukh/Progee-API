@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.sorting;
+package kh.farrukh.progee_api.utils.paging_sorting;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Custom annotation to restrict sort_by values to defined list of fields
+ */
 @Documented
 @Constraint(validatedBy = {AllowedSortFieldsValidator.class})
 @Target({ANNOTATION_TYPE, TYPE, FIELD, PARAMETER})

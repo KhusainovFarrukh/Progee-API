@@ -5,7 +5,7 @@ import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.image.Checkers;
+import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.UserUtils;
@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static kh.farrukh.progee_api.utils.image.Checkers.checkLanguageId;
-import static kh.farrukh.progee_api.utils.image.Checkers.checkPageNumber;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
 
+/**
+ * It implements the LanguageService interface and uses the LanguageRepository and ImageRepository
+ * to perform CRUD operations on the Language entity
+ */
 @Service
 @RequiredArgsConstructor
 public class LanguageServiceImpl implements LanguageService {
@@ -26,6 +30,16 @@ public class LanguageServiceImpl implements LanguageService {
     private final LanguageRepository languageRepository;
     private final ImageRepository imageRepository;
 
+    /**
+     * This function returns a list of languages
+     *
+     * @param state    The state of the language.
+     * @param page     The page number.
+     * @param pageSize The number of items to return per page.
+     * @param sortBy   The field to sort by.
+     * @param orderBy  The order of the results. Can be either "asc" or "desc".
+     * @return A list of frameworks
+     */
     @Override
     public PagingResponse<Language> getLanguages(
             ResourceState state,
@@ -35,6 +49,10 @@ public class LanguageServiceImpl implements LanguageService {
             String orderBy
     ) {
         checkPageNumber(page);
+        // If there isn't state param in request, return only approved languages.
+        // Else if the user is not admin, throw an exception.
+        // If the user is admin then it will return the list of languages with the
+        // given state.
         if (state == null) {
             return new PagingResponse<>(languageRepository.findAll(
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
@@ -49,6 +67,13 @@ public class LanguageServiceImpl implements LanguageService {
         }
     }
 
+    /**
+     * If the id is valid, return the language with the given id, or throw a ResourceNotFoundException if the
+     * language doesn't exist.
+     *
+     * @param id The id of the language to be retrieved
+     * @return Language
+     */
     @Override
     public Language getLanguageById(long id) {
         return languageRepository.findById(id).orElseThrow(
@@ -56,6 +81,12 @@ public class LanguageServiceImpl implements LanguageService {
         );
     }
 
+    /**
+     * This function adds a language to the database
+     *
+     * @param languageDto The DTO object that contains the language information.
+     * @return Language
+     */
     @Override
     public Language addLanguage(LanguageDTO languageDto) {
         if (languageRepository.existsByName(languageDto.getName())) {
@@ -71,6 +102,13 @@ public class LanguageServiceImpl implements LanguageService {
         return languageRepository.save(language);
     }
 
+    /**
+     * This function updates a language in the database
+     *
+     * @param id          The id of the framework to update
+     * @param languageDto The DTO object that contains the new values for the language.
+     * @return The updated language.
+     */
     @Override
     @Transactional
     public Language updateLanguage(long id, LanguageDTO languageDto) {
@@ -78,6 +116,7 @@ public class LanguageServiceImpl implements LanguageService {
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
 
+        // It checks if the name of the language is changed and if the new name is already taken.
         if (!languageDto.getName().equals(existingLanguage.getName()) &&
                 languageRepository.existsByName(languageDto.getName())) {
             throw new DuplicateResourceException("Language", "name", languageDto.getName());
@@ -92,12 +131,24 @@ public class LanguageServiceImpl implements LanguageService {
         return existingLanguage;
     }
 
+    /**
+     * This function deletes a language by id
+     *
+     * @param id The id of the language to delete
+     */
     @Override
     public void deleteLanguage(long id) {
         checkLanguageId(languageRepository, id);
         languageRepository.deleteById(id);
     }
 
+    /**
+     * This function sets the state of a language
+     *
+     * @param id               The id of the language to update
+     * @param resourceStateDto This is the object that contains the state that we want to set.
+     * @return Language
+     */
     @Override
     @Transactional
     public Language setLanguageState(long id, ResourceStateDTO resourceStateDto) {

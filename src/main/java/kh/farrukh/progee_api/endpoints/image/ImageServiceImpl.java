@@ -7,6 +7,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * It implements the ImageService interface and uses the ImageRepository and FileStoreRepository
+ * to save and retrieve images
+ */
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
@@ -14,6 +18,12 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final FileStoreRepository fileStoreRepository;
 
+    /**
+     * We're taking a multipart file, saving it to the file store, and then saving the image to the image repository
+     *
+     * @param multipartImage The image file that is being uploaded.
+     * @return The image object is being returned.
+     */
     @Override
     public Image addImage(MultipartFile multipartImage) {
         try {
@@ -25,6 +35,12 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    /**
+     * If the image exists, return it, otherwise throw an exception.
+     *
+     * @param id The id of the image to be retrieved.
+     * @return The image with the given id.
+     */
     @Override
     public Image getImageById(long id) {
         return imageRepository.findById(id).orElseThrow(
@@ -32,6 +48,12 @@ public class ImageServiceImpl implements ImageService {
         );
     }
 
+    /**
+     * Find the image in the file system and return it as a resource.
+     *
+     * @param id The id of the image you want to download.
+     * @return A resource
+     */
     @Override
     public Resource downloadImage(long id) {
         return fileStoreRepository.findInFileSystem(getImageById(id).getLocation());

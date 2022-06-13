@@ -10,6 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import java.time.ZonedDateTime;
 
+/**
+ * It's a base class for entities that have an author and a creation date
+ *
+ * WARN: extends from EntityWithId
+ */
 @Getter
 @Setter
 @MappedSuperclass

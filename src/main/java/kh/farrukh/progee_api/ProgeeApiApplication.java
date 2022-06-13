@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api;
 
-import kh.farrukh.progee_api.endpoints.auth.AuthService;
 import kh.farrukh.progee_api.endpoints.framework.FrameworkDTO;
 import kh.farrukh.progee_api.endpoints.framework.FrameworkService;
 import kh.farrukh.progee_api.endpoints.image.Image;
@@ -32,6 +31,17 @@ public class ProgeeApiApplication {
         SpringApplication.run(ProgeeApiApplication.class, args);
     }
 
+    /**
+     * It creates a new CommandLineRunner bean that will run the code inside the run() method when the application starts
+     * Populates some mock data
+     *
+     * @param languageService  The LanguageService interface.
+     * @param frameworkService The service that will be used to add the framework.
+     * @param reviewService    The service that will be used to add the reviews.
+     * @param userService      The UserService bean that we created earlier.
+     * @param imageRepository  The ImageRepository interface that we created earlier.
+     * @return CommandLineRunner
+     */
     @Bean
     CommandLineRunner run(
             LanguageService languageService,

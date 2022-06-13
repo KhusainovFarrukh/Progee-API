@@ -6,6 +6,13 @@ import org.springframework.http.HttpStatus;
 
 import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_REVIEW_VOTE;
 
+/**
+ * It's a custom exception that extends the ApiException class
+ * and is thrown when a user tries to vote on a review that
+ * they've already voted on
+ *
+ * HttpStatus of the response will be BAD_REQUEST
+ */
 @Getter
 public class ReviewVoteException extends ApiException {
 

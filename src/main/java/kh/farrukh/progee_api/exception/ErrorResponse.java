@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Custom POJO for returning as JSON response when an exception is thrown
+ */
 @Getter
 @Setter
 @AllArgsConstructor

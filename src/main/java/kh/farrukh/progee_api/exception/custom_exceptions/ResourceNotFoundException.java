@@ -6,6 +6,13 @@ import kh.farrukh.progee_api.utils.constant.ExceptionMessages;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * It's a custom exception class that extends the ApiException class
+ * and is used to throw a ResourceNotFoundException when a resource
+ * is not found
+ *
+ * HttpStatus of the response will be NOT_FOUND
+ */
 @Getter
 @JsonIgnoreProperties
 public class ResourceNotFoundException extends ApiException {

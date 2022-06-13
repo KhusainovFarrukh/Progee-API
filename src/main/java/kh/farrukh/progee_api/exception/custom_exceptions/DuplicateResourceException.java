@@ -6,6 +6,12 @@ import kh.farrukh.progee_api.utils.constant.ExceptionMessages;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * It's a custom exception class that extends the ApiException class,
+ * and thrown when there is already another resource with some unique field
+ *
+ * HttpStatus of the response will be BAD_REQUEST
+ */
 @Getter
 @JsonIgnoreProperties
 public class DuplicateResourceException extends ApiException {

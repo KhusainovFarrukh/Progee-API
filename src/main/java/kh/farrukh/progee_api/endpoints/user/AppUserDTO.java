@@ -10,6 +10,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+/**
+ * It's a DTO that represents a user
+ */
 @Getter
 @Setter
 @AllArgsConstructor

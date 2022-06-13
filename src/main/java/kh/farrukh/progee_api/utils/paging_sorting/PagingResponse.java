@@ -8,6 +8,12 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * It takes a Spring Page object and converts it into a
+ * JSON object that can be returned by a REST endpoint
+ * <p>
+ * Used in all endpoints with pagination
+ */
 @Getter
 @Setter
 @NoArgsConstructor

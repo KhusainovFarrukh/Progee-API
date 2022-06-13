@@ -6,6 +6,12 @@ import org.springframework.http.HttpStatus;
 
 import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_BAD_REQUEST;
 
+/**
+ * `BadRequestException` is a subclass of `ApiException` that is thrown
+ * when a required value is not valid
+ *
+ * HttpStatus of the response will be BAD_REQUEST
+ */
 @Getter
 public class BadRequestException extends ApiException {
 

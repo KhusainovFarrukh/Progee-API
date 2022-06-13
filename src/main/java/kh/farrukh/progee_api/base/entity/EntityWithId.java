@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * This is a base class for all entities that have an id.
+ */
 @Getter
 @Setter
 @MappedSuperclass

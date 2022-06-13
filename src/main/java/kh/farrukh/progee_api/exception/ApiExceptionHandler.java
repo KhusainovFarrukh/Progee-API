@@ -15,12 +15,23 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * It handles exceptions thrown by the application
+ * and returns a response with a message and a status code
+ */
 @ControllerAdvice
 @RequiredArgsConstructor
 public class ApiExceptionHandler {
 
     private final MessageSource messageSource;
 
+    /**
+     * It handles all custom exceptions
+     *
+     * @param exception The exception object that was thrown.
+     * @param locale The locale of the user.
+     * @return A ResponseEntity<Object>
+     */
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<Object> handleApiException(ApiException exception, Locale locale) {
         return new ResponseEntity<>(
@@ -39,6 +50,12 @@ public class ApiExceptionHandler {
         );
     }
 
+    /**
+     * It handles exceptions from AllowedSortFields annotation
+     *
+     * @param exception The exception object that was thrown.
+     * @return A ResponseEntity<Object>
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleSortParamValidationException(ConstraintViolationException exception) {
         String errorMessage = new ArrayList<>(exception.getConstraintViolations()).get(0).getMessage();
@@ -53,6 +70,12 @@ public class ApiExceptionHandler {
         );
     }
 
+    /**
+     * It handles exceptions from Valid annotation on the RequestBody
+     *
+     * @param exception The exception object that was thrown.
+     * @return A ResponseEntity<Object>
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleRequestBodyValidationException(MethodArgumentNotValidException exception) {
         FieldError error = exception.getFieldError();
@@ -73,6 +96,12 @@ public class ApiExceptionHandler {
         );
     }
 
+    /**
+     * It handles all other exceptions (not handled exceptions)
+     *
+     * @param exception The exception object that was thrown.
+     * @return A ResponseEntity<Object>
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnknownException(Exception exception, Locale locale) {
         return new ResponseEntity<>(

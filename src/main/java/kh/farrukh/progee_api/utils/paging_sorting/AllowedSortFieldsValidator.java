@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.sorting;
+package kh.farrukh.progee_api.utils.paging_sorting;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,10 +41,10 @@ public class AllowedSortFieldsValidator implements ConstraintValidator<AllowedSo
             return true;
         }
 
-        String fieldsNotFound = getFieldsFromSort(sort);
+        String notAllowedFields = getNotAllowedFieldsFromSort(sort);
 
         // if all found fields are allowed, then it is valid request
-        if (fieldsNotFound == null || fieldsNotFound.length() == 0) {
+        if (notAllowedFields == null || notAllowedFields.length() == 0) {
             return true;
         }
 
@@ -53,13 +53,19 @@ public class AllowedSortFieldsValidator implements ConstraintValidator<AllowedSo
         context.buildConstraintViolationWithTemplate(
                 String.format(
                         ERROR_MESSAGE,
-                        fieldsNotFound,
+                        notAllowedFields,
                         String.join(",", allowedSortFields)
                 )).addConstraintViolation();
         return false;
     }
 
-    private String getFieldsFromSort(Sort sort) {
+    /**
+     * It takes a Sort object, and returns all not allowed fields used in it
+     *
+     * @param sort The sort object that was passed in by the user.
+     * @return A string of all the fields that are not allowed to be sorted on.
+     */
+    private String getNotAllowedFieldsFromSort(Sort sort) {
         return sort.stream()
                 .map(Sort.Order::getProperty)
                 .filter(property -> !allowedSortFields.contains(property))

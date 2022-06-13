@@ -8,6 +8,10 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * It's a POJO that represents a registration request.
+ * Contains information about user to be registered
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -4,6 +4,11 @@ import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
+/**
+ * A base interface for service of Language endpoints
+ *
+ * Methods implemented in LanguageServiceImpl
+ */
 public interface LanguageService {
 
     PagingResponse<Language> getLanguages(

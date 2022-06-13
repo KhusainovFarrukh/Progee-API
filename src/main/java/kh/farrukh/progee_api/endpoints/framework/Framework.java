@@ -15,6 +15,9 @@ import java.time.ZonedDateTime;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_FRAMEWORK;
 
+/**
+ * Framework is a simple entity
+ */
 @Entity
 @Table(name = TABLE_NAME_FRAMEWORK)
 @Getter
@@ -30,6 +33,9 @@ public class Framework extends EntityWithResourceState {
     @ManyToOne
     private Language language;
 
+    // This is a constructor that takes a FrameworkDTO object and
+    // sets the values of the current object to the values of
+    // the given object.
     public Framework(FrameworkDTO frameworkDto) {
         this.name = frameworkDto.getName();
         this.description = frameworkDto.getDescription();
@@ -38,6 +44,11 @@ public class Framework extends EntityWithResourceState {
         super.setCreatedAt(ZonedDateTime.now());
     }
 
+    /**
+     * Sets the language of the current framework to the language with the given ID.
+     *
+     * @param languageId The ID of the language to be set.
+     */
     public void setLanguageId(long languageId) {
         setLanguage(new Language(languageId));
     }

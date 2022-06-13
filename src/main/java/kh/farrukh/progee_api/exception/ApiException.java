@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * It's a RuntimeException that contains the HTTP status code, a message ID, and message arguments
+ * Used as base class for handled exceptions and for exception message inter-localization (i18n)
+ */
 @Getter
 @Setter
 public class ApiException extends RuntimeException {

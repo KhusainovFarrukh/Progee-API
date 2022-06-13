@@ -2,6 +2,11 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
+/**
+ * A base interface for service of Review endpoints
+ *
+ * Methods implemented in ReviewServiceImpl
+ */
 public interface ReviewService {
 
     PagingResponse<Review> getReviewsByLanguage(

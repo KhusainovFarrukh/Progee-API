@@ -1,10 +1,12 @@
 package kh.farrukh.progee_api.security.utils;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Login request user to deserialize Spring Security login endpoint request body
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

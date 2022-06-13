@@ -13,6 +13,9 @@ import java.time.ZonedDateTime;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_LANGUAGE;
 
+/**
+ * Language is a simple entity
+ */
 @Entity
 @Table(name = TABLE_NAME_LANGUAGE)
 @Getter
@@ -29,6 +32,9 @@ public class Language extends EntityWithResourceState {
         super.setId(id);
     }
 
+    // This is a constructor that takes a LanguageDTO object and
+    // sets the values of the current object to the values of
+    // the given object.
     public Language(LanguageDTO languageDto) {
         this.name = languageDto.getName();
         this.description = languageDto.getDescription();

@@ -15,6 +15,9 @@ import java.util.Set;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
 
+/**
+ * Review is a simple entity
+ */
 @Entity
 @Table(name = TABLE_NAME_REVIEW)
 @Getter
@@ -37,6 +40,8 @@ public class Review extends EntityWithAuthorAndCreatedAt {
     @ManyToOne
     private Language language;
 
+    // This is a constructor that takes a ReviewDTO object and sets the values of the current object to the values of
+    // the given object.
     public Review(ReviewDTO reviewDto) {
         setAuthorId(reviewDto.getAuthorId());
         this.body = reviewDto.getBody();
@@ -44,10 +49,20 @@ public class Review extends EntityWithAuthorAndCreatedAt {
         super.setCreatedAt(ZonedDateTime.now());
     }
 
+    /**
+     * The score of a review is the number of up-votes minus the number of down-votes.
+     *
+     * @return The difference between the number of up-votes and down-votes.
+     */
     public int getScore() {
         return this.upVotes.size() - this.downVotes.size();
     }
 
+    /**
+     * Sets the language of the current review to the language with the given ID.
+     *
+     * @param languageId The ID of the language to be set.
+     */
     public void setLanguageId(long languageId) {
         setLanguage(new Language(languageId));
     }

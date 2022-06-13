@@ -15,8 +15,12 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static kh.farrukh.progee_api.utils.image.Checkers.*;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.*;
 
+/**
+ * It implements the ReviewService interface and uses the ReviewRepository
+ * to perform CRUD operations on the Review entity
+ */
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -25,6 +29,16 @@ public class ReviewServiceImpl implements ReviewService {
     private final LanguageRepository languageRepository;
     private final UserRepository userRepository;
 
+    /**
+     * "Get all reviews for a given language, sorted by a given field, in a given order, and return a page of them."
+     *
+     * @param languageId The id of the language to get reviews for.
+     * @param page The page number to return.
+     * @param pageSize The number of items to return per page.
+     * @param sortBy The field to sort by.
+     * @param orderBy The direction of the sorting. Can be either "asc" or "desc".
+     * @return A PagingResponse object is being returned.
+     */
     @Override
     public PagingResponse<Review> getReviewsByLanguage(
             long languageId,
@@ -41,6 +55,13 @@ public class ReviewServiceImpl implements ReviewService {
         ));
     }
 
+    /**
+     * If the languageId is valid, return the review with the given id, otherwise throw a ResourceNotFoundException.
+     *
+     * @param languageId The id of the language that the review is in.
+     * @param id The id of the review to be retrieved.
+     * @return Review
+     */
     @Override
     public Review getReviewById(long languageId, long id) {
         checkLanguageId(languageRepository, languageId);
@@ -49,6 +70,13 @@ public class ReviewServiceImpl implements ReviewService {
         );
     }
 
+    /**
+     * It adds a review to a language.
+     *
+     * @param languageId The id of the language that the review is for.
+     * @param reviewDto This is the object that will be used to create the new Review object.
+     * @return A Review object
+     */
     @Override
     public Review addReview(long languageId, ReviewDTO reviewDto) {
         Review review = new Review(reviewDto);
@@ -57,6 +85,14 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.save(review);
     }
 
+    /**
+     * This function updates a review in the database
+     *
+     * @param languageId The id of the language that the review is associated with.
+     * @param id The id of the review to update.
+     * @param reviewDto The ReviewDTO object that contains the new values for the review.
+     * @return The updated review.
+     */
     @Override
     @Transactional
     public Review updateReview(long languageId, long id, ReviewDTO reviewDto) {
@@ -73,6 +109,12 @@ public class ReviewServiceImpl implements ReviewService {
         return existingReview;
     }
 
+    /**
+     * This function deletes a review by its id
+     *
+     * @param languageId The id of the language that the review is for.
+     * @param id The id of the review to delete.
+     */
     @Override
     public void deleteReview(long languageId, long id) {
         checkLanguageId(languageRepository, languageId);
@@ -80,6 +122,14 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.deleteById(id);
     }
 
+    /**
+     * If the user has not voted on the review, then add the user's id to the upVotes or downVotes list
+     *
+     * @param languageId The id of the language that the review is for.
+     * @param id The id of the review to vote on.
+     * @param reviewVoteDto This is the DTO that contains the vote.
+     * @return Review
+     */
     @Override
     @Transactional
     public Review voteReview(long languageId, long id, ReviewVoteDTO reviewVoteDto) {
@@ -88,11 +138,15 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
+        // Get the email of the user who is currently logged in and then get the user object from the
+        // database.
         String email = UserUtils.getEmail();
         AppUser user = userRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User", "email", email)
         );
 
+        // Checking if the user has already voted on the review. If the user has already voted on the review, then
+        // throw a ReviewVoteException.
         if (reviewVoteDto.isVote()) {
             if (review.getUpVotes().contains(user.getId())) {
                 throw new ReviewVoteException("up-vote");

@@ -6,7 +6,7 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.image.Checkers;
+import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.UserUtils;
@@ -17,9 +17,13 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static kh.farrukh.progee_api.utils.image.Checkers.checkLanguageId;
-import static kh.farrukh.progee_api.utils.image.Checkers.checkPageNumber;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
 
+/**
+ * It implements the `FrameworkService` interface and uses the `FrameworkRepository`
+ * to perform CRUD operations on the `Framework` entity
+ */
 @Service
 @RequiredArgsConstructor
 public class FrameworkServiceImpl implements FrameworkService {
@@ -28,6 +32,17 @@ public class FrameworkServiceImpl implements FrameworkService {
     private final LanguageRepository languageRepository;
     private final ImageRepository imageRepository;
 
+    /**
+     * This function returns a list of frameworks that are associated with a specific language
+     *
+     * @param languageId The id of the language to filter by.
+     * @param state      The state of the framework.
+     * @param page       The page number.
+     * @param pageSize   The number of items to return per page.
+     * @param sortBy     The field to sort by.
+     * @param orderBy    The order of the results. Can be either "asc" or "desc".
+     * @return A list of frameworks
+     */
     @Override
     public PagingResponse<Framework> getFrameworksByLanguage(
             long languageId,
@@ -39,6 +54,10 @@ public class FrameworkServiceImpl implements FrameworkService {
     ) {
         checkPageNumber(page);
         checkLanguageId(languageRepository, languageId);
+        // If there isn't state param in request, return only approved frameworks.
+        // Else if the user is not admin, throw an exception.
+        // If the user is admin then it will return the list of frameworks with the
+        // given state.
         if (state == null) {
             return new PagingResponse<>(frameworkRepository.findByLanguage_Id(
                     languageId,
@@ -54,6 +73,14 @@ public class FrameworkServiceImpl implements FrameworkService {
         }
     }
 
+    /**
+     * If the languageId is valid, return the framework with the given id, or throw a ResourceNotFoundException if the
+     * framework doesn't exist.
+     *
+     * @param languageId The id of the language that the framework is associated with.
+     * @param id         The id of the framework to be retrieved
+     * @return Framework
+     */
     @Override
     public Framework getFrameworkById(long languageId, long id) {
         checkLanguageId(languageRepository, languageId);
@@ -62,6 +89,13 @@ public class FrameworkServiceImpl implements FrameworkService {
         );
     }
 
+    /**
+     * This function adds a framework to the database
+     *
+     * @param languageId   The id of the language that the framework belongs to.
+     * @param frameworkDto The DTO object that contains the framework information.
+     * @return Framework
+     */
     @Override
     public Framework addFramework(long languageId, FrameworkDTO frameworkDto) {
         checkLanguageId(languageRepository, languageId);
@@ -79,6 +113,14 @@ public class FrameworkServiceImpl implements FrameworkService {
         return frameworkRepository.save(framework);
     }
 
+    /**
+     * This function updates a framework in the database
+     *
+     * @param languageId   The id of the language that the framework belongs to.
+     * @param id           The id of the framework to update
+     * @param frameworkDto The DTO object that contains the new values for the framework.
+     * @return The updated framework.
+     */
     @Override
     @Transactional
     public Framework updateFramework(long languageId, long id, FrameworkDTO frameworkDto) {
@@ -86,6 +128,7 @@ public class FrameworkServiceImpl implements FrameworkService {
         Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
+        // It checks if the name of the framework is changed and if the new name is already taken.
         if (!frameworkDto.getName().equals(existingFramework.getName()) &&
                 languageRepository.existsByName(frameworkDto.getName())) {
             throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
@@ -101,6 +144,12 @@ public class FrameworkServiceImpl implements FrameworkService {
         return existingFramework;
     }
 
+    /**
+     * This function deletes a framework by id
+     *
+     * @param languageId The id of the language that the framework belongs to.
+     * @param id         The id of the framework to delete
+     */
     @Override
     public void deleteFramework(long languageId, long id) {
         checkLanguageId(languageRepository, languageId);
@@ -110,6 +159,14 @@ public class FrameworkServiceImpl implements FrameworkService {
         frameworkRepository.deleteById(id);
     }
 
+    /**
+     * This function sets the state of a framework
+     *
+     * @param languageId       The id of the language that the framework is associated with.
+     * @param id               The id of the framework to update
+     * @param resourceStateDto This is the object that contains the state that we want to set.
+     * @return Framework
+     */
     @Override
     @Transactional
     public Framework setFrameworkState(long languageId, long id, ResourceStateDTO resourceStateDto) {
