@@ -86,7 +86,7 @@ public class Checkers {
             throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
         }
         if (userRepository.existsByEmail(appUserDto.getEmail())) {
-            throw new DuplicateResourceException("User", "email", appUserDto.getUsername());
+            throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
         }
     }
 }

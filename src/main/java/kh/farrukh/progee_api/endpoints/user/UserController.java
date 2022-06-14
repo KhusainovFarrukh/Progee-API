@@ -53,18 +53,6 @@ public class UserController {
     }
 
     /**
-     * This function creates user if it does not exist.
-     *
-     * @param appUserDto Values for the user to be created.
-     * @return A ResponseEntity containing created AppUser object and HttpStatus.
-     */
-    @PostMapping
-    public ResponseEntity<AppUser> addUser(@RequestBody AppUserDTO appUserDto) {
-        return new ResponseEntity<>(userService.addUser(appUserDto), HttpStatus.CREATED);
-    }
-
-
-    /**
      * This function updates a user.
      *
      * @param id         The id of the user to update

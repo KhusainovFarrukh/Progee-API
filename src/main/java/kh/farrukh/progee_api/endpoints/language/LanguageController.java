@@ -23,7 +23,7 @@ public class LanguageController {
     private final LanguageService languageService;
 
     /**
-     * It returns a list (with pagination) of languages for a given language
+     * It returns a list (with pagination) of languages
      *
      * @param state    The state of the resource. (Only for admins. Requires access token)
      * @param page     The page number to return. One-based index.

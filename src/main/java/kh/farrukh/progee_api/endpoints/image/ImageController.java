@@ -27,7 +27,7 @@ public class ImageController {
      * @return The image object is being returned.
      */
     @PostMapping
-    public ResponseEntity<Image> uploadImage(@RequestParam() MultipartFile multipartImage) {
+    public ResponseEntity<Image> uploadImage(@RequestParam("image") MultipartFile multipartImage) {
         return new ResponseEntity<>(imageService.addImage(multipartImage), HttpStatus.CREATED);
     }
 
