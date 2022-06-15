@@ -2,7 +2,7 @@
 
 ---
 
-<a href="https://img.shields.io/badge/Version-0.0.1--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-not--deployed-critical"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-not--deployed-critical"></a>
+<a href="https://img.shields.io/badge/Version-0.0.1--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-not--deployed-critical"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-not--deployed-critical"></a>
 
 
 ## Table of Contents
@@ -43,7 +43,7 @@ _Soon._
 This REST API is developed using Java programming language and Spring Boot starter of Spring framework. The full tech stack:
 
   - **Spring Boot**
-  - **MySQL** for Database
+  - **PostgreSQL** for Database
   - **Spring Data JPA** for data access layers
   - **Spring Security** for authentication and authorization
   - **JWT** for tokens and share security information between two parties — a client and a server
@@ -53,10 +53,10 @@ This REST API is developed using Java programming language and Spring Boot start
 
 ## Usage
 
-**Attention!** This project for some configuration properties (username and password of MySQL, secret key of HMAC256 algorithm used to encode/decode JWT token) uses IntelliJ IDEA environment variables. Define your environtment variables or paste your values directly to places where environment variables are used:
+**Attention!** This project for some configuration properties (username and password of PostgreSQL, secret key of HMAC256 algorithm used to encode/decode JWT token) uses IntelliJ IDEA environment variables. Define your environtment variables or paste your values directly to places where environment variables are used:
 
-- spring.datasource.username=${MYSQL_USERNAME} at application.properties: line 6
-- spring.datasource.password=${MYSQL_PASSWORD} at application.properties: line 7
+- spring.datasource.username=${DB_USERNAME} at application.properties: line 6
+- spring.datasource.password=${DB_PASSWORD} at application.properties: line 7
 - System.getenv("MY_JWT_SECRET") at JWTUtils: line 34
 
 ## Contribution
