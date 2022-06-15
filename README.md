@@ -2,7 +2,7 @@
 
 ---
 
-<a href="https://img.shields.io/badge/Version-0.0.1-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-not--deployed-critical"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-not--deployed-critical"></a>
+<a href="https://img.shields.io/badge/Version-0.0.1--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-not--deployed-critical"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-not--deployed-critical"></a>
 
 
 ## Table of Contents
@@ -10,12 +10,12 @@
 - [Description](#description)
 - [API docs](#api-docs)
 - [Database relations map](#database-relations-map)
-- [Frontend (Android client)](#frontend-(android-client))
+- [Frontend (Android client)](#frontend-android-client)
 - [Tech Stack](#tech-stack)
 - [Usage](#usage)
 - [Contribution](#contribution)
 - [Licenses](#licenses)
-- [Contact Information](#contactin-formation)
+- [Contact Information](#contact-information)
 
 ## Description
 
@@ -27,7 +27,7 @@ Currently working features: **languages, frameworks, reviews**.
 
 Documentation for the Progee API is available at Postman Documenter: [See docs](https://documenter.getpostman.com/view/14256972/UzBgwAPQ)
 
-## Database realtions map
+## Database relations map
 
 Progee API includes 4 main entities: Language (for programming language), Framework (for framework of programming language), AppUser (for user of application) and Review (users' review about programming language).
 And here is relations between tables of MySQL database:
