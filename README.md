@@ -2,7 +2,8 @@
 
 ---
 
-<a href="https://img.shields.io/badge/Version-0.0.1-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a>
+<a href="https://img.shields.io/badge/Version-0.0.1-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-not--deployed-critical"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-not--deployed-critical"></a>
+
 
 ## Table of Contents
 
