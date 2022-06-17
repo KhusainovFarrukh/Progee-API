@@ -2,7 +2,7 @@
 
 ---
 
-<a href="https://img.shields.io/badge/Version-0.0.1--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-not--deployed-critical"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-not--deployed-critical"></a>
+<a href="https://img.shields.io/badge/Version-0.0.1--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.0.1--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-deployed (heroku)-success"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-deployed (heroku)-success"></a>
 
 
 ## Table of Contents
@@ -27,10 +27,12 @@ Currently working features: **languages, frameworks, reviews**.
 
 Documentation for the Progee API is available at Postman Documenter: [See docs](https://documenter.getpostman.com/view/14256972/UzBgwAPQ)
 
+Progee API is currently deployed and working. Base url is: https://progee-api-v1.herokuapp.com (See API docs above to understand where to use base-url)
+
 ## Database relations map
 
 Progee API includes 4 main entities: Language (for programming language), Framework (for framework of programming language), AppUser (for user of application) and Review (users' review about programming language).
-And here is relations between tables of MySQL database:
+And here is relations between tables of PostgreSQL database:
 
 ![progee-db-relations](https://user-images.githubusercontent.com/68108113/173758913-519f58af-5285-4658-953c-0a658963c909.png)
 
