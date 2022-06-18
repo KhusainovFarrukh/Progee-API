@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithAuthorAndCreatedAt;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonPropertyOrder({"id", "body", "value", "score", "language", "up_votes", "down_votes"})
 public class Review extends EntityWithAuthorAndCreatedAt {
 
     private String body;

@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_FRAMEWORK;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonPropertyOrder({"id", "name", "description", "state", "image", "language"})
 public class Framework extends EntityWithResourceState {
 
     @Column(unique = true)

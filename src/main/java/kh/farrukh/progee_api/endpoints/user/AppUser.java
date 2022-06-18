@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_USER;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonPropertyOrder({"id", "name", "role", "image", "email", "username"})
 public class AppUser extends EntityWithId implements UserDetails {
 
     private String name;
