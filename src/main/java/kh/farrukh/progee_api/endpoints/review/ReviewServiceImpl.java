@@ -138,12 +138,8 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        // Get the email of the user who is currently logged in and then get the user object from the
-        // database.
-        String email = UserUtils.getEmail();
-        AppUser user = userRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("User", "email", email)
-        );
+        // Get the user who is currently logged in.
+        AppUser user = UserUtils.getCurrentUser(userRepository);
 
         // Checking if the user has already voted on the review. If the user has already voted on the review, then
         // throw a ReviewVoteException.

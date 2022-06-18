@@ -40,6 +40,5 @@ public class Language extends EntityWithResourceState {
         this.description = languageDto.getDescription();
         super.setImageId(languageDto.getImageId());
         super.setCreatedAt(ZonedDateTime.now());
-        super.setAuthorId(languageDto.getAuthorId());
     }
 }

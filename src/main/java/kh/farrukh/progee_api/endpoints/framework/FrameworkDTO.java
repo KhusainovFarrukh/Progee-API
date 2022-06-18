@@ -20,9 +20,6 @@ public class FrameworkDTO {
     private String description;
     @JsonProperty("image_id")
     private long imageId;
-    @NotNull
-    @JsonProperty("author_id")
-    private long authorId;
 //    private long languageId;
 
 }

@@ -149,4 +149,8 @@ public class AppUser extends EntityWithId implements UserDetails {
     public void setImageId(long imageId) {
         this.image = new Image(imageId, "");
     }
+
+    public boolean isAdmin() {
+        return role == UserRole.ADMIN || role == UserRole.SUPER_ADMIN;
+    }
 }

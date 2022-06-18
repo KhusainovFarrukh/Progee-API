@@ -1,6 +1,9 @@
 package kh.farrukh.progee_api.utils.user;
 
+import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.endpoints.user.UserRole;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -28,11 +31,23 @@ public class UserUtils {
     }
 
     /**
+     * Get the currently logged-in user.
+     *
+     * @return The user that is currently logged in.
+     */
+    public static AppUser getCurrentUser(UserRepository userRepository) {
+        String email = getEmail();
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("User", "email", email)
+        );
+    }
+
+    /**
      * Get the email of the currently logged-in user.
      *
      * @return The email of the user that is currently logged in.
      */
-    public static String getEmail() {
+    private static String getEmail() {
         return (String) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();

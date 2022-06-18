@@ -40,7 +40,6 @@ public class Framework extends EntityWithResourceState {
         this.name = frameworkDto.getName();
         this.description = frameworkDto.getDescription();
         super.setImageId(frameworkDto.getImageId());
-        super.setAuthorId(frameworkDto.getAuthorId());
         super.setCreatedAt(ZonedDateTime.now());
     }
 

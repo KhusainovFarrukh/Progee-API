@@ -20,7 +20,4 @@ public class LanguageDTO {
     private String description;
     @JsonProperty("image_id")
     private long imageId;
-    @NotNull
-    @JsonProperty("author_id")
-    private long authorId;
 }

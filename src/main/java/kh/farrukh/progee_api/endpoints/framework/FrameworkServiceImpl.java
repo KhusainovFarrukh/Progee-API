@@ -4,6 +4,8 @@ import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
@@ -31,6 +33,7 @@ public class FrameworkServiceImpl implements FrameworkService {
     private final FrameworkRepository frameworkRepository;
     private final LanguageRepository languageRepository;
     private final ImageRepository imageRepository;
+    private final UserRepository userRepository;
 
     /**
      * This function returns a list of frameworks that are associated with a specific language
@@ -104,7 +107,9 @@ public class FrameworkServiceImpl implements FrameworkService {
         }
         Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
         Framework framework = new Framework(frameworkDto);
-        if (UserUtils.isAdmin()) {
+        AppUser currentUser = UserUtils.getCurrentUser(userRepository);
+        framework.setAuthorId(currentUser.getId());
+        if (currentUser.isAdmin()) {
             framework.setState(ResourceState.APPROVED);
         } else {
             framework.setState(ResourceState.WAITING);
@@ -139,7 +144,7 @@ public class FrameworkServiceImpl implements FrameworkService {
         existingFramework.setName(frameworkDto.getName());
         existingFramework.setDescription(frameworkDto.getDescription());
         existingFramework.setImageId(frameworkDto.getImageId());
-        existingFramework.setAuthorId(frameworkDto.getAuthorId());
+        existingFramework.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
 
         return existingFramework;
     }
