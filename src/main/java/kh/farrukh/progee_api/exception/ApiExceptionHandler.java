@@ -34,6 +34,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<Object> handleApiException(ApiException exception, Locale locale) {
+        exception.printStackTrace();
         return new ResponseEntity<>(
                 new ErrorResponse(
                         messageSource.getMessage(
@@ -58,6 +59,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleSortParamValidationException(ConstraintViolationException exception) {
+        exception.printStackTrace();
         String errorMessage = new ArrayList<>(exception.getConstraintViolations()).get(0).getMessage();
         return new ResponseEntity<>(
                 new ErrorResponse(
@@ -78,6 +80,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleRequestBodyValidationException(MethodArgumentNotValidException exception) {
+        exception.printStackTrace();
         FieldError error = exception.getFieldError();
         String errorMessage;
         if (error != null) {
@@ -104,6 +107,7 @@ public class ApiExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnknownException(Exception exception, Locale locale) {
+        exception.printStackTrace();
         return new ResponseEntity<>(
                 new ErrorResponse(
                         messageSource.getMessage(

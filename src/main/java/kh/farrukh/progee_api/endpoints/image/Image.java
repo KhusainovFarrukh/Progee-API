@@ -5,6 +5,7 @@ import kh.farrukh.progee_api.base.entity.EntityWithId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -20,6 +21,7 @@ public class Image extends EntityWithId {
 
     @JsonIgnore
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     private byte[] content;
 
     public Image(byte[] content) {
