@@ -1,11 +1,13 @@
 package kh.farrukh.progee_api.endpoints.image;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kh.farrukh.progee_api.base.entity.EntityWithId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 /**
  * Image is a simple entity
@@ -16,15 +18,17 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Image extends EntityWithId {
 
-    private String location;
+    @JsonIgnore
+    @Lob
+    private byte[] content;
 
-    public Image(String location) {
-        this.location = location;
+    public Image(byte[] content) {
+        this.content = content;
     }
 
-    public Image(long id, String location) {
+    public Image(long id, byte[] content) {
         super.setId(id);
-        this.location = location;
+        this.content = content;
     }
 
 }

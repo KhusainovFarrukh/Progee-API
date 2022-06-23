@@ -149,7 +149,7 @@ public class AppUser extends EntityWithId implements UserDetails {
     }
 
     public void setImageId(long imageId) {
-        this.image = new Image(imageId, "");
+        this.image = new Image(imageId, null);
     }
 
     public boolean isAdmin() {

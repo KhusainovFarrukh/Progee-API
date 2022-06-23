@@ -54,7 +54,7 @@ public class ProgeeApiApplication {
         return args -> {
             // code for initializing testing data
             try {
-                imageRepository.save(new Image(1L, "fake.jpeg"));
+                imageRepository.save(new Image(1L, null));
 
                 userService.addUser(new AppUserDTO("Farrukh", "farrukh@mail.com", "farrukh_kh", "1234", true, false, UserRole.SUPER_ADMIN, 1L));
                 userService.addUser(new AppUserDTO("Hamdam", "hamdam@mail.com", "hamdam_u", "1234", true, false, UserRole.ADMIN, 1L));

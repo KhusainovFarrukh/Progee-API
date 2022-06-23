@@ -1,8 +1,8 @@
 package kh.farrukh.progee_api.endpoints.image;
 
-import kh.farrukh.progee_api.endpoints.image.file_store.FileStoreRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,10 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
-    private final FileStoreRepository fileStoreRepository;
 
     /**
-     * We're taking a multipart file, saving it to the file store, and then saving the image to the image repository
+     * We're taking a multipart file, saving image to the image repository
      *
      * @param multipartImage The image file that is being uploaded.
      * @return The image object is being returned.
@@ -27,9 +26,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image addImage(MultipartFile multipartImage) {
         try {
-            return imageRepository.save(
-                    new Image(fileStoreRepository.save(multipartImage.getBytes()))
-            );
+            return imageRepository.save(new Image(multipartImage.getBytes()));
         } catch (Exception exception) {
             throw new RuntimeException("Error on image upload: " + exception.getMessage());
         }
@@ -49,13 +46,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * Find the image in the file system and return it as a resource.
+     * Find the image in the db and return its content as a resource.
      *
      * @param id The id of the image you want to download.
      * @return A resource
      */
     @Override
     public Resource downloadImage(long id) {
-        return fileStoreRepository.findInFileSystem(getImageById(id).getLocation());
+        byte[] content = imageRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Image", "id", id)
+        ).getContent();
+
+        return new ByteArrayResource(content);
     }
 }

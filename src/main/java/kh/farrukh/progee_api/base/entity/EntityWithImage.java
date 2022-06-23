@@ -21,6 +21,6 @@ public abstract class EntityWithImage extends EntityWithAuthorAndCreatedAt {
     private Image image;
 
     public void setImageId(long imageId) {
-        this.image = new Image(imageId, "");
+        this.image = new Image(imageId, null);
     }
 }
