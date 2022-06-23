@@ -19,6 +19,7 @@ public class ApiEndpoints {
     public static final String SECURITY_ENDPOINT_REVIEW = ENDPOINT_LANGUAGE + "/**/reviews";
     public static final String ENDPOINT_USER = "/api/v1/users";
     public static final String ENDPOINT_IMAGE = "/api/v1/images";
+    public static final String SECURITY_ENDPOINT_DOWNLOAD = ENDPOINT_IMAGE + "/**/download";
 
     public static String withChildEndpoints(String endpoint) {
         return endpoint + "/**";

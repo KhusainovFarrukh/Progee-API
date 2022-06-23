@@ -47,6 +47,7 @@ public class SecurityConfiguration {
         setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
         setUserCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
+        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_DOWNLOAD), http);
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
