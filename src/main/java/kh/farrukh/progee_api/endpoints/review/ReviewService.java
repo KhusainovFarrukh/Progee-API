@@ -4,13 +4,14 @@ import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 /**
  * A base interface for service of Review endpoints
- *
+ * <p>
  * Methods implemented in ReviewServiceImpl
  */
 public interface ReviewService {
 
     PagingResponse<Review> getReviewsByLanguage(
             long languageId,
+            ReviewValue value,
             int page,
             int pageSize,
             String sortBy,
