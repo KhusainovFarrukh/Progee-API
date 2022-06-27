@@ -38,7 +38,7 @@ And here is relations between tables of PostgreSQL database:
 
 ## Frontend (Android client)
 
-_Soon._
+Currently, there is Android client app for testing Progee-API main features. Progee-Android is in alpha state now. See [GitHub repository of Progee-Android](https://github.com/khusainovfarrukh/progee-android) for additional information
 
 ## Tech stack
 
