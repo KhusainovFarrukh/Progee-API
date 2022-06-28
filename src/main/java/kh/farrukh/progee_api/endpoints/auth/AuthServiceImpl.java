@@ -3,7 +3,6 @@ package kh.farrukh.progee_api.endpoints.auth;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
-import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.endpoints.user.UserServiceImpl;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
@@ -39,26 +38,14 @@ public class AuthServiceImpl implements AuthService {
         if (!emailValidator.test(registrationRequest.getEmail())) {
             throw new BadRequestException("Email");
         }
-        return userService.addUser(
-                new AppUserDTO(
-                        registrationRequest.getName(),
-                        registrationRequest.getEmail(),
-                        registrationRequest.getUsername(),
-                        registrationRequest.getPassword(),
-                        // TODO: 6/9/22 set default to false and implement email verification
-                        true,
-                        false,
-                        UserRole.USER,
-                        registrationRequest.getImageId()
-                )
-        );
+        return userService.addUser(new AppUserDTO(registrationRequest));
     }
 
     /**
      * It takes the refresh token from the request, decodes it, gets the username from it, loads the user from the
      * database, generates a new access token and refresh token, and sends them back in the response
      *
-     * @param request The request object containing refresh token in header
+     * @param request  The request object containing refresh token in header
      * @param response The response object that will be used to send the token back to the client.
      */
     @Override

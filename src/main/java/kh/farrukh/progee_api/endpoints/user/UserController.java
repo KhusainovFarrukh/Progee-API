@@ -80,15 +80,31 @@ public class UserController {
      * This function sets the role of the user with the given id,
      * to the role given in the request body.
      *
-     * @param id               The id of the user to be updated
+     * @param id      The id of the user to be updated
      * @param roleDto This is the object that contains the role that we want to set the user to.
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
-    @PutMapping("{id}/role")
+    @PatchMapping("{id}/role")
     public ResponseEntity<AppUser> setUserRole(
             @PathVariable long id,
             @Valid @RequestBody UserRoleDTO roleDto
     ) {
         return new ResponseEntity<>(userService.setUserRole(id, roleDto), HttpStatus.OK);
+    }
+
+    /**
+     * This function sets the image of the user with the given id,
+     * to the image given in the request body.
+     *
+     * @param id       The id of the user to be updated
+     * @param imageDto This is the object that contains the image id that we want to set the user to.
+     * @return A ResponseEntity with the updated AppUser object and HttpStatus.
+     */
+    @PatchMapping("{id}/image")
+    public ResponseEntity<AppUser> setUserImage(
+            @PathVariable long id,
+            @Valid @RequestBody UserImageDTO imageDto
+    ) {
+        return new ResponseEntity<>(userService.setUserImage(id, imageDto), HttpStatus.OK);
     }
 }

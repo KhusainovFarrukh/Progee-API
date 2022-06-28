@@ -51,10 +51,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * "Get all users from the database, sort them by the given sortBy and orderBy parameters, and return a PagingResponse
      * object containing the users in the given page."
      *
-     * @param page The page number to return.
+     * @param page     The page number to return.
      * @param pageSize The number of items to return per page.
-     * @param sortBy The field to sort by.
-     * @param orderBy The direction of the sort. Can be either "asc" or "desc".
+     * @param sortBy   The field to sort by.
+     * @param orderBy  The direction of the sort. Can be either "asc" or "desc".
      * @return A PagingResponse object.
      */
     @Override
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * If the username or email is different from the existing one, check if it exists in the database. If it does, throw
      * an exception. If it doesn't, update the user
      *
-     * @param id The id of the user to be updated.
+     * @param id         The id of the user to be updated.
      * @param appUserDto The DTO object that contains the new values for the user.
      * @return The updated user.
      */
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * It takes in a user id and a UserRoleDTO object, finds the user in the database,
      * sets the user's role to the role in the UserRoleDTO object, and returns the user
      *
-     * @param id The id of the user to be updated
+     * @param id      The id of the user to be updated
      * @param roleDto This is the object that will be passed in the request body.
      * @return The updated user.
      */
@@ -161,6 +161,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 () -> new ResourceNotFoundException("User", "id", id)
         );
         user.setRole(roleDto.getRole());
+        return user;
+    }
+
+    /**
+     * It takes in a user id and a UserImageDTO object, finds the user in the database,
+     * sets the user's image to the image with id in the UserImageDTO object, and returns the user
+     *
+     * @param id       The id of the user to be updated
+     * @param imageDto This is the object that will be passed in the request body.
+     * @return The updated user.
+     */
+    @Override
+    @Transactional
+    public AppUser setUserImage(long id, UserImageDTO imageDto) {
+        AppUser user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+
+        checkImageId(imageRepository, imageDto.getImageId());
+        user.setImageId(imageDto.getImageId());
         return user;
     }
 }

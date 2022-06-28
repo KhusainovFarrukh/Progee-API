@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 /**
  * A base interface for service of User endpoints
- *
+ * <p>
  * Methods implemented in UserServiceImpl
  */
 public interface UserService {
@@ -25,4 +25,6 @@ public interface UserService {
     void deleteUser(long id);
 
     AppUser setUserRole(long id, UserRoleDTO roleDto);
+
+    AppUser setUserImage(long id, UserImageDTO imageDto);
 }

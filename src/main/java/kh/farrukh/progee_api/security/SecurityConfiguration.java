@@ -46,7 +46,7 @@ public class SecurityConfiguration {
         setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
         setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
-        setUserCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
+        setEveryoneCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_DOWNLOAD), http);
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
@@ -58,6 +58,18 @@ public class SecurityConfiguration {
     }
 
     /**
+     * It sets the endpoint to be accessible by everyone for get/post requests.
+     *
+     * @param endpoint The endpoint you want to set the permissions for.
+     * @param http     The HttpSecurity object that is used to configure the security of the application.
+     */
+    private void setEveryoneCreatableEndpoint(String endpoint, HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).permitAll();
+        setEditMethodsAccessibleToAnyUser(endpoint, http);
+    }
+
+    /**
      * It sets the endpoint to be accessible by all users.
      *
      * @param endpoint The endpoint you want to set the permissions for.
@@ -66,8 +78,7 @@ public class SecurityConfiguration {
     private void setUserCreatableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        setEditMethodsAccessibleToAnyUser(endpoint, http);
     }
 
     /**
@@ -79,8 +90,7 @@ public class SecurityConfiguration {
     private void setAdminVerifiableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        setEditMethodsAccessibleOnlyToAdmins(endpoint, http);
     }
 
     /**
@@ -92,8 +102,7 @@ public class SecurityConfiguration {
     private void setOnlyAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        setEditMethodsAccessibleOnlyToAdmins(endpoint, http);
     }
 
     /**
@@ -105,7 +114,20 @@ public class SecurityConfiguration {
     private void setOnlySuperAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
+    }
+
+    private void setEditMethodsAccessibleToAnyUser(String endpoint, HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+    }
+
+    private void setEditMethodsAccessibleOnlyToAdmins(String endpoint, HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
     }
 }
