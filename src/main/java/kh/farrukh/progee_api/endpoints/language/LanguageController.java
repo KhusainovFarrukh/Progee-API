@@ -70,7 +70,7 @@ public class LanguageController {
     /**
      * This function updates a language.
      *
-     * @param id           The id of the language to update
+     * @param id          The id of the language to update
      * @param languageDto The language values that we want to update.
      * @return A ResponseEntity with the updated Language object and HttpStatus.
      */
@@ -85,7 +85,7 @@ public class LanguageController {
     /**
      * This function deletes a language
      *
-     * @param id         The id of the language to delete
+     * @param id The id of the language to delete
      * @return A ResponseEntity with HttpStatus.
      */
     @DeleteMapping("{id}")
@@ -102,7 +102,7 @@ public class LanguageController {
      * @param resourceStateDto This is the object that contains the state that we want to set the language to.
      * @return A ResponseEntity with the updated Language object and HttpStatus.
      */
-    @PutMapping("{id}/state")
+    @PatchMapping("{id}/state")
     public ResponseEntity<Language> setLanguageState(
             @PathVariable long id,
             @Valid @RequestBody ResourceStateDTO resourceStateDto

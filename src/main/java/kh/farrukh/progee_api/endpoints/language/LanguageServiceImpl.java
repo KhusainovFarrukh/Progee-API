@@ -6,6 +6,7 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -121,19 +122,25 @@ public class LanguageServiceImpl implements LanguageService {
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
 
-        // It checks if the name of the language is changed and if the new name is already taken.
-        if (!languageDto.getName().equals(existingLanguage.getName()) &&
-                languageRepository.existsByName(languageDto.getName())) {
-            throw new DuplicateResourceException("Language", "name", languageDto.getName());
+        if (UserUtils.isAdminOrAuthor(existingLanguage.getAuthor().getId(), userRepository)) {
+
+            // It checks if the name of the language is changed and if the new name is already taken.
+            if (!languageDto.getName().equals(existingLanguage.getName()) &&
+                    languageRepository.existsByName(languageDto.getName())) {
+                throw new DuplicateResourceException("Language", "name", languageDto.getName());
+            }
+            Checkers.checkImageId(imageRepository, languageDto.getImageId());
+
+            existingLanguage.setName(languageDto.getName());
+            existingLanguage.setDescription(languageDto.getDescription());
+            existingLanguage.setImageId(languageDto.getImageId());
+            existingLanguage.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
+            existingLanguage.setStateAccordingToRole(UserUtils.isAdmin());
+
+            return existingLanguage;
+        } else {
+            throw new PermissionException();
         }
-        Checkers.checkImageId(imageRepository, languageDto.getImageId());
-
-        existingLanguage.setName(languageDto.getName());
-        existingLanguage.setDescription(languageDto.getDescription());
-        existingLanguage.setImageId(languageDto.getImageId());
-        existingLanguage.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
-
-        return existingLanguage;
     }
 
     /**
