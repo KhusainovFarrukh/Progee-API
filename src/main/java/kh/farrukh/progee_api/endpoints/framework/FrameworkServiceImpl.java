@@ -148,7 +148,6 @@ public class FrameworkServiceImpl implements FrameworkService {
             existingFramework.setName(frameworkDto.getName());
             existingFramework.setDescription(frameworkDto.getDescription());
             existingFramework.setImageId(frameworkDto.getImageId());
-            existingFramework.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
             existingFramework.setStateAccordingToRole(UserUtils.isAdmin());
 
             return existingFramework;

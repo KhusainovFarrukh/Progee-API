@@ -134,7 +134,6 @@ public class LanguageServiceImpl implements LanguageService {
             existingLanguage.setName(languageDto.getName());
             existingLanguage.setDescription(languageDto.getDescription());
             existingLanguage.setImageId(languageDto.getImageId());
-            existingLanguage.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
             existingLanguage.setStateAccordingToRole(UserUtils.isAdmin());
 
             return existingLanguage;
