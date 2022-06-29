@@ -27,4 +27,6 @@ public interface UserService {
     AppUser setUserRole(long id, UserRoleDTO roleDto);
 
     AppUser setUserImage(long id, UserImageDTO imageDto);
+
+    AppUser setUserPassword(long id, UserPasswordDTO passwordDto);
 }

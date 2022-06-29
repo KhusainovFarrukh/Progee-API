@@ -107,4 +107,19 @@ public class UserController {
     ) {
         return new ResponseEntity<>(userService.setUserImage(id, imageDto), HttpStatus.OK);
     }
+
+    /**
+     * This function sets the password of the user to the given new password
+     *
+     * @param id          The id of the user to be updated
+     * @param passwordDto This is the object that contains the current and new passwords.
+     * @return A ResponseEntity with the updated AppUser object and HttpStatus.
+     */
+    @PatchMapping("{id}/password")
+    public ResponseEntity<AppUser> setUserPassword(
+            @PathVariable long id,
+            @Valid @RequestBody UserPasswordDTO passwordDto
+    ) {
+        return new ResponseEntity<>(userService.setUserPassword(id, passwordDto), HttpStatus.OK);
+    }
 }

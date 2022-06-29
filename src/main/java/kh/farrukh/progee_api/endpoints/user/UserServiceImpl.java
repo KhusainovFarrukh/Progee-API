@@ -1,11 +1,14 @@
 package kh.farrukh.progee_api.endpoints.user;
 
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
+import kh.farrukh.progee_api.utils.user.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -128,7 +131,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         existingAppUser.setName(appUserDto.getName());
         existingAppUser.setEmail(appUserDto.getEmail());
-        existingAppUser.setPassword(passwordEncoder.encode(appUserDto.getPassword()));
         existingAppUser.setUniqueUsername(appUserDto.getUsername());
         existingAppUser.setImageId(appUserDto.getImageId());
 
@@ -182,5 +184,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         checkImageId(imageRepository, imageDto.getImageId());
         user.setImageId(imageDto.getImageId());
         return user;
+    }
+
+    /**
+     * It takes in a user id and a UserPasswordDTO object, finds the user in the database,
+     * checks the current password, sets the user's password to the password in the UserPasswordDTO object,
+     * and returns the user
+     *
+     * @param id          The id of the user to be updated
+     * @param passwordDto This is the object that will be passed in the request body.
+     * @return The updated user.
+     */
+    @Override
+    @Transactional
+    public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
+        if (UserUtils.isAdminOrAuthor(id, userRepository)) {
+            AppUser currentUser = userRepository.findById(id).orElseThrow(
+                    () -> new ResourceNotFoundException("User", "id", id)
+            );
+            if (passwordEncoder.matches(passwordDto.getPassword(), currentUser.getPassword())) {
+                currentUser.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+                return currentUser;
+            } else {
+                throw new BadRequestException("Password");
+            }
+        } else {
+            throw new PermissionException();
+        }
     }
 }

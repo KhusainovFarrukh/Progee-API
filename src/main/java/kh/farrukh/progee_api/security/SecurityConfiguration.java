@@ -46,6 +46,7 @@ public class SecurityConfiguration {
         // Endpoints that anyone can get and users can do any method request
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_IMAGE), http);
+        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_PASSWORD), http);
 
         // Endpoints for only admin & super-admins
         setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);

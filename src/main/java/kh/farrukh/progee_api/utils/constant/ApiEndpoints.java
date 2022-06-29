@@ -22,6 +22,7 @@ public class ApiEndpoints {
     public static final String SECURITY_ENDPOINT_FRAMEWORK_STATE = SECURITY_ENDPOINT_FRAMEWORK + "/**/state";
     public static final String SECURITY_ENDPOINT_USER_IMAGE = ENDPOINT_USER + "/**/image";
     public static final String SECURITY_ENDPOINT_USER_ROLE = ENDPOINT_USER + "/**/role";
+    public static final String SECURITY_ENDPOINT_USER_PASSWORD = ENDPOINT_USER + "/**/password";
 
     public static String withChildEndpoints(String endpoint) {
         return endpoint + "/**";
