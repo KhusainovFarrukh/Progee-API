@@ -35,10 +35,11 @@ public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
                 request.getServletPath().equals(ENDPOINT_REFRESH_TOKEN) ||
 
                 // upload or download image request
-                (request.getServletPath().contains(ENDPOINT_IMAGE) && (request.getMethod().equals(HttpMethod.GET.name())) || request.getMethod().equals(HttpMethod.POST.name())) ||
+                (request.getServletPath().contains(ENDPOINT_IMAGE) && (request.getMethod().equals(HttpMethod.GET.name()) || request.getMethod().equals(HttpMethod.POST.name()))) ||
 
                 // get languages/frameworks request without filter by state
-                (request.getMethod().equals(HttpMethod.GET.name()) && request.getServletPath().contains(ENDPOINT_LANGUAGE) && request.getParameter("state") == null)) {
+                (request.getMethod().equals(HttpMethod.GET.name()) && request.getServletPath().contains(ENDPOINT_LANGUAGE) && (request.getParameter("state") == null))) {
+
             // then do not check access-token
             filterChain.doFilter(request, response);
         } else {
