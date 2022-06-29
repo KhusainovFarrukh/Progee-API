@@ -47,13 +47,13 @@ public class SecurityConfiguration {
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_IMAGE), http);
 
-        // Endpoints that anyone can GET and users can POST, but admins must verify new added resources
-        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
-        setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
-
         // Endpoints for only admin & super-admins
         setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);
         setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE), http);
+
+        // Endpoints that anyone can GET and users can POST, but admins must verify new added resources
+        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
+        setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
 
         // Endpoints for only super-admins, also admin can execute GET requests
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_ROLE), http);
@@ -99,7 +99,9 @@ public class SecurityConfiguration {
     private void setAdminVerifiableEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        setEditMethodsAccessibleOnlyToAdmins(endpoint, http);
+        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
     }
 
     /**

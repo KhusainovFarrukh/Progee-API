@@ -112,7 +112,7 @@ public class FrameworkController {
      * @param resourceStateDto This is the object that contains the state that we want to set the framework to.
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
-    @PutMapping("{id}/state")
+    @PatchMapping("{id}/state")
     public ResponseEntity<Framework> setFrameworkState(
             @PathVariable long languageId,
             @PathVariable long id,
