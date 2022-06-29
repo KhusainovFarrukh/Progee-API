@@ -21,18 +21,6 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("*"));
-//        configuration.setAllowedMethods(List.of("*"));
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setAllowCredentials(true);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
     /**
      * A function that is used to configure the security filter chain.
      *
@@ -43,7 +31,6 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Disabling the CSRF and making the session stateless.
         http.csrf().disable();
-//        http.cors().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Allowing all the users to access the register, login and refresh token endpoints.
@@ -57,14 +44,11 @@ public class SecurityConfiguration {
         setEveryoneCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
 
         // Endpoints that anyone can get and users can do any method request
-        // TODO: 6/29/22 post review
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
         setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_IMAGE), http);
 
         // Endpoints that anyone can GET and users can POST, but admins must verify new added resources
-        // TODO: 6/29/22 post framework
         setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
-        // TODO: 6/29/22 post language
         setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
 
         // Endpoints for only admin & super-admins
