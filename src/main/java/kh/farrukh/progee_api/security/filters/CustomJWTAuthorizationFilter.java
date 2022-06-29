@@ -27,11 +27,19 @@ public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
         // This is the main logic of the filter. If the request is for the login/refresh-token endpoints or
         // simple user request for getting list of languages/frameworks/reviews, then don't check JWT token.
         // Else decode the JWT and set the authentication in the security context.
+
+        // if..
+        // login request
         if (request.getServletPath().equals(ENDPOINT_LOGIN) ||
+                // refresh token request
                 request.getServletPath().equals(ENDPOINT_REFRESH_TOKEN) ||
-                (request.getMethod().equals(HttpMethod.GET.name()) &&
-                        request.getServletPath().contains(ENDPOINT_LANGUAGE) &&
-                        request.getParameter("state") == null)) {
+
+                // upload or download image request
+                (request.getServletPath().contains(ENDPOINT_IMAGE) && (request.getMethod().equals(HttpMethod.GET.name())) || request.getMethod().equals(HttpMethod.POST.name())) ||
+
+                // get languages/frameworks request without filter by state
+                (request.getMethod().equals(HttpMethod.GET.name()) && request.getServletPath().contains(ENDPOINT_LANGUAGE) && request.getParameter("state") == null)) {
+            // then do not check access-token
             filterChain.doFilter(request, response);
         } else {
             try {

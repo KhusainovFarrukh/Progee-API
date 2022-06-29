@@ -21,6 +21,18 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("*"));
+//        configuration.setAllowedMethods(List.of("*"));
+//        configuration.setAllowedHeaders(List.of("*"));
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
     /**
      * A function that is used to configure the security filter chain.
      *
@@ -31,23 +43,36 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Disabling the CSRF and making the session stateless.
         http.csrf().disable();
+//        http.cors().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // Allowing all the users to access the login and refresh token endpoints.
+        // Allowing all the users to access the register, login and refresh token endpoints.
         http.authorizeRequests().antMatchers(
                 withChildEndpoints(ENDPOINT_REGISTRATION),
                 withChildEndpoints(ENDPOINT_LOGIN),
                 withChildEndpoints(ENDPOINT_REFRESH_TOKEN)
         ).permitAll();
 
-        // Setting security for the other endpoints in the application.
-        setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);
-        setOnlyAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE), http);
-        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
-        setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
-        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
+        // Endpoint that everyone can GET and POST, but only authorized user can PATCH, PUT, DELETE
         setEveryoneCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
-        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_DOWNLOAD), http);
+
+        // Endpoints that anyone can get and users can do any method request
+        // TODO: 6/29/22 post review
+        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
+        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_IMAGE), http);
+
+        // Endpoints that anyone can GET and users can POST, but admins must verify new added resources
+        // TODO: 6/29/22 post framework
+        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
+        // TODO: 6/29/22 post language
+        setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
+
+        // Endpoints for only admin & super-admins
+        setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);
+        setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE), http);
+
+        // Endpoints for only super-admins, also admin can execute GET requests
+        setOnlySuperAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_ROLE), http);
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
@@ -99,7 +124,7 @@ public class SecurityConfiguration {
      * @param endpoint The endpoint you want to set the permissions for.
      * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
-    private void setOnlyAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
+    private void setOnlyAdminEndpoint(String endpoint, HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
         setEditMethodsAccessibleOnlyToAdmins(endpoint, http);

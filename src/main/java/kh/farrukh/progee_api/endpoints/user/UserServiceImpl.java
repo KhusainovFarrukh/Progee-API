@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public AppUser addUser(AppUserDTO appUserDto) {
         checkUserIsUnique(userRepository, appUserDto);
-        Checkers.checkImageId(imageRepository, appUserDto.getImageId());
+        checkImageId(imageRepository, appUserDto.getImageId());
         AppUser appUser = new AppUser(appUserDto);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
