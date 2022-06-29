@@ -45,7 +45,6 @@ public class Review extends EntityWithAuthorAndCreatedAt {
     // This is a constructor that takes a ReviewDTO object and sets the values of the current object to the values of
     // the given object.
     public Review(ReviewDTO reviewDto) {
-        setAuthorId(reviewDto.getAuthorId());
         this.body = reviewDto.getBody();
         this.value = reviewDto.getValue();
         super.setCreatedAt(ZonedDateTime.now());

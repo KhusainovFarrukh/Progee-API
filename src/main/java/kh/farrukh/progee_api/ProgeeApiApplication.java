@@ -80,13 +80,13 @@ public class ProgeeApiApplication {
                 frameworkService.addFramework(2, new FrameworkDTO("Kweb", "Kweb is a new way to create beautiful, efficient, and scalable websites in Kotlin, quickly", 1));
 
                 for (int i = 1; i < 50; i++) {
-                    reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (like)", ReviewValue.LIKE, 1));
-                    reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (don't have pratice)", ReviewValue.DONT_HAVE_PRACTICE, 2));
+                    reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (like)", ReviewValue.LIKE));
+                    reviewService.addReview(1, new ReviewDTO("This is " + i + " review for language (don't have pratice)", ReviewValue.DONT_HAVE_PRACTICE));
 
                     if (i % 2 == 0) {
-                        reviewService.addReview(4, new ReviewDTO("This is " + i + " review for language (dislike)", ReviewValue.DISLIKE, 3));
+                        reviewService.addReview(4, new ReviewDTO("This is " + i + " review for language (dislike)", ReviewValue.DISLIKE));
                     } else {
-                        reviewService.addReview(2, new ReviewDTO("This is " + i + " review for language (like)", ReviewValue.LIKE, 1));
+                        reviewService.addReview(2, new ReviewDTO("This is " + i + " review for language (like)", ReviewValue.LIKE));
                     }
                 }
             } catch (Exception exception) {

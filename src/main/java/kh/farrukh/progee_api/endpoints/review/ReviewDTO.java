@@ -21,9 +21,6 @@ public class ReviewDTO {
     private String body;
     @NotNull
     private ReviewValue value;
-    @NotNull
-    @JsonProperty("author_id")
-    private long authorId;
 //    @JsonProperty("language_id")
 //    private long languageId;
 }

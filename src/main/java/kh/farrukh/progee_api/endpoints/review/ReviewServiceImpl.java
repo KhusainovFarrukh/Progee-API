@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.review;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ReviewVoteException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -92,6 +93,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = new Review(reviewDto);
         checkLanguageId(languageRepository, languageId);
         review.setLanguageId(languageId);
+        review.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
         return reviewRepository.save(review);
     }
 
@@ -111,10 +113,12 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        existingReview.setAuthorId(reviewDto.getAuthorId());
-        existingReview.setBody(reviewDto.getBody());
-        existingReview.setValue(reviewDto.getValue());
-//        existingReview.setLanguageId(reviewDto.getLanguageId());
+        if (UserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
+            existingReview.setBody(reviewDto.getBody());
+            existingReview.setValue(reviewDto.getValue());
+        } else {
+            throw new PermissionException();
+        }
 
         return existingReview;
     }
@@ -128,8 +132,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(long languageId, long id) {
         checkLanguageId(languageRepository, languageId);
-        checkReviewId(reviewRepository, id);
-        reviewRepository.deleteById(id);
+        Review existingReview = reviewRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Review", "id", id)
+        );
+
+        if (UserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
+            checkReviewId(reviewRepository, id);
+            reviewRepository.deleteById(id);
+        } else {
+            throw new PermissionException();
+        }
     }
 
     /**
