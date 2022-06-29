@@ -16,6 +16,25 @@ import java.util.stream.Collectors;
 public class UserUtils {
 
     /**
+     * It returns true if the current user's id equals given id or current user is admin
+     *
+     * @return A boolean value
+     */
+    public static boolean isAdminOrAuthor(long authorId, UserRepository userRepository) {
+        AppUser currentUser = getCurrentUser(userRepository);
+        return currentUser.isAdmin() || currentUser.getId() == authorId;
+    }
+
+    /**
+     * It returns true if the current user's id equals given id
+     *
+     * @return A boolean value
+     */
+    public static boolean isAuthor(long authorId, UserRepository userRepository) {
+        return getCurrentUser(userRepository).getId() == authorId;
+    }
+
+    /**
      * It returns true if the current user is an admin or super admin
      *
      * @return A boolean value

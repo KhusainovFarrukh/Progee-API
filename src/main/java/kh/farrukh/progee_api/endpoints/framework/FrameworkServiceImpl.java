@@ -7,6 +7,7 @@ import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -133,20 +134,26 @@ public class FrameworkServiceImpl implements FrameworkService {
         Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
-        // It checks if the name of the framework is changed and if the new name is already taken.
-        if (!frameworkDto.getName().equals(existingFramework.getName()) &&
-                languageRepository.existsByName(frameworkDto.getName())) {
-            throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
+
+        if (UserUtils.isAdminOrAuthor(existingFramework.getAuthor().getId(), userRepository)) {
+
+            // It checks if the name of the framework is changed and if the new name is already taken.
+            if (!frameworkDto.getName().equals(existingFramework.getName()) &&
+                    languageRepository.existsByName(frameworkDto.getName())) {
+                throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
+            }
+            Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
+
+            existingFramework.setLanguageId(languageId);
+            existingFramework.setName(frameworkDto.getName());
+            existingFramework.setDescription(frameworkDto.getDescription());
+            existingFramework.setImageId(frameworkDto.getImageId());
+            existingFramework.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
+
+            return existingFramework;
+        } else {
+            throw new PermissionException();
         }
-        Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
-
-        existingFramework.setLanguageId(languageId);
-        existingFramework.setName(frameworkDto.getName());
-        existingFramework.setDescription(frameworkDto.getDescription());
-        existingFramework.setImageId(frameworkDto.getImageId());
-        existingFramework.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
-
-        return existingFramework;
     }
 
     /**

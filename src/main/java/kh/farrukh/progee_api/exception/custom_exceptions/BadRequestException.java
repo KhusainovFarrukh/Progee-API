@@ -15,15 +15,15 @@ import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_B
 @Getter
 public class BadRequestException extends ApiException {
 
-    private final String requiredValue;
+    private final String invalidValue;
 
-    public BadRequestException(String requiredValue) {
+    public BadRequestException(String invalidValue) {
         super(
-                String.format("%s is not valid", requiredValue),
+                String.format("%s is not valid", invalidValue),
                 HttpStatus.BAD_REQUEST,
                 EXCEPTION_BAD_REQUEST,
-                new Object[]{requiredValue}
+                new Object[]{invalidValue}
         );
-        this.requiredValue = requiredValue;
+        this.invalidValue = invalidValue;
     }
 }
