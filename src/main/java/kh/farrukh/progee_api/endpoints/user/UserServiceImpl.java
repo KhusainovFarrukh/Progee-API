@@ -177,13 +177,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public AppUser setUserImage(long id, UserImageDTO imageDto) {
-        AppUser user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User", "id", id)
-        );
+        if (UserUtils.isAdminOrAuthor(id, userRepository)) {
+            AppUser user = userRepository.findById(id).orElseThrow(
+                    () -> new ResourceNotFoundException("User", "id", id)
+            );
 
-        checkImageId(imageRepository, imageDto.getImageId());
-        user.setImageId(imageDto.getImageId());
-        return user;
+            checkImageId(imageRepository, imageDto.getImageId());
+            user.setImageId(imageDto.getImageId());
+            return user;
+        } else {
+            throw new PermissionException();
+        }
     }
 
     /**
