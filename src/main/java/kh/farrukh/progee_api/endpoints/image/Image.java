@@ -32,5 +32,4 @@ public class Image extends EntityWithId {
         super.setId(id);
         this.content = content;
     }
-
 }

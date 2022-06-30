@@ -25,8 +25,4 @@ public abstract class EntityWithAuthorAndCreatedAt extends EntityWithId {
     @JsonProperty("created_at")
     @Column(name = "created_at")
     private ZonedDateTime createdAt;
-
-    public void setAuthorId(long authorId) {
-        setAuthor(new AppUser(authorId));
-    }
 }

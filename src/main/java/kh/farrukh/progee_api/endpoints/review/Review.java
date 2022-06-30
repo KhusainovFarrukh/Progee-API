@@ -58,13 +58,4 @@ public class Review extends EntityWithAuthorAndCreatedAt {
     public int getScore() {
         return this.upVotes.size() - this.downVotes.size();
     }
-
-    /**
-     * Sets the language of the current review to the language with the given ID.
-     *
-     * @param languageId The ID of the language to be set.
-     */
-    public void setLanguageId(long languageId) {
-        setLanguage(new Language(languageId));
-    }
 }

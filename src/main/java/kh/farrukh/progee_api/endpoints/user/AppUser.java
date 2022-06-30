@@ -70,44 +70,8 @@ public class AppUser extends EntityWithId implements UserDetails {
         );
     }
 
-    public AppUser(
-            String name,
-            String email,
-            String uniqueUsername,
-            String password,
-            UserRole role,
-            long imageId
-    ) {
-        this.name = name;
-        this.email = email;
-        this.uniqueUsername = uniqueUsername;
-        this.password = password;
-        this.role = role;
-        setImageId(imageId);
-    }
-
     public AppUser(long id) {
         super.setId(id);
-    }
-
-    public AppUser(
-            String name,
-            String email,
-            String uniqueUsername,
-            String password,
-            boolean isEnabled,
-            boolean isLocked,
-            UserRole role,
-            long imageId
-    ) {
-        this.name = name;
-        this.email = email;
-        this.uniqueUsername = uniqueUsername;
-        this.password = password;
-        this.isEnabled = isEnabled;
-        this.isLocked = isLocked;
-        this.role = role;
-        setImageId(imageId);
     }
 
     @JsonIgnore
@@ -152,10 +116,7 @@ public class AppUser extends EntityWithId implements UserDetails {
         return isEnabled;
     }
 
-    public void setImageId(long imageId) {
-        this.image = new Image(imageId, null);
-    }
-
+    @JsonIgnore
     public boolean isAdmin() {
         return role == UserRole.ADMIN || role == UserRole.SUPER_ADMIN;
     }

@@ -48,13 +48,4 @@ public class Framework extends EntityWithResourceState {
         ));
         super.setCreatedAt(ZonedDateTime.now());
     }
-
-    /**
-     * Sets the language of the current framework to the language with the given ID.
-     *
-     * @param languageId The ID of the language to be set.
-     */
-    public void setLanguageId(long languageId) {
-        setLanguage(new Language(languageId));
-    }
 }

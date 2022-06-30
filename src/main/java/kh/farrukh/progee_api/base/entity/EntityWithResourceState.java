@@ -22,11 +22,10 @@ public abstract class EntityWithResourceState extends EntityWithImage {
     private ResourceState state = ResourceState.WAITING;
 
     public void setStateAccordingToRole(boolean isAdmin) {
-        if (CurrentUserUtils.isAdmin()) {
+        if (isAdmin) {
             this.state = ResourceState.APPROVED;
         } else {
             this.state = ResourceState.WAITING;
         }
     }
-
 }

@@ -19,8 +19,4 @@ public abstract class EntityWithImage extends EntityWithAuthorAndCreatedAt {
 
     @ManyToOne
     private Image image;
-
-    public void setImageId(long imageId) {
-        this.image = new Image(imageId, null);
-    }
 }
