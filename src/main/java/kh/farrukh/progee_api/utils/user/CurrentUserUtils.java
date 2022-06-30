@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * It's a utility class with methods for user helper logic
  */
-public class UserUtils {
+public class CurrentUserUtils {
 
     /**
      * It returns true if the current user's id equals given id or current user is admin

@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.base.entity;
 
-import kh.farrukh.progee_api.utils.user.UserUtils;
+import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +22,7 @@ public abstract class EntityWithResourceState extends EntityWithImage {
     private ResourceState state = ResourceState.WAITING;
 
     public void setStateAccordingToRole(boolean isAdmin) {
-        if (UserUtils.isAdmin()) {
+        if (CurrentUserUtils.isAdmin()) {
             this.state = ResourceState.APPROVED;
         } else {
             this.state = ResourceState.WAITING;

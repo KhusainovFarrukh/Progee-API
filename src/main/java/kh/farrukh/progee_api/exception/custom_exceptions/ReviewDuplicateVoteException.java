@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.exception.ApiException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_REVIEW_VOTE;
+import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_REVIEW_DUPLICATE_VOTE;
 
 /**
  * It's a custom exception that extends the ApiException class
@@ -14,15 +14,15 @@ import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_R
  * HttpStatus of the response will be BAD_REQUEST
  */
 @Getter
-public class ReviewVoteException extends ApiException {
+public class ReviewDuplicateVoteException extends ApiException {
 
     private final String voteType;
 
-    public ReviewVoteException(String voteType) {
+    public ReviewDuplicateVoteException(String voteType) {
         super(
                 String.format("You already %sd this review", voteType),
                 HttpStatus.BAD_REQUEST,
-                EXCEPTION_REVIEW_VOTE,
+                EXCEPTION_REVIEW_DUPLICATE_VOTE,
                 new Object[]{voteType}
         );
         this.voteType = voteType;

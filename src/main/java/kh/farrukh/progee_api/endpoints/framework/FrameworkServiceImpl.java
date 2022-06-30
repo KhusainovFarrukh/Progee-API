@@ -7,12 +7,12 @@ import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
+import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
-import kh.farrukh.progee_api.utils.user.UserUtils;
+import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -66,7 +66,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                     ResourceState.APPROVED,
                     languageId,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
-        } else if (UserUtils.isAdmin()) {
+        } else if (CurrentUserUtils.isAdmin()) {
             return new PagingResponse<>(frameworkRepository.findByStateAndLanguage_Id(
                     state,
                     languageId,
@@ -108,7 +108,7 @@ public class FrameworkServiceImpl implements FrameworkService {
         Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
 
         Framework framework = new Framework(frameworkDto);
-        AppUser currentUser = UserUtils.getCurrentUser(userRepository);
+        AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         framework.setAuthor(currentUser);
         framework.setStateAccordingToRole(currentUser.isAdmin());
         framework.setLanguage(languageRepository.findById(languageId).orElseThrow(
@@ -133,7 +133,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
 
-        if (UserUtils.isAdminOrAuthor(existingFramework.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.isAdminOrAuthor(existingFramework.getAuthor().getId(), userRepository)) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
             if (!frameworkDto.getName().equals(existingFramework.getName()) &&
@@ -144,12 +144,12 @@ public class FrameworkServiceImpl implements FrameworkService {
 
             existingFramework.setName(frameworkDto.getName());
             existingFramework.setDescription(frameworkDto.getDescription());
-            existingFramework.setStateAccordingToRole(UserUtils.isAdmin());
+            existingFramework.setStateAccordingToRole(CurrentUserUtils.isAdmin());
             existingFramework.setImageId(frameworkDto.getImageId());
 
             return existingFramework;
         } else {
-            throw new PermissionException();
+            throw new NotEnoughPermissionException();
         }
     }
 

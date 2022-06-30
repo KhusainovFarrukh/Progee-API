@@ -3,12 +3,12 @@ package kh.farrukh.progee_api.endpoints.review;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
+import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.exception.custom_exceptions.ReviewVoteException;
+import kh.farrukh.progee_api.exception.custom_exceptions.ReviewDuplicateVoteException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
-import kh.farrukh.progee_api.utils.user.UserUtils;
+import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -91,9 +91,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review addReview(long languageId, ReviewDTO reviewDto) {
         Review review = new Review(reviewDto);
-        checkLanguageId(languageRepository, languageId);
-        review.setLanguageId(languageId);
-        review.setAuthorId(UserUtils.getCurrentUser(userRepository).getId());
+        review.setLanguage(languageRepository.findById(languageId).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", languageId)
+        ));
+        review.setAuthor(CurrentUserUtils.getCurrentUser(userRepository));
         return reviewRepository.save(review);
     }
 
@@ -113,11 +114,11 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        if (UserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
             existingReview.setBody(reviewDto.getBody());
             existingReview.setValue(reviewDto.getValue());
         } else {
-            throw new PermissionException();
+            throw new NotEnoughPermissionException();
         }
 
         return existingReview;
@@ -136,11 +137,11 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        if (UserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
             checkReviewId(reviewRepository, id);
             reviewRepository.deleteById(id);
         } else {
-            throw new PermissionException();
+            throw new NotEnoughPermissionException();
         }
     }
 
@@ -161,24 +162,24 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         // Get the user who is currently logged in.
-        AppUser user = UserUtils.getCurrentUser(userRepository);
+        AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
 
-        // Checking if the user has already voted on the review. If the user has already voted on the review, then
-        // throw a ReviewVoteException.
+        // Checking if the currentUser has already voted on the review. If the current user has already voted on the review, then
+        // throw a ReviewDuplicateVoteException.
         if (reviewVoteDto.isVote()) {
-            if (review.getUpVotes().contains(user.getId())) {
-                throw new ReviewVoteException("up-vote");
+            if (review.getUpVotes().contains(currentUser.getId())) {
+                throw new ReviewDuplicateVoteException("up-vote");
             }
 
-            review.getUpVotes().add(user.getId());
-            review.getDownVotes().remove(user.getId());
+            review.getUpVotes().add(currentUser.getId());
+            review.getDownVotes().remove(currentUser.getId());
         } else {
-            if (review.getDownVotes().contains(user.getId())) {
-                throw new ReviewVoteException("down-vote");
+            if (review.getDownVotes().contains(currentUser.getId())) {
+                throw new ReviewDuplicateVoteException("down-vote");
             }
 
-            review.getDownVotes().add(user.getId());
-            review.getUpVotes().remove(user.getId());
+            review.getDownVotes().add(currentUser.getId());
+            review.getUpVotes().remove(currentUser.getId());
         }
 
         return review;

@@ -3,12 +3,12 @@ package kh.farrukh.progee_api.endpoints.user;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
+import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
-import kh.farrukh.progee_api.utils.user.UserUtils;
+import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public AppUser setUserImage(long id, UserImageDTO imageDto) {
-        if (UserUtils.isAdminOrAuthor(id, userRepository)) {
+        if (CurrentUserUtils.isAdminOrAuthor(id, userRepository)) {
             AppUser user = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setImageId(imageDto.getImageId());
             return user;
         } else {
-            throw new PermissionException();
+            throw new NotEnoughPermissionException();
         }
     }
 
@@ -202,7 +202,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional
     public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
-        if (UserUtils.isAdminOrAuthor(id, userRepository)) {
+        if (CurrentUserUtils.isAdminOrAuthor(id, userRepository)) {
             AppUser currentUser = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
@@ -213,7 +213,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 throw new BadRequestException("Password");
             }
         } else {
-            throw new PermissionException();
+            throw new NotEnoughPermissionException();
         }
     }
 }

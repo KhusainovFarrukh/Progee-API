@@ -6,12 +6,12 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.PermissionException;
+import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
-import kh.farrukh.progee_api.utils.user.UserUtils;
+import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -61,7 +61,7 @@ public class LanguageServiceImpl implements LanguageService {
                     ResourceState.APPROVED,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
-        } else if (UserUtils.isAdmin()) {
+        } else if (CurrentUserUtils.isAdmin()) {
             return new PagingResponse<>(languageRepository.findByState(
                     state,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
@@ -98,13 +98,9 @@ public class LanguageServiceImpl implements LanguageService {
         }
         Checkers.checkImageId(imageRepository, languageDto.getImageId());
         Language language = new Language(languageDto);
-        AppUser currentUser = UserUtils.getCurrentUser(userRepository);
-        language.setAuthorId(currentUser.getId());
-        if (currentUser.isAdmin()) {
-            language.setState(ResourceState.APPROVED);
-        } else {
-            language.setState(ResourceState.WAITING);
-        }
+        AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
+        language.setAuthor(currentUser);
+        language.setStateAccordingToRole(CurrentUserUtils.isAdmin());
         return languageRepository.save(language);
     }
 
@@ -122,7 +118,7 @@ public class LanguageServiceImpl implements LanguageService {
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
 
-        if (UserUtils.isAdminOrAuthor(existingLanguage.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.isAdminOrAuthor(existingLanguage.getAuthor().getId(), userRepository)) {
 
             // It checks if the name of the language is changed and if the new name is already taken.
             if (!languageDto.getName().equals(existingLanguage.getName()) &&
@@ -134,11 +130,11 @@ public class LanguageServiceImpl implements LanguageService {
             existingLanguage.setName(languageDto.getName());
             existingLanguage.setDescription(languageDto.getDescription());
             existingLanguage.setImageId(languageDto.getImageId());
-            existingLanguage.setStateAccordingToRole(UserUtils.isAdmin());
+            existingLanguage.setStateAccordingToRole(CurrentUserUtils.isAdmin());
 
             return existingLanguage;
         } else {
-            throw new PermissionException();
+            throw new NotEnoughPermissionException();
         }
     }
 
