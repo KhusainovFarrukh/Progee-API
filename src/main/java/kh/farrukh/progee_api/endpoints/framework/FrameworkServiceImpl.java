@@ -102,20 +102,18 @@ public class FrameworkServiceImpl implements FrameworkService {
      */
     @Override
     public Framework addFramework(long languageId, FrameworkDTO frameworkDto) {
-        checkLanguageId(languageRepository, languageId);
         if (frameworkRepository.existsByName(frameworkDto.getName())) {
             throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
         }
         Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
+
         Framework framework = new Framework(frameworkDto);
         AppUser currentUser = UserUtils.getCurrentUser(userRepository);
-        framework.setAuthorId(currentUser.getId());
-        if (currentUser.isAdmin()) {
-            framework.setState(ResourceState.APPROVED);
-        } else {
-            framework.setState(ResourceState.WAITING);
-        }
-        framework.setLanguageId(languageId);
+        framework.setAuthor(currentUser);
+        framework.setStateAccordingToRole(currentUser.isAdmin());
+        framework.setLanguage(languageRepository.findById(languageId).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", languageId)
+        ));
         return frameworkRepository.save(framework);
     }
 
@@ -144,11 +142,10 @@ public class FrameworkServiceImpl implements FrameworkService {
             }
             Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
 
-            existingFramework.setLanguageId(languageId);
             existingFramework.setName(frameworkDto.getName());
             existingFramework.setDescription(frameworkDto.getDescription());
-            existingFramework.setImageId(frameworkDto.getImageId());
             existingFramework.setStateAccordingToRole(UserUtils.isAdmin());
+            existingFramework.setImageId(frameworkDto.getImageId());
 
             return existingFramework;
         } else {
