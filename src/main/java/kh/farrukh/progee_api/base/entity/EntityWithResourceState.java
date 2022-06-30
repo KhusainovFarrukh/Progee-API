@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api.base.entity;
 
-import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.Getter;
 import lombok.Setter;
 

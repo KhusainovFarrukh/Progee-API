@@ -124,7 +124,7 @@ public class SecurityConfiguration {
      * @param http     The HttpSecurity object that is used to configure the security of the application.
      */
     private void setOnlySuperAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
+        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
         http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
         http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
