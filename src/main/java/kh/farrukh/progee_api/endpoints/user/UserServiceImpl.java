@@ -95,8 +95,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public AppUser addUser(AppUserDTO appUserDto) {
         checkUserIsUnique(userRepository, appUserDto);
-        checkImageId(imageRepository, appUserDto.getImageId());
-        AppUser appUser = new AppUser(appUserDto);
+        AppUser appUser = new AppUser(appUserDto, imageRepository);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
     }
@@ -127,12 +126,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 userRepository.existsByEmail(appUserDto.getEmail())) {
             throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
         }
-        Checkers.checkImageId(imageRepository, appUserDto.getImageId());
 
         existingAppUser.setName(appUserDto.getName());
         existingAppUser.setEmail(appUserDto.getEmail());
         existingAppUser.setUniqueUsername(appUserDto.getUsername());
-        existingAppUser.setImageId(appUserDto.getImageId());
+        existingAppUser.setImage(imageRepository.findById(appUserDto.getImageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Image", "id", appUserDto.getImageId())
+        ));
 
         return existingAppUser;
     }
@@ -182,8 +182,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     () -> new ResourceNotFoundException("User", "id", id)
             );
 
-            checkImageId(imageRepository, imageDto.getImageId());
-            user.setImageId(imageDto.getImageId());
+            user.setImage(imageRepository.findById(imageDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", imageDto.getImageId())
+            ));
             return user;
         } else {
             throw new NotEnoughPermissionException();

@@ -9,7 +9,6 @@ import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
@@ -105,9 +104,8 @@ public class FrameworkServiceImpl implements FrameworkService {
         if (frameworkRepository.existsByName(frameworkDto.getName())) {
             throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
         }
-        Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
 
-        Framework framework = new Framework(frameworkDto);
+        Framework framework = new Framework(frameworkDto, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         framework.setAuthor(currentUser);
         framework.setStateAccordingToRole(currentUser.isAdmin());
@@ -140,12 +138,13 @@ public class FrameworkServiceImpl implements FrameworkService {
                     languageRepository.existsByName(frameworkDto.getName())) {
                 throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
             }
-            Checkers.checkImageId(imageRepository, frameworkDto.getImageId());
 
             existingFramework.setName(frameworkDto.getName());
             existingFramework.setDescription(frameworkDto.getDescription());
             existingFramework.setStateAccordingToRole(CurrentUserUtils.isAdmin());
-            existingFramework.setImageId(frameworkDto.getImageId());
+            existingFramework.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
+            ));
 
             return existingFramework;
         } else {

@@ -8,7 +8,6 @@ import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.utils.checkers.Checkers;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
@@ -96,8 +95,7 @@ public class LanguageServiceImpl implements LanguageService {
         if (languageRepository.existsByName(languageDto.getName())) {
             throw new DuplicateResourceException("Language", "name", languageDto.getName());
         }
-        Checkers.checkImageId(imageRepository, languageDto.getImageId());
-        Language language = new Language(languageDto);
+        Language language = new Language(languageDto, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         language.setAuthor(currentUser);
         language.setStateAccordingToRole(CurrentUserUtils.isAdmin());
@@ -125,12 +123,13 @@ public class LanguageServiceImpl implements LanguageService {
                     languageRepository.existsByName(languageDto.getName())) {
                 throw new DuplicateResourceException("Language", "name", languageDto.getName());
             }
-            Checkers.checkImageId(imageRepository, languageDto.getImageId());
 
             existingLanguage.setName(languageDto.getName());
             existingLanguage.setDescription(languageDto.getDescription());
-            existingLanguage.setImageId(languageDto.getImageId());
             existingLanguage.setStateAccordingToRole(CurrentUserUtils.isAdmin());
+            existingLanguage.setImage(imageRepository.findById(languageDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", languageDto.getImageId())
+            ));
 
             return existingLanguage;
         } else {

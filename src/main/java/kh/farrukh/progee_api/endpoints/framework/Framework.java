@@ -2,7 +2,9 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
+import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,10 +40,12 @@ public class Framework extends EntityWithResourceState {
     // This is a constructor that takes a FrameworkDTO object and
     // sets the values of the current object to the values of
     // the given object.
-    public Framework(FrameworkDTO frameworkDto) {
+    public Framework(FrameworkDTO frameworkDto, ImageRepository imageRepository) {
         this.name = frameworkDto.getName();
         this.description = frameworkDto.getDescription();
-        super.setImageId(frameworkDto.getImageId());
+        super.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
+        ));
         super.setCreatedAt(ZonedDateTime.now());
     }
 
