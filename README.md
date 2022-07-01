@@ -21,7 +21,7 @@
 
 Hi! This is **Progee-API v1**. 
 Progee-API is a REST API for providing information about programming languages, and frameworks, their popularity, and respect for them among the community of developers (with reviews and scores). 
-Currently working features: **languages, frameworks, reviews**.
+Currently working features: **auth, languages, frameworks, reviews**.
 
 ## API docs
 
@@ -49,16 +49,14 @@ This REST API is developed using Java programming language and Spring Boot start
   - **Spring Data JPA** for data access layers
   - **Spring Security** for authentication and authorization
   - **JWT** for tokens and share security information between two parties — a client and a server
-  - **Jakarta Validation API** for for expressing and validating application constraints
+  - **Jakarta Validation API** for expressing and validating application constraints
   - **Lombok** for reducing boilerplate code
   - and etc.
 
 ## Usage
 
-**Attention!** This project for some configuration properties (username and password of PostgreSQL, secret key of HMAC256 algorithm used to encode/decode JWT token) uses IntelliJ IDEA environment variables. Define your environtment variables or paste your values directly to places where environment variables are used:
+**Attention!** This project uses IntelliJ IDEA environment variables for some configuration properties (secret key of HMAC256 algorithm used to encode/decode JWT token). Define your environment variables or paste your values directly to places where environment variables are used:
 
-- spring.datasource.username=${DB_USERNAME} at application.properties: line 6
-- spring.datasource.password=${DB_PASSWORD} at application.properties: line 7
 - System.getenv("MY_JWT_SECRET") at JWTUtils: line 34
 
 ## Contribution
@@ -83,4 +81,4 @@ Licensed under the Apache License, Version 2.0 (the "License");
 
 - Email Address: farrukhbekkhusainov@gmail.com
 - [Telegram profile](https://t.me/farruxxusainov)
-- [Github profile](https://github.com/KhusaiovFarrukh)
+- [GitHub profile](https://github.com/KhusaiovFarrukh)
