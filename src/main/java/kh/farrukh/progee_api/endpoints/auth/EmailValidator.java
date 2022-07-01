@@ -16,6 +16,9 @@ public class EmailValidator implements Predicate<String> {
 
     @Override
     public boolean test(String email) {
+        if (email == null) {
+            return false;
+        }
         return pattern.matcher(email).matches();
     }
 }
