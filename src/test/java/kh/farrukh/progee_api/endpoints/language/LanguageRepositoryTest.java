@@ -95,7 +95,9 @@ class LanguageRepositoryTest {
 
         // then
         assertThat(pagedData.getContent().size()).isEqualTo(languages.size());
-        assertThat(pagedData.map((language) -> language.getState() == state).getContent().size()).isEqualTo(languages.size());
+        assertThat(pagedData.map(
+                (language) -> language.getState() == state
+        ).getContent().size()).isEqualTo(languages.size());
     }
 
     @Test
@@ -134,7 +136,9 @@ class LanguageRepositoryTest {
 
         // then
         assertThat(pagedData.getContent().size()).isEqualTo(state1Languages.size());
-        assertThat(pagedData.map((language) -> language.getState() == state1).getContent().size()).isEqualTo(state1Languages.size());
+        assertThat(pagedData.map(
+                (language) -> language.getState() == state1
+        ).getContent().size()).isEqualTo(state1Languages.size());
     }
 
     @Test
@@ -171,7 +175,9 @@ class LanguageRepositoryTest {
 
         // then
         assertThat(pagedData.getContent().size()).isEqualTo(0);
-        assertThat(pagedData.map((language) -> language.getState() == state3).getContent().size()).isEqualTo(0);
+        assertThat(pagedData.map(
+                (language) -> language.getState() == state3
+        ).getContent().size()).isEqualTo(0);
     }
 
     @Test
@@ -190,6 +196,8 @@ class LanguageRepositoryTest {
 
         // then
         assertThat(pagedData.getContent().size()).isEqualTo(0);
-        assertThat(pagedData.map((language) -> language.getState() == state).getContent().size()).isEqualTo(0);
+        assertThat(pagedData.map(
+                (language) -> language.getState() == state
+        ).getContent().size()).isEqualTo(0);
     }
 }

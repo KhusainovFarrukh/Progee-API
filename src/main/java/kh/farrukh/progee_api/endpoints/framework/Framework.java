@@ -48,4 +48,12 @@ public class Framework extends EntityWithResourceState {
         ));
         super.setCreatedAt(ZonedDateTime.now());
     }
+
+    public Framework(String name) {
+        this.name = name;
+    }
+
+    public Framework(Language language) {
+        this.language = language;
+    }
 }

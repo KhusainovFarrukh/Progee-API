@@ -14,6 +14,14 @@ import org.springframework.validation.annotation.Validated;
 public interface FrameworkRepository extends JpaRepository<Framework, Long> {
 
     /**
+     * Returns true if there is a framework with the given name.
+     *
+     * @param name The name of the framework to check for.
+     * @return A boolean value.
+     */
+    boolean existsByName(String name);
+
+    /**
      * "Find all frameworks that have a language with the given id, and return them in a pageable format."
      *
      * The @AllowedSortFields annotation is a custom annotation that I created to ensure that the user can only sort by the
@@ -44,12 +52,4 @@ public interface FrameworkRepository extends JpaRepository<Framework, Long> {
             long languageId,
             @AllowedSortFields({"id", "name", "description", "state", "createdAt"}) Pageable pageable
     );
-
-    /**
-     * Returns true if there is a framework with the given name.
-     *
-     * @param name The name of the framework to check for.
-     * @return A boolean value.
-     */
-    boolean existsByName(String name);
 }
