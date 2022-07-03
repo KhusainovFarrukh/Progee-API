@@ -49,6 +49,7 @@ This REST API is developed using Java programming language and Spring Boot start
   - **Spring Data JPA** for data access layers
   - **Spring Security** for authentication and authorization
   - **JWT** for tokens and share security information between two parties — a client and a server
+  - **JUnit 5** for unit and integration tests
   - **Jakarta Validation API** for expressing and validating application constraints
   - **Lombok** for reducing boilerplate code
   - and etc.
