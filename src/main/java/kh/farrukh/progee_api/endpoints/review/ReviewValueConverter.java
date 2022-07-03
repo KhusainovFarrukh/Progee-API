@@ -12,6 +12,9 @@ public class ReviewValueConverter implements AttributeConverter<ReviewValue, Int
 
     @Override
     public Integer convertToDatabaseColumn(ReviewValue reviewValue) {
+        if (reviewValue == null) {
+            return 0;
+        }
         return reviewValue.getScore();
     }
 

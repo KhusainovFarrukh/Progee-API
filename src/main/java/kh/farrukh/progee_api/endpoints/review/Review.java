@@ -29,7 +29,8 @@ import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
 public class Review extends EntityWithAuthorAndCreatedAt {
 
     private String body;
-    private ReviewValue value;
+    @JsonProperty("value")
+    private ReviewValue reviewValue;
     @ElementCollection
     @JsonProperty("up_votes")
     private Set<Long> upVotes = Collections.emptySet();
@@ -46,8 +47,17 @@ public class Review extends EntityWithAuthorAndCreatedAt {
     // the given object.
     public Review(ReviewDTO reviewDto) {
         this.body = reviewDto.getBody();
-        this.value = reviewDto.getValue();
+        this.reviewValue = reviewDto.getValue();
         super.setCreatedAt(ZonedDateTime.now());
+    }
+
+    public Review(Language language) {
+        this.language = language;
+    }
+
+    public Review(ReviewValue reviewValue, Language language) {
+        this.reviewValue = reviewValue;
+        this.language = language;
     }
 
     /**

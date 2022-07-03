@@ -25,11 +25,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByLanguage_Id(
             long languageId,
             // TODO: 6/12/22 add custom (transient) field: score
-            @AllowedSortFields({"id", "body", "value", "upVotes", "downVotes", "createdAt"}) Pageable pageable
+            @AllowedSortFields({"id", "body", "reviewValue", "upVotes", "downVotes", "createdAt"}) Pageable pageable
     );
 
     /**
-     * "Find all reviews with given value for a given language, and return them in a pageable format."
+     * "Find all reviews with given reviewValue for a given language, and return them in a pageable format."
      * <p>
      * The @AllowedSortFields annotation is a custom annotation that I created to ensure that the user can only sort by the
      * fields that I want them to
@@ -39,10 +39,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      * @param pageable   the pageable object that contains the page number, page size, and sort information.
      * @return A Page of Reviews.
      */
-    Page<Review> findByLanguage_IdAndValue(
+    Page<Review> findByLanguage_IdAndReviewValue(
             long languageId,
             ReviewValue value,
             // TODO: 6/12/22 add custom (transient) field: score
-            @AllowedSortFields({"id", "body", "value", "upVotes", "downVotes", "createdAt"}) Pageable pageable
+            @AllowedSortFields({"id", "body", "reviewValue", "upVotes", "downVotes", "createdAt"}) Pageable pageable
     );
 }

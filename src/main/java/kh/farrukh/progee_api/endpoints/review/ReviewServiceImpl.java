@@ -58,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
         } else {
-            return new PagingResponse<>(reviewRepository.findByLanguage_IdAndValue(
+            return new PagingResponse<>(reviewRepository.findByLanguage_IdAndReviewValue(
                     languageId,
                     value,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
@@ -116,7 +116,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         if (CurrentUserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
             existingReview.setBody(reviewDto.getBody());
-            existingReview.setValue(reviewDto.getValue());
+            existingReview.setReviewValue(reviewDto.getValue());
         } else {
             throw new NotEnoughPermissionException();
         }
