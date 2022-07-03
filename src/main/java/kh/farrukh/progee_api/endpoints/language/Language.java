@@ -36,6 +36,10 @@ public class Language extends EntityWithResourceState {
         super.setId(id);
     }
 
+    public Language(String name) {
+        this.name = name;
+    }
+
     // This is a constructor that takes a LanguageDTO object and
     // sets the values of the current object to the values of
     // the given object.

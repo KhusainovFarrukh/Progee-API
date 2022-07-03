@@ -29,7 +29,7 @@ class LanguageRepositoryTest {
     void returnsTrueIfLanguageExistsByName() {
         // given
         String name = "Java";
-        Language language = new Language(name, "");
+        Language language = new Language(name);
         underTest.save(language);
 
         // when
@@ -43,6 +43,8 @@ class LanguageRepositoryTest {
     void returnsFalseIfLanguageDoesNotExistByName() {
         // given
         String name = "Java";
+        Language language = new Language("Kotlin");
+        underTest.save(language);
 
         // when
         boolean exists = underTest.existsByName(name);
@@ -54,10 +56,11 @@ class LanguageRepositoryTest {
     @Test
     void returnsFalseIfNameIsEmpty() {
         // given
-        String name = "";
+        Language language = new Language("Java");
+        underTest.save(language);
 
         // when
-        boolean exists = underTest.existsByName(name);
+        boolean exists = underTest.existsByName("");
 
         // then
         assertThat(exists).isFalse();
@@ -66,10 +69,11 @@ class LanguageRepositoryTest {
     @Test
     void returnsFalseIfNameIsNull() {
         // given
-        String name = null;
+        Language language = new Language("Java");
+        underTest.save(language);
 
         // when
-        boolean exists = underTest.existsByName(name);
+        boolean exists = underTest.existsByName("");
 
         // then
         assertThat(exists).isFalse();

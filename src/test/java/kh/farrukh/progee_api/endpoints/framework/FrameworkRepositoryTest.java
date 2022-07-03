@@ -47,6 +47,8 @@ class FrameworkRepositoryTest {
     void returnsFalseIfFrameworkDoesNotExistByName() {
         // given
         String name = "Spring Boot";
+        Framework framework = new Framework("Ktor");
+        underTest.save(framework);
 
         // when
         boolean exists = underTest.existsByName(name);
@@ -58,10 +60,11 @@ class FrameworkRepositoryTest {
     @Test
     void returnsFalseIfNameIsEmpty() {
         // given
-        String name = "";
+        Framework framework = new Framework("Spring Boot");
+        underTest.save(framework);
 
         // when
-        boolean exists = underTest.existsByName(name);
+        boolean exists = underTest.existsByName("");
 
         // then
         assertThat(exists).isFalse();
@@ -70,10 +73,11 @@ class FrameworkRepositoryTest {
     @Test
     void returnsFalseIfNameIsNull() {
         // given
-        String name = null;
+        Framework framework = new Framework("Spring Boot");
+        underTest.save(framework);
 
         // when
-        boolean exists = underTest.existsByName(name);
+        boolean exists = underTest.existsByName(null);
 
         // then
         assertThat(exists).isFalse();

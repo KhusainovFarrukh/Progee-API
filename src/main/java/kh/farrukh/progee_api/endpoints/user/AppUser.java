@@ -74,6 +74,15 @@ public class AppUser extends EntityWithId implements UserDetails {
         super.setId(id);
     }
 
+    public AppUser(String email) {
+        this.email = email;
+    }
+
+    public AppUser(String name, String uniqueUsername) {
+        this.name = name;
+        this.uniqueUsername = uniqueUsername;
+    }
+
     @JsonIgnore
     @Override
     public String getUsername() {
