@@ -23,22 +23,24 @@ public class PagingResponse<T> {
     @JsonProperty("prev_page")
     private Integer prevPage = null;
     @JsonProperty("total_pages")
-    private int totalPages;
+    private int totalPages = 0;
     @JsonProperty("total_items")
-    private long totalItems;
-    private int page;
-    private List<T> items;
+    private long totalItems = 0;
+    private int page = 1;
+    private List<T> items = List.of();
 
     public PagingResponse(Page<T> page) {
-        if (page.hasNext()) {
-            this.nextPage = page.nextPageable().getPageNumber() + 1;
+        if (page != null) {
+            if (page.hasNext()) {
+                this.nextPage = page.nextPageable().getPageNumber() + 1;
+            }
+            if (page.hasPrevious()) {
+                this.prevPage = page.previousPageable().getPageNumber() + 1;
+            }
+            this.page = page.getPageable().getPageNumber() + 1;
+            this.totalPages = page.getTotalPages();
+            this.totalItems = page.getTotalElements();
+            this.items = page.getContent();
         }
-        if (page.hasPrevious()) {
-            this.prevPage = page.previousPageable().getPageNumber() + 1;
-        }
-        this.page = page.getPageable().getPageNumber() + 1;
-        this.totalPages = page.getTotalPages();
-        this.totalItems = page.getTotalElements();
-        this.items = page.getContent();
     }
 }

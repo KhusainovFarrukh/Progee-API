@@ -6,6 +6,7 @@ import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -40,13 +41,18 @@ public class CurrentUserUtils {
      * @return A boolean value
      */
     public static boolean isAdmin() {
-        Collection<String> roles = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+        try {
+            Collection<String> roles = SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getAuthorities()
+                    .stream().map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
 
-        return roles.contains(UserRole.SUPER_ADMIN.name()) || roles.contains(UserRole.ADMIN.name());
+            return roles.contains(UserRole.SUPER_ADMIN.name()) || roles.contains(UserRole.ADMIN.name());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -56,6 +62,9 @@ public class CurrentUserUtils {
      */
     public static AppUser getCurrentUser(UserRepository userRepository) {
         String email = getEmail();
+        if (email == null) {
+            throw new ResourceNotFoundException("User", "email", null);
+        }
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User", "email", email)
         );
@@ -67,8 +76,21 @@ public class CurrentUserUtils {
      * @return The email of the user that is currently logged in.
      */
     private static String getEmail() {
-        return (String) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
+        try {
+            Object principal = SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+
+            if (principal.getClass().isInstance(User.class)) {
+                return ((User) principal).getUsername();
+            }
+            if (principal.getClass().isInstance(String.class)) {
+                return (String) principal;
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
