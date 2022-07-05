@@ -5,6 +5,7 @@ import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
@@ -215,7 +216,128 @@ class LanguageServiceImplTest {
                 .hasMessageContaining(name);
     }
 
-    // TODO: 7/5/22 add updateLanguage tests
+    @Test
+    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    void authorCanUpdateLanguage() {
+        // given
+        String name = "test name";
+        String desc = "test desc";
+        AppUser author = new AppUser(1);
+        LanguageDTO languageDto = new LanguageDTO(name, desc, 1);
+        Language existingLanguage = new Language();
+        existingLanguage.setAuthor(author);
+        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+
+        // when
+        Language actual = underTest.updateLanguage(1, languageDto);
+
+        // then
+        assertThat(actual.getName()).isEqualTo(name);
+        assertThat(actual.getDescription()).isEqualTo(desc);
+        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
+    }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void adminCanUpdateLanguage() {
+        // given
+        String name = "test name";
+        String desc = "test desc";
+        AppUser admin = new AppUser(2);
+        admin.setRole(UserRole.ADMIN);
+        LanguageDTO languageDto = new LanguageDTO(name, desc, 1);
+        Language existingLanguage = new Language();
+        existingLanguage.setAuthor(new AppUser(1));
+        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+
+        // when
+        Language actual = underTest.updateLanguage(1, languageDto);
+
+        // then
+        assertThat(actual.getName()).isEqualTo(name);
+        assertThat(actual.getDescription()).isEqualTo(desc);
+        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    void throwsExceptionIfNonAuthorUpdatesLanguage() {
+        // given
+        AppUser user = new AppUser(1);
+        LanguageDTO languageDto = new LanguageDTO("", "", 1);
+        Language existingLanguage = new Language();
+        existingLanguage.setAuthor(new AppUser(2));
+        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateLanguage(1, languageDto))
+                .isInstanceOf(NotEnoughPermissionException.class);
+    }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void throwsExceptionIfLanguageToUpdateDoesNotExistWithId() {
+        // given
+        long languageId = 1;
+        LanguageDTO languageDto = new LanguageDTO("", "", 1);
+        when(languageRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateLanguage(languageId, languageDto))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Language")
+                .hasMessageContaining(String.valueOf(languageId));
+    }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void throwsExceptionIfLanguageToUpdateExistsWithName() {
+        // given
+        String name = "test name";
+        AppUser admin = new AppUser(1);
+        admin.setRole(UserRole.ADMIN);
+        Language existingLanguage = new Language();
+        existingLanguage.setAuthor(admin);
+        LanguageDTO languageDto = new LanguageDTO(name, "", 1);
+        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        when(languageRepository.existsByName(any())).thenReturn(true);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateLanguage(1, languageDto))
+                .isInstanceOf(DuplicateResourceException.class)
+                .hasMessageContaining("Language")
+                .hasMessageContaining(name);
+    }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void throwsExceptionIfImageOfLanguageToUpdateDoesNotExistWithId() {
+        // given
+        long imageId = 1;
+        AppUser admin = new AppUser(1);
+        admin.setRole(UserRole.ADMIN);
+        Language existingLanguage = new Language();
+        existingLanguage.setAuthor(admin);
+        LanguageDTO languageDto = new LanguageDTO("", "", imageId);
+        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateLanguage(1, languageDto))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Image")
+                .hasMessageContaining(String.valueOf(imageId));
+    }
 
     // TODO: 7/5/22 add deleteLanguage tests
 

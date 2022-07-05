@@ -62,9 +62,6 @@ public class CurrentUserUtils {
      */
     public static AppUser getCurrentUser(UserRepository userRepository) {
         String email = getEmail();
-        if (email == null) {
-            throw new ResourceNotFoundException("User", "email", null);
-        }
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User", "email", email)
         );
