@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
@@ -339,7 +340,63 @@ class LanguageServiceImplTest {
                 .hasMessageContaining(String.valueOf(imageId));
     }
 
-    // TODO: 7/5/22 add deleteLanguage tests
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void canDeleteLanguageById() {
+        // given
+        long languageId = 1;
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        underTest.deleteLanguage(languageId);
+
+        // then
+        verify(languageRepository).deleteById(languageId);
+    }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void throwsExceptionIfLanguageToDeleteDoesNotExistWithId() {
+        // given
+        long languageId = 1;
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.deleteLanguage(languageId))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Language")
+                .hasMessageContaining(String.valueOf(languageId));
+    }
 
     // TODO: 7/5/22 add setLanguageState tests
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void canSetLanguageState() {
+        // given
+        long languageId = 1;
+        ResourceStateDTO stateDto = new ResourceStateDTO(ResourceState.APPROVED);
+        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language()));
+
+        // when
+        Language language = underTest.setLanguageState(languageId, stateDto);
+
+        // then
+        assertThat(language.getState()).isEqualTo(stateDto.getState());
+    }
+
+    @Test
+    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    void throwsExceptionIfLanguageToSetStateDoesNotExistWithId() {
+        // given
+        long languageId = 1;
+        ResourceStateDTO stateDto = new ResourceStateDTO(ResourceState.APPROVED);
+        when(languageRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.setLanguageState(languageId, stateDto))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Language")
+                .hasMessageContaining(String.valueOf(languageId));
+    }
 }
