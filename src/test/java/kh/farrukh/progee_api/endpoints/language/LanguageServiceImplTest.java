@@ -159,6 +159,7 @@ class LanguageServiceImplTest {
         // then
         assertThatThrownBy(() -> underTest.getLanguageById(id))
                 .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Language")
                 .hasMessageContaining(String.valueOf(id));
     }
 
@@ -214,6 +215,7 @@ class LanguageServiceImplTest {
         // then
         assertThatThrownBy(() -> underTest.addLanguage(languageDto))
                 .isInstanceOf(DuplicateResourceException.class)
+                .hasMessageContaining("Language")
                 .hasMessageContaining(name);
     }
 
@@ -368,7 +370,6 @@ class LanguageServiceImplTest {
                 .hasMessageContaining(String.valueOf(languageId));
     }
 
-    // TODO: 7/5/22 add setLanguageState tests
     @Test
     @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
     void canSetLanguageState() {
