@@ -12,12 +12,16 @@ import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -27,8 +31,7 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +50,133 @@ class FrameworkServiceImplTest {
     private FrameworkServiceImpl underTest;
 
     // TODO: 7/5/22 getFrameworksByLanguage
+    @Test
+    void unauthenticatedUserCanGetApprovedFrameworks() {
+        // given
+        SecurityContextHolder.clearContext();
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        underTest.getFrameworksByLanguage(1, null, 1, 10, "id", "ASC");
+
+        // then
+        verify(frameworkRepository).findByStateAndLanguage_Id(
+                ResourceState.APPROVED,
+                1,
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    void unauthenticatedUserCanNotGetFrameworksFilteredByState() {
+        // given
+        SecurityContextHolder.clearContext();
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.getFrameworksByLanguage(1, ResourceState.WAITING, 1, 10, "id", "ASC"))
+                .isInstanceOf(NotEnoughPermissionException.class);
+        verify(frameworkRepository, never()).findByStateAndLanguage_Id(any(), anyLong(), any());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    void simpleUserCanGetApprovedFrameworks() {
+        // given
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        underTest.getFrameworksByLanguage(1, null, 1, 10, "id", "ASC");
+
+        // then
+        verify(frameworkRepository).findByStateAndLanguage_Id(
+                ResourceState.APPROVED,
+                1,
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    @WithMockUser(authorities = {"USER"})
+    void throwsExceptionIfSimpleUserFiltersFrameworksByState() {
+        // given
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.getFrameworksByLanguage(1, ResourceState.WAITING, 1, 10, "id", "ASC"))
+                .isInstanceOf(NotEnoughPermissionException.class);
+        verify(frameworkRepository, never()).findByStateAndLanguage_Id(any(), anyLong(), any());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void adminCanGetApprovedFrameworks() {
+        // given
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        underTest.getFrameworksByLanguage(1, null, 1, 10, "id", "ASC");
+
+        // then
+        verify(frameworkRepository).findByStateAndLanguage_Id(
+                ResourceState.APPROVED,
+                1,
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void adminCanGetFrameworksFilteredByState() {
+        // given
+        when(languageRepository.existsById(any())).thenReturn(true);
+
+        // when
+        underTest.getFrameworksByLanguage(1, ResourceState.WAITING, 1, 10, "id", "ASC");
+
+        // then
+        verify(frameworkRepository).findByStateAndLanguage_Id(
+                ResourceState.WAITING,
+                1,
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ADMIN"})
+    void throwsExceptionIfLanguageOfFrameworksDoesNotExistWithId() {
+        // given
+        long languageId = 1;
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> underTest.getFrameworksByLanguage(
+                        languageId, ResourceState.WAITING, 1, 10, "id", "ASC"
+                )
+        )
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Language")
+                .hasMessageContaining(String.valueOf(languageId));
+    }
 
     @Test
     void canGetFrameworkById() {

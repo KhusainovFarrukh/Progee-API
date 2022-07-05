@@ -72,7 +72,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
         } else {
-            throw new RuntimeException("You don't have enough permissions");
+            throw new NotEnoughPermissionException();
         }
     }
 
