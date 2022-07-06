@@ -49,7 +49,6 @@ class FrameworkServiceImplTest {
     @InjectMocks
     private FrameworkServiceImpl underTest;
 
-    // TODO: 7/5/22 getFrameworksByLanguage
     @Test
     void unauthenticatedUserCanGetApprovedFrameworks() {
         // given

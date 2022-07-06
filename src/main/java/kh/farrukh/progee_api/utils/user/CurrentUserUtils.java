@@ -80,11 +80,9 @@ public class CurrentUserUtils {
 
             if (principal.getClass().isInstance(User.class)) {
                 return ((User) principal).getUsername();
-            }
-            if (principal.getClass().isInstance(String.class)) {
+            } else {
                 return (String) principal;
             }
-            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
