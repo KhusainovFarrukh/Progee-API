@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRoleDTO {
-    @NotNull
+    @NotNull(message = "Role must not be null")
     private UserRole role;
 }

@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserImageDTO {
-    @NotNull
+    @NotNull(message = "Image id must not be null")
     @JsonProperty("image_id")
     private long imageId;
 }

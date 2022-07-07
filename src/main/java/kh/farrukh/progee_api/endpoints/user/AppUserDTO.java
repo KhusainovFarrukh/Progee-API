@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * It's a DTO that represents a user
@@ -20,19 +22,21 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class AppUserDTO {
 
-    @NotNull
+    @NotBlank(message = "Name must not be blank")
     private String name;
-    @NotNull
+    @NotBlank(message = "Email must not be blank")
     private String email;
-    @NotNull
+    @NotBlank(message = "Username must not be blank")
+    @Size(max = 16, message = "Username must be shorter than 16 characters")
     private String username;
-    @NotNull
+    @NotBlank(message = "Password must not be blank")
+    @Size(min = 8, message = "Password length must be at least 8 characters")
     private String password;
     @JsonProperty("is_enabled")
     private boolean isEnabled = true;
     @JsonProperty("is_locked")
     private boolean isLocked = false;
-    @NotNull
+    @NotNull(message = "Role must not be null")
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
     @JsonProperty("image_id")

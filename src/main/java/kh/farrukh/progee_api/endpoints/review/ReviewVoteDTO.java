@@ -16,6 +16,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ReviewVoteDTO {
 
-    @NotNull
+    @NotNull(message = "Vote must not be null")
     private boolean vote;
 }
