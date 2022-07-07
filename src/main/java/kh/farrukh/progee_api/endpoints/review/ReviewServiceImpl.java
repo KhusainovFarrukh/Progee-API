@@ -138,7 +138,6 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         if (CurrentUserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
-            checkReviewId(reviewRepository, id);
             reviewRepository.deleteById(id);
         } else {
             throw new NotEnoughPermissionException();

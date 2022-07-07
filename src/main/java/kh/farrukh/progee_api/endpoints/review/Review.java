@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
@@ -33,10 +33,10 @@ public class Review extends EntityWithAuthorAndCreatedAt {
     private ReviewValue reviewValue;
     @ElementCollection
     @JsonProperty("up_votes")
-    private Set<Long> upVotes = Collections.emptySet();
+    private Set<Long> upVotes = new HashSet<>();
     @ElementCollection
     @JsonProperty("down_votes")
-    private Set<Long> downVotes = Collections.emptySet();
+    private Set<Long> downVotes = new HashSet<>();
     @Transient
     private int score;
 

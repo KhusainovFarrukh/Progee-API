@@ -78,7 +78,7 @@ public class CurrentUserUtils {
                     .getAuthentication()
                     .getPrincipal();
 
-            if (principal.getClass().isInstance(User.class)) {
+            if (principal instanceof User) {
                 return ((User) principal).getUsername();
             } else {
                 return (String) principal;
