@@ -41,7 +41,7 @@ public enum ReviewValue {
             case 2:
                 return ReviewValue.LIKE;
             default:
-                throw new IllegalStateException("Unexpected value: " + intValue);
+                return ReviewValueConverter.DEFAULT_REVIEW_VALUE;
         }
     }
 }

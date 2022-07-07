@@ -10,16 +10,22 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 public class ReviewValueConverter implements AttributeConverter<ReviewValue, Integer> {
 
+    public static final ReviewValue DEFAULT_REVIEW_VALUE = ReviewValue.DONT_HAVE_PRACTICE;
+    public static final Integer DEFAULT_SCORE = DEFAULT_REVIEW_VALUE.getScore();
+
     @Override
     public Integer convertToDatabaseColumn(ReviewValue reviewValue) {
         if (reviewValue == null) {
-            return 0;
+            return DEFAULT_SCORE;
         }
         return reviewValue.getScore();
     }
 
     @Override
     public ReviewValue convertToEntityAttribute(Integer intValue) {
+        if (intValue == null) {
+            return DEFAULT_REVIEW_VALUE;
+        }
         return ReviewValue.fromIntValue(intValue);
     }
 }
