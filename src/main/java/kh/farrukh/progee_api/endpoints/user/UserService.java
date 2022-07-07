@@ -1,13 +1,14 @@
 package kh.farrukh.progee_api.endpoints.user;
 
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * A base interface for service of User endpoints
  * <p>
  * Methods implemented in UserServiceImpl
  */
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     PagingResponse<AppUser> getUsers(
             int page,

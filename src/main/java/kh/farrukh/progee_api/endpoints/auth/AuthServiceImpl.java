@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.endpoints.auth;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
-import kh.farrukh.progee_api.endpoints.user.UserServiceImpl;
+import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class AuthServiceImpl implements AuthService {
 
     private final EmailValidator emailValidator;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     /**
      * If the email is valid, add a new user to the database

@@ -13,9 +13,10 @@ import java.util.Objects;
  * Custom repository for working with files in FileSystem
  * <p>
  * DEPRECATED: Use ImageRepository to save images in PostgreSQL database
+ * <p>
  * Cause: Storing files in file system does not work on heroku. There are 2 solutions:
- * 1. Using Amazon S3 (12 months free trial)
- * 2. Saving image content as @Lob in PostgreSQL
+ * <p> 1. Using Amazon S3 (12 months free trial)
+ * <p> 2. Saving image content as @Lob in PostgreSQL
  * <p>
  * Currently, the 2nd solution is being used on learning and testing purposes. (not to pay for Amazon S3)
  */
