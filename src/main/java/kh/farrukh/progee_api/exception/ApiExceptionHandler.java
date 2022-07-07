@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Locale;
+import java.util.*;
+
+import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_METHOD_ARGUMENT_NOT_VALID;
 
 /**
  * It handles exceptions thrown by the application
@@ -29,7 +30,7 @@ public class ApiExceptionHandler {
      * It handles all custom exceptions
      *
      * @param exception The exception object that was thrown.
-     * @param locale The locale of the user.
+     * @param locale    The locale of the user.
      * @return A ResponseEntity<Object>
      */
     @ExceptionHandler(ApiException.class)
@@ -79,21 +80,20 @@ public class ApiExceptionHandler {
      * @return A ResponseEntity<Object>
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleRequestBodyValidationException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<Object> handleRequestBodyValidationException(MethodArgumentNotValidException exception, Locale locale) {
         exception.printStackTrace();
-        FieldError error = exception.getFieldError();
-        String errorMessage;
-        if (error != null) {
-            errorMessage = error.getField() + " " + error.getDefaultMessage();
-        } else {
-            errorMessage = exception.getAllErrors().get(0).toString();
+        Map<String, Object> errorsMap = new HashMap<>();
+        List<FieldError> errors = exception.getFieldErrors();
+        for (FieldError error : errors) {
+            errorsMap.put(error.getField(), error.getDefaultMessage());
         }
         return new ResponseEntity<>(
                 new ErrorResponse(
-                        errorMessage,
+                        messageSource.getMessage(EXCEPTION_METHOD_ARGUMENT_NOT_VALID, null, locale),
                         HttpStatus.BAD_REQUEST,
                         HttpStatus.BAD_REQUEST.value(),
-                        ZonedDateTime.now()
+                        ZonedDateTime.now(),
+                        errorsMap
                 ),
                 HttpStatus.BAD_REQUEST
         );
