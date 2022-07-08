@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static kh.farrukh.progee_api.utils.constant.JWTKeys.*;
@@ -31,7 +34,7 @@ public class JWTUtils {
     private static final DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
     // Creating an algorithm object which will be used to sign the token.
-    private static final Algorithm algorithm = Algorithm.HMAC256(System.getenv("MY_JWT_SECRET").getBytes());
+    private static final Algorithm algorithm = Algorithm.HMAC256(getJwtSecret().getBytes());
     // Value of the expiration time for the access token and refresh token.
     private static final int accessValidMillis = 30 * 60 * 1000;
     private static final int refreshValidMillis = 3 * 24 * 60 * 60 * 1000;
@@ -136,5 +139,13 @@ public class JWTUtils {
     public static void sendTokenInHeader(Map<String, String> data, HttpServletResponse response) {
         response.setHeader(KEY_ACCESS_TOKEN, data.get(KEY_ACCESS_TOKEN));
         response.setHeader(KEY_REFRESH_TOKEN, data.get(KEY_REFRESH_TOKEN));
+    }
+
+    private static String getJwtSecret() {
+        String jwtSecret = System.getenv("MY_JWT_SECRET");
+        if (jwtSecret == null) {
+            return "test-secret";
+        }
+        return jwtSecret;
     }
 }
