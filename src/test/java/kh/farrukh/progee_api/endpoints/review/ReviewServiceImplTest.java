@@ -184,7 +184,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void authorCanUpdateReview() {
         // given
         String body = "test review";
@@ -206,7 +206,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void adminCanUpdateReview() {
         // given
         String body = "test review";
@@ -229,7 +229,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfNonAuthorUpdatesReview() {
         // given
         AppUser user = new AppUser(1);
@@ -247,7 +247,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfReviewToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -264,7 +264,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageOfReviewToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -279,7 +279,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void adminCanDeleteReviewById() {
         // given
         long reviewId = 1;
@@ -299,7 +299,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void authorCanDeleteReviewById() {
         // given
         long reviewId = 1;
@@ -318,7 +318,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfNonAuthorDeletesReview() {
         // given
         AppUser user = new AppUser(1);
@@ -335,7 +335,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfReviewToDeleteDoesNotExistWithId() {
         // given
         long reviewId = 1;
@@ -350,7 +350,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageOfReviewToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -364,7 +364,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void canUpvoteReview() {
         // given
         long reviewId = 1;
@@ -382,7 +382,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void canDownvoteReview() {
         // given
         long reviewId = 1;
@@ -400,7 +400,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void canChangeDownvoteToUpvoteReview() {
         // given
         long reviewId = 1;
@@ -420,7 +420,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void canChangeUpvoteToDownvoteReview() {
         // given
         long reviewId = 1;
@@ -440,7 +440,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfUpvotesAlreadyUpvotedReview() {
         // given
         long reviewId = 1;
@@ -460,7 +460,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfDownvotesAlreadyDownvotedReview() {
         // given
         long reviewId = 1;
@@ -480,7 +480,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfReviewToVoteDoesNotExistWithId() {
         // given
         long reviewId = 1;
@@ -497,7 +497,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageOfReviewToVOteDoesNotExistWithId() {
         // given
         long languageId = 1;
