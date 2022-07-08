@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.language;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
+import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,11 @@ public class Language extends EntityWithResourceState {
 
     public Language(String name) {
         this.name = name;
+    }
+
+    public Language(String name, ResourceState state) {
+        this.name = name;
+        super.setState(state);
     }
 
     // This is a constructor that takes a LanguageDTO object and

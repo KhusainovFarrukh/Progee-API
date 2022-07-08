@@ -54,7 +54,7 @@ class UserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void canGetUsersById() throws Exception {
+    void canGetUsers() throws Exception {
         // given
         List<AppUser> users = List.of(
                 new AppUser("user1@mail.com"),
@@ -71,7 +71,7 @@ class UserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<AppUser> response = new ObjectMapper().readValue(
+        PagingResponse<AppUser> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
@@ -96,7 +96,7 @@ class UserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUser user = new ObjectMapper().readValue(result.getResponse().getContentAsString(), AppUser.class);
+        AppUser user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUser.class);
         assertThat(user.getId()).isEqualTo(user.getId());
     }
 
@@ -127,8 +127,8 @@ class UserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUser user = new ObjectMapper().readValue(result.getResponse().getContentAsString(), AppUser.class);
-        assertThat(user.getId()).isEqualTo(user.getId());
+        AppUser user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUser.class);
+        assertThat(user.getId()).isEqualTo(existingUser.getId());
         assertThat(user.getName()).isEqualTo(userDto.getName());
         assertThat(user.getEmail()).isEqualTo(userDto.getEmail());
         assertThat(user.getUniqueUsername()).isEqualTo(userDto.getUsername());
@@ -165,8 +165,8 @@ class UserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUser user = new ObjectMapper().readValue(result.getResponse().getContentAsString(), AppUser.class);
-        assertThat(user.getId()).isEqualTo(user.getId());
+        AppUser user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUser.class);
+        assertThat(user.getId()).isEqualTo(existingUser.getId());
         assertThat(user.getRole()).isEqualTo(roleDto.getRole());
     }
 
