@@ -26,9 +26,6 @@ class ImageControllerIntegrationTest {
     private MockMvc mvc;
 
     @Autowired
-    private ImageService imageService;
-
-    @Autowired
     private ImageRepository imageRepository;
 
     @Test
@@ -37,7 +34,8 @@ class ImageControllerIntegrationTest {
         Image existingImage = imageRepository.save(new Image());
 
         // when
-        MvcResult result = mvc.perform(get(ENDPOINT_IMAGE + "/" + existingImage.getId()))
+        MvcResult result = mvc
+                .perform(get(ENDPOINT_IMAGE + "/" + existingImage.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -68,7 +66,8 @@ class ImageControllerIntegrationTest {
         Image existingImage = imageRepository.save(new Image("test".getBytes()));
 
         // when
-        MvcResult result = mvc.perform(get(ENDPOINT_IMAGE + "/" + existingImage.getId() + "/download"))
+        MvcResult result = mvc
+                .perform(get(ENDPOINT_IMAGE + "/" + existingImage.getId() + "/download"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
