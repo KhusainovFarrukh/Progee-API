@@ -88,6 +88,12 @@ public class AppUser extends EntityWithId implements UserDetails {
         this.role = role;
     }
 
+    public AppUser(String email, UserRole role, String password) {
+        this.email = email;
+        this.role = role;
+        this.password = password;
+    }
+
     public AppUser(String name, String uniqueUsername, UserRole role) {
         this.name = name;
         this.uniqueUsername = uniqueUsername;

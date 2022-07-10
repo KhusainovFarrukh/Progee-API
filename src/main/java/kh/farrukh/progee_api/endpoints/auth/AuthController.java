@@ -42,7 +42,7 @@ public class AuthController {
      * @param request The request object that contains the token.
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
-    public ResponseEntity<RefreshTokenResponse> refreshToken(HttpServletRequest request) throws IOException {
+    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) throws IOException {
         return new ResponseEntity<>(authService.refreshToken(request), HttpStatus.OK);
     }
 }

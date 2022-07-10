@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.endpoints.auth.RefreshTokenResponse;
+import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -74,6 +74,7 @@ public class JWTUtils {
                 .withSubject(user.getUsername())
                 .withExpiresAt(refreshExpireDate)
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim(KEY_ROLE, role)
                 .sign(algorithm);
 
         Map<String, Object> data = new HashMap<>();
@@ -93,9 +94,9 @@ public class JWTUtils {
      * @param request The request object is used to get the URL of the request.
      * @return RefreshTokenResponse
      */
-    public static RefreshTokenResponse generateRefreshTokenResponse(UserDetails user, HttpServletRequest request) {
+    public static AuthResponse generateAuthResponse(UserDetails user, HttpServletRequest request) {
         Map<String, Object> tokenData = JWTUtils.generateTokens(user, request);
-        return new RefreshTokenResponse(
+        return new AuthResponse(
                 tokenData.get(KEY_ROLE),
                 tokenData.get(KEY_ACCESS_TOKEN),
                 tokenData.get(KEY_REFRESH_TOKEN),

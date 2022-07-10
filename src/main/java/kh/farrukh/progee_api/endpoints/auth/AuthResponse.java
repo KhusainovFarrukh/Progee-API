@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({"access_token", "access_token_expires", "refresh_token", "refresh_token_expires", "role"})
-public class RefreshTokenResponse {
+public class AuthResponse {
 
     private String role;
     @JsonProperty("access_token")
@@ -22,7 +22,7 @@ public class RefreshTokenResponse {
     @JsonProperty("refresh_token_expires")
     private String refreshTokenExpires;
 
-    public RefreshTokenResponse(
+    public AuthResponse(
             Object role,
             Object accessToken,
             Object refreshToken,
