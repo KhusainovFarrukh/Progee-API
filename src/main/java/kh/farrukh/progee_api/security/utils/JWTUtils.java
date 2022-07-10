@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.endpoints.auth.RefreshTokenResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -83,6 +84,24 @@ public class JWTUtils {
         data.put(KEY_REFRESH_TOKEN_EXPIRES, formatter.format(refreshExpireDate));
 
         return data;
+    }
+
+    /**
+     * It creates two tokens, one for access and one for refresh, and returns them in a RefreshTokenResponse
+     *
+     * @param user    The user object that is passed in from the controller.
+     * @param request The request object is used to get the URL of the request.
+     * @return RefreshTokenResponse
+     */
+    public static RefreshTokenResponse generateRefreshTokenResponse(UserDetails user, HttpServletRequest request) {
+        Map<String, Object> tokenData = JWTUtils.generateTokens(user, request);
+        return new RefreshTokenResponse(
+                tokenData.get(KEY_ROLE),
+                tokenData.get(KEY_ACCESS_TOKEN),
+                tokenData.get(KEY_REFRESH_TOKEN),
+                tokenData.get(KEY_ACCESS_TOKEN_EXPIRES),
+                tokenData.get(KEY_REFRESH_TOKEN_EXPIRES)
+        );
     }
 
     /**

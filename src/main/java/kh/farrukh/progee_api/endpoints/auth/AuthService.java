@@ -15,5 +15,5 @@ public interface AuthService {
 
     AppUser register(RegistrationRequest registrationRequest);
 
-    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    RefreshTokenResponse refreshToken(HttpServletRequest request) throws IOException;
 }

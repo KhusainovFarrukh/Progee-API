@@ -5,16 +5,13 @@ import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * It implements the AuthService interface and uses the EmailValidator and UserServiceImpl classes
@@ -45,24 +42,22 @@ public class AuthServiceImpl implements AuthService {
      * It takes the refresh token from the request, decodes it, gets the username from it, loads the user from the
      * database, generates a new access token and refresh token, and sends them back in the response
      *
-     * @param request  The request object containing refresh token in header
-     * @param response The response object that will be used to send the token back to the client.
+     * @param request The request object containing refresh token in header
      */
     @Override
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public RefreshTokenResponse refreshToken(HttpServletRequest request) {
         try {
             DecodedJWT decodedJWT = JWTUtils.decodeJWT(request);
             if (decodedJWT != null) {
                 String username = decodedJWT.getSubject();
                 UserDetails user = userService.loadUserByUsername(username);
-                Map<String, Object> data = JWTUtils.generateTokens(user, request);
-                JWTUtils.sendTokenInResponse(data, response);
+                return JWTUtils.generateRefreshTokenResponse(user, request);
             } else {
                 throw new BadRequestException("Refresh token");
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-            response.sendError(HttpStatus.FORBIDDEN.value());
+            throw new NotEnoughPermissionException();
         }
     }
 }

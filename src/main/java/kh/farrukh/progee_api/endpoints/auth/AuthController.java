@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -41,10 +40,9 @@ public class AuthController {
      * Refreshing token
      *
      * @param request The request object that contains the token.
-     * @param response The response object that will be used to send the token back to the client.
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        authService.refreshToken(request, response);
+    public ResponseEntity<RefreshTokenResponse> refreshToken(HttpServletRequest request) throws IOException {
+        return new ResponseEntity<>(authService.refreshToken(request), HttpStatus.OK);
     }
 }

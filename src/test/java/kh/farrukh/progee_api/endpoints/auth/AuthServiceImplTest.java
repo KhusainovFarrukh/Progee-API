@@ -3,7 +3,6 @@ package kh.farrukh.progee_api.endpoints.auth;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
-import kh.farrukh.progee_api.security.utils.JWTUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
