@@ -5,7 +5,6 @@ import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
-import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,22 +39,18 @@ public class AuthServiceImpl implements AuthService {
      * It takes the refresh token from the request, decodes it, gets the username from it, loads the user from the
      * database, generates a new access token and refresh token, and sends them back in the response
      *
-     * @param refreshToken The refresh token in header
+     * @param refreshTokenHeader The refresh token in header
      */
     @Override
-    public AuthResponse refreshToken(String refreshToken) {
+    public AuthResponse refreshToken(String refreshTokenHeader) {
         try {
-            DecodedJWT decodedJWT = JWTUtils.decodeJWT(refreshToken);
-            if (decodedJWT != null) {
-                String username = decodedJWT.getSubject();
-                UserDetails user = userService.loadUserByUsername(username);
-                return JWTUtils.generateTokens(user);
-            } else {
-                throw new BadRequestException("Refresh token");
-            }
+            DecodedJWT decodedJWT = JWTUtils.decodeJWT(refreshTokenHeader);
+            String username = decodedJWT.getSubject();
+            UserDetails user = userService.loadUserByUsername(username);
+            return JWTUtils.generateTokens(user);
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new NotEnoughPermissionException();
+            throw new BadRequestException("Refresh token");
         }
     }
 }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -130,7 +131,7 @@ class AuthControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(
                         get(ENDPOINT_REFRESH_TOKEN)
-                                .header("Authorization", "Bearer " + loginResponse.getRefreshToken())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginResponse.getRefreshToken())
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

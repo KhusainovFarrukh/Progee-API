@@ -33,10 +33,10 @@ public class JWTUtils {
     private static final DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
     // Creating an algorithm object which will be used to sign the token.
-    private static final Algorithm algorithm = Algorithm.HMAC256(getJwtSecret().getBytes());
+    public static final Algorithm algorithm = Algorithm.HMAC256(getJwtSecret().getBytes());
     // Value of the expiration time for the access token and refresh token.
-    private static final int accessValidMillis = 30 * 60 * 1000;
-    private static final int refreshValidMillis = 3 * 24 * 60 * 60 * 1000;
+    public static final int accessValidMillis = 30 * 60 * 1000;
+    public static final int refreshValidMillis = 3 * 24 * 60 * 60 * 1000;
 
     /**
      * It creates two tokens, one for access and one for refresh, and returns them in a RefreshTokenResponse
@@ -84,12 +84,12 @@ public class JWTUtils {
     /**
      * If the request has an Authorization header with a Bearer token, then verify the token and return the decoded JWT
      *
-     * @param refreshToken The refresh token in request header
+     * @param refreshTokenHeader The refresh token in request header
      * @return A DecodedJWT object
      */
-    public static DecodedJWT decodeJWT(String refreshToken) {
-        if (refreshToken != null && refreshToken.startsWith("Bearer ")) {
-            String token = refreshToken.substring("Bearer ".length());
+    public static DecodedJWT decodeJWT(String refreshTokenHeader) {
+        if (refreshTokenHeader != null && refreshTokenHeader.startsWith("Bearer ")) {
+            String token = refreshTokenHeader.substring("Bearer ".length());
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             return jwtVerifier.verify(token);
         } else {
