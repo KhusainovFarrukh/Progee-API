@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.auth;
 
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -41,10 +41,11 @@ public class AuthController {
      * Refreshing token
      *
      * @param request The request object that contains the token.
-     * @param response The response object that will be used to send the token back to the client.
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        authService.refreshToken(request, response);
+    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) throws IOException {
+        return new ResponseEntity<>(
+                authService.refreshToken(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK
+        );
     }
 }

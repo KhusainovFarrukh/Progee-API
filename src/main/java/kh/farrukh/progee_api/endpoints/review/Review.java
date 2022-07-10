@@ -60,6 +60,12 @@ public class Review extends EntityWithAuthorAndCreatedAt {
         this.language = language;
     }
 
+    public Review(String body, ReviewValue reviewValue, Language language) {
+        this.body = body;
+        this.reviewValue = reviewValue;
+        this.language = language;
+    }
+
     /**
      * The score of a review is the number of up-votes minus the number of down-votes.
      *

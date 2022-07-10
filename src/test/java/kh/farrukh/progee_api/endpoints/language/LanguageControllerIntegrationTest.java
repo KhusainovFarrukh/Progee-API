@@ -137,7 +137,7 @@ class LanguageControllerIntegrationTest {
 
         // then
         Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
-        assertThat(language.getId()).isEqualTo(language.getId());
+        assertThat(language.getId()).isEqualTo(existingLanguage.getId());
     }
 
     @Test

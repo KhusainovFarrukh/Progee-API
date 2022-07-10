@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.security.filters;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,7 +45,7 @@ public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             try {
-                DecodedJWT decodedJWT = JWTUtils.decodeJWT(request);
+                DecodedJWT decodedJWT = JWTUtils.decodeJWT(request.getHeader(HttpHeaders.AUTHORIZATION));
                 if (decodedJWT != null) {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             JWTUtils.getAuthenticationFromDecodedJWT(decodedJWT);

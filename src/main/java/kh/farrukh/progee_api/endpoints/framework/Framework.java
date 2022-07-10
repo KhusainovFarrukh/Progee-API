@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
+import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
@@ -54,6 +55,12 @@ public class Framework extends EntityWithResourceState {
     }
 
     public Framework(Language language) {
+        this.language = language;
+    }
+
+    public Framework(String name, ResourceState state, Language language) {
+        this.name = name;
+        super.setState(state);
         this.language = language;
     }
 }
