@@ -13,11 +13,13 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_HOME;
 @RequestMapping(ENDPOINT_HOME)
 public class HomeController {
 
+    public static final String GREETING = "Hi! This is Progee-API v1. \nProgee-API is REST API for providing information about programming languages, frameworks, " +
+            "their popularity and respect for them among community of developers (with reviews and scores). " +
+            "\nCurrently working features: languages, frameworks, reviews. \nAPI docs is available at: https://documenter.getpostman.com/view/14256972/UzBgwAPQ" +
+            "\n\nby Farrukh Khusainov";
+
     @GetMapping
     public String home() {
-        return "Hi! This is Progee-API v1. \nProgee-API is REST API for providing information about programming languages, frameworks, " +
-                "their popularity and respect for them among community of developers (with reviews and scores). " +
-                "\nCurrently working features: languages, frameworks, reviews. \nAPI docs is available at: https://documenter.getpostman.com/view/14256972/UzBgwAPQ" +
-                "\n\nby Farrukh Khusainov";
+        return GREETING;
     }
 }

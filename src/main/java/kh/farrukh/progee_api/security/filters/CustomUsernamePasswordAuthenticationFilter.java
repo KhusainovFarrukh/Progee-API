@@ -1,6 +1,8 @@
 package kh.farrukh.progee_api.security.filters;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import kh.farrukh.progee_api.security.utils.LoginRequest;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +62,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        Map<String, Object> data = JWTUtils.generateTokens(user, request);
-        JWTUtils.sendTokenInResponse(data, response);
+        AuthResponse authResponse = JWTUtils.generateTokens(user);
+        JWTUtils.sendTokenInResponse(authResponse, response);
     }
 }

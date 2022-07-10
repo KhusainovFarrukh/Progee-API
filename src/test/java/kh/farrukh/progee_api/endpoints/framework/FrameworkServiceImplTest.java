@@ -84,7 +84,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = "USER")
     void simpleUserCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -105,7 +105,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = "USER")
     void throwsExceptionIfSimpleUserFiltersFrameworksByState() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -118,7 +118,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "ADMIN")
     void adminCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -139,7 +139,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "ADMIN")
     void adminCanGetFrameworksFilteredByState() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -160,7 +160,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "ADMIN")
     void throwsExceptionIfLanguageOfFrameworksDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -299,7 +299,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void authorCanUpdateFramework() {
         // given
         String name = "test name";
@@ -323,7 +323,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void adminCanUpdateFramework() {
         // given
         String name = "test name";
@@ -348,7 +348,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfNonAuthorUpdatesFramework() {
         // given
         AppUser user = new AppUser(1);
@@ -366,7 +366,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -383,7 +383,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageOfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -398,7 +398,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfFrameworkToUpdateExistsWithName() {
         // given
         String name = "test name";
@@ -421,7 +421,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfImageOfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long imageId = 1;
@@ -443,7 +443,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void canDeleteFrameworkById() {
         // given
         long frameworkId = 1;
@@ -458,7 +458,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfFrameworkToDeleteDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -473,7 +473,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageOfFrameworkToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -487,7 +487,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void canSetFrameworkState() {
         // given
         long frameworkId = 1;
@@ -503,7 +503,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfFrameworkToSetStateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -520,7 +520,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageOfFrameworkToSetStateDoesNotExistWithId() {
         // given
         long languageId = 1;

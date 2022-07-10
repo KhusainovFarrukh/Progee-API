@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * It's a POJO that represents a registration request.
@@ -18,13 +19,15 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class RegistrationRequest {
 
-    @NotNull
+    @NotBlank(message = "Name must not be blank")
     private String name;
-    @NotNull
+    @NotBlank(message = "Username must not be blank")
+    @Size(max = 16, message = "Username must be shorter than 16 characters")
     private String username;
-    @NotNull
+    @NotBlank(message = "Email must not be blank")
     private String email;
-    @NotNull
+    @NotBlank(message = "Password must not be blank")
+    @Size(min = 8, message = "Password length must be at least 8 characters")
     private String password;
     @JsonProperty("image_id")
     private long imageId;

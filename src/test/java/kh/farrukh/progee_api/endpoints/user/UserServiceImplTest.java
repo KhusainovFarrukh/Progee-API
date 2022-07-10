@@ -351,7 +351,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void selfCanSetUserImage() {
         // given
         long userId = 1;
@@ -369,7 +369,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void adminCanSetUserImage() {
         // given
         long userId = 1;
@@ -388,7 +388,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfOtherUserSetsUserImage() {
         // given
         long userId = 1;
@@ -403,7 +403,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfUserToSetImageDoesNotExistWithId() {
         // given
         long userId = 1;
@@ -421,7 +421,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfImageToSetDoesNotExistWithId() {
         // given
         long userId = 1;
@@ -440,7 +440,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void selfCanSetUserPassword() {
         // given
         long userId = 1;
@@ -461,7 +461,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void adminCanSetUserPassword() {
         // given
         long userId = 1;
@@ -483,7 +483,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfOtherUserSetsUserPassword() {
         // given
         long userId = 1;
@@ -498,7 +498,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfCurrentPasswordIsWrong() {
         // given
         long userId = 1;
@@ -517,7 +517,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfUserToSetPasswordDoesNotExistWithId() {
         // given
         long userId = 1;

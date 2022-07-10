@@ -77,7 +77,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = "USER")
     void simpleUserCanGetApprovedLanguages() {
         // when
         underTest.getLanguages(null, 1, 10, "id", "ASC");
@@ -94,7 +94,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"USER"})
+    @WithMockUser(authorities = "USER")
     void throwsExceptionIfSimpleUserFiltersLanguagesByState() {
         // when
         // then
@@ -104,7 +104,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "ADMIN")
     void adminCanGetApprovedLanguages() {
         // when
         underTest.getLanguages(null, 1, 10, "id", "ASC");
@@ -121,7 +121,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"ADMIN"})
+    @WithMockUser(authorities = "ADMIN")
     void adminCanGetLanguagesFilteredByState() {
         // when
         underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC");
@@ -220,7 +220,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void authorCanUpdateLanguage() {
         // given
         String name = "test name";
@@ -243,7 +243,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void adminCanUpdateLanguage() {
         // given
         String name = "test name";
@@ -267,7 +267,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = {"USER"})
+    @WithMockUser(username = "user@mail.com", authorities = "USER")
     void throwsExceptionIfNonAuthorUpdatesLanguage() {
         // given
         AppUser user = new AppUser(1);
@@ -284,7 +284,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -300,7 +300,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageToUpdateExistsWithName() {
         // given
         String name = "test name";
@@ -322,7 +322,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfImageOfLanguageToUpdateDoesNotExistWithId() {
         // given
         long imageId = 1;
@@ -343,7 +343,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void canDeleteLanguageById() {
         // given
         long languageId = 1;
@@ -357,7 +357,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -371,7 +371,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void canSetLanguageState() {
         // given
         long languageId = 1;
@@ -386,7 +386,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = {"ADMIN"})
+    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
     void throwsExceptionIfLanguageToSetStateDoesNotExistWithId() {
         // given
         long languageId = 1;

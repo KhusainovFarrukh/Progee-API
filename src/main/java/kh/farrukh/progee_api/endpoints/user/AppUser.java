@@ -83,6 +83,29 @@ public class AppUser extends EntityWithId implements UserDetails {
         this.uniqueUsername = uniqueUsername;
     }
 
+    public AppUser(String email, UserRole role) {
+        this.email = email;
+        this.role = role;
+    }
+
+    public AppUser(String email, UserRole role, String password) {
+        this.email = email;
+        this.role = role;
+        this.password = password;
+    }
+
+    public AppUser(String name, String uniqueUsername, UserRole role) {
+        this.name = name;
+        this.uniqueUsername = uniqueUsername;
+        this.role = role;
+    }
+
+    public AppUser(String name, String uniqueUsername, String password) {
+        this.name = name;
+        this.uniqueUsername = uniqueUsername;
+        this.password = password;
+    }
+
     @JsonIgnore
     @Override
     public String getUsername() {
