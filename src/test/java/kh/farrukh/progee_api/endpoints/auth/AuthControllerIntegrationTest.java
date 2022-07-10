@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -79,8 +78,34 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
+    void canLogin() throws Exception {
+        // given
+        AppUser user = userRepository.save(
+                new AppUser("user@mail.com", UserRole.USER, passwordEncoder.encode("12345678"))
+        );
+        LoginRequest request = new LoginRequest(user.getEmail(), "12345678");
+
+        // when
+        MvcResult result = mvc
+                .perform(
+                        post(ENDPOINT_LOGIN)
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(objectMapper.writeValueAsString(request))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // then
+        AuthResponse response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), AuthResponse.class
+        );
+
+        assertThat(response.getRole()).isEqualTo(user.getRole().name());
+    }
+
+    @Test
     void canRefreshToken() throws Exception {
-        // TODO: 7/7/22 refresh token integration test
         // given
         AppUser user = userRepository.save(
                 new AppUser("user@mail.com", UserRole.USER, passwordEncoder.encode("12345678"))
