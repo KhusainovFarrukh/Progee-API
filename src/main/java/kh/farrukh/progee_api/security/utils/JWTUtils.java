@@ -4,23 +4,21 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -41,13 +39,12 @@ public class JWTUtils {
     private static final int refreshValidMillis = 3 * 24 * 60 * 60 * 1000;
 
     /**
-     * It creates two tokens, one for access and one for refresh, and returns them in a map
+     * It creates two tokens, one for access and one for refresh, and returns them in a RefreshTokenResponse
      *
-     * @param user    The user object that is passed in from the controller.
-     * @param request The request object is used to get the URL of the request.
-     * @return A map of tokens and their expiration dates.
+     * @param user The user object that is passed in from the controller.
+     * @return RefreshTokenResponse
      */
-    public static Map<String, Object> generateTokens(UserDetails user, HttpServletRequest request) {
+    public static AuthResponse generateTokens(UserDetails user) {
         long currentMillis = System.currentTimeMillis();
         Date accessExpireDate = new Date(currentMillis + accessValidMillis);
         Date refreshExpireDate = new Date(currentMillis + refreshValidMillis);
@@ -66,55 +63,33 @@ public class JWTUtils {
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(accessExpireDate)
-                .withIssuer(request.getRequestURL().toString())
                 .withClaim(KEY_ROLE, role)
                 .sign(algorithm);
 
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(refreshExpireDate)
-                .withIssuer(request.getRequestURL().toString())
                 .withClaim(KEY_ROLE, role)
                 .sign(algorithm);
 
-        Map<String, Object> data = new HashMap<>();
-        data.put(KEY_ROLE, role);
-        data.put(KEY_ACCESS_TOKEN, accessToken);
-        data.put(KEY_REFRESH_TOKEN, refreshToken);
-        data.put(KEY_ACCESS_TOKEN_EXPIRES, formatter.format(accessExpireDate));
-        data.put(KEY_REFRESH_TOKEN_EXPIRES, formatter.format(refreshExpireDate));
-
-        return data;
-    }
-
-    /**
-     * It creates two tokens, one for access and one for refresh, and returns them in a RefreshTokenResponse
-     *
-     * @param user    The user object that is passed in from the controller.
-     * @param request The request object is used to get the URL of the request.
-     * @return RefreshTokenResponse
-     */
-    public static AuthResponse generateAuthResponse(UserDetails user, HttpServletRequest request) {
-        Map<String, Object> tokenData = JWTUtils.generateTokens(user, request);
         return new AuthResponse(
-                tokenData.get(KEY_ROLE),
-                tokenData.get(KEY_ACCESS_TOKEN),
-                tokenData.get(KEY_REFRESH_TOKEN),
-                tokenData.get(KEY_ACCESS_TOKEN_EXPIRES),
-                tokenData.get(KEY_REFRESH_TOKEN_EXPIRES)
+                role,
+                accessToken,
+                refreshToken,
+                formatter.format(accessExpireDate),
+                formatter.format(refreshExpireDate)
         );
     }
 
     /**
      * If the request has an Authorization header with a Bearer token, then verify the token and return the decoded JWT
      *
-     * @param request The request object
+     * @param refreshToken The refresh token in request header
      * @return A DecodedJWT object
      */
-    public static DecodedJWT decodeJWT(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring("Bearer ".length());
+    public static DecodedJWT decodeJWT(String refreshToken) {
+        if (refreshToken != null && refreshToken.startsWith("Bearer ")) {
+            String token = refreshToken.substring("Bearer ".length());
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             return jwtVerifier.verify(token);
         } else {
@@ -142,11 +117,15 @@ public class JWTUtils {
     /**
      * It takes a map of data and an HttpServletResponse object, and writes the data to the response as JSON
      *
-     * @param data     This is the data that you want to send back to the client.
-     * @param response The HttpServletResponse object.
+     * @param authResponse This is the AuthResponse that you want to send back to the client.
+     * @param response     The HttpServletResponse object.
      */
-    public static void sendTokenInResponse(Map<String, Object> data, HttpServletResponse response) throws IOException {
+    public static void sendTokenInResponse(AuthResponse authResponse, HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        Map<String, Object> data = new ObjectMapper().convertValue(authResponse,
+                new TypeReference<>() {
+                }
+        );
         new ObjectMapper().writeValue(response.getOutputStream(), data);
     }
 

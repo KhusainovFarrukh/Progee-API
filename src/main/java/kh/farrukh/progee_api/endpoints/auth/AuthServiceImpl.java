@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * It implements the AuthService interface and uses the EmailValidator and UserServiceImpl classes
  * to register a new user or refresh the token
@@ -42,16 +40,16 @@ public class AuthServiceImpl implements AuthService {
      * It takes the refresh token from the request, decodes it, gets the username from it, loads the user from the
      * database, generates a new access token and refresh token, and sends them back in the response
      *
-     * @param request The request object containing refresh token in header
+     * @param refreshToken The refresh token in header
      */
     @Override
-    public AuthResponse refreshToken(HttpServletRequest request) {
+    public AuthResponse refreshToken(String refreshToken) {
         try {
-            DecodedJWT decodedJWT = JWTUtils.decodeJWT(request);
+            DecodedJWT decodedJWT = JWTUtils.decodeJWT(refreshToken);
             if (decodedJWT != null) {
                 String username = decodedJWT.getSubject();
                 UserDetails user = userService.loadUserByUsername(username);
-                return JWTUtils.generateAuthResponse(user, request);
+                return JWTUtils.generateTokens(user);
             } else {
                 throw new BadRequestException("Refresh token");
             }

@@ -21,18 +21,4 @@ public class AuthResponse {
     private String accessTokenExpires;
     @JsonProperty("refresh_token_expires")
     private String refreshTokenExpires;
-
-    public AuthResponse(
-            Object role,
-            Object accessToken,
-            Object refreshToken,
-            Object accessTokenExpires,
-            Object refreshTokenExpires
-    ) {
-        this.role = (String) role;
-        this.accessToken = (String) accessToken;
-        this.refreshToken = (String) refreshToken;
-        this.accessTokenExpires = (String) accessTokenExpires;
-        this.refreshTokenExpires = (String) refreshTokenExpires;
-    }
 }

@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.auth;
 
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,8 @@ public class AuthController {
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
     public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) throws IOException {
-        return new ResponseEntity<>(authService.refreshToken(request), HttpStatus.OK);
+        return new ResponseEntity<>(
+                authService.refreshToken(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK
+        );
     }
 }
