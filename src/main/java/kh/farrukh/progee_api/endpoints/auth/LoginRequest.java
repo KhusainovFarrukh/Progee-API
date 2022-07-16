@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.security.utils;
+package kh.farrukh.progee_api.endpoints.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
-    private String username;
+    private String email;
     private String password;
 }

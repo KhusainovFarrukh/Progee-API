@@ -84,12 +84,12 @@ public class JWTUtils {
     /**
      * If the request has an Authorization header with a Bearer token, then verify the token and return the decoded JWT
      *
-     * @param refreshTokenHeader The refresh token in request header
+     * @param authHeader The refresh token in request header
      * @return A DecodedJWT object
      */
-    public static DecodedJWT decodeJWT(String refreshTokenHeader) {
-        if (refreshTokenHeader != null && refreshTokenHeader.startsWith("Bearer ")) {
-            String token = refreshTokenHeader.substring("Bearer ".length());
+    public static DecodedJWT decodeJWT(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring("Bearer ".length());
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             return jwtVerifier.verify(token);
         } else {

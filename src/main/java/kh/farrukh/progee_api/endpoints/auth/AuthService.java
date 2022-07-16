@@ -13,5 +13,5 @@ public interface AuthService {
 
     AppUser register(RegistrationRequest registrationRequest);
 
-    AuthResponse refreshToken(String refreshToken) throws IOException;
+    AuthResponse refreshToken(String authHeader) throws IOException;
 }

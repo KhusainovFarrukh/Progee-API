@@ -21,7 +21,7 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
  * If the request is not for the login or refresh token endpoints, then decode the JWT and set the authentication in the
  * security context
  */
-public class CustomJWTAuthorizationFilter extends OncePerRequestFilter {
+public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

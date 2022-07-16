@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.security.utils;
 
-import kh.farrukh.progee_api.security.filters.CustomUsernamePasswordAuthenticationFilter;
+import kh.farrukh.progee_api.security.filters.EmailPasswordAuthenticationFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -13,7 +13,7 @@ import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LOGIN;
  * The class extends AbstractHttpConfigurer, which is a class that provides a DSL for configuring the Spring Security
  * filter chain
  */
-public class CustomDslForAuthManager extends AbstractHttpConfigurer<CustomDslForAuthManager, HttpSecurity> {
+public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<AuthenticationFilterConfigurer, HttpSecurity> {
 
     /**
      * Add a custom filter to the http security chain that will be used to authenticate users.
@@ -23,17 +23,17 @@ public class CustomDslForAuthManager extends AbstractHttpConfigurer<CustomDslFor
     @Override
     public void configure(HttpSecurity http) {
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-        CustomUsernamePasswordAuthenticationFilter authenticationFilter = new CustomUsernamePasswordAuthenticationFilter(authenticationManager);
+        EmailPasswordAuthenticationFilter authenticationFilter = new EmailPasswordAuthenticationFilter(authenticationManager);
         authenticationFilter.setFilterProcessesUrl(ENDPOINT_LOGIN);
         http.addFilter(authenticationFilter);
     }
 
     /**
-     * It returns a new instance of the `CustomDslForAuthManager` class for using in apply() method of HttpSecurity
+     * It returns a new instance of the `AuthenticationFilterConfigurer` class for using in apply() method of HttpSecurity
      *
-     * @return A new instance of the CustomDslForAuthManager class.
+     * @return A new instance of the AuthenticationFilterConfigurer class.
      */
-    public static CustomDslForAuthManager customDsl() {
-        return new CustomDslForAuthManager();
+    public static AuthenticationFilterConfigurer configureAuthenticationFilter() {
+        return new AuthenticationFilterConfigurer();
     }
 }

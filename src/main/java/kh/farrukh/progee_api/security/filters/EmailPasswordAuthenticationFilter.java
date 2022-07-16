@@ -1,10 +1,9 @@
 package kh.farrukh.progee_api.security.filters;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
-import kh.farrukh.progee_api.security.utils.LoginRequest;
+import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -18,14 +17,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * It extends the default UsernamePasswordAuthenticationFilter and overrides the attemptAuthentication and
  * successfulAuthentication methods
  */
 @RequiredArgsConstructor
-public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
@@ -47,7 +45,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
             throw new AuthenticationServiceException(e.getMessage(), e);
         }
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 

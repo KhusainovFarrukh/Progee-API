@@ -39,12 +39,12 @@ public class AuthServiceImpl implements AuthService {
      * It takes the refresh token from the request, decodes it, gets the username from it, loads the user from the
      * database, generates a new access token and refresh token, and sends them back in the response
      *
-     * @param refreshTokenHeader The refresh token in header
+     * @param authHeader The refresh token in header
      */
     @Override
-    public AuthResponse refreshToken(String refreshTokenHeader) {
+    public AuthResponse refreshToken(String authHeader) {
         try {
-            DecodedJWT decodedJWT = JWTUtils.decodeJWT(refreshTokenHeader);
+            DecodedJWT decodedJWT = JWTUtils.decodeJWT(authHeader);
             String username = decodedJWT.getSubject();
             UserDetails user = userService.loadUserByUsername(username);
             return JWTUtils.generateTokens(user);

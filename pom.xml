@@ -10,11 +10,11 @@
     </parent>
     <groupId>kh.farrukh</groupId>
     <artifactId>progee-api</artifactId>
-    <version>0.3.0-beta</version>
+    <version>0.2.0-beta</version>
     <name>Progee API</name>
     <description>Progee API</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>18</java.version>
     </properties>
     <dependencies>
         <dependency>
