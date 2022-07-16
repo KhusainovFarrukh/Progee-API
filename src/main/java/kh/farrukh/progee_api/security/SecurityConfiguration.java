@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.security;
 
 import kh.farrukh.progee_api.endpoints.user.UserRole;
-import kh.farrukh.progee_api.security.filters.CustomJWTAuthorizationFilter;
+import kh.farrukh.progee_api.security.filters.JWTAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static kh.farrukh.progee_api.security.utils.CustomDslForAuthManager.customDsl;
+import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.configureAuthenticationFilter;
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
 
 /**
@@ -61,8 +61,8 @@ public class SecurityConfiguration {
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
-        http.apply(customDsl());
-        http.addFilterBefore(new CustomJWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.apply(configureAuthenticationFilter());
+        http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
