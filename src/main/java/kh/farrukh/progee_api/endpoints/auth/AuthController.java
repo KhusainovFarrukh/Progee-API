@@ -5,12 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -40,12 +36,14 @@ public class AuthController {
     /**
      * Refreshing token
      *
-     * @param request The request object that contains the token.
+     * @param authHeader The HttpHeader (AUTHORIZATION Header) that contains the token.
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
-    public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) throws IOException {
+    public ResponseEntity<AuthResponse> refreshToken(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
+    ) throws IOException {
         return new ResponseEntity<>(
-                authService.refreshToken(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK
+                authService.refreshToken(authHeader), HttpStatus.OK
         );
     }
 }
