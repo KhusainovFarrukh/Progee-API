@@ -22,14 +22,12 @@ public class JWTAccessDeniedHandler implements AccessDeniedHandler {
         this.resolver = resolver;
     }
 
-    // TODO: 7/29/22 not working
     @Override
     public void handle(
             HttpServletRequest request,
             HttpServletResponse response,
             AccessDeniedException accessDeniedException
-    ) throws IOException {
-//        // TODO: 7/29/22 localize security exceptions
+    ) {
         resolver.resolveException(request, response, null, new EndpointAccessDeniedException(request.getServletPath()));
     }
 }
