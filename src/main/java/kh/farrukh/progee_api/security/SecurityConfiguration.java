@@ -2,6 +2,8 @@ package kh.farrukh.progee_api.security;
 
 import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.security.filters.JWTAuthorizationFilter;
+import kh.farrukh.progee_api.security.handlers.EmailPasswordAuthenticationEntryPoint;
+import kh.farrukh.progee_api.security.handlers.JWTAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,17 +30,14 @@ public class SecurityConfiguration {
      * @return SecurityFilterChain
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(
+            HttpSecurity http,
+            JWTAccessDeniedHandler accessDeniedHandler,
+            EmailPasswordAuthenticationEntryPoint authenticationEntryPoint
+    ) throws Exception {
         // Disabling the CSRF and making the session stateless.
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // Allowing all the users to access the register, login and refresh token endpoints.
-        http.authorizeRequests().antMatchers(
-                withChildEndpoints(ENDPOINT_REGISTRATION),
-                withChildEndpoints(ENDPOINT_LOGIN),
-                withChildEndpoints(ENDPOINT_REFRESH_TOKEN)
-        ).permitAll();
 
         // Endpoint that everyone can GET and POST, but only authorized user can PATCH, PUT, DELETE
         setEveryoneCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
@@ -63,6 +62,17 @@ public class SecurityConfiguration {
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
         http.apply(configureAuthenticationFilter());
         http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // Allowing all the users to access the register, login and refresh token endpoints.
+        http.authorizeRequests().antMatchers(
+                        withChildEndpoints(ENDPOINT_REGISTRATION),
+                        withChildEndpoints(ENDPOINT_LOGIN),
+                        withChildEndpoints(ENDPOINT_REFRESH_TOKEN)
+                ).permitAll()
+                .anyRequest().authenticated()
+                .and().exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPoint);
 
         return http.build();
     }
