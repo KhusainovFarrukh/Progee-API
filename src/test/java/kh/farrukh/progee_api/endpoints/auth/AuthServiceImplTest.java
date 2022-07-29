@@ -17,8 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 
-import static kh.farrukh.progee_api.security.utils.JWTUtils.algorithm;
-import static kh.farrukh.progee_api.security.utils.JWTUtils.refreshValidMillis;
+import static kh.farrukh.progee_api.security.utils.JWTUtils.*;
 import static kh.farrukh.progee_api.utils.constant.JWTKeys.KEY_ROLE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -84,7 +83,7 @@ class AuthServiceImplTest {
                 .withSubject("user@mail.com")
                 .withExpiresAt(new Date(System.currentTimeMillis() + refreshValidMillis))
                 .withClaim(KEY_ROLE, UserRole.USER.name())
-                .sign(algorithm);
+                .sign(refreshTokenAlgorithm);
 
         // when
         AuthResponse authResponse = underTest.refreshToken("Bearer " + refreshToken);

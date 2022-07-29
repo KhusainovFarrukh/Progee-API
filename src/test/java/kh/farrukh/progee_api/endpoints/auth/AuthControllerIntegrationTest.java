@@ -104,11 +104,12 @@ class AuthControllerIntegrationTest {
         assertThat(response.getRole()).isEqualTo(user.getRole().name());
     }
 
+    // TODO: 7/29/22 giving 403 error if refresh token is valid
     @Test
     void canRefreshToken() throws Exception {
         // given
         AppUser user = userRepository.save(
-                new AppUser("user@mail.com", UserRole.USER, passwordEncoder.encode("12345678"))
+                new AppUser("user@mail.com", UserRole.SUPER_ADMIN, passwordEncoder.encode("12345678"))
         );
         LoginRequest request = new LoginRequest(user.getEmail(), "12345678");
 

@@ -44,10 +44,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refreshToken(String authHeader) {
         try {
-            DecodedJWT decodedJWT = JWTUtils.decodeJWT(authHeader);
-            String username = decodedJWT.getSubject();
-            UserDetails user = userService.loadUserByUsername(username);
-            return JWTUtils.generateTokens(user);
+            DecodedJWT decodedJWT = JWTUtils.decodeJWT(authHeader, true);
+            if (decodedJWT != null) {
+                String username = decodedJWT.getSubject();
+                UserDetails user = userService.loadUserByUsername(username);
+                return JWTUtils.generateTokens(user);
+            } else {
+                throw new BadRequestException("Refresh token");
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BadRequestException("Refresh token");

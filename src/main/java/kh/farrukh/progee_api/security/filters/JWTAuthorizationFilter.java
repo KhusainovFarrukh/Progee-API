@@ -45,7 +45,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             try {
-                DecodedJWT decodedJWT = JWTUtils.decodeJWT(request.getHeader(HttpHeaders.AUTHORIZATION));
+                DecodedJWT decodedJWT = JWTUtils.decodeJWT(request.getHeader(HttpHeaders.AUTHORIZATION), false);
                 if (decodedJWT != null) {
                     UsernamePasswordAuthenticationToken authenticationToken =
                             JWTUtils.getAuthenticationFromDecodedJWT(decodedJWT);
