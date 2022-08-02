@@ -20,7 +20,7 @@ public class InvalidCredentialsException extends ApiException {
 
     public InvalidCredentialsException() {
         super(
-                "Token is invalid. Get the new one from login endpoint",
+                "Auth credentials are invalid",
                 HttpStatus.UNAUTHORIZED,
                 EXCEPTION_INVALID_CREDENTIALS,
                 new Object[]{}
