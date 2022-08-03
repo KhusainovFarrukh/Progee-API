@@ -1,11 +1,15 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,11 +21,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 
-import static kh.farrukh.progee_api.security.utils.JWTUtils.*;
 import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,6 +37,8 @@ class AuthServiceImplTest {
     private EmailValidator emailValidator;
     @Mock
     private UserService userService;
+    @Mock
+    private TokenProvider tokenProvider;
     @InjectMocks
     private AuthServiceImpl underTest;
 
@@ -79,11 +84,19 @@ class AuthServiceImplTest {
         // given
         AppUser existingUser = new AppUser("user@mail.com", UserRole.USER);
         when(userService.loadUserByUsername(any())).thenReturn(existingUser);
+        when(tokenProvider.getRefreshTokenAlgorithm()).thenReturn(Algorithm.HMAC256("test"));
+        when(tokenProvider.getRefreshTokenValidityInSeconds()).thenReturn(604800L);
         String refreshToken = JWT.create()
                 .withSubject("user@mail.com")
-                .withExpiresAt(new Date(System.currentTimeMillis() + refreshValidMillis))
+                .withExpiresAt(new Date(System.currentTimeMillis() + tokenProvider.getRefreshTokenValidityInSeconds() * 1000))
                 .withClaim(KEY_ROLE, UserRole.USER.name())
-                .sign(refreshTokenAlgorithm);
+                .sign(tokenProvider.getRefreshTokenAlgorithm());
+        JWTVerifier jwtVerifier = JWT.require(tokenProvider.getRefreshTokenAlgorithm()).build();
+        DecodedJWT decodedJWT = jwtVerifier.verify(refreshToken);
+        when(tokenProvider.validateToken(anyString(), anyBoolean())).thenReturn(decodedJWT);
+        when(tokenProvider.generateTokens(any())).thenReturn(
+                new AuthResponse(existingUser.getRole().name(), "test", "test", "test", "test")
+        );
 
         // when
         AuthResponse authResponse = underTest.refreshToken("Bearer " + refreshToken);

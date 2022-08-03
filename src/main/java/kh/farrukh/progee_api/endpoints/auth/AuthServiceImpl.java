@@ -5,7 +5,7 @@ import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
-import kh.farrukh.progee_api.security.utils.JWTUtils;
+import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+    private final TokenProvider tokenProvider;
     private final EmailValidator emailValidator;
     private final UserService userService;
 
@@ -44,11 +45,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refreshToken(String authHeader) {
         try {
-            DecodedJWT decodedJWT = JWTUtils.decodeJWT(authHeader, true);
+            DecodedJWT decodedJWT = tokenProvider.validateToken(authHeader, true);
             if (decodedJWT != null) {
                 String username = decodedJWT.getSubject();
                 UserDetails user = userService.loadUserByUsername(username);
-                return JWTUtils.generateTokens(user);
+                return tokenProvider.generateTokens(user);
             } else {
                 throw new BadRequestException("Refresh token");
             }

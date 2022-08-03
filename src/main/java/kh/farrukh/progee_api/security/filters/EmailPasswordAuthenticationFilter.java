@@ -5,7 +5,8 @@ import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordWrongException;
-import kh.farrukh.progee_api.security.utils.JWTUtils;
+import kh.farrukh.progee_api.security.jwt.TokenProvider;
+import kh.farrukh.progee_api.security.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -30,6 +31,7 @@ import java.io.IOException;
 public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
     private final HandlerExceptionResolver resolver;
 
@@ -66,8 +68,8 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        AuthResponse authResponse = JWTUtils.generateTokens(user);
-        JWTUtils.sendTokenInResponse(authResponse, response);
+        AuthResponse authResponse = tokenProvider.generateTokens(user);
+        SecurityUtils.sendTokenInResponse(authResponse, response);
     }
 
     @Override

@@ -6,7 +6,8 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.exception.custom_exceptions.token_exceptions.*;
-import kh.farrukh.progee_api.security.utils.JWTUtils;
+import kh.farrukh.progee_api.security.jwt.TokenProvider;
+import kh.farrukh.progee_api.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,11 +30,14 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.*;
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
+    private final TokenProvider tokenProvider;
     private final HandlerExceptionResolver resolver;
 
     public JWTAuthorizationFilter(
+            TokenProvider tokenProvider,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
     ) {
+        this.tokenProvider = tokenProvider;
         this.resolver = resolver;
     }
 
@@ -45,7 +49,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         // if..
         // home request
         return request.getRequestURI().equals(ENDPOINT_HOME) ||
-                
+
                 // register request
                 request.getRequestURI().equals(ENDPOINT_REGISTRATION) ||
 
@@ -69,9 +73,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) {
         try {
-            DecodedJWT decodedJWT = JWTUtils.decodeJWT(request.getHeader(HttpHeaders.AUTHORIZATION), false);
+            DecodedJWT decodedJWT = tokenProvider.validateToken(request.getHeader(HttpHeaders.AUTHORIZATION), false);
             UsernamePasswordAuthenticationToken authenticationToken =
-                    JWTUtils.getAuthenticationFromDecodedJWT(decodedJWT);
+                    SecurityUtils.getAuthenticationFromDecodedJWT(decodedJWT);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         } catch (AlgorithmMismatchException exception) {
