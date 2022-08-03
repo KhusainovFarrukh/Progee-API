@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
+import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.*;
 
 /**
  * It configures the security of the application using Spring Security via JWT.

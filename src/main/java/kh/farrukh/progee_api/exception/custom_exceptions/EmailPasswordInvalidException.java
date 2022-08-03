@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_EMAIL_PASSWORD_INVALID;
+import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_EMAIL_PASSWORD_INVALID;
 
 /**
  * `EmailPasswordInvalidException` is a subclass of `ApiException` that is thrown

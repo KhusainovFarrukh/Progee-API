@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import static kh.farrukh.progee_api.utils.constant.JWTKeys.*;
+import static kh.farrukh.progee_api.utils.constants.JWTKeys.*;
 
 /**
  * Utils for generating, decoding and sending tokens

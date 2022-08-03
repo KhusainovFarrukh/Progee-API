@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.exception.custom_exceptions;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import kh.farrukh.progee_api.exception.ApiException;
-import kh.farrukh.progee_api.utils.constant.ExceptionMessages;
+import kh.farrukh.progee_api.utils.constants.ExceptionMessages;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

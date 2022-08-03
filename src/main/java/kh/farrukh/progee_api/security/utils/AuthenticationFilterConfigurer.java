@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.stereotype.Component;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LOGIN;
+import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LOGIN;
 
 /**
  * This class is a custom DSL that adds a custom authentication filter to the Spring Security filter chain.

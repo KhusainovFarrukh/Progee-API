@@ -25,14 +25,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LANGUAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class ReviewControllerIntegrationTest {
 
     @Autowired
