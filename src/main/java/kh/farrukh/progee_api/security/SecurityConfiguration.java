@@ -4,6 +4,7 @@ import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.security.filters.JWTAuthorizationFilter;
 import kh.farrukh.progee_api.security.handlers.EmailPasswordAuthenticationEntryPoint;
 import kh.farrukh.progee_api.security.handlers.JWTAccessDeniedHandler;
+import kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.configureAuthenticationFilter;
 import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.*;
 
 /**
@@ -32,6 +32,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http,
+            JWTAuthorizationFilter authorizationFilter,
+            AuthenticationFilterConfigurer authenticationFilterConfigurer,
             JWTAccessDeniedHandler accessDeniedHandler,
             EmailPasswordAuthenticationEntryPoint authenticationEntryPoint
     ) throws Exception {
@@ -60,8 +62,8 @@ public class SecurityConfiguration {
         setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
-        http.apply(configureAuthenticationFilter());
-        http.addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.apply(authenticationFilterConfigurer);
+        http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Allowing all the users to access the register, login and refresh token endpoints.
         http.authorizeRequests().antMatchers(

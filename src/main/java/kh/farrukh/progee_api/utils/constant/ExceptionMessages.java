@@ -14,5 +14,5 @@ public class ExceptionMessages {
     public static final String EXCEPTION_METHOD_ARGUMENT_NOT_VALID = "message.exception.method_argument_not_valid";
     public static final String EXCEPTION_EMAIL_PASSWORD_INVALID = "message.exception.email_password_invalid";
     public static final String EXCEPTION_ENDPOINT_ACCESS_DENIED = "message.exception.endpoint_access_denied";
-    public static final String EXCEPTION_INVALID_CREDENTIALS = "message.exception.invalid_credentials";
+    public static final String EXCEPTION_INVALID_TOKEN = "message.exception.invalid_token";
 }

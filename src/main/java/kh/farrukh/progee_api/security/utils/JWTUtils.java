@@ -98,7 +98,7 @@ public class JWTUtils {
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             return jwtVerifier.verify(token);
         } else {
-            return null;
+            throw new RuntimeException("Token is empty");
         }
     }
 

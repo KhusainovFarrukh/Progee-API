@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.security.handlers;
 
-import kh.farrukh.progee_api.exception.custom_exceptions.InvalidCredentialsException;
+import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordInvalidException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -14,14 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 public class EmailPasswordAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     //    // TODO: 7/29/22 change to service
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
     private final HandlerExceptionResolver resolver;
 
     public EmailPasswordAuthenticationEntryPoint(
-//            UserRepository userRepository,
+            UserRepository userRepository,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
     ) {
-//        this.userRepository = userRepository;
+        this.userRepository = userRepository;
         this.resolver = resolver;
     }
 
@@ -31,16 +32,13 @@ public class EmailPasswordAuthenticationEntryPoint implements AuthenticationEntr
             HttpServletResponse response,
             AuthenticationException authException
     ) {
-//        // TODO: 7/29/22 separate message (logic) for 401 in /login and 401 in other endpoints
-//        EmailPasswordInvalidException.Type type;
-//        // TODO: 7/29/22 always being false because email is null
-//        if (userRepository.existsByEmail(request.getParameter("email"))) {
-//            type = EmailPasswordInvalidException.Type.PASSWORD;
-//        } else {
-//            type = EmailPasswordInvalidException.Type.EMAIL;
-//        }
-//        resolver.resolveException(request, response, null, new EmailPasswordInvalidException(type));
-
-        resolver.resolveException(request, response, null, new InvalidCredentialsException());
+        EmailPasswordInvalidException.Type type;
+        // TODO: 7/29/22 always being false because email is null, get email from body, not params
+        if (userRepository.existsByEmail(request.getParameter("email"))) {
+            type = EmailPasswordInvalidException.Type.PASSWORD;
+        } else {
+            type = EmailPasswordInvalidException.Type.EMAIL;
+        }
+        resolver.resolveException(request, response, null, new EmailPasswordInvalidException(type));
     }
 }
