@@ -39,12 +39,15 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // This is the shouldNotFilter logic of the filter. If the request is for the register/login/refresh-token endpoints or
+        // This is the shouldNotFilter logic of the filter. If the request is for the home/register/login/refresh-token endpoints or
         // simple user request for getting list of languages/frameworks/reviews, then don't check JWT token.
 
         // if..
-        // register request
-        return request.getRequestURI().equals(ENDPOINT_REGISTRATION) ||
+        // home request
+        return request.getRequestURI().equals(ENDPOINT_HOME) ||
+                
+                // register request
+                request.getRequestURI().equals(ENDPOINT_REGISTRATION) ||
 
                 // login request
                 request.getRequestURI().equals(ENDPOINT_LOGIN) ||

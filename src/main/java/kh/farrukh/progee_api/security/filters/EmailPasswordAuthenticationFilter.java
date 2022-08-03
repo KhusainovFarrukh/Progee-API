@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordInvalidException;
+import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordWrongException;
 import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -73,12 +73,12 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
-        EmailPasswordInvalidException.Type type;
+        EmailPasswordWrongException.Type type;
         if (userRepository.existsByEmail(loginRequest.getEmail())) {
-            type = EmailPasswordInvalidException.Type.PASSWORD;
+            type = EmailPasswordWrongException.Type.PASSWORD;
         } else {
-            type = EmailPasswordInvalidException.Type.EMAIL;
+            type = EmailPasswordWrongException.Type.EMAIL;
         }
-        resolver.resolveException(request, response, null, new EmailPasswordInvalidException(type));
+        resolver.resolveException(request, response, null, new EmailPasswordWrongException(type));
     }
 }

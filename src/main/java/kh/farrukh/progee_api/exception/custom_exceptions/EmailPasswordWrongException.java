@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_EMAIL_PASSWORD_INVALID;
+import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_EMAIL_PASSWORD_WRONG;
 
 /**
  * `EmailPasswordInvalidException` is a subclass of `ApiException` that is thrown
@@ -15,15 +15,15 @@ import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_
  * HttpStatus of the response will be UNAUTHORIZED
  */
 @Getter
-public class EmailPasswordInvalidException extends ApiException {
+public class EmailPasswordWrongException extends ApiException {
 
     private final Type errorType;
 
-    public EmailPasswordInvalidException(Type errorType) {
+    public EmailPasswordWrongException(Type errorType) {
         super(
-                String.format("%s is invalid", errorType.errorName),
+                String.format("%s is wrong", errorType.errorName),
                 HttpStatus.UNAUTHORIZED,
-                EXCEPTION_EMAIL_PASSWORD_INVALID,
+                EXCEPTION_EMAIL_PASSWORD_WRONG,
                 new Object[]{errorType.errorName}
         );
         this.errorType = errorType;
