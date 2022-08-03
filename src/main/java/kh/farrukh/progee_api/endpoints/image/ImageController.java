@@ -1,10 +1,12 @@
 package kh.farrukh.progee_api.endpoints.image;
 
+import kh.farrukh.progee_api.utils.file.NotEmptyFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +18,7 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_IMAGE;
 @RestController
 @RequestMapping(ENDPOINT_IMAGE)
 @RequiredArgsConstructor
+@Validated
 public class ImageController {
 
     private final ImageService imageService;
@@ -27,7 +30,7 @@ public class ImageController {
      * @return The image object is being returned.
      */
     @PostMapping
-    public ResponseEntity<Image> uploadImage(@RequestParam("image") MultipartFile multipartImage) {
+    public ResponseEntity<Image> uploadImage(@NotEmptyFile @RequestParam("image") MultipartFile multipartImage) {
         return new ResponseEntity<>(imageService.addImage(multipartImage), HttpStatus.CREATED);
     }
 
