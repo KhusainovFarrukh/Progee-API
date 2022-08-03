@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.constant;
+package kh.farrukh.progee_api.utils.constants;
 
 /**
  * It contains all the endpoints of the application

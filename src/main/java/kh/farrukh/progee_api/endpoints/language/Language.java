@@ -15,7 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
-import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_LANGUAGE;
+import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_LANGUAGE;
 
 /**
  * Language is a simple entity

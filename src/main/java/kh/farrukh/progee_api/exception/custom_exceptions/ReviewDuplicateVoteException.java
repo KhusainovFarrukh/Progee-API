@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.exception.ApiException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_REVIEW_DUPLICATE_VOTE;
+import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_REVIEW_DUPLICATE_VOTE;
 
 /**
  * It's a custom exception that extends the ApiException class

@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.exception.ApiException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_BAD_REQUEST;
+import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_BAD_REQUEST;
 
 /**
  * `BadRequestException` is a subclass of `ApiException` that is thrown

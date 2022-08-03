@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_HOME;
+import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_HOME;
 
 /**
  * It's a controller that handles requests to the root of the application

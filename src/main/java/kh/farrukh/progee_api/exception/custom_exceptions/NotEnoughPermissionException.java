@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.exception.ApiException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constant.ExceptionMessages.EXCEPTION_NOT_ENOUGH_PERMISSION;
+import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_NOT_ENOUGH_PERMISSION;
 
 @Getter
 public class NotEnoughPermissionException extends ApiException {

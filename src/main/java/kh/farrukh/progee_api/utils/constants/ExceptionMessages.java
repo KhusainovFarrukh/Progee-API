@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.constant;
+package kh.farrukh.progee_api.utils.constants;
 
 /**
  * It's a class that contains constants that are used to look up error messages in the message bundle
@@ -12,4 +12,11 @@ public class ExceptionMessages {
     public static final String EXCEPTION_REVIEW_DUPLICATE_VOTE = "message.exception.review_duplicate_vote";
     public static final String EXCEPTION_UNKNOWN = "message.exception.unknown";
     public static final String EXCEPTION_METHOD_ARGUMENT_NOT_VALID = "message.exception.method_argument_not_valid";
+    public static final String EXCEPTION_EMAIL_PASSWORD_INVALID = "message.exception.email_password_invalid";
+    public static final String EXCEPTION_ENDPOINT_ACCESS_DENIED = "message.exception.endpoint_access_denied";
+    public static final String EXCEPTION_TOKEN_EXPIRED = "message.exception.token_expired";
+    public static final String EXCEPTION_TOKEN_INVALID_ROLE = "message.exception.token_invalid_role";
+    public static final String EXCEPTION_TOKEN_INVALID_SIGNATURE = "message.exception.invalid_signature";
+    public static final String EXCEPTION_TOKEN_WRONG_TYPE = "message.exception.token_wrong_type";
+    public static final String EXCEPTION_TOKEN_UNKNOWN = "message.exception.token_unknown";
 }

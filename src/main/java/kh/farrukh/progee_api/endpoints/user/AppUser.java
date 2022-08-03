@@ -19,7 +19,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
-import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_USER;
+import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_USER;
 
 /**
  * AppUser is a simple entity

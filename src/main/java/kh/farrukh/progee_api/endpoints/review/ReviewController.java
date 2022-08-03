@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_REVIEW;
+import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_REVIEW;
 
 /**
  * Controller that exposes endpoints for managing reviews

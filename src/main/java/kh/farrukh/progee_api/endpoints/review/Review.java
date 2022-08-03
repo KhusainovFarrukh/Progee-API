@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_REVIEW;
+import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_REVIEW;
 
 /**
  * Review is a simple entity
