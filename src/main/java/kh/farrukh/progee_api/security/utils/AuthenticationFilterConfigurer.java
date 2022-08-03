@@ -1,10 +1,13 @@
 package kh.farrukh.progee_api.security.utils;
 
+import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.security.filters.EmailPasswordAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LOGIN;
 
@@ -17,6 +20,17 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LOGIN;
 @Component
 public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<AuthenticationFilterConfigurer, HttpSecurity> {
 
+    private final UserRepository userRepository;
+    private final HandlerExceptionResolver resolver;
+
+    public AuthenticationFilterConfigurer(
+            UserRepository userRepository,
+            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
+    ) {
+        this.userRepository = userRepository;
+        this.resolver = resolver;
+    }
+
     /**
      * Add a custom filter to the http security chain that will be used to authenticate users.
      *
@@ -25,7 +39,9 @@ public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<Authe
     @Override
     public void configure(HttpSecurity http) {
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
-        EmailPasswordAuthenticationFilter authenticationFilter = new EmailPasswordAuthenticationFilter(authenticationManager);
+        EmailPasswordAuthenticationFilter authenticationFilter = new EmailPasswordAuthenticationFilter(
+                authenticationManager, userRepository, resolver
+        );
         authenticationFilter.setFilterProcessesUrl(ENDPOINT_LOGIN);
         http.addFilter(authenticationFilter);
     }

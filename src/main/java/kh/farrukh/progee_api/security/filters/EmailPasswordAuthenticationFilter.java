@@ -2,8 +2,10 @@ package kh.farrukh.progee_api.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
-import kh.farrukh.progee_api.security.utils.JWTUtils;
 import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
+import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordInvalidException;
+import kh.farrukh.progee_api.security.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -12,8 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,6 +30,8 @@ import java.io.IOException;
 public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final HandlerExceptionResolver resolver;
 
     /**
      * This function is called when the user submits the login form. It takes the username and password from the form,
@@ -62,5 +68,17 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
         UserDetails user = (UserDetails) authentication.getPrincipal();
         AuthResponse authResponse = JWTUtils.generateTokens(user);
         JWTUtils.sendTokenInResponse(authResponse, response);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+        EmailPasswordInvalidException.Type type;
+        if (userRepository.existsByEmail(loginRequest.getEmail())) {
+            type = EmailPasswordInvalidException.Type.PASSWORD;
+        } else {
+            type = EmailPasswordInvalidException.Type.EMAIL;
+        }
+        resolver.resolveException(request, response, null, new EmailPasswordInvalidException(type));
     }
 }
