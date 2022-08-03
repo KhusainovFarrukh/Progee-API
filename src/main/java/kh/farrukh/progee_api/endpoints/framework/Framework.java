@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
-import static kh.farrukh.progee_api.utils.constant.Tables.TABLE_NAME_FRAMEWORK;
+import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_FRAMEWORK;
 
 /**
  * Framework is a simple entity

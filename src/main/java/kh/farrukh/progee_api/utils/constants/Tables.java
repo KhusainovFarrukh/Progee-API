@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.constant;
+package kh.farrukh.progee_api.utils.constants;
 
 /**
  * It's a class that contains names of table in application database

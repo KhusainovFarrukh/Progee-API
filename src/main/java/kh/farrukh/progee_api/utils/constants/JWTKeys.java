@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.constant;
+package kh.farrukh.progee_api.utils.constants;
 
 /**
  * It's a class that contains all the keys that are used in the JWT

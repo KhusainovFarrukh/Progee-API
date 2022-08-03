@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * It's a utility class with methods for user helper logic
@@ -45,8 +44,7 @@ public class CurrentUserUtils {
             Collection<String> roles = SecurityContextHolder.getContext()
                     .getAuthentication()
                     .getAuthorities()
-                    .stream().map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
+                    .stream().map(GrantedAuthority::getAuthority).toList();
 
             return roles.contains(UserRole.SUPER_ADMIN.name()) || roles.contains(UserRole.ADMIN.name());
         } catch (Exception e) {

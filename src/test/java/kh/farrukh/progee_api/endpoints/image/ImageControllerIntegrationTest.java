@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
-import static kh.farrukh.progee_api.utils.constant.ApiEndpoints.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_IMAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class ImageControllerIntegrationTest {
 
     @Autowired

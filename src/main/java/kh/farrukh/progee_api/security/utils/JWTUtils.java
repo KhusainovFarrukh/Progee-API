@@ -20,9 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static kh.farrukh.progee_api.utils.constant.JWTKeys.*;
+import static kh.farrukh.progee_api.utils.constants.JWTKeys.*;
 
 /**
  * Utils for generating, decoding and sending tokens
@@ -33,7 +32,8 @@ public class JWTUtils {
     private static final DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
     // Creating an algorithm object which will be used to sign the token.
-    public static final Algorithm algorithm = Algorithm.HMAC256(getJwtSecret().getBytes());
+    public static final Algorithm accessTokenAlgorithm = Algorithm.HMAC256(getJwtSecret().getBytes());
+    public static final Algorithm refreshTokenAlgorithm = Algorithm.HMAC384(getJwtSecret().getBytes());
     // Value of the expiration time for the access token and refresh token.
     public static final int accessValidMillis = 30 * 60 * 1000;
     public static final int refreshValidMillis = 3 * 24 * 60 * 60 * 1000;
@@ -51,8 +51,7 @@ public class JWTUtils {
 
         // Getting the roles of the user and converting them to a list of strings.
         String role = user.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList()).stream()
+                .stream().map(GrantedAuthority::getAuthority).toList().stream()
                 .findFirst()
                 .orElseThrow(
                         () -> new RuntimeException(
@@ -64,13 +63,13 @@ public class JWTUtils {
                 .withSubject(user.getUsername())
                 .withExpiresAt(accessExpireDate)
                 .withClaim(KEY_ROLE, role)
-                .sign(algorithm);
+                .sign(accessTokenAlgorithm);
 
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(refreshExpireDate)
                 .withClaim(KEY_ROLE, role)
-                .sign(algorithm);
+                .sign(refreshTokenAlgorithm);
 
         return new AuthResponse(
                 role,
@@ -87,13 +86,19 @@ public class JWTUtils {
      * @param authHeader The refresh token in request header
      * @return A DecodedJWT object
      */
-    public static DecodedJWT decodeJWT(String authHeader) {
+    public static DecodedJWT decodeJWT(String authHeader, boolean isRefresh) {
+        Algorithm algorithm;
+        if (isRefresh) {
+            algorithm = refreshTokenAlgorithm;
+        } else {
+            algorithm = accessTokenAlgorithm;
+        }
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring("Bearer ".length());
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             return jwtVerifier.verify(token);
         } else {
-            return null;
+            throw new RuntimeException("Token is empty");
         }
     }
 
