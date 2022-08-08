@@ -9,6 +9,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.Table;
+
+import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_IMAGE;
 
 /**
  * Image is a simple entity
@@ -17,6 +20,7 @@ import javax.persistence.Lob;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = TABLE_NAME_IMAGE)
 public class Image extends EntityWithId {
 
     @JsonIgnore
