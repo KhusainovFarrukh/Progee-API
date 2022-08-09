@@ -4,7 +4,9 @@ import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.AllowedSortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -35,4 +37,12 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
             ResourceState state,
             @AllowedSortFields({"id", "name", "description", "state", "createdAt"}) Pageable pageable
     );
+
+    @EntityGraph(value = "language_with_frameworks", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select l from Language l")
+    Page<Language> findAllWithFrameworks(Pageable pageable);
+
+    @EntityGraph(value = "language_with_reviews", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select l from Language l")
+    Page<Language> findAllWithReviews(Pageable pageable);
 }

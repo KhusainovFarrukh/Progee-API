@@ -36,6 +36,10 @@ import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME
         name = TABLE_NAME_LANGUAGE,
         uniqueConstraints = @UniqueConstraint(name = "uk_language_name", columnNames = "name")
 )
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "language_with_frameworks", attributeNodes = @NamedAttributeNode("frameworks")),
+        @NamedEntityGraph(name = "language_with_reviews", attributeNodes = @NamedAttributeNode("reviews"))
+})
 public class Language extends EntityWithResourceState {
 
     private String name;
