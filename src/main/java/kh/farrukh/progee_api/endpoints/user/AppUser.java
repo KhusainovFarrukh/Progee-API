@@ -28,29 +28,30 @@ import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME
  * <p>
  * Implements UserDetails to be used in Spring Security logic.
  */
-@Entity
-@Table(name = TABLE_NAME_USER)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "name", "role", "image", "email", "username"})
+@Entity
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_USER_ID)
+@Table(name = TABLE_NAME_USER,
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_app_user_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_app_user_username", columnNames = "username")
+        })
 public class AppUser extends EntityWithId implements UserDetails {
 
     private String name;
-    @Column(unique = true)
     private String email;
-    @Column(name = "username", unique = true)
+    @Column(name = "username")
     @JsonProperty("username")
     private String uniqueUsername;
     private String password;
     @JsonProperty("is_enabled")
-    @Column(name = "is_enabled")
     // TODO: 6/7/22 set default to false and implement email verification
     private boolean isEnabled = true;
     @JsonProperty("is_locked")
-    @Column(name = "is_locked")
     private boolean isLocked = false;
     @Enumerated(EnumType.STRING)
     private UserRole role;
