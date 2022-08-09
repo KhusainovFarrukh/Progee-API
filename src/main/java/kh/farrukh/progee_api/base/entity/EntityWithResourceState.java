@@ -15,7 +15,7 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class EntityWithResourceState extends EntityWithImage {
+public abstract class EntityWithResourceState extends EntityWithId{
 
     @Enumerated(EnumType.STRING)
     private ResourceState state = ResourceState.WAITING;

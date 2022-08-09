@@ -1,15 +1,19 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -40,6 +44,24 @@ public class Framework extends EntityWithResourceState {
 
     @ManyToOne
     @JoinColumn(
+            name = "image_id",
+            foreignKey = @ForeignKey(name = "fk_image_id_of_framework")
+    )
+    private Image image;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "author_id",
+            foreignKey = @ForeignKey(name = "fk_author_id_of_framework")
+    )
+    private AppUser author;
+
+    @CreationTimestamp
+    @JsonProperty("created_at")
+    private ZonedDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(
             name = "language_id",
             foreignKey = @ForeignKey(name = "fk_language_id_of_framework")
     )
@@ -51,10 +73,9 @@ public class Framework extends EntityWithResourceState {
     public Framework(FrameworkDTO frameworkDto, ImageRepository imageRepository) {
         this.name = frameworkDto.getName();
         this.description = frameworkDto.getDescription();
-        super.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
+        this.image = imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
                 () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
-        ));
-        super.setCreatedAt(ZonedDateTime.now());
+        );
     }
 
     public Framework(String name) {
