@@ -14,7 +14,9 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_REVIEW;
+import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_REVIEW_ID;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_REVIEW;
 
 /**
  * Review is a simple entity
@@ -26,6 +28,7 @@ import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_REVIEW;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "body", "value", "score", "language", "up_votes", "down_votes"})
+@SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_REVIEW_ID)
 public class Review extends EntityWithAuthorAndCreatedAt {
 
     private String body;

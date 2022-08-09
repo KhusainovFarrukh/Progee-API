@@ -12,10 +12,13 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
-import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_LANGUAGE;
+import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_LANGUAGE_ID;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_LANGUAGE;
 
 /**
  * Language is a simple entity
@@ -27,6 +30,7 @@ import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_LANGUAGE;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "name", "description", "state", "image"})
+@SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_LANGUAGE_ID)
 public class Language extends EntityWithResourceState {
 
     @Column(unique = true)

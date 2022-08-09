@@ -16,7 +16,9 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class EntityWithId {
 
+    public static final String GENERATOR_NAME = "id_generator";
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = GENERATOR_NAME)
     private long id;
 }

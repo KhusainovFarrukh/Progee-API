@@ -19,7 +19,9 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
-import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_USER;
+import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_USER_ID;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_USER;
 
 /**
  * AppUser is a simple entity
@@ -33,6 +35,7 @@ import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_USER;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "name", "role", "image", "email", "username"})
+@SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_USER_ID)
 public class AppUser extends EntityWithId implements UserDetails {
 
     private String name;

@@ -11,13 +11,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
-import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_FRAMEWORK;
+import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_FRAMEWORK_ID;
+import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_FRAMEWORK;
 
 /**
  * Framework is a simple entity
@@ -29,6 +28,7 @@ import static kh.farrukh.progee_api.utils.constants.Tables.TABLE_NAME_FRAMEWORK;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "name", "description", "state", "image", "language"})
+@SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_FRAMEWORK_ID)
 public class Framework extends EntityWithResourceState {
 
     @Column(unique = true)
