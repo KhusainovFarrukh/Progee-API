@@ -1,21 +1,22 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.endpoints.framework.Framework;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.review.Review;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_LANGUAGE_ID;
@@ -46,6 +47,16 @@ public class Language extends EntityWithResourceState {
             foreignKey = @ForeignKey(name = "fk_image_id_of_language")
     )
     private Image image;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "language", cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "language", cascade = CascadeType.REMOVE)
+    private List<Framework> frameworks;
 
     @ManyToOne
     @JoinColumn(
