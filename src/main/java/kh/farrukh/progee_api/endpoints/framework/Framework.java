@@ -39,6 +39,10 @@ public class Framework extends EntityWithResourceState {
     private String description;
 
     @ManyToOne
+    @JoinColumn(
+            name = "language_id",
+            foreignKey = @ForeignKey(name = "fk_language_id_of_framework")
+    )
     private Language language;
 
     // This is a constructor that takes a FrameworkDTO object and

@@ -34,16 +34,32 @@ public class Review extends EntityWithAuthorAndCreatedAt {
     private String body;
     @JsonProperty("value")
     private ReviewValue reviewValue;
+    @Column(name = "up_voter_id")
     @ElementCollection
+    @CollectionTable(
+            name = "review_up_votes",
+            joinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name = "fk_review_id_of_up_votes")
+    )
     @JsonProperty("up_votes")
     private Set<Long> upVotes = new HashSet<>();
+    @Column(name = "down_voter_id")
     @ElementCollection
+    @CollectionTable(
+            name = "review_down_votes",
+            joinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name = "fk_review_id_of_down_votes")
+    )
     @JsonProperty("down_votes")
     private Set<Long> downVotes = new HashSet<>();
     @Transient
     private int score;
 
     @ManyToOne
+    @JoinColumn(
+            name = "language_id",
+            foreignKey = @ForeignKey(name = "fk_language_id_of_review")
+    )
     private Language language;
 
     // This is a constructor that takes a ReviewDTO object and sets the values of the current object to the values of

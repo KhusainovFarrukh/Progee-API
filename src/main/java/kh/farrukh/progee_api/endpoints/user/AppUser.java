@@ -56,6 +56,10 @@ public class AppUser extends EntityWithId implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserRole role;
     @ManyToOne
+    @JoinColumn(
+            name = "image_id",
+            foreignKey = @ForeignKey(name = "fk_image_id_of_app_user")
+    )
     private Image image;
 
     // This is a constructor that takes a AppUserDTO object and
