@@ -29,10 +29,10 @@ import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME
 @JsonPropertyOrder({"id", "name", "description", "state", "image", "language"})
 @Entity
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_FRAMEWORK_ID)
-@Table(name = TABLE_NAME_FRAMEWORK,
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_framework_name", columnNames = "name")
-        })
+@Table(
+        name = TABLE_NAME_FRAMEWORK,
+        uniqueConstraints = @UniqueConstraint(name = "uk_framework_name", columnNames = "name")
+)
 public class Framework extends EntityWithResourceState {
 
     private String name;
