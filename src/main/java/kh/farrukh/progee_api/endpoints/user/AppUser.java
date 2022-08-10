@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.base.entity.EntityWithId;
+import kh.farrukh.progee_api.endpoints.framework.Framework;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.review.Review;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_USER_ID;
@@ -43,24 +44,54 @@ import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME
 public class AppUser extends EntityWithId implements UserDetails {
 
     private String name;
+
     private String email;
+
     @Column(name = "username")
     @JsonProperty("username")
     private String uniqueUsername;
+
     private String password;
+
     @JsonProperty("is_enabled")
     // TODO: 6/7/22 set default to false and implement email verification
     private boolean isEnabled = true;
+
     @JsonProperty("is_locked")
     private boolean isLocked = false;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
     @ManyToOne
     @JoinColumn(
             name = "image_id",
             foreignKey = @ForeignKey(name = "fk_image_id_of_app_user")
     )
     private Image image;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "author")
+    private List<Language> createdLanguages;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "author")
+    private List<Framework> createdFrameworks;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "author")
+    private List<Review> createdReviews;
+
+    @PreRemove
+    public void beforeRemove() {
+        // if user has created some resources, make their author null ("anonymous" in frontend)
+        createdLanguages.forEach(language -> language.setAuthor(null));
+        createdFrameworks.forEach(framework -> framework.setAuthor(null));
+        createdReviews.forEach(review -> review.setAuthor(null));
+    }
 
     // This is a constructor that takes a AppUserDTO object and
     // sets the values of the current object to the values of
