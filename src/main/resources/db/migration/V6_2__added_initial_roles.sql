@@ -1,14 +1,18 @@
 TRUNCATE TABLE role CASCADE;
 ALTER SEQUENCE role_id_sequence RESTART WITH 1;
 
+SELECT nextval('role_id_sequence');
+
 INSERT INTO role (id, title)
-VALUES (nextval('role_id_sequence'), 'Super admin');
+VALUES (currval('role_id_sequence'), 'Super admin');
 
 INSERT INTO role (id, title)
 VALUES (currval('role_id_sequence') + 1, 'Admin');
 
 INSERT INTO role (id, title)
 VALUES (currval('role_id_sequence') + 2, 'User');
+
+SELECT setval('role_id_sequence', currval('role_id_sequence') + 2);
 
 COMMIT;
 
