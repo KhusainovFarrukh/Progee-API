@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRoleDTO {
-    @NotNull(message = "Role must not be null")
-    private UserRole role;
+    @NotNull(message = "Role id must not be null")
+    @JsonProperty("role_id")
+    private long roleId;
 }

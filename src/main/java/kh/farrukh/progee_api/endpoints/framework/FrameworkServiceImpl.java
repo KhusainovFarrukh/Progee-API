@@ -4,6 +4,7 @@ import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
@@ -65,7 +66,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                     ResourceState.APPROVED,
                     languageId,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
-        } else if (CurrentUserUtils.isAdmin()) {
+        } else if (CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, userRepository)) {
             return new PagingResponse<>(frameworkRepository.findByStateAndLanguage_Id(
                     state,
                     languageId,
@@ -108,10 +109,15 @@ public class FrameworkServiceImpl implements FrameworkService {
         Framework framework = new Framework(frameworkDto, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         framework.setAuthor(currentUser);
-        framework.setStateAccordingToRole(currentUser.isAdmin());
         framework.setLanguage(languageRepository.findById(languageId).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", languageId)
         ));
+        if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
+            framework.setState(ResourceState.APPROVED);
+        } else {
+            framework.setState(ResourceState.WAITING);
+        }
+
         return frameworkRepository.save(framework);
     }
 
@@ -131,7 +137,9 @@ public class FrameworkServiceImpl implements FrameworkService {
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
 
-        if (CurrentUserUtils.isAdminOrAuthor(existingFramework.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_UPDATE_OTHERS_FRAMEWORK, existingFramework.getAuthor().getId(), userRepository
+        )) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
             if (!frameworkDto.getName().equals(existingFramework.getName()) &&
@@ -141,10 +149,14 @@ public class FrameworkServiceImpl implements FrameworkService {
 
             existingFramework.setName(frameworkDto.getName());
             existingFramework.setDescription(frameworkDto.getDescription());
-            existingFramework.setStateAccordingToRole(CurrentUserUtils.isAdmin());
             existingFramework.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
                     () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
             ));
+            if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
+                existingFramework.setState(ResourceState.APPROVED);
+            } else {
+                existingFramework.setState(ResourceState.WAITING);
+            }
 
             return existingFramework;
         } else {

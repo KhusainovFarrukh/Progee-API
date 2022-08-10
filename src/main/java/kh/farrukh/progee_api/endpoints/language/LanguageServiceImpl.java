@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.language;
 import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
@@ -60,7 +61,7 @@ public class LanguageServiceImpl implements LanguageService {
                     ResourceState.APPROVED,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
-        } else if (CurrentUserUtils.isAdmin()) {
+        } else if (CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, userRepository)) {
             return new PagingResponse<>(languageRepository.findByState(
                     state,
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
@@ -98,7 +99,12 @@ public class LanguageServiceImpl implements LanguageService {
         Language language = new Language(languageDto, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         language.setAuthor(currentUser);
-        language.setStateAccordingToRole(CurrentUserUtils.isAdmin());
+        if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, userRepository)) {
+            language.setState(ResourceState.APPROVED);
+        } else {
+            language.setState(ResourceState.WAITING);
+        }
+
         return languageRepository.save(language);
     }
 
@@ -116,7 +122,9 @@ public class LanguageServiceImpl implements LanguageService {
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
 
-        if (CurrentUserUtils.isAdminOrAuthor(existingLanguage.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_UPDATE_OTHERS_LANGUAGE, existingLanguage.getAuthor().getId(), userRepository
+        )) {
 
             // It checks if the name of the language is changed and if the new name is already taken.
             if (!languageDto.getName().equals(existingLanguage.getName()) &&
@@ -126,7 +134,11 @@ public class LanguageServiceImpl implements LanguageService {
 
             existingLanguage.setName(languageDto.getName());
             existingLanguage.setDescription(languageDto.getDescription());
-            existingLanguage.setStateAccordingToRole(CurrentUserUtils.isAdmin());
+            if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, userRepository)) {
+                existingLanguage.setState(ResourceState.APPROVED);
+            } else {
+                existingLanguage.setState(ResourceState.WAITING);
+            }
             existingLanguage.setImage(imageRepository.findById(languageDto.getImageId()).orElseThrow(
                     () -> new ResourceNotFoundException("Image", "id", languageDto.getImageId())
             ));

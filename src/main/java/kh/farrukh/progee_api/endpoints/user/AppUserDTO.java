@@ -2,13 +2,13 @@ package kh.farrukh.progee_api.endpoints.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.endpoints.auth.RegistrationRequest;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,13 +36,13 @@ public class AppUserDTO {
     private boolean isEnabled = true;
     @JsonProperty("is_locked")
     private boolean isLocked = false;
-    @NotNull(message = "Role must not be null")
-    @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.USER;
+    @JsonProperty("role_id")
+    @NotNull(message = "Role id must not be null")
+    private long roleId;
     @JsonProperty("image_id")
     private long imageId;
 
-    public AppUserDTO(RegistrationRequest request) {
+    public AppUserDTO(RegistrationRequest request, RoleRepository roleRepository) {
         this.name = request.getName();
         this.email = request.getEmail();
         this.username = request.getUsername();
@@ -50,7 +50,9 @@ public class AppUserDTO {
         // TODO: 6/9/22 set default to false and implement email verification
         this.isEnabled = true;
         this.isLocked = false;
-        this.role = UserRole.USER;
+        this.roleId = roleRepository.findFirstByIsDefaultIsTrue().orElseThrow(
+                () -> new ResourceNotFoundException("Role", "isDefault", true)
+        ).getId();
         this.imageId = request.getImageId();
     }
 }

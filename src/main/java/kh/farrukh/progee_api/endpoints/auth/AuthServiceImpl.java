@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
@@ -21,6 +22,7 @@ public class AuthServiceImpl implements AuthService {
     private final TokenProvider tokenProvider;
     private final EmailValidator emailValidator;
     private final UserService userService;
+    private final RoleRepository roleRepository;
 
     /**
      * If the email is valid, add a new user to the database
@@ -33,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
         if (!emailValidator.test(registrationRequest.getEmail())) {
             throw new BadRequestException("Email");
         }
-        return userService.addUser(new AppUserDTO(registrationRequest));
+        return userService.addUser(new AppUserDTO(registrationRequest, roleRepository));
     }
 
     /**

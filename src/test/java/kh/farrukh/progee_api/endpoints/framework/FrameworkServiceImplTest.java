@@ -8,7 +8,6 @@ import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
@@ -84,7 +83,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
     void simpleUserCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -105,7 +104,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
     void throwsExceptionIfSimpleUserFiltersFrameworksByState() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -118,7 +117,8 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    // TODO: 8/10/22 specific permission for framework filtering
+    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
     void adminCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -139,7 +139,8 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    // TODO: 8/10/22 specific permission for framework filtering
+    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
     void adminCanGetFrameworksFilteredByState() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -160,7 +161,8 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    // TODO: 8/10/22 specific permission for framework filtering
+    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
     void throwsExceptionIfLanguageOfFrameworksDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -241,11 +243,13 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    // TODO: 8/10/22 specific permission for framework filtering
+    @WithMockUser(username = "admin@mail.com", authorities = "CAN_VIEW_FRAMEWORK")
     void adminCreatesFrameworkWithApprovedState() {
         // given
         AppUser admin = new AppUser("admin@mail.com");
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
@@ -329,7 +333,8 @@ class FrameworkServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser admin = new AppUser(2);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(1));
@@ -403,7 +408,8 @@ class FrameworkServiceImplTest {
         // given
         String name = "test name";
         AppUser admin = new AppUser(1);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(admin);
         FrameworkDTO frameworkDto = new FrameworkDTO(name, "", 1);
@@ -426,7 +432,8 @@ class FrameworkServiceImplTest {
         // given
         long imageId = 1;
         AppUser admin = new AppUser(1);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(admin);
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", imageId);

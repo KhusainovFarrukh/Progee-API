@@ -1,6 +1,9 @@
 package kh.farrukh.progee_api.endpoints.user;
 
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
@@ -34,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImageRepository imageRepository;
+    private final RoleRepository roleRepository;
 
     /**
      * If the user exists in the database, return the user, otherwise throw an exception.
@@ -93,7 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AppUser addUser(AppUserDTO appUserDto) {
         checkUserIsUnique(userRepository, appUserDto);
-        AppUser appUser = new AppUser(appUserDto, imageRepository);
+        AppUser appUser = new AppUser(appUserDto, imageRepository, roleRepository);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
     }
@@ -160,7 +164,10 @@ public class UserServiceImpl implements UserService {
         AppUser user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
         );
-        user.setRole(roleDto.getRole());
+        Role role = roleRepository.findById(roleDto.getRoleId()).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", roleDto.getRoleId())
+        );
+        user.setRole(role);
         return user;
     }
 
@@ -175,7 +182,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AppUser setUserImage(long id, UserImageDTO imageDto) {
-        if (CurrentUserUtils.isAdminOrAuthor(id, userRepository)) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(Permission.CAN_UPDATE_OTHER_USER, id, userRepository)) {
             AppUser user = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
@@ -201,7 +208,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
-        if (CurrentUserUtils.isAdminOrAuthor(id, userRepository)) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(Permission.CAN_UPDATE_OTHER_USER, id, userRepository)) {
             AppUser currentUser = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );

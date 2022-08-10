@@ -16,7 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE;
+import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_PERMISSIONS;
 
 @Getter
 @Component
@@ -58,7 +58,7 @@ public class TokenProvider implements InitializingBean {
         Date refreshExpireDate = new Date(currentMillis + refreshTokenValidityInSeconds * 1000);
 
         return new AuthResponse(
-                SecurityUtils.getRoleNameFromUserDetails(user),
+                SecurityUtils.getPermissionNames(user),
                 createToken(user, accessExpireDate, accessTokenAlgorithm),
                 createToken(user, refreshExpireDate, refreshTokenAlgorithm),
                 formatter.format(accessExpireDate),
@@ -89,8 +89,8 @@ public class TokenProvider implements InitializingBean {
     }
 
     /**
-     * It creates a JWT token with the username as the subject, the expiration date as the expiration date, and the role as
-     * the claim
+     * It creates a JWT token with the username as the subject, the expiration date as the expiration date,
+     * and the permission names list as the claim
      *
      * @param user       The user object that contains the username and role.
      * @param expireDate The date when the token will expire.
@@ -101,7 +101,7 @@ public class TokenProvider implements InitializingBean {
         return JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(expireDate)
-                .withClaim(KEY_ROLE, SecurityUtils.getRoleNameFromUserDetails(user))
+                .withClaim(KEY_PERMISSIONS, SecurityUtils.getPermissionNames(user))
                 .sign(algorithm);
     }
 }

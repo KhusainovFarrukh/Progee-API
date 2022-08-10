@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
@@ -114,7 +115,9 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        if (CurrentUserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_UPDATE_OTHERS_REVIEW, existingReview.getAuthor().getId(), userRepository
+        )) {
             existingReview.setBody(reviewDto.getBody());
             existingReview.setReviewValue(reviewDto.getValue());
         } else {
@@ -137,7 +140,9 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        if (CurrentUserUtils.isAdminOrAuthor(existingReview.getAuthor().getId(), userRepository)) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_DELETE_OTHERS_REVIEW, existingReview.getAuthor().getId(), userRepository
+        )) {
             reviewRepository.deleteById(id);
         } else {
             throw new NotEnoughPermissionException();

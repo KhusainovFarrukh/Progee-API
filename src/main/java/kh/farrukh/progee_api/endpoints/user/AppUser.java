@@ -9,6 +9,8 @@ import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.review.Review;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
@@ -60,8 +61,12 @@ public class AppUser extends EntityWithId implements UserDetails {
     @JsonProperty("is_locked")
     private boolean isLocked = false;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @ManyToOne
+    @JoinColumn(
+            name = "role_id",
+            foreignKey = @ForeignKey(name = "fk_role_id_of_app_user")
+    )
+    private Role role;
 
     @ManyToOne
     @JoinColumn(
@@ -96,12 +101,14 @@ public class AppUser extends EntityWithId implements UserDetails {
     // This is a constructor that takes a AppUserDTO object and
     // sets the values of the current object to the values of
     // the given object.
-    public AppUser(AppUserDTO appUserDto, ImageRepository imageRepository) {
+    public AppUser(AppUserDTO appUserDto, ImageRepository imageRepository, RoleRepository roleRepository) {
         this.name = appUserDto.getName();
         this.email = appUserDto.getEmail();
         this.uniqueUsername = appUserDto.getUsername();
         this.password = appUserDto.getPassword();
-        this.role = appUserDto.getRole();
+        this.role = roleRepository.findById(appUserDto.getRoleId()).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", appUserDto.getRoleId())
+        );
         this.isLocked = appUserDto.isLocked();
         this.isEnabled = appUserDto.isEnabled();
         this.image = imageRepository.findById(appUserDto.getImageId()).orElseThrow(
@@ -122,21 +129,27 @@ public class AppUser extends EntityWithId implements UserDetails {
         this.uniqueUsername = uniqueUsername;
     }
 
-    public AppUser(String email, UserRole role) {
+    public AppUser(String email, long roleId, RoleRepository roleRepository) {
         this.email = email;
-        this.role = role;
+        this.role = roleRepository.findById(roleId).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", roleId)
+        );
     }
 
-    public AppUser(String email, UserRole role, String password) {
+    public AppUser(String email, long roleId, String password, RoleRepository roleRepository) {
         this.email = email;
-        this.role = role;
+        this.role = roleRepository.findById(roleId).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", roleId)
+        );
         this.password = password;
     }
 
-    public AppUser(String name, String uniqueUsername, UserRole role) {
+    public AppUser(String name, String uniqueUsername, long roleId, RoleRepository roleRepository) {
         this.name = name;
         this.uniqueUsername = uniqueUsername;
-        this.role = role;
+        this.role = roleRepository.findById(roleId).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", roleId)
+        );
     }
 
     public AppUser(String name, String uniqueUsername, String password) {
@@ -160,7 +173,9 @@ public class AppUser extends EntityWithId implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+        return role.getPermissions().stream().map(
+                permission -> new SimpleGrantedAuthority(permission.name())
+        ).toList();
     }
 
     @JsonIgnore
@@ -185,10 +200,5 @@ public class AppUser extends EntityWithId implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
-    }
-
-    @JsonIgnore
-    public boolean isAdmin() {
-        return role == UserRole.ADMIN || role == UserRole.SUPER_ADMIN;
     }
 }

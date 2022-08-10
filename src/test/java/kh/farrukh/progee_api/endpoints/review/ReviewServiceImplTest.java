@@ -4,7 +4,6 @@ import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ReviewDuplicateVoteException;
@@ -212,7 +211,8 @@ class ReviewServiceImplTest {
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
         AppUser admin = new AppUser(2);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
@@ -284,7 +284,8 @@ class ReviewServiceImplTest {
         // given
         long reviewId = 1;
         AppUser admin = new AppUser(2);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(languageRepository.existsById(any())).thenReturn(true);

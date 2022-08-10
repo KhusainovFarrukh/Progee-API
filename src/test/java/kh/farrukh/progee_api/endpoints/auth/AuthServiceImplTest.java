@@ -4,9 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
-import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -19,9 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 
-import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE;
+import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_PERMISSIONS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -37,6 +41,8 @@ class AuthServiceImplTest {
     private EmailValidator emailValidator;
     @Mock
     private UserService userService;
+    @Mock
+    private RoleRepository roleRepository;
     @Mock
     private TokenProvider tokenProvider;
     @InjectMocks
@@ -82,27 +88,36 @@ class AuthServiceImplTest {
     @Test
     void canRefreshToken() {
         // given
-        AppUser existingUser = new AppUser("user@mail.com", UserRole.USER);
+        Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE));
+        when(roleRepository.findById(any())).thenReturn(Optional.of(role));
+        AppUser existingUser = new AppUser("user@mail.com", 1, roleRepository);
         when(userService.loadUserByUsername(any())).thenReturn(existingUser);
         when(tokenProvider.getRefreshTokenAlgorithm()).thenReturn(Algorithm.HMAC256("test"));
         when(tokenProvider.getRefreshTokenValidityInSeconds()).thenReturn(604800L);
         String refreshToken = JWT.create()
                 .withSubject("user@mail.com")
                 .withExpiresAt(new Date(System.currentTimeMillis() + tokenProvider.getRefreshTokenValidityInSeconds() * 1000))
-                .withClaim(KEY_ROLE, UserRole.USER.name())
+                .withClaim(KEY_PERMISSIONS, role.getPermissions().stream().map(Enum::name).toList())
                 .sign(tokenProvider.getRefreshTokenAlgorithm());
         JWTVerifier jwtVerifier = JWT.require(tokenProvider.getRefreshTokenAlgorithm()).build();
         DecodedJWT decodedJWT = jwtVerifier.verify(refreshToken);
         when(tokenProvider.validateToken(anyString(), anyBoolean())).thenReturn(decodedJWT);
         when(tokenProvider.generateTokens(any())).thenReturn(
-                new AuthResponse(existingUser.getRole().name(), "test", "test", "test", "test")
+                new AuthResponse(
+                        role.getPermissions().stream().map(Enum::name).toList(),
+                        "test",
+                        "test",
+                        "test",
+                        "test"
+                )
         );
 
         // when
         AuthResponse authResponse = underTest.refreshToken("Bearer " + refreshToken);
 
         // then
-        assertThat(authResponse.getRole()).isEqualTo(existingUser.getRole().name());
+        assertThat(authResponse.getPermissions())
+                .isEqualTo(existingUser.getRole().getPermissions().stream().map(Enum::name).toList());
     }
 
     @Test

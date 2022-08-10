@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static kh.farrukh.progee_api.utils.constants.JWTKeys.*;
@@ -23,20 +23,22 @@ import static kh.farrukh.progee_api.utils.constants.JWTKeys.*;
 public class SecurityUtils {
 
     /**
-     * It takes a decoded JWT and returns a UsernamePasswordAuthenticationToken with the username and roles from the JWT
+     * It takes a decoded JWT and returns a UsernamePasswordAuthenticationToken with the username and permissions
+     * from the JWT
      *
      * @param decodedJWT The decoded JWT.
      * @return A UsernamePasswordAuthenticationToken object
      */
     public static UsernamePasswordAuthenticationToken getAuthenticationFromDecodedJWT(DecodedJWT decodedJWT) {
         String username = decodedJWT.getSubject();
-        GrantedAuthority authority = new SimpleGrantedAuthority(
-                decodedJWT.getClaim(KEY_ROLE).asString()
-        );
+        List<SimpleGrantedAuthority> authorities = decodedJWT
+                .getClaim(KEY_PERMISSIONS)
+                .asList(String.class)
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
-        return new UsernamePasswordAuthenticationToken(
-                username, null, Collections.singletonList(authority)
-        );
+        return new UsernamePasswordAuthenticationToken(username, null, authorities);
     }
 
     /**
@@ -71,14 +73,9 @@ public class SecurityUtils {
      * @param user The user object that contains the user's details.
      * @return The first role of the user.
      */
-    public static String getRoleNameFromUserDetails(UserDetails user) {
+    public static List<String> getPermissionNames(UserDetails user) {
         return user.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).toList().stream()
-                .findFirst()
-                .orElseThrow(
-                        () -> new RuntimeException(
-                                "User don't have any role. Check user in database or add role to user from admin profile"
-                        )
-                );
+                .toList();
     }
 }

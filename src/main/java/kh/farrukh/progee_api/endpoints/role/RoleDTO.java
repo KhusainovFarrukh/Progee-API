@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.role;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,9 @@ import java.util.List;
 public class RoleDTO {
 
     private String title;
+
+    @JsonProperty("is_default")
+    private boolean isDefault;
 
     @Enumerated(EnumType.STRING)
     private List<Permission> permissions;

@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.role;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.base.entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +29,12 @@ public class Role extends EntityWithId {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    @JsonProperty("is_default")
+    private boolean isDefault = false;
+
     @Column(name = "permission_name")
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
             name = "role_permissions",
@@ -40,5 +45,10 @@ public class Role extends EntityWithId {
 
     public Role(RoleDTO roleDTO) {
         BeanUtils.copyProperties(roleDTO, this);
+    }
+
+    public Role(List<Permission> permissions) {
+        this.title = "test";
+        this.permissions = permissions;
     }
 }

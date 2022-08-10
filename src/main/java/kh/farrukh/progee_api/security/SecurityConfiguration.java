@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.security;
 
-import kh.farrukh.progee_api.endpoints.user.UserRole;
+import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.security.filters.JWTAuthorizationFilter;
 import kh.farrukh.progee_api.security.handlers.JWTAccessDeniedHandler;
 import kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer;
@@ -38,36 +38,56 @@ public class SecurityConfiguration {
             JWTAccessDeniedHandler accessDeniedHandler
     ) throws Exception {
         // Disabling the CSRF and making the session stateless.
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // Endpoint that everyone can GET and POST, but only authorized user can PATCH, PUT, DELETE
-        setEveryoneCreatableEndpoint(withChildEndpoints(ENDPOINT_IMAGE), http);
-
-        // Endpoints that anyone can get and users can do any method request
-        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_REVIEW), http);
-        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_IMAGE), http);
-        setUserCreatableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_PASSWORD), http);
-
-        // Endpoints for only admin & super-admins
-        setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE), http);
-        setOnlyAdminEndpoint(withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE), http);
-
-        // Endpoints that anyone can GET and users can POST, but admins must verify new added resources
-        setAdminVerifiableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK), http);
-        setAdminVerifiableEndpoint(withChildEndpoints(ENDPOINT_LANGUAGE), http);
-
-        // Endpoints for only super-admins, also admin can execute GET requests
-        setOnlySuperAdminEditableEndpoint(withChildEndpoints(SECURITY_ENDPOINT_USER_ROLE), http);
-        setOnlySuperAdminEditableEndpoint(withChildEndpoints(ENDPOINT_USER), http);
+        http.csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Adding the custom DSL for the authentication manager and the custom JWT authorization filter.
-        http.apply(authenticationFilterConfigurer);
-        http.addFilterBefore(loginRequestWrapperFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.apply(authenticationFilterConfigurer)
+                .and()
+                .addFilterBefore(loginRequestWrapperFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Allowing all the users to access the register, login and refresh token endpoints.
-        http.authorizeRequests().antMatchers(
+        http.authorizeRequests()
+                //image endpoints
+                .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_IMAGE)).permitAll()
+                .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_IMAGE)).permitAll()
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_IMAGE)).hasAuthority(Permission.CAN_UPDATE_IMAGE.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_IMAGE)).hasAuthority(Permission.CAN_UPDATE_IMAGE.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_IMAGE)).hasAuthority(Permission.CAN_DELETE_IMAGE.name())
+                //review endpoints
+                .antMatchers(HttpMethod.GET, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).permitAll()
+                .antMatchers(HttpMethod.POST, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_CREATE_REVIEW.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_DELETE_REVIEW.name())
+                //framework endpoints
+                .antMatchers(HttpMethod.GET, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).permitAll()
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE)).hasAuthority(Permission.CAN_SET_FRAMEWORK_STATE.name())
+                .antMatchers(HttpMethod.POST, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_CREATE_FRAMEWORK.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_FRAMEWORK.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_FRAMEWORK.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_DELETE_FRAMEWORK.name())
+                //language endpoints
+                .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_LANGUAGE)).permitAll()
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE)).hasAuthority(Permission.CAN_SET_LANGUAGE_STATE.name())
+                .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAuthority(Permission.CAN_CREATE_LANGUAGE.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_LANGUAGE.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_LANGUAGE.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAuthority(Permission.CAN_DELETE_LANGUAGE.name())
+                //user endpoints
+                .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_USER)).permitAll()
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_USER_ROLE)).hasAuthority(Permission.CAN_SET_USER_ROLE.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_USER)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_USER.name(), Permission.CAN_UPDATE_OTHER_USER.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_USER)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_USER.name(), Permission.CAN_UPDATE_OTHER_USER.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_USER)).hasAuthority(Permission.CAN_DELETE_USER.name())
+                //role endpoints
+                .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_ROLE)).hasAuthority(Permission.CAN_VIEW_ROLE.name())
+                .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_ROLE)).hasAuthority(Permission.CAN_CREATE_ROLE.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_ROLE)).hasAuthority(Permission.CAN_UPDATE_ROLE.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_ROLE)).hasAuthority(Permission.CAN_UPDATE_ROLE.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_ROLE)).hasAuthority(Permission.CAN_DELETE_ROLE.name())
+                //auth endpoints
+                .antMatchers(
                         withChildEndpoints(ENDPOINT_REGISTRATION),
                         withChildEndpoints(ENDPOINT_LOGIN),
                         withChildEndpoints(ENDPOINT_REFRESH_TOKEN)
@@ -77,81 +97,5 @@ public class SecurityConfiguration {
                 .accessDeniedHandler(accessDeniedHandler);
 
         return http.build();
-    }
-
-    /**
-     * It sets the endpoint to be accessible by everyone for get/post requests.
-     *
-     * @param endpoint The endpoint you want to set the permissions for.
-     * @param http     The HttpSecurity object that is used to configure the security of the application.
-     */
-    private void setEveryoneCreatableEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).permitAll();
-        setEditMethodsAccessibleToAnyUser(endpoint, http);
-    }
-
-    /**
-     * It sets the endpoint to be accessible by all users.
-     *
-     * @param endpoint The endpoint you want to set the permissions for.
-     * @param http     The HttpSecurity object that is used to configure the security of the application.
-     */
-    private void setUserCreatableEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        setEditMethodsAccessibleToAnyUser(endpoint, http);
-    }
-
-    /**
-     * It sets the endpoint to be for admin-verified resource (when user created some resource).
-     *
-     * @param endpoint The endpoint you want to set the permissions for.
-     * @param http     The HttpSecurity object that is used to configure the security of the application.
-     */
-    private void setAdminVerifiableEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-    }
-
-    /**
-     * It sets the endpoint to be accessible by only admins.
-     *
-     * @param endpoint The endpoint you want to set the permissions for.
-     * @param http     The HttpSecurity object that is used to configure the security of the application.
-     */
-    private void setOnlyAdminEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        setEditMethodsAccessibleOnlyToAdmins(endpoint, http);
-    }
-
-    /**
-     * It sets the endpoint to be accessible by only super admins (admins can access only GET requests).
-     *
-     * @param endpoint The endpoint you want to set the permissions for.
-     * @param http     The HttpSecurity object that is used to configure the security of the application.
-     */
-    private void setOnlySuperAdminEditableEndpoint(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.GET, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.POST, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name());
-    }
-
-    private void setEditMethodsAccessibleToAnyUser(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name(), UserRole.USER.name());
-    }
-
-    private void setEditMethodsAccessibleOnlyToAdmins(String endpoint, HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers(HttpMethod.PATCH, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, endpoint).hasAnyAuthority(UserRole.SUPER_ADMIN.name(), UserRole.ADMIN.name());
     }
 }

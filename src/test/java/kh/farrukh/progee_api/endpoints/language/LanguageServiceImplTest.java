@@ -6,7 +6,6 @@ import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.endpoints.user.UserRole;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
@@ -249,7 +248,8 @@ class LanguageServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser admin = new AppUser(2);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         LanguageDTO languageDto = new LanguageDTO(name, desc, 1);
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(new AppUser(1));
@@ -305,7 +305,8 @@ class LanguageServiceImplTest {
         // given
         String name = "test name";
         AppUser admin = new AppUser(1);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(admin);
         LanguageDTO languageDto = new LanguageDTO(name, "", 1);
@@ -327,7 +328,8 @@ class LanguageServiceImplTest {
         // given
         long imageId = 1;
         AppUser admin = new AppUser(1);
-        admin.setRole(UserRole.ADMIN);
+        // TODO: 8/10/22
+//        admin.setRole(UserRole.ADMIN);
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(admin);
         LanguageDTO languageDto = new LanguageDTO("", "", imageId);
