@@ -15,6 +15,7 @@ public class ApiEndpoints {
     public static final String ENDPOINT_REVIEW = "/api/v1/languages/{languageId}/reviews";
     public static final String ENDPOINT_USER = "/api/v1/users";
     public static final String ENDPOINT_IMAGE = "/api/v1/images";
+    public static final String ENDPOINT_ROLE = "/api/v1/roles";
 
     public static final String SECURITY_ENDPOINT_FRAMEWORK = ENDPOINT_LANGUAGE + "/**/frameworks";
     public static final String SECURITY_ENDPOINT_REVIEW = ENDPOINT_LANGUAGE + "/**/reviews";

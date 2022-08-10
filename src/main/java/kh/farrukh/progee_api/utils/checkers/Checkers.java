@@ -3,6 +3,8 @@ package kh.farrukh.progee_api.utils.checkers;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.review.ReviewRepository;
+import kh.farrukh.progee_api.endpoints.role.RoleDTO;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
@@ -87,6 +89,18 @@ public class Checkers {
         }
         if (userRepository.existsByEmail(appUserDto.getEmail())) {
             throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
+        }
+    }
+
+    public static void checkRoleId(RoleRepository roleRepository, long id) {
+        if (!roleRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Role", "id", id);
+        }
+    }
+
+    public static void checkRoleIsUnique(RoleRepository roleRepository, RoleDTO roleDTO) {
+        if (roleRepository.existsByTitle(roleDTO.getTitle())) {
+            throw new DuplicateResourceException("Role", "title", roleDTO.getTitle());
         }
     }
 }
