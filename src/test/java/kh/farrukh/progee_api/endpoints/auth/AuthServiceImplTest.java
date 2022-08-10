@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
-import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_PERMISSIONS;
+import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE_ID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -97,14 +97,14 @@ class AuthServiceImplTest {
         String refreshToken = JWT.create()
                 .withSubject("user@mail.com")
                 .withExpiresAt(new Date(System.currentTimeMillis() + tokenProvider.getRefreshTokenValidityInSeconds() * 1000))
-                .withClaim(KEY_PERMISSIONS, role.getPermissions().stream().map(Enum::name).toList())
+                .withClaim(KEY_ROLE_ID, role.getPermissions().stream().map(Enum::name).toList())
                 .sign(tokenProvider.getRefreshTokenAlgorithm());
         JWTVerifier jwtVerifier = JWT.require(tokenProvider.getRefreshTokenAlgorithm()).build();
         DecodedJWT decodedJWT = jwtVerifier.verify(refreshToken);
         when(tokenProvider.validateToken(anyString(), anyBoolean())).thenReturn(decodedJWT);
         when(tokenProvider.generateTokens(any())).thenReturn(
                 new AuthResponse(
-                        role.getPermissions().stream().map(Enum::name).toList(),
+                        role,
                         "test",
                         "test",
                         "test",
@@ -116,8 +116,7 @@ class AuthServiceImplTest {
         AuthResponse authResponse = underTest.refreshToken("Bearer " + refreshToken);
 
         // then
-        assertThat(authResponse.getPermissions())
-                .isEqualTo(existingUser.getRole().getPermissions().stream().map(Enum::name).toList());
+        assertThat(authResponse.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
     }
 
     @Test

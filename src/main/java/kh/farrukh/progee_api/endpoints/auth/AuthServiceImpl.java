@@ -8,7 +8,6 @@ import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 /**
@@ -50,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
             DecodedJWT decodedJWT = tokenProvider.validateToken(authHeader, true);
             if (decodedJWT != null) {
                 String username = decodedJWT.getSubject();
-                UserDetails user = userService.loadUserByUsername(username);
+                AppUser user = userService.getUserByEmail(username);
                 return tokenProvider.generateTokens(user);
             } else {
                 throw new BadRequestException("Refresh token");

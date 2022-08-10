@@ -110,8 +110,7 @@ class AuthControllerIntegrationTest {
                 result.getResponse().getContentAsString(), AuthResponse.class
         );
 
-        assertThat(response.getPermissions())
-                .isEqualTo(user.getRole().getPermissions().stream().map(Enum::name).toList());
+        assertThat(response.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
     }
 
     // TODO: 7/29/22 giving 403 error if refresh token is valid
@@ -152,7 +151,6 @@ class AuthControllerIntegrationTest {
         AuthResponse response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), AuthResponse.class
         );
-        assertThat(response.getPermissions())
-                .isEqualTo(user.getRole().getPermissions().stream().map(Enum::name).toList());
+        assertThat(response.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
     }
 }

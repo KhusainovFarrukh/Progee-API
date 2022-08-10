@@ -89,6 +89,19 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * If the user exists, return the user, otherwise throw an exception.
+     *
+     * @param email The email of the user to retrieve
+     * @return The userRepository.findByEmail(email) is being returned.
+     */
+    @Override
+    public AppUser getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("User", "email", email)
+        );
+    }
+
+    /**
      * Creates a new AppUser object, encodes the password, and saves the user
      *
      * @param appUserDto The DTO object that contains the user's information.

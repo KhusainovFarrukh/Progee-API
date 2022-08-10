@@ -5,18 +5,17 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
-import kh.farrukh.progee_api.security.utils.SecurityUtils;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.Getter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_PERMISSIONS;
+import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE_ID;
 
 @Getter
 @Component
@@ -52,13 +51,13 @@ public class TokenProvider implements InitializingBean {
      *
      * @param user The user details object that contains the user's information.
      */
-    public AuthResponse generateTokens(UserDetails user) {
+    public AuthResponse generateTokens(AppUser user) {
         long currentMillis = System.currentTimeMillis();
         Date accessExpireDate = new Date(currentMillis + accessTokenValidityInSeconds * 1000);
         Date refreshExpireDate = new Date(currentMillis + refreshTokenValidityInSeconds * 1000);
 
         return new AuthResponse(
-                SecurityUtils.getPermissionNames(user),
+                user.getRole(),
                 createToken(user, accessExpireDate, accessTokenAlgorithm),
                 createToken(user, refreshExpireDate, refreshTokenAlgorithm),
                 formatter.format(accessExpireDate),
@@ -97,11 +96,11 @@ public class TokenProvider implements InitializingBean {
      * @param algorithm  The algorithm to use for signing the token.
      * @return A JWT token
      */
-    private String createToken(UserDetails user, Date expireDate, Algorithm algorithm) {
+    private String createToken(AppUser user, Date expireDate, Algorithm algorithm) {
         return JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(expireDate)
-                .withClaim(KEY_PERMISSIONS, SecurityUtils.getPermissionNames(user))
+                .withClaim(KEY_ROLE_ID, user.getRole().getId())
                 .sign(algorithm);
     }
 }

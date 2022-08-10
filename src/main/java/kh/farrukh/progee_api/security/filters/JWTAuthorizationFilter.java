@@ -5,6 +5,7 @@ import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.token_exceptions.*;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.security.utils.SecurityUtils;
@@ -31,13 +32,16 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.*;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
+    private final RoleRepository roleRepository;
     private final HandlerExceptionResolver resolver;
 
     public JWTAuthorizationFilter(
             TokenProvider tokenProvider,
+            RoleRepository roleRepository,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
     ) {
         this.tokenProvider = tokenProvider;
+        this.roleRepository = roleRepository;
         this.resolver = resolver;
     }
 
@@ -75,7 +79,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         try {
             DecodedJWT decodedJWT = tokenProvider.validateToken(request.getHeader(HttpHeaders.AUTHORIZATION), false);
             UsernamePasswordAuthenticationToken authenticationToken =
-                    SecurityUtils.getAuthenticationFromDecodedJWT(decodedJWT);
+                    SecurityUtils.getAuthenticationFromDecodedJWT(decodedJWT, roleRepository);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         } catch (AlgorithmMismatchException exception) {

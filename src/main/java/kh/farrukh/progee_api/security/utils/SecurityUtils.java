@@ -4,6 +4,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
+import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,13 +32,18 @@ public class SecurityUtils {
      * @param decodedJWT The decoded JWT.
      * @return A UsernamePasswordAuthenticationToken object
      */
-    public static UsernamePasswordAuthenticationToken getAuthenticationFromDecodedJWT(DecodedJWT decodedJWT) {
+    public static UsernamePasswordAuthenticationToken getAuthenticationFromDecodedJWT(
+            DecodedJWT decodedJWT, RoleRepository roleRepository
+    ) {
         String username = decodedJWT.getSubject();
-        List<SimpleGrantedAuthority> authorities = decodedJWT
-                .getClaim(KEY_PERMISSIONS)
-                .asList(String.class)
-                .stream()
-                .map(SimpleGrantedAuthority::new)
+        long roleId = decodedJWT.getClaim(KEY_ROLE_ID).asLong();
+        Role role = roleRepository.findById(roleId).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", roleId)
+        );
+
+        List<SimpleGrantedAuthority> authorities = role
+                .getPermissions()
+                .stream().map(permission -> new SimpleGrantedAuthority(permission.name()))
                 .toList();
 
         return new UsernamePasswordAuthenticationToken(username, null, authorities);

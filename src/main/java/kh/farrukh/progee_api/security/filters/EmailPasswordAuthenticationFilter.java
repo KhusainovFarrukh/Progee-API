@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.security.filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
+import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordWrongException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -68,7 +70,10 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        AuthResponse authResponse = tokenProvider.generateTokens(user);
+        AppUser appUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
+                () -> new UsernameNotFoundException("User not found in the database")
+        );
+        AuthResponse authResponse = tokenProvider.generateTokens(appUser);
         SecurityUtils.sendTokenInResponse(authResponse, response);
     }
 
