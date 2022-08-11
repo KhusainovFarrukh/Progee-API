@@ -130,26 +130,35 @@ public class UserServiceImpl implements UserService {
                 () -> new ResourceNotFoundException("User", "id", id)
         );
 
-        // It checks if the username of the user is changed and if the new username is already taken.
-        if (!appUserDto.getUsername().equals(existingAppUser.getUniqueUsername()) &&
-                userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
-            throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
+        if (
+                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
+                        (CurrentUserUtils.isAuthor(id, userRepository) &&
+                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
+        ) {
+
+            // It checks if the username of the user is changed and if the new username is already taken.
+            if (!appUserDto.getUsername().equals(existingAppUser.getUniqueUsername()) &&
+                    userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
+                throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
+            }
+
+            // It checks if the email of the user is changed and if the new email is already taken.
+            if (!appUserDto.getEmail().equals(existingAppUser.getEmail()) &&
+                    userRepository.existsByEmail(appUserDto.getEmail())) {
+                throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
+            }
+
+            existingAppUser.setName(appUserDto.getName());
+            existingAppUser.setEmail(appUserDto.getEmail());
+            existingAppUser.setUniqueUsername(appUserDto.getUsername());
+            existingAppUser.setImage(imageRepository.findById(appUserDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", appUserDto.getImageId())
+            ));
+
+            return existingAppUser;
+        } else {
+            throw new NotEnoughPermissionException();
         }
-
-        // It checks if the email of the user is changed and if the new email is already taken.
-        if (!appUserDto.getEmail().equals(existingAppUser.getEmail()) &&
-                userRepository.existsByEmail(appUserDto.getEmail())) {
-            throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
-        }
-
-        existingAppUser.setName(appUserDto.getName());
-        existingAppUser.setEmail(appUserDto.getEmail());
-        existingAppUser.setUniqueUsername(appUserDto.getUsername());
-        existingAppUser.setImage(imageRepository.findById(appUserDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", appUserDto.getImageId())
-        ));
-
-        return existingAppUser;
     }
 
     /**
@@ -229,7 +238,8 @@ public class UserServiceImpl implements UserService {
                 CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
                         (CurrentUserUtils.isAuthor(id, userRepository) &&
                                 CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
-        ) {            AppUser currentUser = userRepository.findById(id).orElseThrow(
+        ) {
+            AppUser currentUser = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
             if (passwordEncoder.matches(passwordDto.getPassword(), currentUser.getPassword())) {

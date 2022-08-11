@@ -27,7 +27,11 @@ public class CurrentUserUtils {
      * @return A boolean value
      */
     public static boolean isAuthor(long authorId, UserRepository userRepository) {
-        return getCurrentUser(userRepository).getId() == authorId;
+        try {
+            return getCurrentUser(userRepository).getId() == authorId;
+        } catch (ResourceNotFoundException e) {
+            return false;
+        }
     }
 
     /**

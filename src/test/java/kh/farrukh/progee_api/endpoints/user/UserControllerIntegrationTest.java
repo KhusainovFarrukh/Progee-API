@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,10 +57,11 @@ class UserControllerIntegrationTest {
     @AfterEach
     void tearDown() {
         userRepository.deleteAll();
+        roleRepository.deleteAll();
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canGetUsers() throws Exception {
         // given
         List<AppUser> users = List.of(
@@ -87,7 +91,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canGetUserById() throws Exception {
         // given
         AppUser existingUser = userRepository.save(new AppUser());
@@ -105,10 +109,11 @@ class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "SUPER_ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canUpdateUser() throws Exception {
         // given
-        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", "test"));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
+        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         AppUserDTO userDto = new AppUserDTO(
                 "test",
@@ -117,9 +122,7 @@ class UserControllerIntegrationTest {
                 null,
                 true,
                 false,
-// TODO: 8/10/22
                 1,
-//                null,
                 existingImage.getId()
         );
 
@@ -142,7 +145,7 @@ class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "SUPER_ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canDeleteUserById() throws Exception {
         // given
         AppUser existingUser = userRepository.save(new AppUser());
@@ -155,19 +158,15 @@ class UserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "SUPER_ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canSetUserRole() throws Exception {
         // given
-        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", "test",
-                // TODO: 8/10/22
-                1, roleRepository
-//                UserRole.USER
+        Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
+        Role newRole = roleRepository.save(new Role("2", false, Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
+        AppUser existingUser = userRepository.save(new AppUser(
+                "user@mail.com", "test", existingRole.getId(), roleRepository
         ));
-        UserRoleDTO roleDto = new UserRoleDTO(
-                // TODO: 8/10/22
-                1
-//                UserRole.ADMIN
-        );
+        UserRoleDTO roleDto = new UserRoleDTO(newRole.getId());
 
         // when
         MvcResult result = mvc
@@ -181,23 +180,18 @@ class UserControllerIntegrationTest {
         // then
         AppUser user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUser.class);
         assertThat(user.getId()).isEqualTo(existingUser.getId());
-        // TODO: 8/10/22
-//        assertThat(user.getRole()).isEqualTo(roleDto.getRole());
+        assertThat(user.getRole().getId()).isEqualTo(roleDto.getRoleId());
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "SUPER_ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canSetUserPassword() throws Exception {
         // given
-        userRepository.save(new AppUser("admin@mail.com",
-                // TODO: 8/10/22
-                1, roleRepository
-//                UserRole.SUPER_ADMIN
-        ));
+        Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         String password = "12345678";
         String newPassword = "87654321";
         AppUser existingUser = userRepository.save(new AppUser(
-                "admin@mail.com", "test", passwordEncoder.encode(password)
+                "user@mail.com", "test", passwordEncoder.encode(password), existingRole
         ));
         UserPasswordDTO passwordDto = new UserPasswordDTO(password, newPassword);
 
