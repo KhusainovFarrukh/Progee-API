@@ -499,8 +499,6 @@ class FrameworkServiceImplTest {
         // given
         long imageId = 1;
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
-        // TODO: 8/10/22
-//        user.setRole(UserRole.user);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(user);
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", imageId);
