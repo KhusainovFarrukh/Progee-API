@@ -19,6 +19,7 @@ public class ApiEndpoints {
 
     public static final String SECURITY_ENDPOINT_FRAMEWORK = ENDPOINT_LANGUAGE + "/**/frameworks";
     public static final String SECURITY_ENDPOINT_REVIEW = ENDPOINT_LANGUAGE + "/**/reviews";
+    public static final String SECURITY_ENDPOINT_REVIEW_VOTE = SECURITY_ENDPOINT_REVIEW + "/**/vote";
     public static final String SECURITY_ENDPOINT_LANGUAGE_STATE = ENDPOINT_LANGUAGE + "/**/state";
     public static final String SECURITY_ENDPOINT_FRAMEWORK_STATE = SECURITY_ENDPOINT_FRAMEWORK + "/**/state";
     public static final String SECURITY_ENDPOINT_USER_IMAGE = ENDPOINT_USER + "/**/image";
