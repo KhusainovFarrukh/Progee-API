@@ -123,10 +123,14 @@ public class LanguageServiceImpl implements LanguageService {
         );
 
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHERS_LANGUAGE, userRepository) ||
-                        (CurrentUserUtils.isAuthor(existingLanguage.getAuthor().getId(), userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_LANGUAGE, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_UPDATE_OTHERS_LANGUAGE,
+                        Permission.CAN_UPDATE_OWN_LANGUAGE,
+                        existingLanguage.getAuthor().getId(),
+                        userRepository
+                )
         ) {
+
 
             // It checks if the name of the language is changed and if the new name is already taken.
             if (!languageDto.getName().equals(existingLanguage.getName()) &&

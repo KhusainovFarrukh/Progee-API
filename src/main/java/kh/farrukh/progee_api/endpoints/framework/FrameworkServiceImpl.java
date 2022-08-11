@@ -138,9 +138,12 @@ public class FrameworkServiceImpl implements FrameworkService {
         );
 
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHERS_FRAMEWORK, userRepository) ||
-                        (CurrentUserUtils.isAuthor(existingFramework.getAuthor().getId(), userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_FRAMEWORK, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_UPDATE_OTHERS_FRAMEWORK,
+                        Permission.CAN_UPDATE_OWN_FRAMEWORK,
+                        existingFramework.getAuthor().getId(),
+                        userRepository
+                )
         ) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.

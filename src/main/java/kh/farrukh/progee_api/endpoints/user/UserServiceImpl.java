@@ -131,9 +131,12 @@ public class UserServiceImpl implements UserService {
         );
 
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
-                        (CurrentUserUtils.isAuthor(id, userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_UPDATE_OTHER_USER,
+                        Permission.CAN_UPDATE_OWN_USER,
+                        existingAppUser.getId(),
+                        userRepository
+                )
         ) {
 
             // It checks if the username of the user is changed and if the new username is already taken.
@@ -205,10 +208,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public AppUser setUserImage(long id, UserImageDTO imageDto) {
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
-                        (CurrentUserUtils.isAuthor(id, userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_UPDATE_OTHER_USER,
+                        Permission.CAN_UPDATE_OWN_USER,
+                        id,
+                        userRepository
+                )
         ) {
+
             AppUser user = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
@@ -235,10 +242,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
-                        (CurrentUserUtils.isAuthor(id, userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_UPDATE_OTHER_USER,
+                        Permission.CAN_UPDATE_OWN_USER,
+                        id,
+                        userRepository
+                )
         ) {
+
             AppUser currentUser = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );

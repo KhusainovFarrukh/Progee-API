@@ -117,10 +117,14 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHERS_REVIEW, userRepository) ||
-                        (CurrentUserUtils.isAuthor(existingReview.getAuthor().getId(), userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_REVIEW, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_UPDATE_OTHERS_REVIEW,
+                        Permission.CAN_UPDATE_OWN_REVIEW,
+                        existingReview.getAuthor().getId(),
+                        userRepository
+                )
         ) {
+
             existingReview.setBody(reviewDto.getBody());
             existingReview.setReviewValue(reviewDto.getValue());
         } else {
@@ -144,10 +148,14 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         if (
-                CurrentUserUtils.hasPermission(Permission.CAN_DELETE_OTHERS_REVIEW, userRepository) ||
-                        (CurrentUserUtils.isAuthor(existingReview.getAuthor().getId(), userRepository) &&
-                                CurrentUserUtils.hasPermission(Permission.CAN_DELETE_OWN_REVIEW, userRepository))
+                CurrentUserUtils.hasPermissionOrIsAuthor(
+                        Permission.CAN_DELETE_OTHERS_REVIEW,
+                        Permission.CAN_DELETE_OWN_REVIEW,
+                        existingReview.getAuthor().getId(),
+                        userRepository
+                )
         ) {
+
             reviewRepository.deleteById(id);
         } else {
             throw new NotEnoughPermissionException();

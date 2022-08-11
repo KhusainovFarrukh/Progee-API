@@ -12,23 +12,25 @@ import org.springframework.security.core.userdetails.User;
  */
 public class CurrentUserUtils {
 
-    public static boolean hasPermission(Permission permission, UserRepository userRepository) {
+    public static boolean hasPermissionOrIsAuthor(
+            Permission permissionToChangeOthers,
+            Permission permissionToChangeOwn,
+            long authorId,
+            UserRepository userRepository
+    ) {
         try {
             AppUser currentUser = getCurrentUser(userRepository);
-            return currentUser.getRole().getPermissions().contains(permission);
+            return (currentUser.getId() != authorId && currentUser.getRole().getPermissions().contains(permissionToChangeOthers)) ||
+                    (currentUser.getId() == authorId && currentUser.getRole().getPermissions().contains(permissionToChangeOwn));
         } catch (ResourceNotFoundException e) {
             return false;
         }
     }
 
-    /**
-     * It returns true if the current user's id equals given id
-     *
-     * @return A boolean value
-     */
-    public static boolean isAuthor(long authorId, UserRepository userRepository) {
+    public static boolean hasPermission(Permission permission, UserRepository userRepository) {
         try {
-            return getCurrentUser(userRepository).getId() == authorId;
+            AppUser currentUser = getCurrentUser(userRepository);
+            return currentUser.getRole().getPermissions().contains(permission);
         } catch (ResourceNotFoundException e) {
             return false;
         }
