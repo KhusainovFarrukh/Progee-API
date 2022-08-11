@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.test_utils.ReviewValueDeserializer;
@@ -21,8 +24,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LANGUAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -50,6 +53,9 @@ class ReviewControllerIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private ReviewService reviewService;
 
     @BeforeEach
@@ -65,6 +71,7 @@ class ReviewControllerIntegrationTest {
         reviewRepository.deleteAll();
         languageRepository.deleteAll();
         userRepository.deleteAll();
+        roleRepository.deleteAll();
     }
 
     @Test
@@ -95,13 +102,13 @@ class ReviewControllerIntegrationTest {
         );
         assertThat(response.getTotalItems()).isEqualTo(reviews.size());
         assertThat(reviews.stream().allMatch(review ->
-                response.getItems().stream().map(Review::getBody).collect(Collectors.toList())
+                response.getItems().stream().map(Review::getBody).toList()
                         .contains(review.getBody())
         )).isTrue();
     }
 
     @Test
-    void canGetFrameworksWithFilter() throws Exception {
+    void canGetReviewsWithFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         List<Review> likeReviews = List.of(
@@ -131,7 +138,7 @@ class ReviewControllerIntegrationTest {
         );
         assertThat(response.getTotalItems()).isEqualTo(likeReviews.size());
         assertThat(likeReviews.stream().allMatch(review ->
-                response.getItems().stream().map(Review::getBody).collect(Collectors.toList())
+                response.getItems().stream().map(Review::getBody).toList()
                         .contains(review.getBody())
         )).isTrue();
     }
@@ -160,11 +167,11 @@ class ReviewControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canAddReview() throws Exception {
         // given
-        // TODO: 8/10/22
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_REVIEW)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewDTO reviewDto = new ReviewDTO("test body", ReviewValue.LIKE);
 
@@ -181,16 +188,14 @@ class ReviewControllerIntegrationTest {
         Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
         assertThat(review.getBody()).isEqualTo(reviewDto.getBody());
         assertThat(review.getReviewValue()).isEqualTo(reviewDto.getValue());
-        // TODO: 8/10/22
-//        assertThat(review.getAuthor().getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canUpdateReview() throws Exception {
         // given
-        // TODO: 8/10/22
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewService.addReview(
                 existingLanguage.getId(), new ReviewDTO("test body", ReviewValue.LIKE)
@@ -211,16 +216,14 @@ class ReviewControllerIntegrationTest {
         assertThat(review.getId()).isEqualTo(existingReview.getId());
         assertThat(review.getBody()).isEqualTo(reviewDto.getBody());
         assertThat(review.getReviewValue()).isEqualTo(reviewDto.getValue());
-        // TODO: 8/10/22
-//        assertThat(review.getAuthor().getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canDeleteReviewById() throws Exception {
         // given
-        // TODO: 8/10/22
-//        userRepository.save(new AppUser("admin@mail.com", UserRole.ADMIN));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewService.addReview(
                 existingLanguage.getId(), new ReviewDTO("test body", ReviewValue.LIKE)
@@ -236,11 +239,11 @@ class ReviewControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canVoteReview() throws Exception {
         // given
-        // TODO: 8/10/22
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
+        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewRepository.save(new Review("", ReviewValue.LIKE, existingLanguage));
         ReviewVoteDTO voteDTO = new ReviewVoteDTO(true);
@@ -259,8 +262,7 @@ class ReviewControllerIntegrationTest {
         // then
         Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
         assertThat(review.getId()).isEqualTo(existingReview.getId());
-        // TODO: 8/10/22
-//        assertThat(existingUser.getId()).isIn(review.getUpVotes());
-//        assertThat(existingUser.getId()).isNotIn(review.getDownVotes());
+        assertThat(existingUser.getId()).isIn(review.getUpVotes());
+        assertThat(existingUser.getId()).isNotIn(review.getDownVotes());
     }
 }

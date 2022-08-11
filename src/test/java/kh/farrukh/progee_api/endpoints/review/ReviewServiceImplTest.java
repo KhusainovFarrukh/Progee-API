@@ -2,6 +2,8 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
@@ -21,6 +23,7 @@ import org.springframework.security.test.context.annotation.SecurityTestExecutio
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -143,7 +146,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canCreateReview() {
         // given
         String body = "test review";
@@ -167,7 +170,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -183,12 +186,12 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void authorCanUpdateReview() {
+    @WithMockUser(username = "user@mail.com")
+    void authorWithUpdateOwnPermissionCanUpdateReview() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
-        AppUser author = new AppUser(1);
+        AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(author);
@@ -205,20 +208,38 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
-    void adminCanUpdateReview() {
+    @WithMockUser(username = "user@mail.com")
+    void throwsExceptionIfAuthorWithoutUpdateOwnPermissionUpdatesReview() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
-        AppUser admin = new AppUser(2);
-        // TODO: 8/10/22
-//        admin.setRole(UserRole.ADMIN);
+        AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
+        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
+        Review existingReview = new Review();
+        existingReview.setAuthor(author);
+        when(languageRepository.existsById(any())).thenReturn(true);
+        when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateReview(1, 1, reviewDto))
+                .isInstanceOf(NotEnoughPermissionException.class);
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com")
+    void userWithUpdateOthersPermissionCanUpdateReview() {
+        // given
+        String body = "test review";
+        ReviewValue reviewValue = ReviewValue.LIKE;
+        AppUser user = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHERS_REVIEW)));
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         Review actual = underTest.updateReview(1, 1, reviewDto);
@@ -229,13 +250,15 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void throwsExceptionIfNonAuthorUpdatesReview() {
+    @WithMockUser(username = "user@mail.com")
+    void throwsExceptionIfUserWithoutUpdateOthersPermissionUpdatesReview() {
         // given
-        AppUser user = new AppUser(1);
-        ReviewDTO reviewDto = new ReviewDTO("", ReviewValue.LIKE);
+        String body = "test review";
+        ReviewValue reviewValue = ReviewValue.LIKE;
+        AppUser user = new AppUser("test@mail.com", new Role(Collections.emptyList()));
+        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
-        existingReview.setAuthor(new AppUser(2));
+        existingReview.setAuthor(new AppUser(1));
         when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
@@ -247,7 +270,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void throwsExceptionIfReviewToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -264,7 +287,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void throwsExceptionIfLanguageOfReviewToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -279,17 +302,15 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
-    void adminCanDeleteReviewById() {
+    @WithMockUser(username = "user@mail.com")
+    void userWithDeleteOthersPermissionCanDeleteReviewById() {
         // given
         long reviewId = 1;
-        AppUser admin = new AppUser(2);
-        // TODO: 8/10/22
-//        admin.setRole(UserRole.ADMIN);
+        AppUser user = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OTHERS_REVIEW)));
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(languageRepository.existsById(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -300,13 +321,31 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void authorCanDeleteReviewById() {
+    @WithMockUser(username = "user@mail.com")
+    void throwsExceptionIfUserWithoutDeleteOthersPermissionDeletesReviewById() {
         // given
         long reviewId = 1;
-        AppUser author = new AppUser(1);
+        AppUser user = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
+        when(languageRepository.existsById(any())).thenReturn(true);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.deleteReview(1, reviewId))
+                .isInstanceOf(NotEnoughPermissionException.class);
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com")
+    void authorWithDeleteOwnPermissionCanDeleteReviewById() {
+        // given
+        long reviewId = 1;
+        AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
+        Review existingReview = new Review();
+        existingReview.setAuthor(author);
         when(languageRepository.existsById(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
@@ -319,24 +358,25 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void throwsExceptionIfNonAuthorDeletesReview() {
+    @WithMockUser(username = "user@mail.com")
+    void throwsExceptionIfAuthorWithoutDeleteOwnPermissionDeletesReviewById() {
         // given
-        AppUser user = new AppUser(1);
+        long reviewId = 1;
+        AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         Review existingReview = new Review();
-        existingReview.setAuthor(new AppUser(2));
+        existingReview.setAuthor(author);
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.deleteReview(1, 1))
+        assertThatThrownBy(() -> underTest.deleteReview(1, reviewId))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void throwsExceptionIfReviewToDeleteDoesNotExistWithId() {
         // given
         long reviewId = 1;
@@ -351,7 +391,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void throwsExceptionIfLanguageOfReviewToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -481,7 +521,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void throwsExceptionIfReviewToVoteDoesNotExistWithId() {
         // given
         long reviewId = 1;
@@ -498,7 +538,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void throwsExceptionIfLanguageOfReviewToVOteDoesNotExistWithId() {
         // given
         long languageId = 1;

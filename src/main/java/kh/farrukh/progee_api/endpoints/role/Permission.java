@@ -2,6 +2,8 @@ package kh.farrukh.progee_api.endpoints.role;
 
 public enum Permission {
 
+    // TODO: 8/11/22 add permissions for upvote/downvote review (with unit and int tests)
+
     CAN_VIEW_LANGUAGES_BY_STATE,
     CAN_CREATE_LANGUAGE,
     CAN_UPDATE_OWN_LANGUAGE,
