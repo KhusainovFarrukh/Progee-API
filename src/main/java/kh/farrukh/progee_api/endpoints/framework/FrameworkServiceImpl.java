@@ -137,9 +137,11 @@ public class FrameworkServiceImpl implements FrameworkService {
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
 
-        if (CurrentUserUtils.hasPermissionOrIsAuthor(
-                Permission.CAN_UPDATE_OTHERS_FRAMEWORK, existingFramework.getAuthor().getId(), userRepository
-        )) {
+        if (
+                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHERS_FRAMEWORK, userRepository) ||
+                        (CurrentUserUtils.isAuthor(existingFramework.getAuthor().getId(), userRepository) &&
+                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_FRAMEWORK, userRepository))
+        ) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
             if (!frameworkDto.getName().equals(existingFramework.getName()) &&

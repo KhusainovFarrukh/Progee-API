@@ -6,6 +6,8 @@ import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
@@ -25,6 +27,8 @@ import org.springframework.security.test.context.annotation.SecurityTestExecutio
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -83,8 +87,8 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
-    void simpleUserCanGetApprovedFrameworks() {
+    @WithMockUser
+    void userWithoutRequiredPermissionCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
 
@@ -104,22 +108,22 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
-    void throwsExceptionIfSimpleUserFiltersFrameworksByState() {
+    @WithMockUser
+    void throwsExceptionIfUserWithoutRequiredPermissionFiltersFrameworksByState() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.getFrameworksByLanguage(1, ResourceState.WAITING, 1, 10, "id", "ASC"))
-                .isInstanceOf(NotEnoughPermissionException.class);
-        verify(frameworkRepository, never()).findByStateAndLanguage_Id(any(), anyLong(), any());
+        assertThatThrownBy(
+                () -> underTest.getFrameworksByLanguage(1, ResourceState.WAITING, 1, 10, "id", "ASC")
+        ).isInstanceOf(NotEnoughPermissionException.class);
     }
 
+    //this test is unnecessary for current logic
     @Test
-    // TODO: 8/10/22 specific permission for framework filtering
-    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
-    void adminCanGetApprovedFrameworks() {
+    @WithMockUser(username = "test@mail.com", authorities = "CAN_VIEW_FRAMEWORKS_BY_STATE")
+    void userWithRequiredPermissionCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
 
@@ -139,11 +143,12 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    // TODO: 8/10/22 specific permission for framework filtering
-    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
-    void adminCanGetFrameworksFilteredByState() {
+    @WithMockUser
+    void userWithRequiredPermissionCanGetFrameworksFilteredByState() {
         // given
+        Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
 
         // when
         underTest.getFrameworksByLanguage(1, ResourceState.WAITING, 1, 10, "id", "ASC");
@@ -161,8 +166,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    // TODO: 8/10/22 specific permission for framework filtering
-    @WithMockUser(authorities = "CAN_VIEW_FRAMEWORK")
+    @WithMockUser
     void throwsExceptionIfLanguageOfFrameworksDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -171,7 +175,7 @@ class FrameworkServiceImplTest {
         // then
         assertThatThrownBy(
                 () -> underTest.getFrameworksByLanguage(
-                        languageId, ResourceState.WAITING, 1, 10, "id", "ASC"
+                        languageId, null, 1, 10, "id", "ASC"
                 )
         )
                 .isInstanceOf(ResourceNotFoundException.class)
@@ -221,13 +225,14 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void simpleUserCreatesFrameworkWithWaitingState() {
+    @WithMockUser
+    void userWithOnlyCreatePermissionCreatesFrameworkWithWaitingState() {
         // given
+        Role role = new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK));
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com")));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com", role)));
 
         // when
         underTest.addFramework(1, frameworkDto);
@@ -243,17 +248,15 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    // TODO: 8/10/22 specific permission for framework filtering
-    @WithMockUser(username = "admin@mail.com", authorities = "CAN_VIEW_FRAMEWORK")
-    void adminCreatesFrameworkWithApprovedState() {
+    @WithMockUser
+    void userWithCreateAndSetStatePermissionsCreatesFrameworkWithApprovedState() {
         // given
-        AppUser admin = new AppUser("admin@mail.com");
-        // TODO: 8/10/22
-//        admin.setRole(UserRole.ADMIN);
+        Role role = new Role(List.of(Permission.CAN_CREATE_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE));
+        AppUser user = new AppUser("user@mail.com", role);
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         underTest.addFramework(1, frameworkDto);
@@ -264,12 +267,12 @@ class FrameworkServiceImplTest {
 
         Framework capturedFramework = languageArgCaptor.getValue();
         assertThat(capturedFramework.getLanguage().getId()).isEqualTo(1);
-        assertThat(capturedFramework.getAuthor().getUsername()).isEqualTo("admin@mail.com");
+        assertThat(capturedFramework.getAuthor().getUsername()).isEqualTo("user@mail.com");
         assertThat(capturedFramework.getState()).isEqualTo(ResourceState.APPROVED);
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void throwsExceptionIfFrameworkExistsWithName() {
         // given
         String name = "test";
@@ -285,7 +288,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -303,12 +306,12 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void authorCanUpdateFramework() {
+    @WithMockUser
+    void authorWithOnlyUpdateOwnPermissionCanUpdateFramework() {
         // given
         String name = "test name";
         String desc = "test desc";
-        AppUser author = new AppUser(1);
+        AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
         FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(author);
@@ -327,20 +330,18 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
-    void adminCanUpdateFramework() {
+    @WithMockUser
+    void authorWithUpdateOwnAndSetStatePermissionsCanUpdateFramework() {
         // given
         String name = "test name";
         String desc = "test desc";
-        AppUser admin = new AppUser(2);
-        // TODO: 8/10/22
-//        admin.setRole(UserRole.ADMIN);
+        AppUser author = new AppUser("test@mail.com", new Role(List.of(Permission.CAN_UPDATE_OWN_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE)));
         FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
         Framework existingFramework = new Framework();
-        existingFramework.setAuthor(new AppUser(1));
+        existingFramework.setAuthor(author);
         when(languageRepository.existsById(any())).thenReturn(true);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -353,10 +354,78 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void throwsExceptionIfNonAuthorUpdatesFramework() {
+    @WithMockUser
+    void throwsExceptionIfAuthorWithoutUpdateOwnPermissionUpdatesFramework() {
         // given
-        AppUser user = new AppUser(1);
+        String name = "test name";
+        String desc = "test desc";
+        AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
+        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
+        Framework existingFramework = new Framework();
+        existingFramework.setAuthor(author);
+        when(languageRepository.existsById(any())).thenReturn(true);
+        when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateFramework(1, 1, frameworkDto))
+                .isInstanceOf(NotEnoughPermissionException.class);
+    }
+
+    @Test
+    @WithMockUser
+    void nonAuthorWithOnlyUpdateOthersPermissionCanUpdateFramework() {
+        // given
+        String name = "test name";
+        String desc = "test desc";
+        AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHERS_FRAMEWORK)));
+        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
+        Framework existingFramework = new Framework();
+        existingFramework.setAuthor(new AppUser(1));
+        when(languageRepository.existsById(any())).thenReturn(true);
+        when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+
+        // when
+        Framework actual = underTest.updateFramework(1, 1, frameworkDto);
+
+        // then
+        assertThat(actual.getName()).isEqualTo(name);
+        assertThat(actual.getDescription()).isEqualTo(desc);
+        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
+    }
+
+    @Test
+    @WithMockUser
+    void nonAuthorWithUpdateOthersAndSetStatePermissionsCanUpdateOthersFramework() {
+        // given
+        String name = "test name";
+        String desc = "test desc";
+        AppUser user = new AppUser(2, new Role(List.of(Permission.CAN_UPDATE_OTHERS_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE)));
+        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
+        Framework existingFramework = new Framework();
+        existingFramework.setAuthor(new AppUser(1));
+        when(languageRepository.existsById(any())).thenReturn(true);
+        when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+
+        // when
+        Framework actual = underTest.updateFramework(1, 1, frameworkDto);
+
+        // then
+        assertThat(actual.getName()).isEqualTo(name);
+        assertThat(actual.getDescription()).isEqualTo(desc);
+        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
+    }
+
+    @Test
+    @WithMockUser
+    void throwsExceptionIfNonAuthorWithoutUpdateOthersPermissionUpdatesFramework() {
+        // given
+        AppUser user = new AppUser(1,new Role(Collections.emptyList()));
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(2));
@@ -371,7 +440,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -388,7 +457,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfLanguageOfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -403,20 +472,20 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfFrameworkToUpdateExistsWithName() {
         // given
         String name = "test name";
-        AppUser admin = new AppUser(1);
+        AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
         // TODO: 8/10/22
-//        admin.setRole(UserRole.ADMIN);
+//        user.setRole(UserRole.user);
         Framework existingFramework = new Framework();
-        existingFramework.setAuthor(admin);
+        existingFramework.setAuthor(user);
         FrameworkDTO frameworkDto = new FrameworkDTO(name, "", 1);
         when(languageRepository.existsById(any())).thenReturn(true);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
         when(languageRepository.existsByName(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -427,19 +496,19 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfImageOfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long imageId = 1;
-        AppUser admin = new AppUser(1);
+        AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
         // TODO: 8/10/22
-//        admin.setRole(UserRole.ADMIN);
+//        user.setRole(UserRole.user);
         Framework existingFramework = new Framework();
-        existingFramework.setAuthor(admin);
+        existingFramework.setAuthor(user);
         FrameworkDTO frameworkDto = new FrameworkDTO("", "", imageId);
         when(languageRepository.existsById(any())).thenReturn(true);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(admin));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -450,7 +519,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void canDeleteFrameworkById() {
         // given
         long frameworkId = 1;
@@ -465,7 +534,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfFrameworkToDeleteDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -480,7 +549,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfLanguageOfFrameworkToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -494,7 +563,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void canSetFrameworkState() {
         // given
         long frameworkId = 1;
@@ -510,7 +579,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfFrameworkToSetStateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -527,7 +596,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser
     void throwsExceptionIfLanguageOfFrameworkToSetStateDoesNotExistWithId() {
         // given
         long languageId = 1;

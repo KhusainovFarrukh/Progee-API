@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static kh.farrukh.progee_api.utils.checkers.Checkers.*;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
+import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
 
 /**
  * It implements the ReviewService interface and uses the ReviewRepository
@@ -115,9 +116,11 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        if (CurrentUserUtils.hasPermissionOrIsAuthor(
-                Permission.CAN_UPDATE_OTHERS_REVIEW, existingReview.getAuthor().getId(), userRepository
-        )) {
+        if (
+                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHERS_REVIEW, userRepository) ||
+                        (CurrentUserUtils.isAuthor(existingReview.getAuthor().getId(), userRepository) &&
+                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_REVIEW, userRepository))
+        ) {
             existingReview.setBody(reviewDto.getBody());
             existingReview.setReviewValue(reviewDto.getValue());
         } else {
@@ -140,9 +143,11 @@ public class ReviewServiceImpl implements ReviewService {
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
 
-        if (CurrentUserUtils.hasPermissionOrIsAuthor(
-                Permission.CAN_DELETE_OTHERS_REVIEW, existingReview.getAuthor().getId(), userRepository
-        )) {
+        if (
+                CurrentUserUtils.hasPermission(Permission.CAN_DELETE_OTHERS_REVIEW, userRepository) ||
+                        (CurrentUserUtils.isAuthor(existingReview.getAuthor().getId(), userRepository) &&
+                                CurrentUserUtils.hasPermission(Permission.CAN_DELETE_OWN_REVIEW, userRepository))
+        ) {
             reviewRepository.deleteById(id);
         } else {
             throw new NotEnoughPermissionException();

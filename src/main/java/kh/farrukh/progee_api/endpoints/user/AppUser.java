@@ -120,6 +120,16 @@ public class AppUser extends EntityWithId implements UserDetails {
         super.setId(id);
     }
 
+    public AppUser(long id, Role role) {
+        super.setId(id);
+        this.role = role;
+    }
+
+    public AppUser(String email, Role role) {
+        this.email = email;
+        this.role = role;
+    }
+
     public AppUser(String email) {
         this.email = email;
     }

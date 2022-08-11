@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.POST, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_CREATE_REVIEW.name())
                 .antMatchers(HttpMethod.PUT, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
-                .antMatchers(HttpMethod.DELETE, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_DELETE_REVIEW.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_DELETE_OWN_REVIEW.name())
                 //framework endpoints
                 .antMatchers(HttpMethod.GET, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).permitAll()
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE)).hasAuthority(Permission.CAN_SET_FRAMEWORK_STATE.name())

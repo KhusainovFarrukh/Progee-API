@@ -195,7 +195,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AppUser setUserImage(long id, UserImageDTO imageDto) {
-        if (CurrentUserUtils.hasPermissionOrIsAuthor(Permission.CAN_UPDATE_OTHER_USER, id, userRepository)) {
+        if (
+                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
+                        (CurrentUserUtils.isAuthor(id, userRepository) &&
+                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
+        ) {
             AppUser user = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
@@ -221,8 +225,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
-        if (CurrentUserUtils.hasPermissionOrIsAuthor(Permission.CAN_UPDATE_OTHER_USER, id, userRepository)) {
-            AppUser currentUser = userRepository.findById(id).orElseThrow(
+        if (
+                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OTHER_USER, userRepository) ||
+                        (CurrentUserUtils.isAuthor(id, userRepository) &&
+                                CurrentUserUtils.hasPermission(Permission.CAN_UPDATE_OWN_USER, userRepository))
+        ) {            AppUser currentUser = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
             if (passwordEncoder.matches(passwordDto.getPassword(), currentUser.getPassword())) {

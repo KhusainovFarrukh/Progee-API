@@ -8,6 +8,9 @@ import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -21,6 +24,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +54,9 @@ class FrameworkControllerIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private ImageRepository imageRepository;
 
     @Autowired
@@ -60,6 +67,7 @@ class FrameworkControllerIntegrationTest {
         frameworkRepository.deleteAll();
         languageRepository.deleteAll();
         userRepository.deleteAll();
+        roleRepository.deleteAll();
     }
 
     @Test
@@ -90,15 +98,17 @@ class FrameworkControllerIntegrationTest {
         );
         assertThat(response.getTotalItems()).isEqualTo(approvedFrameworks.size());
         assertThat(approvedFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(Framework::getName).collect(Collectors.toList())
+                response.getItems().stream().map(Framework::getName).toList()
                         .contains(framework.getName())
         )).isTrue();
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canGetFrameworksWithFilter() throws Exception {
         // given
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         List<Framework> waitingFrameworks = List.of(
                 new Framework("test2", ResourceState.WAITING, existingLanguage),
@@ -156,11 +166,11 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canAddFramework() throws Exception {
         // given
-        // TODO: 8/10/22  
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkDTO languageDto = new FrameworkDTO("test", "test", existingImage.getId());
@@ -179,16 +189,14 @@ class FrameworkControllerIntegrationTest {
         assertThat(framework.getName()).isEqualTo(languageDto.getName());
         assertThat(framework.getDescription()).isEqualTo(languageDto.getDescription());
         assertThat(framework.getImage().getId()).isEqualTo(languageDto.getImageId());
-        // TODO: 8/10/22  
-//        assertThat(framework.getAuthor().getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canUpdateFramework() throws Exception {
         // given
-        // TODO: 8/10/22  
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkService.addFramework(
@@ -211,16 +219,14 @@ class FrameworkControllerIntegrationTest {
         assertThat(framework.getName()).isEqualTo(frameworkDto.getName());
         assertThat(framework.getDescription()).isEqualTo(frameworkDto.getDescription());
         assertThat(framework.getImage().getId()).isEqualTo(frameworkDto.getImageId());
-        // TODO: 8/10/22  
-//        assertThat(framework.getAuthor().getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canDeleteFrameworkById() throws Exception {
         // given
-        // TODO: 8/10/22  
-//        userRepository.save(new AppUser("admin@mail.com", UserRole.ADMIN));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_FRAMEWORK)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkService.addFramework(
@@ -237,7 +243,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canSetFrameworkState() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());

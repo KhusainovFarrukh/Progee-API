@@ -13,13 +13,12 @@ import org.springframework.security.core.userdetails.User;
 public class CurrentUserUtils {
 
     public static boolean hasPermission(Permission permission, UserRepository userRepository) {
-        AppUser currentUser = getCurrentUser(userRepository);
-        return currentUser.getRole().getPermissions().contains(permission);
-    }
-
-    public static boolean hasPermissionOrIsAuthor(Permission permission, long authorId, UserRepository userRepository) {
-        AppUser currentUser = getCurrentUser(userRepository);
-        return isAuthor(authorId, userRepository) || currentUser.getRole().getPermissions().contains(permission);
+        try {
+            AppUser currentUser = getCurrentUser(userRepository);
+            return currentUser.getRole().getPermissions().contains(permission);
+        } catch (ResourceNotFoundException e) {
+            return false;
+        }
     }
 
     /**
