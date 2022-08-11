@@ -54,6 +54,7 @@ class AuthControllerIntegrationTest {
     void tearDown() {
         userRepository.deleteAll();
         imageRepository.deleteAll();
+        roleRepository.deleteAll();
     }
 
     @Test
@@ -82,13 +83,13 @@ class AuthControllerIntegrationTest {
         assertThat(user.getUniqueUsername()).isEqualTo(request.getUsername());
         assertThat(user.getEmail()).isEqualTo(request.getEmail());
         assertThat(user.getImage().getId()).isEqualTo(request.getImageId());
-        assertThat(user.getRole()).isEqualTo(existingRole);
+        assertThat(user.getRole().getId()).isEqualTo(existingRole.getId());
     }
 
     @Test
     void canLogin() throws Exception {
         // given
-        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE)));
+        Role existingRole = roleRepository.save(new Role("user", true, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
         AppUser user = userRepository.save(
                 new AppUser("user@mail.com", existingRole.getId(), passwordEncoder.encode("12345678"), roleRepository)
         );

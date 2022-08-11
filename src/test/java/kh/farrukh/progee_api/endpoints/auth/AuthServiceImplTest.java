@@ -55,6 +55,7 @@ class AuthServiceImplTest {
                 "test", "test_lover", "user@mail.com", "1234", 1
         );
         when(emailValidator.test(any())).thenReturn(true);
+        when(roleRepository.findFirstByIsDefaultIsTrue()).thenReturn(Optional.of(new Role()));
 
         // when
         underTest.register(registrationRequest);
@@ -91,7 +92,6 @@ class AuthServiceImplTest {
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE));
         when(roleRepository.findById(any())).thenReturn(Optional.of(role));
         AppUser existingUser = new AppUser("user@mail.com", 1, roleRepository);
-        when(userService.loadUserByUsername(any())).thenReturn(existingUser);
         when(tokenProvider.getRefreshTokenAlgorithm()).thenReturn(Algorithm.HMAC256("test"));
         when(tokenProvider.getRefreshTokenValidityInSeconds()).thenReturn(604800L);
         String refreshToken = JWT.create()
