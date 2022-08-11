@@ -6,6 +6,9 @@ import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.base.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.role.Permission;
+import kh.farrukh.progee_api.endpoints.role.Role;
+import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -19,8 +22,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LANGUAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -48,6 +51,9 @@ class LanguageControllerIntegrationTest {
     private ImageRepository imageRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private LanguageService languageService;
 
 
@@ -55,6 +61,8 @@ class LanguageControllerIntegrationTest {
     void tearDown() {
         languageRepository.deleteAll();
         userRepository.deleteAll();
+        imageRepository.deleteAll();
+        roleRepository.deleteAll();
     }
 
     @Test
@@ -81,15 +89,17 @@ class LanguageControllerIntegrationTest {
         );
         assertThat(response.getTotalItems()).isEqualTo(approvedLanguages.size());
         assertThat(approvedLanguages.stream().allMatch(language ->
-                response.getItems().stream().map(Language::getName).collect(Collectors.toList())
+                response.getItems().stream().map(Language::getName).toList()
                         .contains(language.getName())
         )).isTrue();
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canGetLanguagesWithFilter() throws Exception {
         // given
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         List<Language> waitingLanguages = List.of(
                 new Language("test2", ResourceState.WAITING),
                 new Language("test3", ResourceState.WAITING)
@@ -117,7 +127,7 @@ class LanguageControllerIntegrationTest {
         );
         assertThat(response.getTotalItems()).isEqualTo(waitingLanguages.size());
         assertThat(waitingLanguages.stream().allMatch(language ->
-                response.getItems().stream().map(Language::getName).collect(Collectors.toList())
+                response.getItems().stream().map(Language::getName).toList()
                         .contains(language.getName())
         )).isTrue();
     }
@@ -140,11 +150,11 @@ class LanguageControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canAddLanguage() throws Exception {
         // given
-        // TODO: 8/10/22  
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageDTO languageDto = new LanguageDTO("test", "test", existingImage.getId());
 
@@ -162,16 +172,14 @@ class LanguageControllerIntegrationTest {
         assertThat(language.getName()).isEqualTo(languageDto.getName());
         assertThat(language.getDescription()).isEqualTo(languageDto.getDescription());
         assertThat(language.getImage().getId()).isEqualTo(languageDto.getImageId());
-        // TODO: 8/10/22  
-//        assertThat(language.getAuthor().getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser(username = "user@mail.com")
     void canUpdateLanguage() throws Exception {
         // given
-        // TODO: 8/10/22  
-//        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", UserRole.USER));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageService.addLanguage(new LanguageDTO("test", "test", existingImage.getId()));
         LanguageDTO languageDto = new LanguageDTO("test-update", "test-update", existingImage.getId());
@@ -191,16 +199,14 @@ class LanguageControllerIntegrationTest {
         assertThat(language.getName()).isEqualTo(languageDto.getName());
         assertThat(language.getDescription()).isEqualTo(languageDto.getDescription());
         assertThat(language.getImage().getId()).isEqualTo(languageDto.getImageId());
-        // TODO: 8/10/22  
-//        assertThat(language.getAuthor().getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com")
     void canDeleteUserById() throws Exception {
         // given
-        // TODO: 8/10/22  
-//        userRepository.save(new AppUser("admin@mail.com", UserRole.ADMIN));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_LANGUAGE)));
+        userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageService.addLanguage(new LanguageDTO("", "", existingImage.getId()));
 
@@ -212,7 +218,7 @@ class LanguageControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "admin@mail.com", authorities = "ADMIN")
+    @WithMockUser(username = "user@mail.com", authorities = "user")
     void canSetLanguageState() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language("", ResourceState.WAITING));

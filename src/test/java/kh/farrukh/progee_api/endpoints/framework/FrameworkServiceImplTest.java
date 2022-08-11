@@ -122,7 +122,7 @@ class FrameworkServiceImplTest {
 
     //this test is unnecessary for current logic
     @Test
-    @WithMockUser(username = "test@mail.com", authorities = "CAN_VIEW_FRAMEWORKS_BY_STATE")
+    @WithMockUser(username = "test@mail.com")
     void userWithRequiredPermissionCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -477,8 +477,6 @@ class FrameworkServiceImplTest {
         // given
         String name = "test name";
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
-        // TODO: 8/10/22
-//        user.setRole(UserRole.user);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(user);
         FrameworkDTO frameworkDto = new FrameworkDTO(name, "", 1);
