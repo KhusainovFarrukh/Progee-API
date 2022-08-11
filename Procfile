@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/progee-api-0.2.1-beta.jar
+web: java -Dserver.port=$PORT -jar target/progee-api-0.2.2-alpha.jar
