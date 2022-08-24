@@ -93,10 +93,10 @@ class AuthServiceImplTest {
         when(roleRepository.findById(any())).thenReturn(Optional.of(role));
         AppUser existingUser = new AppUser("user@mail.com", 1, roleRepository);
         when(tokenProvider.getRefreshTokenAlgorithm()).thenReturn(Algorithm.HMAC256("test"));
-        when(tokenProvider.getRefreshTokenValidityInSeconds()).thenReturn(604800L);
+        when(tokenProvider.getJwtConfiguration().getRefreshTokenValidityInSeconds()).thenReturn(604800L);
         String refreshToken = JWT.create()
                 .withSubject("user@mail.com")
-                .withExpiresAt(new Date(System.currentTimeMillis() + tokenProvider.getRefreshTokenValidityInSeconds() * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + tokenProvider.getJwtConfiguration().getRefreshTokenValidityInSeconds() * 1000))
                 .withClaim(KEY_ROLE_ID, role.getPermissions().stream().map(Enum::name).toList())
                 .sign(tokenProvider.getRefreshTokenAlgorithm());
         JWTVerifier jwtVerifier = JWT.require(tokenProvider.getRefreshTokenAlgorithm()).build();

@@ -8,7 +8,6 @@ import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.Getter;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
@@ -24,26 +23,19 @@ public class TokenProvider implements InitializingBean {
     private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm";
     private static final DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
-    private final String secret;
-    private final long accessTokenValidityInSeconds;
-    private final long refreshTokenValidityInSeconds;
-
     private Algorithm accessTokenAlgorithm;
     private Algorithm refreshTokenAlgorithm;
 
-    public TokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
-            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds) {
-        this.secret = secret;
-        this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
-        this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
+    private final JwtConfiguration jwtConfiguration;
+
+    public TokenProvider(JwtConfiguration jwtConfiguration) {
+        this.jwtConfiguration = jwtConfiguration;
     }
 
     @Override
     public void afterPropertiesSet() {
-        accessTokenAlgorithm = Algorithm.HMAC256(secret);
-        refreshTokenAlgorithm = Algorithm.HMAC384(secret);
+        accessTokenAlgorithm = Algorithm.HMAC256(jwtConfiguration.getSecret());
+        refreshTokenAlgorithm = Algorithm.HMAC384(jwtConfiguration.getSecret());
     }
 
     /**
@@ -53,8 +45,8 @@ public class TokenProvider implements InitializingBean {
      */
     public AuthResponse generateTokens(AppUser user) {
         long currentMillis = System.currentTimeMillis();
-        Date accessExpireDate = new Date(currentMillis + accessTokenValidityInSeconds * 1000);
-        Date refreshExpireDate = new Date(currentMillis + refreshTokenValidityInSeconds * 1000);
+        Date accessExpireDate = new Date(currentMillis + jwtConfiguration.getAccessTokenValidityInSeconds() * 1000);
+        Date refreshExpireDate = new Date(currentMillis + jwtConfiguration.getRefreshTokenValidityInSeconds() * 1000);
 
         return new AuthResponse(
                 user.getRole(),
