@@ -14,7 +14,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.*;
+import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.endpoints.role.RoleController.ENDPOINT_ROLE;
+import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
 
 /**
  * It configures the security of the application using Spring Security via JWT.
@@ -22,6 +28,13 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.*;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+
+    public static final String SECURITY_ENDPOINT_FRAMEWORK = ENDPOINT_LANGUAGE + "/**/frameworks";
+    public static final String SECURITY_ENDPOINT_REVIEW = ENDPOINT_LANGUAGE + "/**/reviews";
+    public static final String SECURITY_ENDPOINT_REVIEW_VOTE = SECURITY_ENDPOINT_REVIEW + "/**/vote";
+    public static final String SECURITY_ENDPOINT_LANGUAGE_STATE = ENDPOINT_LANGUAGE + "/**/state";
+    public static final String SECURITY_ENDPOINT_FRAMEWORK_STATE = SECURITY_ENDPOINT_FRAMEWORK + "/**/state";
+    public static final String SECURITY_ENDPOINT_USER_ROLE = ENDPOINT_USER + "/**/role";
 
     /**
      * A function that is used to configure the security filter chain.
@@ -98,5 +111,9 @@ public class SecurityConfiguration {
                 .accessDeniedHandler(accessDeniedHandler);
 
         return http.build();
+    }
+
+    public static String withChildEndpoints(String endpoint) {
+        return endpoint + "/**";
     }
 }

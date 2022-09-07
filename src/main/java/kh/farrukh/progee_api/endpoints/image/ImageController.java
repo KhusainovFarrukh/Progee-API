@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
 
 /**
  * Controller that exposes endpoints for managing images
@@ -20,6 +20,8 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_IMAGE;
 @RequiredArgsConstructor
 @Validated
 public class ImageController {
+
+    public static final String ENDPOINT_IMAGE = "/api/v1/images";
 
     private final ImageService imageService;
 

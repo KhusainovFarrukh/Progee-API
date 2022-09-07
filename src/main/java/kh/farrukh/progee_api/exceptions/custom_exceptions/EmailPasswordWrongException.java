@@ -1,12 +1,12 @@
-package kh.farrukh.progee_api.exception.custom_exceptions;
+package kh.farrukh.progee_api.exceptions.custom_exceptions;
 
-import kh.farrukh.progee_api.exception.ApiException;
+import kh.farrukh.progee_api.exceptions.ApiException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_EMAIL_PASSWORD_WRONG;
+import static kh.farrukh.progee_api.exceptions.ExceptionMessages.EXCEPTION_EMAIL_PASSWORD_WRONG;
 
 /**
  * `EmailPasswordInvalidException` is a subclass of `ApiException` that is thrown

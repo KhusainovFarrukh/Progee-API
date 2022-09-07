@@ -10,7 +10,8 @@ import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
-import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.security.jwt.JwtConfiguration;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +26,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
-import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE_ID;
+import static kh.farrukh.progee_api.security.jwt.JWTKeys.KEY_ROLE_ID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -93,7 +94,9 @@ class AuthServiceImplTest {
         when(roleRepository.findById(any())).thenReturn(Optional.of(role));
         AppUser existingUser = new AppUser("user@mail.com", 1, roleRepository);
         when(tokenProvider.getRefreshTokenAlgorithm()).thenReturn(Algorithm.HMAC256("test"));
-        when(tokenProvider.getJwtConfiguration().getRefreshTokenValidityInSeconds()).thenReturn(604800L);
+        JwtConfiguration jwtConfiguration = new JwtConfiguration();
+        jwtConfiguration.setRefreshTokenValidityInSeconds(604800L);
+        when(tokenProvider.getJwtConfiguration()).thenReturn(jwtConfiguration);
         String refreshToken = JWT.create()
                 .withSubject("user@mail.com")
                 .withExpiresAt(new Date(System.currentTimeMillis() + tokenProvider.getJwtConfiguration().getRefreshTokenValidityInSeconds() * 1000))

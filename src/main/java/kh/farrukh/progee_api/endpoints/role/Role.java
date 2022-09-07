@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.role;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kh.farrukh.progee_api.base.entity.EntityWithId;
+import kh.farrukh.progee_api.global.entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.beans.BeanUtils;
 import javax.persistence.*;
 import java.util.List;
 
-import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.global.entity.EntityWithId.GENERATOR_NAME;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_ROLE_ID;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_ROLE;
 

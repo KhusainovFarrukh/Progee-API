@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.exception;
+package kh.farrukh.progee_api.exceptions;
 
 import lombok.Getter;
 import lombok.Setter;

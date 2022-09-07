@@ -14,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static kh.farrukh.progee_api.utils.constants.JWTKeys.KEY_ROLE_ID;
+import static kh.farrukh.progee_api.security.jwt.JWTKeys.KEY_ROLE_ID;
 
 @Getter
 @Component

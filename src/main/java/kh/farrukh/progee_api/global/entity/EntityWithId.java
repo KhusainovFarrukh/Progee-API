@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.base.entity;
+package kh.farrukh.progee_api.global.entity;
 
 import lombok.Getter;
 import lombok.Setter;

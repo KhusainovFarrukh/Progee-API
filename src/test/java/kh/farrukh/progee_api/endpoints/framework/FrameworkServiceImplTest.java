@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
-import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
@@ -10,9 +10,9 @@ import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
-import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

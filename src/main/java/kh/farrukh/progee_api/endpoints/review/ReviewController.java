@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_REVIEW;
+import static kh.farrukh.progee_api.endpoints.review.ReviewController.ENDPOINT_REVIEW;
 
 /**
  * Controller that exposes endpoints for managing reviews
@@ -17,6 +17,8 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_REVIEW
 @RequestMapping(ENDPOINT_REVIEW)
 @RequiredArgsConstructor
 public class ReviewController {
+
+    public static final String ENDPOINT_REVIEW = "/api/v1/languages/{languageId}/reviews";
 
     private final ReviewService reviewService;
 

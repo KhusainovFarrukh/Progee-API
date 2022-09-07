@@ -1,14 +1,14 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.NotEnoughPermissionException;
-import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;

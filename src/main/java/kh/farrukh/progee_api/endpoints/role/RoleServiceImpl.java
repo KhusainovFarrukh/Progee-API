@@ -1,12 +1,10 @@
 package kh.farrukh.progee_api.endpoints.role;
 
-import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
-import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import static kh.farrukh.progee_api.utils.checkers.Checkers.*;

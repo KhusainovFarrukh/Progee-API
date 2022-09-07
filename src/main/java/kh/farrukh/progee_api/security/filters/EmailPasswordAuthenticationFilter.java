@@ -5,7 +5,7 @@ import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
 import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.EmailPasswordWrongException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.EmailPasswordWrongException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.security.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;

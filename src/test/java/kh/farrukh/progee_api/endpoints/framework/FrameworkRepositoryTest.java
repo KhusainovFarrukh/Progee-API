@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import org.junit.jupiter.api.AfterEach;

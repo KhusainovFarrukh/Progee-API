@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.base.entity;
+package kh.farrukh.progee_api.global.entity;
 
 /**
  * Enum class for publish states of resource (Language, Framework and etc.)

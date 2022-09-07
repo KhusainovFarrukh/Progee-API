@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 /**

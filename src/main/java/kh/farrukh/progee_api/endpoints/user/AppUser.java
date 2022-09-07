@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.endpoints.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.base.entity.EntityWithId;
+import kh.farrukh.progee_api.global.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.framework.Framework;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
@@ -11,7 +11,7 @@ import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.review.Review;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +21,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
-import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.global.entity.EntityWithId.GENERATOR_NAME;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_USER_ID;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_USER;
 

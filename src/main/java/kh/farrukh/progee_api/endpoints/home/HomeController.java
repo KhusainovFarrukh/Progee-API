@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_HOME;
+import static kh.farrukh.progee_api.endpoints.home.HomeController.ENDPOINT_HOME;
 
 /**
  * It's a controller that handles requests to the root of the application
@@ -12,6 +12,8 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_HOME;
 @RestController
 @RequestMapping(ENDPOINT_HOME)
 public class HomeController {
+
+    public static final String ENDPOINT_HOME = "/";
 
     public static final String GREETING = "Hi! This is Progee-API v1. \nProgee-API is REST API for providing information about programming languages, frameworks, " +
             "their popularity and respect for them among community of developers (with reviews and scores). " +

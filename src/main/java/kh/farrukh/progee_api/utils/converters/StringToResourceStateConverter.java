@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.utils.converters;
 
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 

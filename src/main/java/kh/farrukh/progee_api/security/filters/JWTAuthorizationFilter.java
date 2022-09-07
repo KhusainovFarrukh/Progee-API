@@ -6,7 +6,7 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.token_exceptions.*;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.token_exceptions.*;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +22,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.*;
+import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.endpoints.home.HomeController.ENDPOINT_HOME;
+import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
 
 /**
  * If the request is not for the login or refresh token endpoints, then decode the JWT and set the authentication in the

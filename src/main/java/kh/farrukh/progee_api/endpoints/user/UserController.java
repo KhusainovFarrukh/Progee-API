@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_USER;
+import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
 
 /**
  * Controller that exposes endpoints for managing users
@@ -17,6 +17,8 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_USER;
 @RequestMapping(ENDPOINT_USER)
 @RequiredArgsConstructor
 public class UserController {
+
+    public static final String ENDPOINT_USER = "/api/v1/users";
 
     private final UserService userService;
 

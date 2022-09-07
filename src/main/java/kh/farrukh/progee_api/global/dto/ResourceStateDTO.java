@@ -1,6 +1,6 @@
-package kh.farrukh.progee_api.base.dto;
+package kh.farrukh.progee_api.global.dto;
 
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

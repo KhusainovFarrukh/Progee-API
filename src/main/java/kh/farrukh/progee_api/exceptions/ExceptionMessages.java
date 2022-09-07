@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.constants;
+package kh.farrukh.progee_api.exceptions;
 
 /**
  * It's a class that contains constants that are used to look up error messages in the message bundle

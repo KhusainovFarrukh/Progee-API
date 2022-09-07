@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_REFRESH_TOKEN;
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_REGISTRATION;
-
 /**
  * Controller for Auth-related endpoints (login, register, refresh token and etc.)
  */
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
+
+    public static final String ENDPOINT_REGISTRATION = "/api/v1/registration";
+    public static final String ENDPOINT_REFRESH_TOKEN = "/api/v1/token/refresh";
 
     private final AuthService authService;
 

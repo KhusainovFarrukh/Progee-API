@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;

@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.endpoints.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.endpoints.auth.RegistrationRequest;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

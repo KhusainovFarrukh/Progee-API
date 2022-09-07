@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.AllowedSortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

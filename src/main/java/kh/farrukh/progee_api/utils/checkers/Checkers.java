@@ -7,9 +7,9 @@ import kh.farrukh.progee_api.endpoints.role.RoleDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
-import kh.farrukh.progee_api.exception.custom_exceptions.BadRequestException;
-import kh.farrukh.progee_api.exception.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.exception.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 
 /**
  * It contains static methods that check if a resource exists in the database,

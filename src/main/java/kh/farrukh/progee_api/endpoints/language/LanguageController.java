@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.base.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.base.entity.ResourceState;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LANGUAGE;
-
 /**
  * Controller that exposes endpoints for managing frameworks
  */
 @RestController
-@RequestMapping(ENDPOINT_LANGUAGE)
+@RequestMapping(LanguageController.ENDPOINT_LANGUAGE)
 @RequiredArgsConstructor
 public class LanguageController {
+
+    public static final String ENDPOINT_LANGUAGE = "/api/v1/languages";
 
     private final LanguageService languageService;
 

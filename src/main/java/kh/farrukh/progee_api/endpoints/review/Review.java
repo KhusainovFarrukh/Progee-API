@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.base.entity.EntityWithId;
+import kh.farrukh.progee_api.global.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.global.entity.EntityWithId.GENERATOR_NAME;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_REVIEW_ID;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_REVIEW;
 

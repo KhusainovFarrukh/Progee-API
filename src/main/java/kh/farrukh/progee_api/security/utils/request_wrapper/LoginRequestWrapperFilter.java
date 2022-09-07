@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LOGIN;
+import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
 
 @Component
 public class LoginRequestWrapperFilter extends OncePerRequestFilter {

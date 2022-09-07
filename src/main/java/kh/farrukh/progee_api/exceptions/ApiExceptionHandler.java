@@ -1,6 +1,5 @@
-package kh.farrukh.progee_api.exception;
+package kh.farrukh.progee_api.exceptions;
 
-import kh.farrukh.progee_api.utils.constants.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,7 @@ import javax.validation.ConstraintViolationException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static kh.farrukh.progee_api.utils.constants.ExceptionMessages.EXCEPTION_METHOD_ARGUMENT_NOT_VALID;
+import static kh.farrukh.progee_api.exceptions.ExceptionMessages.EXCEPTION_METHOD_ARGUMENT_NOT_VALID;
 
 /**
  * It handles exceptions thrown by the application

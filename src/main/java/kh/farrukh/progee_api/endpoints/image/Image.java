@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kh.farrukh.progee_api.base.entity.EntityWithId;
+import kh.farrukh.progee_api.global.entity.EntityWithId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import static kh.farrukh.progee_api.base.entity.EntityWithId.GENERATOR_NAME;
+import static kh.farrukh.progee_api.global.entity.EntityWithId.GENERATOR_NAME;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.SEQUENCE_NAME_IMAGE_ID;
 import static kh.farrukh.progee_api.utils.constants.DatabaseConstants.TABLE_NAME_IMAGE;
 

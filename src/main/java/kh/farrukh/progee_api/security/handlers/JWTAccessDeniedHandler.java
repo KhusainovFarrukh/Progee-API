@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.security.handlers;
 
-import kh.farrukh.progee_api.exception.custom_exceptions.EndpointAccessDeniedException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.EndpointAccessDeniedException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

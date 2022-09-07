@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LOGIN;
-
 /**
  * This class is a custom DSL that adds a custom authentication filter to the Spring Security filter chain.
  * <p>
@@ -20,6 +18,8 @@ import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_LOGIN;
  */
 @Component
 public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<AuthenticationFilterConfigurer, HttpSecurity> {
+
+    public static final String ENDPOINT_LOGIN = "/api/v1/login";
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;

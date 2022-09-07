@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kh.farrukh.progee_api.utils.constants.ApiEndpoints.ENDPOINT_USER;
+import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
