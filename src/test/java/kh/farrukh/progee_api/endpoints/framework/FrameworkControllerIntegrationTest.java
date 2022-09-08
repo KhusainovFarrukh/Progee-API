@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static kh.farrukh.progee_api.endpoints.framework.FrameworkController.ENDPOINT_FRAMEWORK;
 import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -84,7 +85,8 @@ class FrameworkControllerIntegrationTest {
         // when
         MvcResult result = mvc
                 .perform(
-                        get(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/frameworks")
+                        get(ENDPOINT_FRAMEWORK)
+                                .param("languageId", String.valueOf(existingLanguage.getId()))
                                 .param("page_size", String.valueOf(approvedFrameworks.size()))
                 )
                 .andDo(print())
@@ -122,7 +124,8 @@ class FrameworkControllerIntegrationTest {
         // when
         MvcResult result = mvc
                 .perform(
-                        get(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/frameworks")
+                        get(ENDPOINT_FRAMEWORK)
+                                .param("languageId", String.valueOf(existingLanguage.getId()))
                                 .param("page_size", String.valueOf(waitingFrameworks.size() + approvedFrameworks.size()))
                                 .param("state", ResourceState.WAITING.name())
                 )
@@ -152,10 +155,7 @@ class FrameworkControllerIntegrationTest {
 
         // when
         MvcResult result = mvc
-                .perform(get(ENDPOINT_LANGUAGE + "/"
-                        + existingLanguage.getId() +
-                        "/frameworks/" + existingFramework.getId()
-                ))
+                .perform(get(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -173,11 +173,11 @@ class FrameworkControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
-        FrameworkDTO languageDto = new FrameworkDTO("test", "test", existingImage.getId());
+        FrameworkDTO languageDto = new FrameworkDTO("test", "test", existingImage.getId(), existingLanguage.getId());
 
         // when
         MvcResult result = mvc
-                .perform(post(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/frameworks")
+                .perform(post(ENDPOINT_FRAMEWORK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(languageDto)))
                 .andDo(print())
@@ -200,13 +200,13 @@ class FrameworkControllerIntegrationTest {
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkService.addFramework(
-                existingLanguage.getId(), new FrameworkDTO("test", "test", existingImage.getId())
+                new FrameworkDTO("test", "test", existingImage.getId(), existingLanguage.getId())
         );
         FrameworkDTO frameworkDto = new FrameworkDTO("test-update", "test-update", existingImage.getId());
 
         // when
         MvcResult result = mvc
-                .perform(put(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/frameworks/" + existingFramework.getId())
+                .perform(put(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(frameworkDto)))
                 .andDo(print())
@@ -230,14 +230,12 @@ class FrameworkControllerIntegrationTest {
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkService.addFramework(
-                existingLanguage.getId(), new FrameworkDTO("", "", existingImage.getId())
+                 new FrameworkDTO("", "", existingImage.getId(), existingLanguage.getId())
         );
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_LANGUAGE + "/"
-                        + existingLanguage.getId()
-                        + "/frameworks/" + existingFramework.getId()))
+        mvc.perform(delete(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -252,8 +250,7 @@ class FrameworkControllerIntegrationTest {
 
         // when
         MvcResult result = mvc
-                .perform(patch(ENDPOINT_LANGUAGE + "/"
-                        + existingLanguage.getId() + "/frameworks/"
+                .perform(patch(ENDPOINT_FRAMEWORK + "/"
                         + existingFramework.getId() + "/state")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(stateDto)))

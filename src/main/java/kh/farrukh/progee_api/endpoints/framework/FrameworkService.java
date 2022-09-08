@@ -11,8 +11,8 @@ import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
  */
 public interface FrameworkService {
 
-    PagingResponse<Framework> getFrameworksByLanguage(
-            long languageId,
+    PagingResponse<Framework> getFrameworks(
+            Long languageId,
             ResourceState state,
             int page,
             int pageSize,
@@ -20,13 +20,13 @@ public interface FrameworkService {
             String orderBy
     );
 
-    Framework getFrameworkById(long languageId, long id);
+    Framework getFrameworkById(long id);
 
-    Framework addFramework(long languageId, FrameworkDTO frameworkDto);
+    Framework addFramework(FrameworkDTO frameworkDto);
 
-    Framework updateFramework(long languageId, long id, FrameworkDTO frameworkDto);
+    Framework updateFramework(long id, FrameworkDTO frameworkDto);
 
-    void deleteFramework(long languageId, long id);
+    void deleteFramework(long id);
 
-    Framework setFrameworkState(long languageId, long id, ResourceStateDTO resourceStateDto);
+    Framework setFrameworkState(long id, ResourceStateDTO resourceStateDto);
 }

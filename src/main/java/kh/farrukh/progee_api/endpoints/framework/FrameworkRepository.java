@@ -5,6 +5,7 @@ import kh.farrukh.progee_api.utils.paging_sorting.AllowedSortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
@@ -13,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Repository
 @Validated
-public interface FrameworkRepository extends JpaRepository<Framework, Long> {
+public interface FrameworkRepository extends JpaRepository<Framework, Long>, JpaSpecificationExecutor<Framework> {
 
     /**
      * Returns true if there is a framework with the given name.

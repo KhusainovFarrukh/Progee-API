@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class FrameworkDTO {
 
     @NotBlank(message = "Name must not be blank")
@@ -22,6 +24,12 @@ public class FrameworkDTO {
     private String description;
     @JsonProperty("image_id")
     private long imageId;
-//    private long languageId;
+    @JsonProperty("language_id")
+    private Long languageId;
 
+    public FrameworkDTO(String name, String description, long imageId) {
+        this.name = name;
+        this.description = description;
+        this.imageId = imageId;
+    }
 }

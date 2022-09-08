@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.Image;
@@ -70,11 +71,14 @@ public class Framework extends EntityWithResourceState {
     // This is a constructor that takes a FrameworkDTO object and
     // sets the values of the current object to the values of
     // the given object.
-    public Framework(FrameworkDTO frameworkDto, ImageRepository imageRepository) {
+    public Framework(FrameworkDTO frameworkDto, LanguageRepository languageRepository, ImageRepository imageRepository) {
         this.name = frameworkDto.getName();
         this.description = frameworkDto.getDescription();
         this.image = imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
                 () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
+        );
+        this.language = languageRepository.findById(frameworkDto.getLanguageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", frameworkDto.getLanguageId())
         );
     }
 

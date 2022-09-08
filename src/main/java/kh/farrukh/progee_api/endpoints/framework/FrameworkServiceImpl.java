@@ -1,15 +1,16 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
-import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
@@ -17,8 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
 import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
@@ -48,8 +47,8 @@ public class FrameworkServiceImpl implements FrameworkService {
      * @return A list of frameworks
      */
     @Override
-    public PagingResponse<Framework> getFrameworksByLanguage(
-            long languageId,
+    public PagingResponse<Framework> getFrameworks(
+            Long languageId,
             ResourceState state,
             int page,
             int pageSize,
@@ -57,19 +56,17 @@ public class FrameworkServiceImpl implements FrameworkService {
             String orderBy
     ) {
         checkPageNumber(page);
-        checkLanguageId(languageRepository, languageId);
+        if (languageId != null) checkLanguageId(languageRepository, languageId);
         // If there isn't state param in request, return only approved frameworks.
         // Else if the user is admin then return the list of frameworks with the given state.
         // Else if the user is not admin, throw an exception.
         if (state == null) {
-            return new PagingResponse<>(frameworkRepository.findByStateAndLanguage_Id(
-                    ResourceState.APPROVED,
-                    languageId,
+            return new PagingResponse<>(frameworkRepository.findAll(
+                    new FrameworkSpecification(languageId, ResourceState.APPROVED),
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
         } else if (CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, userRepository)) {
-            return new PagingResponse<>(frameworkRepository.findByStateAndLanguage_Id(
-                    state,
-                    languageId,
+            return new PagingResponse<>(frameworkRepository.findAll(
+                    new FrameworkSpecification(languageId, state),
                     PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
             ));
         } else {
@@ -81,13 +78,11 @@ public class FrameworkServiceImpl implements FrameworkService {
      * If the languageId is valid, return the framework with the given id, or throw a ResourceNotFoundException if the
      * framework doesn't exist.
      *
-     * @param languageId The id of the language that the framework is associated with.
-     * @param id         The id of the framework to be retrieved
+     * @param id The id of the framework to be retrieved
      * @return Framework
      */
     @Override
-    public Framework getFrameworkById(long languageId, long id) {
-        checkLanguageId(languageRepository, languageId);
+    public Framework getFrameworkById(long id) {
         return frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
@@ -96,22 +91,21 @@ public class FrameworkServiceImpl implements FrameworkService {
     /**
      * This function adds a framework to the database
      *
-     * @param languageId   The id of the language that the framework belongs to.
      * @param frameworkDto The DTO object that contains the framework information.
      * @return Framework
      */
     @Override
-    public Framework addFramework(long languageId, FrameworkDTO frameworkDto) {
+    public Framework addFramework(FrameworkDTO frameworkDto) {
+        if (frameworkDto.getLanguageId() == null) {
+            throw new BadRequestException("Language id");
+        }
         if (frameworkRepository.existsByName(frameworkDto.getName())) {
             throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
         }
 
-        Framework framework = new Framework(frameworkDto, imageRepository);
+        Framework framework = new Framework(frameworkDto, languageRepository, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         framework.setAuthor(currentUser);
-        framework.setLanguage(languageRepository.findById(languageId).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", languageId)
-        ));
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
             framework.setState(ResourceState.APPROVED);
         } else {
@@ -124,15 +118,12 @@ public class FrameworkServiceImpl implements FrameworkService {
     /**
      * This function updates a framework in the database
      *
-     * @param languageId   The id of the language that the framework belongs to.
      * @param id           The id of the framework to update
      * @param frameworkDto The DTO object that contains the new values for the framework.
      * @return The updated framework.
      */
     @Override
-    @Transactional
-    public Framework updateFramework(long languageId, long id, FrameworkDTO frameworkDto) {
-        checkLanguageId(languageRepository, languageId);
+    public Framework updateFramework(long id, FrameworkDTO frameworkDto) {
         Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
@@ -163,7 +154,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                 existingFramework.setState(ResourceState.WAITING);
             }
 
-            return existingFramework;
+            return frameworkRepository.save(existingFramework);
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -172,12 +163,10 @@ public class FrameworkServiceImpl implements FrameworkService {
     /**
      * This function deletes a framework by id
      *
-     * @param languageId The id of the language that the framework belongs to.
-     * @param id         The id of the framework to delete
+     * @param id The id of the framework to delete
      */
     @Override
-    public void deleteFramework(long languageId, long id) {
-        checkLanguageId(languageRepository, languageId);
+    public void deleteFramework(long id) {
         if (!frameworkRepository.existsById(id)) {
             throw new ResourceNotFoundException("Framework", "id", id);
         }
@@ -187,19 +176,16 @@ public class FrameworkServiceImpl implements FrameworkService {
     /**
      * This function sets the state of a framework
      *
-     * @param languageId       The id of the language that the framework is associated with.
      * @param id               The id of the framework to update
      * @param resourceStateDto This is the object that contains the state that we want to set.
      * @return Framework
      */
     @Override
-    @Transactional
-    public Framework setFrameworkState(long languageId, long id, ResourceStateDTO resourceStateDto) {
-        checkLanguageId(languageRepository, languageId);
+    public Framework setFrameworkState(long id, ResourceStateDTO resourceStateDto) {
         Framework framework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
         framework.setState(resourceStateDto.getState());
-        return framework;
+        return frameworkRepository.save(framework);
     }
 }
