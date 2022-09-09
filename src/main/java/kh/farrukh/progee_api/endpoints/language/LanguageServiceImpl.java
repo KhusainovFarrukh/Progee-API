@@ -51,22 +51,16 @@ public class LanguageServiceImpl implements LanguageService {
             String orderBy
     ) {
         checkPageNumber(page);
-        // If there isn't state param in request, return only approved languages.
-        // Else if the user is admin then return the list of languages with the given state.
-        // Else if the user is not admin, throw an exception.
-        if (state == null) {
-            return new PagingResponse<>(languageRepository.findByState(
-                    ResourceState.APPROVED,
-                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
-            ));
-        } else if (CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, userRepository)) {
-            return new PagingResponse<>(languageRepository.findByState(
-                    state,
-                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
-            ));
-        } else {
-            throw new NotEnoughPermissionException();
+
+        if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, userRepository)) {
+            if (state != null) throw new NotEnoughPermissionException();
+            state = ResourceState.APPROVED;
         }
+
+        return new PagingResponse<>(languageRepository.findAll(
+                new LanguageSpecification(state),
+                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+        ));
     }
 
     /**

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Repository
 @Validated
-public interface LanguageRepository extends JpaRepository<Language, Long> {
+public interface LanguageRepository extends JpaRepository<Language, Long>, JpaSpecificationExecutor<Language> {
 
     /**
      * Returns true if there is a language with the given name.
@@ -27,11 +28,11 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
 
     /**
      * "Find all languages with the given state, and return them in the given pageable."
-     *
+     * <p>
      * The @AllowedSortFields annotation is a custom annotation that I created to ensure that the user can only sort by the
      * fields that I want them to
      *
-     * @param state The state of the resource.
+     * @param state    The state of the resource.
      * @param pageable The pageable object that contains the page number, page size, and sort information.
      * @return A Page of Language objects.
      */

@@ -16,8 +16,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
 import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.endpoints.framework.FrameworkController.ENDPOINT_FRAMEWORK;
 import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
 import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.endpoints.review.ReviewController.ENDPOINT_REVIEW;
 import static kh.farrukh.progee_api.endpoints.role.RoleController.ENDPOINT_ROLE;
 import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
 import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
@@ -29,11 +31,9 @@ import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigure
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    public static final String SECURITY_ENDPOINT_FRAMEWORK = ENDPOINT_LANGUAGE + "/**/frameworks";
-    public static final String SECURITY_ENDPOINT_REVIEW = ENDPOINT_LANGUAGE + "/**/reviews";
-    public static final String SECURITY_ENDPOINT_REVIEW_VOTE = SECURITY_ENDPOINT_REVIEW + "/**/vote";
+    public static final String ENDPOINT_REVIEW_VOTE = ENDPOINT_REVIEW + "/**/vote";
     public static final String SECURITY_ENDPOINT_LANGUAGE_STATE = ENDPOINT_LANGUAGE + "/**/state";
-    public static final String SECURITY_ENDPOINT_FRAMEWORK_STATE = SECURITY_ENDPOINT_FRAMEWORK + "/**/state";
+    public static final String ENDPOINT_FRAMEWORK_STATE = ENDPOINT_FRAMEWORK + "/**/state";
     public static final String SECURITY_ENDPOINT_USER_ROLE = ENDPOINT_USER + "/**/role";
 
     /**
@@ -68,19 +68,19 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_IMAGE)).hasAuthority(Permission.CAN_UPDATE_IMAGE.name())
                 .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_IMAGE)).hasAuthority(Permission.CAN_DELETE_IMAGE.name())
                 //review endpoints
-                .antMatchers(HttpMethod.GET, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).permitAll()
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_REVIEW_VOTE)).hasAuthority(Permission.CAN_VOTE_REVIEW.name())
-                .antMatchers(HttpMethod.POST, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_CREATE_REVIEW.name())
-                .antMatchers(HttpMethod.PUT, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
-                .antMatchers(HttpMethod.DELETE, withChildEndpoints(SECURITY_ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_DELETE_OWN_REVIEW.name())
+                .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_REVIEW)).permitAll()
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_REVIEW_VOTE)).hasAuthority(Permission.CAN_VOTE_REVIEW.name())
+                .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_CREATE_REVIEW.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_DELETE_OWN_REVIEW.name())
                 //framework endpoints
-                .antMatchers(HttpMethod.GET, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).permitAll()
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK_STATE)).hasAuthority(Permission.CAN_SET_FRAMEWORK_STATE.name())
-                .antMatchers(HttpMethod.POST, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_CREATE_FRAMEWORK.name())
-                .antMatchers(HttpMethod.PUT, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_FRAMEWORK.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_FRAMEWORK.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
-                .antMatchers(HttpMethod.DELETE, withChildEndpoints(SECURITY_ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_DELETE_FRAMEWORK.name())
+                .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_FRAMEWORK)).permitAll()
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_FRAMEWORK_STATE)).hasAuthority(Permission.CAN_SET_FRAMEWORK_STATE.name())
+                .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_CREATE_FRAMEWORK.name())
+                .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_FRAMEWORK)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_FRAMEWORK.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_FRAMEWORK)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_FRAMEWORK.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
+                .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_DELETE_FRAMEWORK.name())
                 //language endpoints
                 .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_LANGUAGE)).permitAll()
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE)).hasAuthority(Permission.CAN_SET_LANGUAGE_STATE.name())

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
 import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.endpoints.framework.FrameworkController.ENDPOINT_FRAMEWORK;
 import static kh.farrukh.progee_api.endpoints.home.HomeController.ENDPOINT_HOME;
 import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
 import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
@@ -71,8 +72,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 // upload or download image request
                 (request.getRequestURI().contains(ENDPOINT_IMAGE) && (request.getMethod().equals(HttpMethod.GET.name()) || request.getMethod().equals(HttpMethod.POST.name()))) ||
 
-                // get languages/frameworks request without filter by state
-                (request.getMethod().equals(HttpMethod.GET.name()) && request.getRequestURI().contains(ENDPOINT_LANGUAGE) && (request.getParameter("state") == null));
+                // get languages request without filter by state from non-logged user
+                (request.getMethod().equals(HttpMethod.GET.name()) && request.getRequestURI().contains(ENDPOINT_LANGUAGE) && (request.getParameter("state") == null) && request.getHeader(HttpHeaders.AUTHORIZATION) == null) ||
+
+                // get frameworks request without filter by state from non-logged user
+                (request.getMethod().equals(HttpMethod.GET.name()) && request.getRequestURI().contains(ENDPOINT_FRAMEWORK) && (request.getParameter("state") == null) && request.getHeader(HttpHeaders.AUTHORIZATION) == null);
     }
 
     @Override

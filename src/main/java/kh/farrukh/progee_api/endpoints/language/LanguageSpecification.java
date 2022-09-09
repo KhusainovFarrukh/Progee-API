@@ -1,5 +1,6 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,25 +15,20 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ReviewSpecification implements Specification<Review> {
+public class LanguageSpecification implements Specification<Language> {
 
-    private Long languageId;
-    private ReviewValue reviewValue;
+    private ResourceState state;
 
     @Override
     public Predicate toPredicate(
-            Root<Review> root,
+            Root<Language> root,
             CriteriaQuery<?> query,
             CriteriaBuilder criteriaBuilder
     ) {
         Predicate predicate = criteriaBuilder.conjunction();
 
-        if (languageId != null) {
-            predicate.getExpressions().add(criteriaBuilder.equal(root.get("language").get("id"), languageId));
-        }
-
-        if (reviewValue != null) {
-            predicate.getExpressions().add(criteriaBuilder.equal(root.get("reviewValue"), reviewValue));
+        if (state != null) {
+            predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"), state));
         }
 
         return predicate;
@@ -41,7 +37,7 @@ public class ReviewSpecification implements Specification<Review> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ReviewSpecification that)) return false;
-        return Objects.equals(languageId, that.languageId) && reviewValue == that.reviewValue;
+        if (!(o instanceof LanguageSpecification that)) return false;
+        return state == that.state;
     }
 }

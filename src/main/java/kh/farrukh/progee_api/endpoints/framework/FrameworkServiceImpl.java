@@ -57,21 +57,15 @@ public class FrameworkServiceImpl implements FrameworkService {
     ) {
         checkPageNumber(page);
         if (languageId != null) checkLanguageId(languageRepository, languageId);
-        // If there isn't state param in request, return only approved frameworks.
-        // Else if the user is admin then return the list of frameworks with the given state.
-        // Else if the user is not admin, throw an exception.
-        if (state == null) {
-            return new PagingResponse<>(frameworkRepository.findAll(
-                    new FrameworkSpecification(languageId, ResourceState.APPROVED),
-                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
-        } else if (CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, userRepository)) {
-            return new PagingResponse<>(frameworkRepository.findAll(
-                    new FrameworkSpecification(languageId, state),
-                    PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
-            ));
-        } else {
-            throw new NotEnoughPermissionException();
+
+        if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, userRepository)) {
+            if (state != null) throw new NotEnoughPermissionException();
+            state = ResourceState.APPROVED;
         }
+
+        return new PagingResponse<>(frameworkRepository.findAll(
+                new FrameworkSpecification(languageId, state),
+                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
     }
 
     /**

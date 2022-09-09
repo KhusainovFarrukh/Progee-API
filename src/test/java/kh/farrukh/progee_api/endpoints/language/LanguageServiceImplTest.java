@@ -57,8 +57,8 @@ class LanguageServiceImplTest {
         underTest.getLanguages(null, 1, 10, "id", "ASC");
 
         // then
-        verify(languageRepository).findByState(
-                ResourceState.APPROVED,
+        verify(languageRepository).findAll(
+                new LanguageSpecification(ResourceState.APPROVED),
                 PageRequest.of(
                         0,
                         10,
@@ -86,8 +86,8 @@ class LanguageServiceImplTest {
         underTest.getLanguages(null, 1, 10, "id", "ASC");
 
         // then
-        verify(languageRepository).findByState(
-                ResourceState.APPROVED,
+        verify(languageRepository).findAll(
+                new LanguageSpecification(ResourceState.APPROVED),
                 PageRequest.of(
                         0,
                         10,
@@ -113,8 +113,8 @@ class LanguageServiceImplTest {
         underTest.getLanguages(null, 1, 10, "id", "ASC");
 
         // then
-        verify(languageRepository).findByState(
-                ResourceState.APPROVED,
+        verify(languageRepository).findAll(
+                new LanguageSpecification(ResourceState.APPROVED),
                 PageRequest.of(
                         0,
                         10,
@@ -134,8 +134,29 @@ class LanguageServiceImplTest {
         underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC");
 
         // then
-        verify(languageRepository).findByState(
-                ResourceState.WAITING,
+        verify(languageRepository).findAll(
+                new LanguageSpecification(ResourceState.WAITING),
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    @WithMockUser
+    void userWithRequiredPermissionCanGetAllLanguages() {
+        // given
+        Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
+        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+
+        // when
+        underTest.getLanguages(null, 1, 10, "id", "ASC");
+
+        // then
+        verify(languageRepository).findAll(
+                new LanguageSpecification(null),
                 PageRequest.of(
                         0,
                         10,
