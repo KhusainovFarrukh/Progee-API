@@ -21,8 +21,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -59,6 +58,8 @@ class FrameworkServiceImplTest {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getFrameworks(1L, null, 1, 10, "id", "ASC");
@@ -91,6 +92,8 @@ class FrameworkServiceImplTest {
     void userWithoutRequiredPermissionCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getFrameworks(1L, null, 1, 10, "id", "ASC");
@@ -125,6 +128,8 @@ class FrameworkServiceImplTest {
     void userWithRequiredPermissionCanGetApprovedFrameworks() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getFrameworks(1L, null, 1, 10, "id", "ASC");
@@ -147,6 +152,8 @@ class FrameworkServiceImplTest {
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
         when(languageRepository.existsById(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getFrameworks(1L, ResourceState.WAITING, 1, 10, "id", "ASC");

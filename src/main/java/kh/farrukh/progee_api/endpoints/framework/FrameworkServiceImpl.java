@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
@@ -48,7 +49,7 @@ public class FrameworkServiceImpl implements FrameworkService {
      * @return A list of frameworks
      */
     @Override
-    public PagingResponse<Framework> getFrameworks(
+    public PagingResponse<FrameworkResponseDTO> getFrameworks(
             Long languageId,
             ResourceState state,
             int page,
@@ -66,7 +67,8 @@ public class FrameworkServiceImpl implements FrameworkService {
 
         return new PagingResponse<>(frameworkRepository.findAll(
                 new FrameworkSpecification(languageId, state),
-                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))));
+                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+        ).map(FrameworkMappers::toFrameworkResponseDTO));
     }
 
     /**
@@ -77,10 +79,12 @@ public class FrameworkServiceImpl implements FrameworkService {
      * @return Framework
      */
     @Override
-    public Framework getFrameworkById(long id) {
-        return frameworkRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Framework", "id", id)
-        );
+    public FrameworkResponseDTO getFrameworkById(long id) {
+        return frameworkRepository.findById(id)
+                .map(FrameworkMappers::toFrameworkResponseDTO)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Framework", "id", id)
+                );
     }
 
     /**
@@ -90,7 +94,7 @@ public class FrameworkServiceImpl implements FrameworkService {
      * @return Framework
      */
     @Override
-    public Framework addFramework(FrameworkRequestDTO frameworkRequestDto) {
+    public FrameworkResponseDTO addFramework(FrameworkRequestDTO frameworkRequestDto) {
         if (frameworkRequestDto.getLanguageId() == null) {
             throw new BadRequestException("Language id");
         }
@@ -107,18 +111,18 @@ public class FrameworkServiceImpl implements FrameworkService {
             framework.setState(ResourceState.WAITING);
         }
 
-        return frameworkRepository.save(framework);
+        return FrameworkMappers.toFrameworkResponseDTO(frameworkRepository.save(framework));
     }
 
     /**
      * This function updates a framework in the database
      *
-     * @param id           The id of the framework to update
+     * @param id                  The id of the framework to update
      * @param frameworkRequestDto The DTO object that contains the new values for the framework.
      * @return The updated framework.
      */
     @Override
-    public Framework updateFramework(long id, FrameworkRequestDTO frameworkRequestDto) {
+    public FrameworkResponseDTO updateFramework(long id, FrameworkRequestDTO frameworkRequestDto) {
         Framework framework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
@@ -149,7 +153,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                 framework.setState(ResourceState.WAITING);
             }
 
-            return frameworkRepository.save(framework);
+            return FrameworkMappers.toFrameworkResponseDTO(frameworkRepository.save(framework));
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -176,11 +180,11 @@ public class FrameworkServiceImpl implements FrameworkService {
      * @return Framework
      */
     @Override
-    public Framework setFrameworkState(long id, ResourceStateDTO resourceStateDto) {
+    public FrameworkResponseDTO setFrameworkState(long id, ResourceStateDTO resourceStateDto) {
         Framework framework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
         framework.setState(resourceStateDto.getState());
-        return frameworkRepository.save(framework);
+        return FrameworkMappers.toFrameworkResponseDTO(frameworkRepository.save(framework));
     }
 }

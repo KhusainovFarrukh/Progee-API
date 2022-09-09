@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -37,7 +38,7 @@ public class FrameworkController {
      * @return A list of frameworks
      */
     @GetMapping
-    public ResponseEntity<PagingResponse<Framework>> getFrameworks(
+    public ResponseEntity<PagingResponse<FrameworkResponseDTO>> getFrameworks(
             @RequestParam(name = "language_id", required = false) Long languageId,
             @RequestParam(name = "state", required = false) ResourceState state,
             @RequestParam(name = "page", defaultValue = "1") int page,
@@ -57,7 +58,7 @@ public class FrameworkController {
      * @return A ResponseEntity containing Framework object and HttpStatus.
      */
     @GetMapping("{id}")
-    public ResponseEntity<Framework> getFrameworkById(@PathVariable long id) {
+    public ResponseEntity<FrameworkResponseDTO> getFrameworkById(@PathVariable long id) {
         return new ResponseEntity<>(frameworkService.getFrameworkById(id), HttpStatus.OK);
     }
 
@@ -68,7 +69,7 @@ public class FrameworkController {
      * @return A ResponseEntity containing created Framework object and HttpStatus.
      */
     @PostMapping
-    public ResponseEntity<Framework> addFramework(
+    public ResponseEntity<FrameworkResponseDTO> addFramework(
             @Valid @RequestBody FrameworkRequestDTO frameworkRequestDto
     ) {
         return new ResponseEntity<>(frameworkService.addFramework(frameworkRequestDto), HttpStatus.CREATED);
@@ -82,7 +83,7 @@ public class FrameworkController {
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PutMapping("{id}")
-    public ResponseEntity<Framework> updateFramework(
+    public ResponseEntity<FrameworkResponseDTO> updateFramework(
             @PathVariable long id,
             @Valid @RequestBody FrameworkRequestDTO frameworkRequestDto
     ) {
@@ -110,7 +111,7 @@ public class FrameworkController {
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PatchMapping("{id}/state")
-    public ResponseEntity<Framework> setFrameworkState(
+    public ResponseEntity<FrameworkResponseDTO> setFrameworkState(
             @PathVariable long id,
             @Valid @RequestBody ResourceStateDTO resourceStateDto
     ) {

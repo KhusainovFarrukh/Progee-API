@@ -1,18 +1,19 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 /**
  * A base interface for service of Framework endpoints
- *
+ * <p>
  * Methods implemented in FrameworkServiceImpl
  */
 public interface FrameworkService {
 
-    PagingResponse<Framework> getFrameworks(
+    PagingResponse<FrameworkResponseDTO> getFrameworks(
             Long languageId,
             ResourceState state,
             int page,
@@ -21,13 +22,13 @@ public interface FrameworkService {
             String orderBy
     );
 
-    Framework getFrameworkById(long id);
+    FrameworkResponseDTO getFrameworkById(long id);
 
-    Framework addFramework(FrameworkRequestDTO frameworkRequestDto);
+    FrameworkResponseDTO addFramework(FrameworkRequestDTO frameworkRequestDto);
 
-    Framework updateFramework(long id, FrameworkRequestDTO frameworkRequestDto);
+    FrameworkResponseDTO updateFramework(long id, FrameworkRequestDTO frameworkRequestDto);
 
     void deleteFramework(long id);
 
-    Framework setFrameworkState(long id, ResourceStateDTO resourceStateDto);
+    FrameworkResponseDTO setFrameworkState(long id, ResourceStateDTO resourceStateDto);
 }

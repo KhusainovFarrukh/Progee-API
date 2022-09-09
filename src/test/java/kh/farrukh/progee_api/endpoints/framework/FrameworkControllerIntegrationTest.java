@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
@@ -199,7 +200,7 @@ class FrameworkControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
-        Framework existingFramework = frameworkService.addFramework(
+        FrameworkResponseDTO existingFramework = frameworkService.addFramework(
                 new FrameworkRequestDTO("test", "test", existingImage.getId(), existingLanguage.getId())
         );
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("test-update", "test-update", existingImage.getId());
@@ -229,8 +230,8 @@ class FrameworkControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
-        Framework existingFramework = frameworkService.addFramework(
-                 new FrameworkRequestDTO("", "", existingImage.getId(), existingLanguage.getId())
+        FrameworkResponseDTO existingFramework = frameworkService.addFramework(
+                new FrameworkRequestDTO("", "", existingImage.getId(), existingLanguage.getId())
         );
 
         // when
