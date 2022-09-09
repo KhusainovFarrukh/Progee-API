@@ -1,9 +1,6 @@
 package kh.farrukh.progee_api.endpoints.user;
 
-import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserImageRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserPasswordRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserRoleRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.*;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -25,7 +22,7 @@ public interface UserService extends UserDetailsService {
 
     AppUser getUserByEmail(String email);
 
-    AppUser addUser(AppUserRequestDTO appUserRequestDto);
+    AppUserResponseDTO addUser(AppUserRequestDTO appUserRequestDto);
 
     AppUser updateUser(long id, AppUserRequestDTO appUserRequestDto);
 

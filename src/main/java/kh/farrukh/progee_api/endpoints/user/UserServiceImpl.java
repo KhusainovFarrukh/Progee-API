@@ -4,10 +4,7 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserImageRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserPasswordRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserRoleRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.*;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
@@ -110,18 +107,18 @@ public class UserServiceImpl implements UserService {
      * @return The created user.
      */
     @Override
-    public AppUser addUser(AppUserRequestDTO appUserRequestDto) {
+    public AppUserResponseDTO addUser(AppUserRequestDTO appUserRequestDto) {
         checkUserIsUnique(userRepository, appUserRequestDto);
         AppUser appUser = new AppUser(appUserRequestDto, imageRepository, roleRepository);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        return userRepository.save(appUser);
+        return AppUserMappers.toAppUserResponseDTO(userRepository.save(appUser));
     }
 
     /**
      * If the username or email is different from the existing one, check if it exists in the database. If it does, throw
      * an exception. If it doesn't, update the user
      *
-     * @param id         The id of the user to be updated.
+     * @param id                The id of the user to be updated.
      * @param appUserRequestDto The DTO object that contains the new values for the user.
      * @return The updated user.
      */

@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.endpoints.auth;
 
 import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class AuthController {
      * @return A ResponseEntity with the AppUser object and a status of OK.
      */
     @PostMapping(ENDPOINT_REGISTRATION)
-    public ResponseEntity<AppUser> register(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
+    public ResponseEntity<AppUserResponseDTO> register(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
         return new ResponseEntity<>(authService.register(registrationRequestDTO), HttpStatus.OK);
     }
 
