@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
@@ -11,7 +12,7 @@ import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
  */
 public interface ReviewService {
 
-    PagingResponse<Review> getReviews(
+    PagingResponse<ReviewResponseDTO> getReviews(
             Long languageId,
             ReviewValue value,
             int page,
@@ -20,13 +21,13 @@ public interface ReviewService {
             String orderBy
     );
 
-    Review getReviewById(long id);
+    ReviewResponseDTO getReviewById(long id);
 
-    Review addReview(ReviewRequestDTO reviewRequestDto);
+    ReviewResponseDTO addReview(ReviewRequestDTO reviewRequestDto);
 
-    Review updateReview(long id, ReviewRequestDTO reviewRequestDto);
+    ReviewResponseDTO updateReview(long id, ReviewRequestDTO reviewRequestDto);
 
     void deleteReview(long id);
 
-    Review voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto);
+    ReviewResponseDTO voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto);
 }

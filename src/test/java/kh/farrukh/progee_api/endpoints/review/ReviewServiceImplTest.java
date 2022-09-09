@@ -18,7 +18,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
@@ -53,6 +55,8 @@ class ReviewServiceImplTest {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getReviews(1L, null, 1, 10, "id", "ASC");
@@ -73,6 +77,8 @@ class ReviewServiceImplTest {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
+        when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getReviews(1L, ReviewValue.LIKE, 1, 10, "id", "ASC");

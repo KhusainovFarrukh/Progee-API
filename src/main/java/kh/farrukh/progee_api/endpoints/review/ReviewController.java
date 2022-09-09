@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class ReviewController {
      * @return A list of reviews for a given language.
      */
     @GetMapping
-    public ResponseEntity<PagingResponse<Review>> getReviews(
+    public ResponseEntity<PagingResponse<ReviewResponseDTO>> getReviews(
             @RequestParam(name = "language_id", required = false) Long languageId,
             @RequestParam(name = "value", required = false) ReviewValue value,
             @RequestParam(name = "page", defaultValue = "1") int page,
@@ -56,7 +57,7 @@ public class ReviewController {
      * @return A review object
      */
     @GetMapping("{id}")
-    public ResponseEntity<Review> getReviewById(@PathVariable long id) {
+    public ResponseEntity<ReviewResponseDTO> getReviewById(@PathVariable long id) {
         return new ResponseEntity<>(reviewService.getReviewById(id), HttpStatus.OK);
     }
 
@@ -67,7 +68,7 @@ public class ReviewController {
      * @return A ResponseEntity containing created Review object and HttpStatus.
      */
     @PostMapping
-    public ResponseEntity<Review> addReview(@Valid @RequestBody ReviewRequestDTO reviewRequestDto) {
+    public ResponseEntity<ReviewResponseDTO> addReview(@Valid @RequestBody ReviewRequestDTO reviewRequestDto) {
         return new ResponseEntity<>(reviewService.addReview(reviewRequestDto), HttpStatus.CREATED);
     }
 
@@ -79,7 +80,7 @@ public class ReviewController {
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PutMapping("{id}")
-    public ResponseEntity<Review> updateReview(
+    public ResponseEntity<ReviewResponseDTO> updateReview(
             @PathVariable long id,
             @Valid @RequestBody ReviewRequestDTO reviewRequestDto
     ) {
@@ -106,7 +107,7 @@ public class ReviewController {
      * @return Review
      */
     @PostMapping("{id}/vote")
-    public ResponseEntity<Review> voteReview(
+    public ResponseEntity<ReviewResponseDTO> voteReview(
             @PathVariable long id,
             @Valid @RequestBody ReviewVoteRequestDTO reviewVoteRequestDto
     ) {

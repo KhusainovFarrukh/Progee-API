@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
@@ -45,7 +46,7 @@ public class ReviewServiceImpl implements ReviewService {
      * @return A PagingResponse object is being returned.
      */
     @Override
-    public PagingResponse<Review> getReviews(
+    public PagingResponse<ReviewResponseDTO> getReviews(
             Long languageId,
             ReviewValue value,
             int page,
@@ -58,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
         return new PagingResponse<>(reviewRepository.findAll(
                 new ReviewSpecification(languageId, value),
                 PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
-        ));
+        ).map(ReviewMappers::toReviewResponseDTO));
     }
 
     /**
@@ -68,10 +69,10 @@ public class ReviewServiceImpl implements ReviewService {
      * @return Review
      */
     @Override
-    public Review getReviewById(long id) {
-        return reviewRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Review", "id", id)
-        );
+    public ReviewResponseDTO getReviewById(long id) {
+        return reviewRepository.findById(id)
+                .map(ReviewMappers::toReviewResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Review", "id", id));
     }
 
     /**
@@ -81,24 +82,24 @@ public class ReviewServiceImpl implements ReviewService {
      * @return A Review object
      */
     @Override
-    public Review addReview(ReviewRequestDTO reviewRequestDto) {
+    public ReviewResponseDTO addReview(ReviewRequestDTO reviewRequestDto) {
         if (reviewRequestDto.getLanguageId() == null) {
             throw new BadRequestException("Language id");
         }
         Review review = new Review(reviewRequestDto, languageRepository);
         review.setAuthor(CurrentUserUtils.getCurrentUser(userRepository));
-        return reviewRepository.save(review);
+        return ReviewMappers.toReviewResponseDTO(reviewRepository.save(review));
     }
 
     /**
      * This function updates a review in the database
      *
-     * @param id        The id of the review to update.
+     * @param id               The id of the review to update.
      * @param reviewRequestDto The ReviewDTO object that contains the new values for the review.
      * @return The updated review.
      */
     @Override
-    public Review updateReview(long id, ReviewRequestDTO reviewRequestDto) {
+    public ReviewResponseDTO updateReview(long id, ReviewRequestDTO reviewRequestDto) {
         Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -118,7 +119,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new NotEnoughPermissionException();
         }
 
-        return reviewRepository.save(review);
+        return ReviewMappers.toReviewResponseDTO(reviewRepository.save(review));
     }
 
     /**
@@ -150,12 +151,12 @@ public class ReviewServiceImpl implements ReviewService {
     /**
      * If the user has not voted on the review, then add the user's id to the upVotes or downVotes list
      *
-     * @param id            The id of the review to vote on.
+     * @param id                   The id of the review to vote on.
      * @param reviewVoteRequestDto This is the DTO that contains the vote.
      * @return Review
      */
     @Override
-    public Review voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto) {
+    public ReviewResponseDTO voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto) {
         Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -181,6 +182,6 @@ public class ReviewServiceImpl implements ReviewService {
             review.getUpVotes().remove(currentUser.getId());
         }
 
-        return reviewRepository.save(review);
+        return ReviewMappers.toReviewResponseDTO(reviewRepository.save(review));
     }
 }

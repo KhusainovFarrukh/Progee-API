@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
@@ -194,7 +195,7 @@ class ReviewControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
-        Review existingReview = reviewService.addReview(
+        ReviewResponseDTO existingReview = reviewService.addReview(
                 new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
         );
         ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("test body update", ReviewValue.LIKE);
@@ -222,7 +223,7 @@ class ReviewControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
-        Review existingReview = reviewService.addReview(
+        ReviewResponseDTO existingReview = reviewService.addReview(
                 new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
         );
 
