@@ -1,5 +1,9 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.exceptions.InvalidClaimException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
@@ -9,6 +13,7 @@ import kh.farrukh.progee_api.endpoints.user.AppUserService;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.token_exceptions.*;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,16 +55,20 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDTO refreshToken(String authHeader) {
         try {
             DecodedJWT decodedJWT = tokenProvider.validateToken(authHeader, true);
-            if (decodedJWT != null) {
-                String username = decodedJWT.getSubject();
-                AppUserResponseDTO user = appUserService.getUserByEmail(username);
-                return tokenProvider.generateTokens(AppUserMappers.toAppUser(user));
-            } else {
-                throw new BadRequestException("Refresh token");
-            }
+            String username = decodedJWT.getSubject();
+            AppUserResponseDTO user = appUserService.getUserByEmail(username);
+            return tokenProvider.generateTokens(AppUserMappers.toAppUser(user));
+        } catch (AlgorithmMismatchException exception) {
+            throw new WrongTypeTokenException();
+        } catch (SignatureVerificationException exception) {
+            throw new InvalidSignatureTokenException();
+        } catch (TokenExpiredException exception) {
+            throw new ExpiredTokenException();
+        } catch (InvalidClaimException exception) {
+            throw new InvalidRoleTokenException();
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new BadRequestException("Refresh token");
+            throw new UnknownTokenException();
         }
     }
 }

@@ -5,12 +5,10 @@ import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 /**
  * Controller for Auth-related endpoints (login, register, refresh token and etc.)
@@ -32,7 +30,7 @@ public class AuthController {
      */
     @PostMapping(ENDPOINT_REGISTRATION)
     public ResponseEntity<AppUserResponseDTO> register(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
-        return new ResponseEntity<>(authService.register(registrationRequestDTO), HttpStatus.OK);
+        return ResponseEntity.ok(authService.register(registrationRequestDTO));
     }
 
     /**
@@ -42,10 +40,8 @@ public class AuthController {
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
     public ResponseEntity<AuthResponseDTO> refreshToken(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
-    ) throws IOException {
-        return new ResponseEntity<>(
-                authService.refreshToken(authHeader), HttpStatus.OK
-        );
+            @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = false) String authHeader
+    ) {
+        return ResponseEntity.ok(authService.refreshToken(authHeader));
     }
 }
