@@ -60,7 +60,7 @@ public class ApiExceptionHandler {
      * @return A ResponseEntity<Object>
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleRequestBodyValidationException(MethodArgumentNotValidException exception, Locale locale) {
+    public ResponseEntity<Object> handleMethodArgNotValidException(MethodArgumentNotValidException exception, Locale locale) {
         exception.printStackTrace();
         Map<String, Object> errorsMap = new HashMap<>();
         List<FieldError> errors = exception.getFieldErrors();
