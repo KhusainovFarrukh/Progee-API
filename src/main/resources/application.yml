@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/progee_api
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  messages:
+    basename: strings
+    encoding: UTF-8
+    fallback-to-system-locale: true
+    use-code-as-default-message: false
+
+jwt:
+  secret: ${MY_JWT_SECRET}
+  access-token-validity-in-seconds: 1800
+  refresh-token-validity-in-seconds: 604800
+
+server:
+  error:
+    include-stacktrace: never
