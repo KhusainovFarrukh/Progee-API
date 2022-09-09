@@ -66,6 +66,8 @@ public class AuthServiceImpl implements AuthService {
             throw new ExpiredTokenException();
         } catch (InvalidClaimException exception) {
             throw new InvalidRoleTokenException();
+        } catch (MissingTokenException exception) {
+            throw new MissingTokenException();
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new UnknownTokenException();

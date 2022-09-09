@@ -99,6 +99,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             resolver.resolveException(request, response, null, new ExpiredTokenException());
         } catch (InvalidClaimException exception) {
             resolver.resolveException(request, response, null, new InvalidRoleTokenException());
+        } catch (MissingTokenException exception) {
+            resolver.resolveException(request, response, null, new MissingTokenException());
         } catch (Exception exception) {
             exception.printStackTrace();
             resolver.resolveException(request, response, null, new UnknownTokenException());

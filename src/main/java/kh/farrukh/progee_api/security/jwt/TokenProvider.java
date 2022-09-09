@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.token_exceptions.MissingTokenException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
@@ -68,7 +69,7 @@ public class TokenProvider implements InitializingBean {
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             return jwtVerifier.verify(token);
         } else {
-            throw new RuntimeException("Token is empty");
+            throw new MissingTokenException();
         }
     }
 

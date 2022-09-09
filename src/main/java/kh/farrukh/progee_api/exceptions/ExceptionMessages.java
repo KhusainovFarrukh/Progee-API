@@ -17,7 +17,8 @@ public class ExceptionMessages {
     public static final String EXCEPTION_ENDPOINT_ACCESS_DENIED = "message.exception.endpoint_access_denied";
     public static final String EXCEPTION_TOKEN_EXPIRED = "message.exception.token_expired";
     public static final String EXCEPTION_TOKEN_INVALID_ROLE = "message.exception.token_invalid_role";
-    public static final String EXCEPTION_TOKEN_INVALID_SIGNATURE = "message.exception.invalid_signature";
+    public static final String EXCEPTION_TOKEN_INVALID_SIGNATURE = "message.exception.token_invalid_signature";
+    public static final String EXCEPTION_TOKEN_MISSING = "message.exception.token_missing";
     public static final String EXCEPTION_TOKEN_WRONG_TYPE = "message.exception.token_wrong_type";
     public static final String EXCEPTION_TOKEN_UNKNOWN = "message.exception.token_unknown";
 }
