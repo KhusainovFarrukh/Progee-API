@@ -77,16 +77,4 @@ public class SecurityUtils {
         response.setHeader(KEY_ACCESS_TOKEN, data.get(KEY_ACCESS_TOKEN));
         response.setHeader(KEY_REFRESH_TOKEN, data.get(KEY_REFRESH_TOKEN));
     }
-
-    /**
-     * It takes a UserDetails object and returns the first role name from the list of roles
-     *
-     * @param user The user object that contains the user's details.
-     * @return The first role of the user.
-     */
-    public static List<String> getPermissionNames(UserDetails user) {
-        return user.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority).toList().stream()
-                .toList();
-    }
 }

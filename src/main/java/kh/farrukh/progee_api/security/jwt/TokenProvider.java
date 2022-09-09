@@ -7,11 +7,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -19,19 +18,13 @@ import static kh.farrukh.progee_api.security.jwt.JWTKeys.KEY_ROLE_ID;
 
 @Getter
 @Component
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
-
-    private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm";
-    private static final DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 
     private Algorithm accessTokenAlgorithm;
     private Algorithm refreshTokenAlgorithm;
 
     private final JwtConfiguration jwtConfiguration;
-
-    public TokenProvider(JwtConfiguration jwtConfiguration) {
-        this.jwtConfiguration = jwtConfiguration;
-    }
 
     @Override
     public void afterPropertiesSet() {
