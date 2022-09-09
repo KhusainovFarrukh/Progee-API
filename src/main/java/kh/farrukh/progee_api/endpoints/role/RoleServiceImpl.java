@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.role;
 
 import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleResponseDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -17,28 +18,28 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public PagingResponse<Role> getRoles(int page, int pageSize) {
+    public PagingResponse<RoleResponseDTO> getRoles(int page, int pageSize) {
         checkPageNumber(page);
         return new PagingResponse<>(roleRepository.findAll(
                 PageRequest.of(page - 1, pageSize)
-        ));
+        ).map(RoleMappers::toRoleResponseDTO));
     }
 
     @Override
-    public Role getRoleById(long id) {
-        return roleRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", id)
-        );
+    public RoleResponseDTO getRoleById(long id) {
+        return roleRepository.findById(id)
+                .map(RoleMappers::toRoleResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
     }
 
     @Override
-    public Role addRole(RoleRequestDTO roleRequestDto) {
+    public RoleResponseDTO addRole(RoleRequestDTO roleRequestDto) {
         checkRoleIsUnique(roleRepository, roleRequestDto);
-        return roleRepository.save(new Role(roleRequestDto));
+        return RoleMappers.toRoleResponseDTO(roleRepository.save(new Role(roleRequestDto)));
     }
 
     @Override
-    public Role updateRole(long id, RoleRequestDTO roleRequestDto) {
+    public RoleResponseDTO updateRole(long id, RoleRequestDTO roleRequestDto) {
         Role existingRole = roleRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Role", "id", id)
         );
@@ -52,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
         existingRole.setTitle(roleRequestDto.getTitle());
         existingRole.setPermissions(roleRequestDto.getPermissions());
 
-        return roleRepository.save(existingRole);
+        return RoleMappers.toRoleResponseDTO(roleRepository.save(existingRole));
     }
 
     @Override

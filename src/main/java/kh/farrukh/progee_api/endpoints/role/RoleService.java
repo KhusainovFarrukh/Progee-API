@@ -1,17 +1,18 @@
 package kh.farrukh.progee_api.endpoints.role;
 
 import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleResponseDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 public interface RoleService {
 
-    PagingResponse<Role> getRoles(int pageNumber, int pageSize);
+    PagingResponse<RoleResponseDTO> getRoles(int pageNumber, int pageSize);
 
-    Role getRoleById(long id);
+    RoleResponseDTO getRoleById(long id);
 
-    Role addRole(RoleRequestDTO roleRequestDTO);
+    RoleResponseDTO addRole(RoleRequestDTO roleRequestDTO);
 
-    Role updateRole(long id, RoleRequestDTO roleRequestDTO);
+    RoleResponseDTO updateRole(long id, RoleRequestDTO roleRequestDTO);
 
     void deleteRoleById(long id);
 }

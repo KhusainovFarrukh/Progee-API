@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.role;
 
 import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleResponseDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping
-    public ResponseEntity<PagingResponse<Role>> getRoles(
+    public ResponseEntity<PagingResponse<RoleResponseDTO>> getRoles(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize
     ) {
@@ -29,17 +30,17 @@ public class RoleController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Role> getRoleById(@PathVariable long id) {
+    public ResponseEntity<RoleResponseDTO> getRoleById(@PathVariable long id) {
         return new ResponseEntity<>(roleService.getRoleById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Role> addRole(@Valid @RequestBody RoleRequestDTO roleRequestDto) {
+    public ResponseEntity<RoleResponseDTO> addRole(@Valid @RequestBody RoleRequestDTO roleRequestDto) {
         return new ResponseEntity<>(roleService.addRole(roleRequestDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Role> updateRole(
+    public ResponseEntity<RoleResponseDTO> updateRole(
             @PathVariable long id,
             @Valid @RequestBody RoleRequestDTO roleRequestDto
     ) {
