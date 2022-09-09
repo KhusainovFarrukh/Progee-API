@@ -1,8 +1,8 @@
 package kh.farrukh.progee_api.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
-import kh.farrukh.progee_api.endpoints.auth.LoginRequest;
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.LoginRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.EmailPasswordWrongException;
@@ -47,15 +47,15 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        LoginRequest loginRequest;
+        LoginRequestDTO loginRequestDTO;
 
         try {
-            loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+            loginRequestDTO = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDTO.class);
         } catch (IOException e) {
             throw new AuthenticationServiceException(e.getMessage(), e);
         }
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(), loginRequestDTO.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -73,15 +73,15 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
         AppUser appUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("User not found in the database")
         );
-        AuthResponse authResponse = tokenProvider.generateTokens(appUser);
-        SecurityUtils.sendTokenInResponse(authResponse, response);
+        AuthResponseDTO authResponseDTO = tokenProvider.generateTokens(appUser);
+        SecurityUtils.sendTokenInResponse(authResponseDTO, response);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+        LoginRequestDTO loginRequestDTO = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDTO.class);
         EmailPasswordWrongException.Type type;
-        if (userRepository.existsByEmail(loginRequest.getEmail())) {
+        if (userRepository.existsByEmail(loginRequestDTO.getEmail())) {
             type = EmailPasswordWrongException.Type.PASSWORD;
         } else {
             type = EmailPasswordWrongException.Type.EMAIL;

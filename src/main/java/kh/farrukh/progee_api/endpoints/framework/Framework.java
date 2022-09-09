@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.global.entity.ResourceState;
@@ -71,14 +72,14 @@ public class Framework extends EntityWithResourceState {
     // This is a constructor that takes a FrameworkDTO object and
     // sets the values of the current object to the values of
     // the given object.
-    public Framework(FrameworkDTO frameworkDto, LanguageRepository languageRepository, ImageRepository imageRepository) {
-        this.name = frameworkDto.getName();
-        this.description = frameworkDto.getDescription();
-        this.image = imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
+    public Framework(FrameworkRequestDTO frameworkRequestDto, LanguageRepository languageRepository, ImageRepository imageRepository) {
+        this.name = frameworkRequestDto.getName();
+        this.description = frameworkRequestDto.getDescription();
+        this.image = imageRepository.findById(frameworkRequestDto.getImageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Image", "id", frameworkRequestDto.getImageId())
         );
-        this.language = languageRepository.findById(frameworkDto.getLanguageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", frameworkDto.getLanguageId())
+        this.language = languageRepository.findById(frameworkRequestDto.getLanguageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", frameworkRequestDto.getLanguageId())
         );
     }
 

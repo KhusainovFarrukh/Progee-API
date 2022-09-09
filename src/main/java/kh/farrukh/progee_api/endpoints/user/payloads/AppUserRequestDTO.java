@@ -1,7 +1,7 @@
-package kh.farrukh.progee_api.endpoints.user;
+package kh.farrukh.progee_api.endpoints.user.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kh.farrukh.progee_api.endpoints.auth.RegistrationRequest;
+import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUserDTO {
+public class AppUserRequestDTO {
 
     @NotBlank(message = "Name must not be blank")
     private String name;
@@ -42,7 +42,7 @@ public class AppUserDTO {
     @JsonProperty("image_id")
     private long imageId;
 
-    public AppUserDTO(RegistrationRequest request, RoleRepository roleRepository) {
+    public AppUserRequestDTO(RegistrationRequestDTO request, RoleRepository roleRepository) {
         this.name = request.getName();
         this.email = request.getEmail();
         this.username = request.getUsername();

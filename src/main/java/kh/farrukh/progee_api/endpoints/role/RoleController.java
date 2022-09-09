@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.role;
 
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,16 +34,16 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity<Role> addRole(@Valid @RequestBody RoleDTO roleDto) {
-        return new ResponseEntity<>(roleService.addRole(roleDto), HttpStatus.CREATED);
+    public ResponseEntity<Role> addRole(@Valid @RequestBody RoleRequestDTO roleRequestDto) {
+        return new ResponseEntity<>(roleService.addRole(roleRequestDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Role> updateRole(
             @PathVariable long id,
-            @Valid @RequestBody RoleDTO roleDto
+            @Valid @RequestBody RoleRequestDTO roleRequestDto
     ) {
-        return new ResponseEntity<>(roleService.updateRole(id, roleDto), HttpStatus.OK);
+        return new ResponseEntity<>(roleService.updateRole(id, roleRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

@@ -1,6 +1,9 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.LoginRequestDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
@@ -64,7 +67,7 @@ class AuthControllerIntegrationTest {
         // given
         Role existingRole = roleRepository.save(new Role("user", true, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
         Image existingImage = imageRepository.save(new Image());
-        RegistrationRequest request = new RegistrationRequest(
+        RegistrationRequestDTO request = new RegistrationRequestDTO(
                 "test", "test_user", "user@mail.com", "12345678", existingImage.getId()
         );
 
@@ -95,7 +98,7 @@ class AuthControllerIntegrationTest {
         AppUser user = userRepository.save(
                 new AppUser("user@mail.com", existingRole.getId(), passwordEncoder.encode("12345678"), roleRepository)
         );
-        LoginRequest request = new LoginRequest(user.getEmail(), "12345678");
+        LoginRequestDTO request = new LoginRequestDTO(user.getEmail(), "12345678");
 
         // when
         MvcResult result = mvc
@@ -109,8 +112,8 @@ class AuthControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AuthResponse response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), AuthResponse.class
+        AuthResponseDTO response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), AuthResponseDTO.class
         );
 
         assertThat(response.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
@@ -124,7 +127,7 @@ class AuthControllerIntegrationTest {
         AppUser user = userRepository.save(
                 new AppUser("user@mail.com", existingRole.getId(), passwordEncoder.encode("12345678"), roleRepository)
         );
-        LoginRequest request = new LoginRequest(user.getEmail(), "12345678");
+        LoginRequestDTO request = new LoginRequestDTO(user.getEmail(), "12345678");
 
         MvcResult loginResult = mvc
                 .perform(
@@ -136,8 +139,8 @@ class AuthControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        AuthResponse loginResponse = objectMapper.readValue(
-                loginResult.getResponse().getContentAsString(), AuthResponse.class
+        AuthResponseDTO loginResponse = objectMapper.readValue(
+                loginResult.getResponse().getContentAsString(), AuthResponseDTO.class
         );
 
         // when
@@ -151,8 +154,8 @@ class AuthControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AuthResponse response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), AuthResponse.class
+        AuthResponseDTO response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), AuthResponseDTO.class
         );
         assertThat(response.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
     }

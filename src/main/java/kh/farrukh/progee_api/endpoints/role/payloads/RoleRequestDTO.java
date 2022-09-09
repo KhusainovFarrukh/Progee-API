@@ -1,6 +1,7 @@
-package kh.farrukh.progee_api.endpoints.role;
+package kh.farrukh.progee_api.endpoints.role.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.endpoints.role.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDTO {
+public class RoleRequestDTO {
 
     private String title;
 

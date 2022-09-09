@@ -1,6 +1,8 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
@@ -75,15 +77,15 @@ public class ReviewServiceImpl implements ReviewService {
     /**
      * It adds a review to a language.
      *
-     * @param reviewDto This is the object that will be used to create the new Review object.
+     * @param reviewRequestDto This is the object that will be used to create the new Review object.
      * @return A Review object
      */
     @Override
-    public Review addReview(ReviewDTO reviewDto) {
-        if (reviewDto.getLanguageId() == null) {
+    public Review addReview(ReviewRequestDTO reviewRequestDto) {
+        if (reviewRequestDto.getLanguageId() == null) {
             throw new BadRequestException("Language id");
         }
-        Review review = new Review(reviewDto, languageRepository);
+        Review review = new Review(reviewRequestDto, languageRepository);
         review.setAuthor(CurrentUserUtils.getCurrentUser(userRepository));
         return reviewRepository.save(review);
     }
@@ -92,11 +94,11 @@ public class ReviewServiceImpl implements ReviewService {
      * This function updates a review in the database
      *
      * @param id        The id of the review to update.
-     * @param reviewDto The ReviewDTO object that contains the new values for the review.
+     * @param reviewRequestDto The ReviewDTO object that contains the new values for the review.
      * @return The updated review.
      */
     @Override
-    public Review updateReview(long id, ReviewDTO reviewDto) {
+    public Review updateReview(long id, ReviewRequestDTO reviewRequestDto) {
         Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -110,8 +112,8 @@ public class ReviewServiceImpl implements ReviewService {
                 )
         ) {
 
-            review.setBody(reviewDto.getBody());
-            review.setReviewValue(reviewDto.getValue());
+            review.setBody(reviewRequestDto.getBody());
+            review.setReviewValue(reviewRequestDto.getValue());
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -149,11 +151,11 @@ public class ReviewServiceImpl implements ReviewService {
      * If the user has not voted on the review, then add the user's id to the upVotes or downVotes list
      *
      * @param id            The id of the review to vote on.
-     * @param reviewVoteDto This is the DTO that contains the vote.
+     * @param reviewVoteRequestDto This is the DTO that contains the vote.
      * @return Review
      */
     @Override
-    public Review voteReview(long id, ReviewVoteDTO reviewVoteDto) {
+    public Review voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto) {
         Review review = reviewRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Review", "id", id)
         );
@@ -163,7 +165,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // Checking if the currentUser has already voted on the review. If the current user has already voted on the review, then
         // throw a ReviewDuplicateVoteException.
-        if (reviewVoteDto.isVote()) {
+        if (reviewVoteRequestDto.isVote()) {
             if (review.getUpVotes().contains(currentUser.getId())) {
                 throw new ReviewDuplicateVoteException("up-vote");
             }

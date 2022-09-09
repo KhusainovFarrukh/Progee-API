@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 
 /**
@@ -20,11 +22,11 @@ public interface ReviewService {
 
     Review getReviewById(long id);
 
-    Review addReview(ReviewDTO reviewDto);
+    Review addReview(ReviewRequestDTO reviewRequestDto);
 
-    Review updateReview(long id, ReviewDTO reviewDto);
+    Review updateReview(long id, ReviewRequestDTO reviewRequestDto);
 
     void deleteReview(long id);
 
-    Review voteReview(long id, ReviewVoteDTO reviewVoteDto);
+    Review voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto);
 }

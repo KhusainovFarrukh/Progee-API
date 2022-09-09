@@ -7,6 +7,9 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserPasswordRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserRoleRequestDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -115,7 +118,7 @@ class UserControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         AppUser existingUser = userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "test",
                 "test@mail.com",
                 "test",
@@ -166,7 +169,7 @@ class UserControllerIntegrationTest {
         AppUser existingUser = userRepository.save(new AppUser(
                 "user@mail.com", "test", existingRole.getId(), roleRepository
         ));
-        UserRoleDTO roleDto = new UserRoleDTO(newRole.getId());
+        SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(newRole.getId());
 
         // when
         MvcResult result = mvc
@@ -193,7 +196,7 @@ class UserControllerIntegrationTest {
         AppUser existingUser = userRepository.save(new AppUser(
                 "user@mail.com", "test", passwordEncoder.encode(password), existingRole
         ));
-        UserPasswordDTO passwordDto = new UserPasswordDTO(password, newPassword);
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(password, newPassword);
 
         // when
         mvc.perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/password")

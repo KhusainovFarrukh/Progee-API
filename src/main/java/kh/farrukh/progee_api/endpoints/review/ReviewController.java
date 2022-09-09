@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.review;
 
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,27 +63,27 @@ public class ReviewController {
     /**
      * This function takes creates review if it does not exist.
      *
-     * @param reviewDto Values for the review to be created.
+     * @param reviewRequestDto Values for the review to be created.
      * @return A ResponseEntity containing created Review object and HttpStatus.
      */
     @PostMapping
-    public ResponseEntity<Review> addReview(@Valid @RequestBody ReviewDTO reviewDto) {
-        return new ResponseEntity<>(reviewService.addReview(reviewDto), HttpStatus.CREATED);
+    public ResponseEntity<Review> addReview(@Valid @RequestBody ReviewRequestDTO reviewRequestDto) {
+        return new ResponseEntity<>(reviewService.addReview(reviewRequestDto), HttpStatus.CREATED);
     }
 
     /**
      * This function updates a review.
      *
      * @param id         The id of the review to update
-     * @param reviewDto  The review values that we want to update.
+     * @param reviewRequestDto  The review values that we want to update.
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<Review> updateReview(
             @PathVariable long id,
-            @Valid @RequestBody ReviewDTO reviewDto
+            @Valid @RequestBody ReviewRequestDTO reviewRequestDto
     ) {
-        return new ResponseEntity<>(reviewService.updateReview(id, reviewDto), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.updateReview(id, reviewRequestDto), HttpStatus.OK);
     }
 
     /**
@@ -100,14 +102,14 @@ public class ReviewController {
      * Function for voting on a review. Up-vote or down-vote.
      *
      * @param id            the id of the review
-     * @param reviewVoteDto This is the object that contains the vote value.
+     * @param reviewVoteRequestDto This is the object that contains the vote value.
      * @return Review
      */
     @PostMapping("{id}/vote")
     public ResponseEntity<Review> voteReview(
             @PathVariable long id,
-            @Valid @RequestBody ReviewVoteDTO reviewVoteDto
+            @Valid @RequestBody ReviewVoteRequestDTO reviewVoteRequestDto
     ) {
-        return new ResponseEntity<>(reviewService.voteReview(id, reviewVoteDto), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.voteReview(id, reviewVoteRequestDto), HttpStatus.OK);
     }
 }

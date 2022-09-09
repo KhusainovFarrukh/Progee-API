@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.global.entity.EntityWithId;
@@ -81,11 +82,11 @@ public class Review extends EntityWithId {
     @JsonProperty("created_at")
     private ZonedDateTime createdAt;
 
-    public Review(ReviewDTO reviewDto, LanguageRepository languageRepository) {
-        this.body = reviewDto.getBody();
-        this.reviewValue = reviewDto.getValue();
-        this.language = languageRepository.findById(reviewDto.getLanguageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", reviewDto.getLanguageId())
+    public Review(ReviewRequestDTO reviewRequestDto, LanguageRepository languageRepository) {
+        this.body = reviewRequestDto.getBody();
+        this.reviewValue = reviewRequestDto.getValue();
+        this.language = languageRepository.findById(reviewRequestDto.getLanguageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", reviewRequestDto.getLanguageId())
         );
     }
 

@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.role;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.global.entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,8 +44,8 @@ public class Role extends EntityWithId {
     )
     private List<Permission> permissions;
 
-    public Role(RoleDTO roleDTO) {
-        BeanUtils.copyProperties(roleDTO, this);
+    public Role(RoleRequestDTO roleRequestDTO) {
+        BeanUtils.copyProperties(roleRequestDTO, this);
     }
 
     public Role(List<Permission> permissions) {

@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static kh.farrukh.progee_api.endpoints.framework.FrameworkController.ENDPOINT_FRAMEWORK;
-import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -173,7 +173,7 @@ class FrameworkControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
-        FrameworkDTO languageDto = new FrameworkDTO("test", "test", existingImage.getId(), existingLanguage.getId());
+        FrameworkRequestDTO languageDto = new FrameworkRequestDTO("test", "test", existingImage.getId(), existingLanguage.getId());
 
         // when
         MvcResult result = mvc
@@ -200,15 +200,15 @@ class FrameworkControllerIntegrationTest {
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkService.addFramework(
-                new FrameworkDTO("test", "test", existingImage.getId(), existingLanguage.getId())
+                new FrameworkRequestDTO("test", "test", existingImage.getId(), existingLanguage.getId())
         );
-        FrameworkDTO frameworkDto = new FrameworkDTO("test-update", "test-update", existingImage.getId());
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("test-update", "test-update", existingImage.getId());
 
         // when
         MvcResult result = mvc
                 .perform(put(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(frameworkDto)))
+                        .content(objectMapper.writeValueAsString(frameworkRequestDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -216,9 +216,9 @@ class FrameworkControllerIntegrationTest {
         // then
         Framework framework = objectMapper.readValue(result.getResponse().getContentAsString(), Framework.class);
         assertThat(framework.getId()).isEqualTo(existingFramework.getId());
-        assertThat(framework.getName()).isEqualTo(frameworkDto.getName());
-        assertThat(framework.getDescription()).isEqualTo(frameworkDto.getDescription());
-        assertThat(framework.getImage().getId()).isEqualTo(frameworkDto.getImageId());
+        assertThat(framework.getName()).isEqualTo(frameworkRequestDto.getName());
+        assertThat(framework.getDescription()).isEqualTo(frameworkRequestDto.getDescription());
+        assertThat(framework.getImage().getId()).isEqualTo(frameworkRequestDto.getImageId());
     }
 
     @Test
@@ -230,7 +230,7 @@ class FrameworkControllerIntegrationTest {
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkService.addFramework(
-                 new FrameworkDTO("", "", existingImage.getId(), existingLanguage.getId())
+                 new FrameworkRequestDTO("", "", existingImage.getId(), existingLanguage.getId())
         );
 
         // when

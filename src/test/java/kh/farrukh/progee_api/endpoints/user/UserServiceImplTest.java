@@ -5,6 +5,10 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserImageRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserPasswordRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserRoleRequestDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
@@ -113,7 +117,7 @@ class UserServiceImplTest {
     @Test
     void canAddUser() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -143,7 +147,7 @@ class UserServiceImplTest {
     @Test
     void throwsExceptionIfDuplicateEmail() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -166,7 +170,7 @@ class UserServiceImplTest {
     @Test
     void throwsExceptionIfDuplicateUsername() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -190,7 +194,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void userWithUpdateOwnPermissionCanUpdateUser() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -221,7 +225,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void throwsExceptionIfUserWithoutUpdateOwnPermissionUpdatesUser() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -245,7 +249,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void userWithUpdateOthersPermissionCanUpdateUser() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -276,7 +280,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void throwsExceptionIfUserWithoutUpdateOthersPermissionUpdatesUser() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -299,7 +303,7 @@ class UserServiceImplTest {
     @Test
     void throwsExceptionIfUserToUpdateDoesNotExistWithId() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -322,7 +326,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void throwsExceptionIfUsernameOfUserToUpdateIsAlreadyUsed() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -348,7 +352,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void throwsExceptionIfEmailOfUserToUpdateIsAlreadyUsed() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -374,7 +378,7 @@ class UserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void throwsExceptionIfImageOfUserToUpdateDoesNotExistWithId() {
         // given
-        AppUserDTO userDto = new AppUserDTO(
+        AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
                 "user_u",
@@ -424,7 +428,7 @@ class UserServiceImplTest {
     @Test
     void canSetUserRole() {
         // given
-        UserRoleDTO roleDto = new UserRoleDTO(1);
+        SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
         when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE))));
 
@@ -441,7 +445,7 @@ class UserServiceImplTest {
     @Test
     void throwsExceptionIfRoleToSetDoesNotExistWithId() {
         // given
-        UserRoleDTO roleDto = new UserRoleDTO(1);
+        SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
         when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
 
         // when
@@ -455,7 +459,7 @@ class UserServiceImplTest {
     @Test
     void throwsExceptionIfUserToSetRoleDoesNotExistWithId() {
         // given
-        UserRoleDTO roleDto = new UserRoleDTO(1);
+        SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
 
         // when
         // then
@@ -470,7 +474,7 @@ class UserServiceImplTest {
     void userWithUpdateOwnPermissionCanSetUserImage() {
         // given
         long userId = 1;
-        UserImageDTO imageDto = new UserImageDTO(1);
+        SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
@@ -491,7 +495,7 @@ class UserServiceImplTest {
     void throwsExceptionIfUserWithoutUpdateOwnPermissionSetsUserImage() {
         // given
         long userId = 1;
-        UserImageDTO imageDto = new UserImageDTO(1);
+        SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.emptyList()));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
@@ -506,7 +510,7 @@ class UserServiceImplTest {
     void userWithUpdateOtherPermissionCanSetUserImage() {
         // given
         long userId = 1;
-        UserImageDTO imageDto = new UserImageDTO(1);
+        SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
@@ -527,7 +531,7 @@ class UserServiceImplTest {
     void throwsExceptionIfUserWithoutUpdateOtherPermissionSetsUserImage() {
         // given
         long userId = 1;
-        UserImageDTO imageDto = new UserImageDTO(1);
+        SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(2, new Role(Collections.emptyList()));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
@@ -542,7 +546,7 @@ class UserServiceImplTest {
     void throwsExceptionIfUserToSetImageDoesNotExistWithId() {
         // given
         long userId = 1;
-        UserImageDTO imageDto = new UserImageDTO(1);
+        SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
@@ -560,7 +564,7 @@ class UserServiceImplTest {
     void throwsExceptionIfImageToSetDoesNotExistWithId() {
         // given
         long userId = 1;
-        UserImageDTO imageDto = new UserImageDTO(1);
+        SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
@@ -581,7 +585,7 @@ class UserServiceImplTest {
         long userId = 1;
         String currentPassword = "1234";
         String newPassword = "4321";
-        UserPasswordDTO passwordDto = new UserPasswordDTO(currentPassword, newPassword);
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
@@ -605,7 +609,7 @@ class UserServiceImplTest {
         long userId = 1;
         String currentPassword = "1234";
         String newPassword = "4321";
-        UserPasswordDTO passwordDto = new UserPasswordDTO(currentPassword, newPassword);
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.emptyList()));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
@@ -622,7 +626,7 @@ class UserServiceImplTest {
         long userId = 1;
         String currentPassword = "1234";
         String newPassword = "4321";
-        UserPasswordDTO passwordDto = new UserPasswordDTO(currentPassword, newPassword);
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
@@ -646,7 +650,7 @@ class UserServiceImplTest {
         long userId = 1;
         String currentPassword = "1234";
         String newPassword = "4321";
-        UserPasswordDTO passwordDto = new UserPasswordDTO(currentPassword, newPassword);
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(2, new Role(Collections.emptyList()));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
@@ -663,7 +667,7 @@ class UserServiceImplTest {
         long userId = 1;
         String currentPassword = "1234";
         String newPassword = "4321";
-        UserPasswordDTO passwordDto = new UserPasswordDTO(currentPassword, newPassword);
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
@@ -680,7 +684,7 @@ class UserServiceImplTest {
     void throwsExceptionIfUserToSetPasswordDoesNotExistWithId() {
         // given
         long userId = 1;
-        UserPasswordDTO passwordDto = new UserPasswordDTO("", "");
+        SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO("", "");
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(userRepository.findById(any())).thenReturn(Optional.empty());

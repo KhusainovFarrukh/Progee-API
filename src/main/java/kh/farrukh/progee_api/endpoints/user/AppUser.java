@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.global.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.framework.Framework;
 import kh.farrukh.progee_api.endpoints.image.Image;
@@ -101,18 +102,18 @@ public class AppUser extends EntityWithId implements UserDetails {
     // This is a constructor that takes a AppUserDTO object and
     // sets the values of the current object to the values of
     // the given object.
-    public AppUser(AppUserDTO appUserDto, ImageRepository imageRepository, RoleRepository roleRepository) {
-        this.name = appUserDto.getName();
-        this.email = appUserDto.getEmail();
-        this.uniqueUsername = appUserDto.getUsername();
-        this.password = appUserDto.getPassword();
-        this.role = roleRepository.findById(appUserDto.getRoleId()).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", appUserDto.getRoleId())
+    public AppUser(AppUserRequestDTO appUserRequestDto, ImageRepository imageRepository, RoleRepository roleRepository) {
+        this.name = appUserRequestDto.getName();
+        this.email = appUserRequestDto.getEmail();
+        this.uniqueUsername = appUserRequestDto.getUsername();
+        this.password = appUserRequestDto.getPassword();
+        this.role = roleRepository.findById(appUserRequestDto.getRoleId()).orElseThrow(
+                () -> new ResourceNotFoundException("Role", "id", appUserRequestDto.getRoleId())
         );
-        this.isLocked = appUserDto.isLocked();
-        this.isEnabled = appUserDto.isEnabled();
-        this.image = imageRepository.findById(appUserDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", appUserDto.getImageId())
+        this.isLocked = appUserRequestDto.isLocked();
+        this.isEnabled = appUserRequestDto.isEnabled();
+        this.image = imageRepository.findById(appUserRequestDto.getImageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Image", "id", appUserRequestDto.getImageId())
         );
     }
 

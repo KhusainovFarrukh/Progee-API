@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.io.IOException;
  */
 public interface AuthService {
 
-    AppUser register(RegistrationRequest registrationRequest);
+    AppUser register(RegistrationRequestDTO registrationRequestDTO);
 
-    AuthResponse refreshToken(String authHeader) throws IOException;
+    AuthResponseDTO refreshToken(String authHeader) throws IOException;
 }

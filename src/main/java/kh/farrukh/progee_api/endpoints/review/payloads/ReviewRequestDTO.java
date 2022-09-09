@@ -1,6 +1,7 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.endpoints.review.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.endpoints.review.ReviewValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewDTO {
+public class ReviewRequestDTO {
 
     @NotBlank(message = "Body must not be blank")
     @Size(min = 8, message = "Body must not be shorter than 8 characters")
@@ -27,7 +28,7 @@ public class ReviewDTO {
     @JsonProperty("language_id")
     private Long languageId;
 
-    public ReviewDTO(String body, ReviewValue value) {
+    public ReviewRequestDTO(String body, ReviewValue value) {
         this.body = body;
         this.value = value;
     }

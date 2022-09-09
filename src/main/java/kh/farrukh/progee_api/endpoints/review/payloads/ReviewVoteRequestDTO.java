@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.endpoints.review.payloads;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewVoteDTO {
+public class ReviewVoteRequestDTO {
 
     @NotNull(message = "Vote must not be null")
     private boolean vote;

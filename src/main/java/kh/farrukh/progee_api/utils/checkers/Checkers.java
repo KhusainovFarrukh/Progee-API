@@ -3,9 +3,9 @@ package kh.farrukh.progee_api.utils.checkers;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.review.ReviewRepository;
-import kh.farrukh.progee_api.endpoints.role.RoleDTO;
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
@@ -81,14 +81,14 @@ public class Checkers {
      * If the user with given username or email already exists, throw an exception.
      *
      * @param userRepository The repository that will be used to check if the user exists.
-     * @param appUserDto The DTO that is being validated.
+     * @param appUserRequestDto The DTO that is being validated.
      */
-    public static void checkUserIsUnique(UserRepository userRepository, AppUserDTO appUserDto) {
-        if (userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
-            throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
+    public static void checkUserIsUnique(UserRepository userRepository, AppUserRequestDTO appUserRequestDto) {
+        if (userRepository.existsByUniqueUsername(appUserRequestDto.getUsername())) {
+            throw new DuplicateResourceException("User", "username", appUserRequestDto.getUsername());
         }
-        if (userRepository.existsByEmail(appUserDto.getEmail())) {
-            throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
+        if (userRepository.existsByEmail(appUserRequestDto.getEmail())) {
+            throw new DuplicateResourceException("User", "email", appUserRequestDto.getEmail());
         }
     }
 
@@ -98,9 +98,9 @@ public class Checkers {
         }
     }
 
-    public static void checkRoleIsUnique(RoleRepository roleRepository, RoleDTO roleDTO) {
-        if (roleRepository.existsByTitle(roleDTO.getTitle())) {
-            throw new DuplicateResourceException("Role", "title", roleDTO.getTitle());
+    public static void checkRoleIsUnique(RoleRepository roleRepository, RoleRequestDTO roleRequestDTO) {
+        if (roleRepository.existsByTitle(roleRequestDTO.getTitle())) {
+            throw new DuplicateResourceException("Role", "title", roleRequestDTO.getTitle());
         }
     }
 }

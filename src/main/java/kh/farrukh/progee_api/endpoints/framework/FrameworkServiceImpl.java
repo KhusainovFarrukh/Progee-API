@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
@@ -85,19 +86,19 @@ public class FrameworkServiceImpl implements FrameworkService {
     /**
      * This function adds a framework to the database
      *
-     * @param frameworkDto The DTO object that contains the framework information.
+     * @param frameworkRequestDto The DTO object that contains the framework information.
      * @return Framework
      */
     @Override
-    public Framework addFramework(FrameworkDTO frameworkDto) {
-        if (frameworkDto.getLanguageId() == null) {
+    public Framework addFramework(FrameworkRequestDTO frameworkRequestDto) {
+        if (frameworkRequestDto.getLanguageId() == null) {
             throw new BadRequestException("Language id");
         }
-        if (frameworkRepository.existsByName(frameworkDto.getName())) {
-            throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
+        if (frameworkRepository.existsByName(frameworkRequestDto.getName())) {
+            throw new DuplicateResourceException("Framework", "name", frameworkRequestDto.getName());
         }
 
-        Framework framework = new Framework(frameworkDto, languageRepository, imageRepository);
+        Framework framework = new Framework(frameworkRequestDto, languageRepository, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         framework.setAuthor(currentUser);
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
@@ -113,11 +114,11 @@ public class FrameworkServiceImpl implements FrameworkService {
      * This function updates a framework in the database
      *
      * @param id           The id of the framework to update
-     * @param frameworkDto The DTO object that contains the new values for the framework.
+     * @param frameworkRequestDto The DTO object that contains the new values for the framework.
      * @return The updated framework.
      */
     @Override
-    public Framework updateFramework(long id, FrameworkDTO frameworkDto) {
+    public Framework updateFramework(long id, FrameworkRequestDTO frameworkRequestDto) {
         Framework framework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
@@ -132,15 +133,15 @@ public class FrameworkServiceImpl implements FrameworkService {
         ) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
-            if (!frameworkDto.getName().equals(framework.getName()) &&
-                    languageRepository.existsByName(frameworkDto.getName())) {
-                throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
+            if (!frameworkRequestDto.getName().equals(framework.getName()) &&
+                    languageRepository.existsByName(frameworkRequestDto.getName())) {
+                throw new DuplicateResourceException("Framework", "name", frameworkRequestDto.getName());
             }
 
-            framework.setName(frameworkDto.getName());
-            framework.setDescription(frameworkDto.getDescription());
-            framework.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
+            framework.setName(frameworkRequestDto.getName());
+            framework.setDescription(frameworkRequestDto.getDescription());
+            framework.setImage(imageRepository.findById(frameworkRequestDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", frameworkRequestDto.getImageId())
             ));
             if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
                 framework.setState(ResourceState.APPROVED);

@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -21,9 +22,9 @@ public interface LanguageService {
 
     Language getLanguageById(long id);
 
-    Language addLanguage(LanguageDTO languageDto);
+    Language addLanguage(LanguageRequestDTO languageRequestDto);
 
-    Language updateLanguage(long id, LanguageDTO languageDto);
+    Language updateLanguage(long id, LanguageRequestDTO languageRequestDto);
 
     void deleteLanguage(long id);
 

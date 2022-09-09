@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.user;
+package kh.farrukh.progee_api.endpoints.user.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserImageDTO {
+public class SetUserImageRequestDTO {
     @NotNull(message = "Image id must not be null")
     @JsonProperty("image_id")
     private long imageId;

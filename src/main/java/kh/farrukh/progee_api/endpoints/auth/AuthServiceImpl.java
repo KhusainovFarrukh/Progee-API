@@ -1,9 +1,11 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -26,15 +28,15 @@ public class AuthServiceImpl implements AuthService {
     /**
      * If the email is valid, add a new user to the database
      *
-     * @param registrationRequest The request object that contains the user's information.
+     * @param registrationRequestDTO The request object that contains the user's information.
      * @return Registered AppUser object
      */
     @Override
-    public AppUser register(RegistrationRequest registrationRequest) {
-        if (!emailValidator.test(registrationRequest.getEmail())) {
+    public AppUser register(RegistrationRequestDTO registrationRequestDTO) {
+        if (!emailValidator.test(registrationRequestDTO.getEmail())) {
             throw new BadRequestException("Email");
         }
-        return userService.addUser(new AppUserDTO(registrationRequest, roleRepository));
+        return userService.addUser(new AppUserRequestDTO(registrationRequestDTO, roleRepository));
     }
 
     /**
@@ -44,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
      * @param authHeader The refresh token in header
      */
     @Override
-    public AuthResponse refreshToken(String authHeader) {
+    public AuthResponseDTO refreshToken(String authHeader) {
         try {
             DecodedJWT decodedJWT = tokenProvider.validateToken(authHeader, true);
             if (decodedJWT != null) {

@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -63,29 +64,29 @@ public class FrameworkController {
     /**
      * This function creates framework if it does not exist.
      *
-     * @param frameworkDto Values for the framework to be created.
+     * @param frameworkRequestDto Values for the framework to be created.
      * @return A ResponseEntity containing created Framework object and HttpStatus.
      */
     @PostMapping
     public ResponseEntity<Framework> addFramework(
-            @Valid @RequestBody FrameworkDTO frameworkDto
+            @Valid @RequestBody FrameworkRequestDTO frameworkRequestDto
     ) {
-        return new ResponseEntity<>(frameworkService.addFramework(frameworkDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(frameworkService.addFramework(frameworkRequestDto), HttpStatus.CREATED);
     }
 
     /**
      * This function updates a framework.
      *
      * @param id           The id of the framework to update
-     * @param frameworkDto The framework values that we want to update.
+     * @param frameworkRequestDto The framework values that we want to update.
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<Framework> updateFramework(
             @PathVariable long id,
-            @Valid @RequestBody FrameworkDTO frameworkDto
+            @Valid @RequestBody FrameworkRequestDTO frameworkRequestDto
     ) {
-        return new ResponseEntity<>(frameworkService.updateFramework(id, frameworkDto), HttpStatus.OK);
+        return new ResponseEntity<>(frameworkService.updateFramework(id, frameworkRequestDto), HttpStatus.OK);
     }
 
     /**

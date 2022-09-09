@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.language;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.framework.Framework;
@@ -89,11 +90,11 @@ public class Language extends EntityWithResourceState {
     // This is a constructor that takes a LanguageDTO object and
     // sets the values of the current object to the values of
     // the given object.
-    public Language(LanguageDTO languageDto, ImageRepository imageRepository) {
-        this.name = languageDto.getName();
-        this.description = languageDto.getDescription();
-        this.image = imageRepository.findById(languageDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", languageDto.getImageId())
+    public Language(LanguageRequestDTO languageRequestDto, ImageRepository imageRepository) {
+        this.name = languageRequestDto.getName();
+        this.description = languageRequestDto.getDescription();
+        this.image = imageRepository.findById(languageRequestDto.getImageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Image", "id", languageRequestDto.getImageId())
         );
     }
 }

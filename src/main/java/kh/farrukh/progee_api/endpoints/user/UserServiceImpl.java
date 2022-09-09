@@ -4,6 +4,10 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserImageRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserPasswordRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.SetUserRoleRequestDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
@@ -102,13 +106,13 @@ public class UserServiceImpl implements UserService {
     /**
      * Creates a new AppUser object, encodes the password, and saves the user
      *
-     * @param appUserDto The DTO object that contains the user's information.
+     * @param appUserRequestDto The DTO object that contains the user's information.
      * @return The created user.
      */
     @Override
-    public AppUser addUser(AppUserDTO appUserDto) {
-        checkUserIsUnique(userRepository, appUserDto);
-        AppUser appUser = new AppUser(appUserDto, imageRepository, roleRepository);
+    public AppUser addUser(AppUserRequestDTO appUserRequestDto) {
+        checkUserIsUnique(userRepository, appUserRequestDto);
+        AppUser appUser = new AppUser(appUserRequestDto, imageRepository, roleRepository);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return userRepository.save(appUser);
     }
@@ -118,11 +122,11 @@ public class UserServiceImpl implements UserService {
      * an exception. If it doesn't, update the user
      *
      * @param id         The id of the user to be updated.
-     * @param appUserDto The DTO object that contains the new values for the user.
+     * @param appUserRequestDto The DTO object that contains the new values for the user.
      * @return The updated user.
      */
     @Override
-    public AppUser updateUser(long id, AppUserDTO appUserDto) {
+    public AppUser updateUser(long id, AppUserRequestDTO appUserRequestDto) {
         AppUser user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
         );
@@ -137,22 +141,22 @@ public class UserServiceImpl implements UserService {
         ) {
 
             // It checks if the username of the user is changed and if the new username is already taken.
-            if (!appUserDto.getUsername().equals(user.getUniqueUsername()) &&
-                    userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
-                throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
+            if (!appUserRequestDto.getUsername().equals(user.getUniqueUsername()) &&
+                    userRepository.existsByUniqueUsername(appUserRequestDto.getUsername())) {
+                throw new DuplicateResourceException("User", "username", appUserRequestDto.getUsername());
             }
 
             // It checks if the email of the user is changed and if the new email is already taken.
-            if (!appUserDto.getEmail().equals(user.getEmail()) &&
-                    userRepository.existsByEmail(appUserDto.getEmail())) {
-                throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
+            if (!appUserRequestDto.getEmail().equals(user.getEmail()) &&
+                    userRepository.existsByEmail(appUserRequestDto.getEmail())) {
+                throw new DuplicateResourceException("User", "email", appUserRequestDto.getEmail());
             }
 
-            user.setName(appUserDto.getName());
-            user.setEmail(appUserDto.getEmail());
-            user.setUniqueUsername(appUserDto.getUsername());
-            user.setImage(imageRepository.findById(appUserDto.getImageId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Image", "id", appUserDto.getImageId())
+            user.setName(appUserRequestDto.getName());
+            user.setEmail(appUserRequestDto.getEmail());
+            user.setUniqueUsername(appUserRequestDto.getUsername());
+            user.setImage(imageRepository.findById(appUserRequestDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", appUserRequestDto.getImageId())
             ));
 
             return userRepository.save(user);
@@ -181,7 +185,7 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    public AppUser setUserRole(long id, UserRoleDTO roleDto) {
+    public AppUser setUserRole(long id, SetUserRoleRequestDTO roleDto) {
         AppUser user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
         );
@@ -201,7 +205,7 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    public AppUser setUserImage(long id, UserImageDTO imageDto) {
+    public AppUser setUserImage(long id, SetUserImageRequestDTO imageDto) {
         if (
                 CurrentUserUtils.hasPermissionOrIsAuthor(
                         Permission.CAN_UPDATE_OTHER_USER,
@@ -234,7 +238,7 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
+    public AppUser setUserPassword(long id, SetUserPasswordRequestDTO passwordDto) {
         if (
                 CurrentUserUtils.hasPermissionOrIsAuthor(
                         Permission.CAN_UPDATE_OTHER_USER,

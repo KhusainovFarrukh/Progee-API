@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.user;
+package kh.farrukh.progee_api.endpoints.user.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserPasswordDTO {
+public class SetUserPasswordRequestDTO {
     @NotBlank(message = "Password must not be blank")
     @Size(min = 8, message = "Password length must be at least 8 characters")
     private String password;

@@ -2,6 +2,8 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
@@ -135,12 +137,12 @@ class ReviewServiceImplTest {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
-        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue, 1L);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com")));
 
         // when
-        underTest.addReview(reviewDto);
+        underTest.addReview(reviewRequestDto);
 
         // then
         ArgumentCaptor<Review> languageArgCaptor = ArgumentCaptor.forClass(Review.class);
@@ -158,12 +160,12 @@ class ReviewServiceImplTest {
     void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
-        ReviewDTO reviewDto = new ReviewDTO("", ReviewValue.LIKE, languageId);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("", ReviewValue.LIKE, languageId);
         when(languageRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addReview(reviewDto))
+        assertThatThrownBy(() -> underTest.addReview(reviewRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
                 .hasMessageContaining(String.valueOf(languageId));
@@ -176,14 +178,14 @@ class ReviewServiceImplTest {
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
         AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
-        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(author);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
-        underTest.updateReview(1, reviewDto);
+        underTest.updateReview(1, reviewRequestDto);
 
         // then
         ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
@@ -200,7 +202,7 @@ class ReviewServiceImplTest {
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
         AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
-        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(author);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
@@ -208,7 +210,7 @@ class ReviewServiceImplTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateReview(1, reviewDto))
+        assertThatThrownBy(() -> underTest.updateReview(1, reviewRequestDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -219,14 +221,14 @@ class ReviewServiceImplTest {
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
         AppUser user = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHERS_REVIEW)));
-        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
-        underTest.updateReview(1, reviewDto);
+        underTest.updateReview(1, reviewRequestDto);
 
         // then
         ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
@@ -243,7 +245,7 @@ class ReviewServiceImplTest {
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
         AppUser user = new AppUser("test@mail.com", new Role(Collections.emptyList()));
-        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
@@ -251,7 +253,7 @@ class ReviewServiceImplTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateReview(1, reviewDto))
+        assertThatThrownBy(() -> underTest.updateReview(1, reviewRequestDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -260,12 +262,12 @@ class ReviewServiceImplTest {
     void throwsExceptionIfReviewToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
-        ReviewDTO reviewDto = new ReviewDTO("", ReviewValue.LIKE);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("", ReviewValue.LIKE);
         when(reviewRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateReview(frameworkId, reviewDto))
+        assertThatThrownBy(() -> underTest.updateReview(frameworkId, reviewRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Review")
                 .hasMessageContaining(String.valueOf(frameworkId));
@@ -360,7 +362,7 @@ class ReviewServiceImplTest {
     void canUpvoteReview() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO voteDto = new ReviewVoteDTO(true);
+        ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
         AppUser user = new AppUser(1);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
@@ -380,7 +382,7 @@ class ReviewServiceImplTest {
     void canDownvoteReview() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO voteDto = new ReviewVoteDTO(false);
+        ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
         AppUser user = new AppUser(1);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
@@ -400,7 +402,7 @@ class ReviewServiceImplTest {
     void canChangeDownvoteToUpvoteReview() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO voteDto = new ReviewVoteDTO(true);
+        ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getDownVotes().add(user.getId());
@@ -422,7 +424,7 @@ class ReviewServiceImplTest {
     void canChangeUpvoteToDownvoteReview() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO voteDto = new ReviewVoteDTO(false);
+        ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getUpVotes().add(user.getId());
@@ -444,7 +446,7 @@ class ReviewServiceImplTest {
     void throwsExceptionIfUpvotesAlreadyUpvotedReview() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO voteDto = new ReviewVoteDTO(true);
+        ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getUpVotes().add(user.getId());
@@ -463,7 +465,7 @@ class ReviewServiceImplTest {
     void throwsExceptionIfDownvotesAlreadyDownvotedReview() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO voteDto = new ReviewVoteDTO(false);
+        ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getDownVotes().add(user.getId());
@@ -482,7 +484,7 @@ class ReviewServiceImplTest {
     void throwsExceptionIfReviewToVoteDoesNotExistWithId() {
         // given
         long reviewId = 1;
-        ReviewVoteDTO stateDto = new ReviewVoteDTO(true);
+        ReviewVoteRequestDTO stateDto = new ReviewVoteRequestDTO(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.empty());
 
         // when

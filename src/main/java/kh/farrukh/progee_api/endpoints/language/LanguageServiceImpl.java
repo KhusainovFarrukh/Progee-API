@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
@@ -80,15 +81,15 @@ public class LanguageServiceImpl implements LanguageService {
     /**
      * This function adds a language to the database
      *
-     * @param languageDto The DTO object that contains the language information.
+     * @param languageRequestDto The DTO object that contains the language information.
      * @return Language
      */
     @Override
-    public Language addLanguage(LanguageDTO languageDto) {
-        if (languageRepository.existsByName(languageDto.getName())) {
-            throw new DuplicateResourceException("Language", "name", languageDto.getName());
+    public Language addLanguage(LanguageRequestDTO languageRequestDto) {
+        if (languageRepository.existsByName(languageRequestDto.getName())) {
+            throw new DuplicateResourceException("Language", "name", languageRequestDto.getName());
         }
-        Language language = new Language(languageDto, imageRepository);
+        Language language = new Language(languageRequestDto, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
         language.setAuthor(currentUser);
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, userRepository)) {
@@ -104,11 +105,11 @@ public class LanguageServiceImpl implements LanguageService {
      * This function updates a language in the database
      *
      * @param id          The id of the framework to update
-     * @param languageDto The DTO object that contains the new values for the language.
+     * @param languageRequestDto The DTO object that contains the new values for the language.
      * @return The updated language.
      */
     @Override
-    public Language updateLanguage(long id, LanguageDTO languageDto) {
+    public Language updateLanguage(long id, LanguageRequestDTO languageRequestDto) {
         Language existingLanguage = languageRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
@@ -124,20 +125,20 @@ public class LanguageServiceImpl implements LanguageService {
 
 
             // It checks if the name of the language is changed and if the new name is already taken.
-            if (!languageDto.getName().equals(existingLanguage.getName()) &&
-                    languageRepository.existsByName(languageDto.getName())) {
-                throw new DuplicateResourceException("Language", "name", languageDto.getName());
+            if (!languageRequestDto.getName().equals(existingLanguage.getName()) &&
+                    languageRepository.existsByName(languageRequestDto.getName())) {
+                throw new DuplicateResourceException("Language", "name", languageRequestDto.getName());
             }
 
-            existingLanguage.setName(languageDto.getName());
-            existingLanguage.setDescription(languageDto.getDescription());
+            existingLanguage.setName(languageRequestDto.getName());
+            existingLanguage.setDescription(languageRequestDto.getDescription());
             if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, userRepository)) {
                 existingLanguage.setState(ResourceState.APPROVED);
             } else {
                 existingLanguage.setState(ResourceState.WAITING);
             }
-            existingLanguage.setImage(imageRepository.findById(languageDto.getImageId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Image", "id", languageDto.getImageId())
+            existingLanguage.setImage(imageRepository.findById(languageRequestDto.getImageId()).orElseThrow(
+                    () -> new ResourceNotFoundException("Image", "id", languageRequestDto.getImageId())
             ));
 
             return languageRepository.save(existingLanguage);

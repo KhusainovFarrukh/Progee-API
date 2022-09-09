@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.Getter;
 import org.springframework.beans.factory.InitializingBean;
@@ -43,12 +43,12 @@ public class TokenProvider implements InitializingBean {
      *
      * @param user The user details object that contains the user's information.
      */
-    public AuthResponse generateTokens(AppUser user) {
+    public AuthResponseDTO generateTokens(AppUser user) {
         long currentMillis = System.currentTimeMillis();
         Date accessExpireDate = new Date(currentMillis + jwtConfiguration.getAccessTokenValidityInSeconds() * 1000);
         Date refreshExpireDate = new Date(currentMillis + jwtConfiguration.getRefreshTokenValidityInSeconds() * 1000);
 
-        return new AuthResponse(
+        return new AuthResponseDTO(
                 user.getRole(),
                 createToken(user, accessExpireDate, accessTokenAlgorithm),
                 createToken(user, refreshExpireDate, refreshTokenAlgorithm),

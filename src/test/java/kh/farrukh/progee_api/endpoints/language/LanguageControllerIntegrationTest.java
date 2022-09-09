@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
@@ -156,22 +157,22 @@ class LanguageControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
-        LanguageDTO languageDto = new LanguageDTO("test", "test", existingImage.getId());
+        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test", "test", existingImage.getId());
 
         // when
         MvcResult result = mvc
                 .perform(post(ENDPOINT_LANGUAGE)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(languageDto)))
+                        .content(objectMapper.writeValueAsString(languageRequestDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
 
         // then
         Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
-        assertThat(language.getName()).isEqualTo(languageDto.getName());
-        assertThat(language.getDescription()).isEqualTo(languageDto.getDescription());
-        assertThat(language.getImage().getId()).isEqualTo(languageDto.getImageId());
+        assertThat(language.getName()).isEqualTo(languageRequestDto.getName());
+        assertThat(language.getDescription()).isEqualTo(languageRequestDto.getDescription());
+        assertThat(language.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
     }
 
     @Test
@@ -181,14 +182,14 @@ class LanguageControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
-        Language existingLanguage = languageService.addLanguage(new LanguageDTO("test", "test", existingImage.getId()));
-        LanguageDTO languageDto = new LanguageDTO("test-update", "test-update", existingImage.getId());
+        Language existingLanguage = languageService.addLanguage(new LanguageRequestDTO("test", "test", existingImage.getId()));
+        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test-update", "test-update", existingImage.getId());
 
         // when
         MvcResult result = mvc
                 .perform(put(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(languageDto)))
+                        .content(objectMapper.writeValueAsString(languageRequestDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -196,9 +197,9 @@ class LanguageControllerIntegrationTest {
         // then
         Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
         assertThat(language.getId()).isEqualTo(existingLanguage.getId());
-        assertThat(language.getName()).isEqualTo(languageDto.getName());
-        assertThat(language.getDescription()).isEqualTo(languageDto.getDescription());
-        assertThat(language.getImage().getId()).isEqualTo(languageDto.getImageId());
+        assertThat(language.getName()).isEqualTo(languageRequestDto.getName());
+        assertThat(language.getDescription()).isEqualTo(languageRequestDto.getDescription());
+        assertThat(language.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
     }
 
     @Test
@@ -208,7 +209,7 @@ class LanguageControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_LANGUAGE)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
-        Language existingLanguage = languageService.addLanguage(new LanguageDTO("", "", existingImage.getId()));
+        Language existingLanguage = languageService.addLanguage(new LanguageRequestDTO("", "", existingImage.getId()));
 
         // when
         // then

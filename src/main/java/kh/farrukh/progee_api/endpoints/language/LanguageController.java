@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -59,27 +60,27 @@ public class LanguageController {
     /**
      * This function creates language if it does not exist.
      *
-     * @param languageDto Values for the language to be created.
+     * @param languageRequestDto Values for the language to be created.
      * @return A ResponseEntity containing created Language object and HttpStatus.
      */
     @PostMapping
-    public ResponseEntity<Language> addLanguage(@Valid @RequestBody LanguageDTO languageDto) {
-        return new ResponseEntity<>(languageService.addLanguage(languageDto), HttpStatus.CREATED);
+    public ResponseEntity<Language> addLanguage(@Valid @RequestBody LanguageRequestDTO languageRequestDto) {
+        return new ResponseEntity<>(languageService.addLanguage(languageRequestDto), HttpStatus.CREATED);
     }
 
     /**
      * This function updates a language.
      *
      * @param id          The id of the language to update
-     * @param languageDto The language values that we want to update.
+     * @param languageRequestDto The language values that we want to update.
      * @return A ResponseEntity with the updated Language object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<Language> updateLanguage(
             @PathVariable long id,
-            @Valid @RequestBody LanguageDTO languageDto
+            @Valid @RequestBody LanguageRequestDTO languageRequestDto
     ) {
-        return new ResponseEntity<>(languageService.updateLanguage(id, languageDto), HttpStatus.OK);
+        return new ResponseEntity<>(languageService.updateLanguage(id, languageRequestDto), HttpStatus.OK);
     }
 
     /**

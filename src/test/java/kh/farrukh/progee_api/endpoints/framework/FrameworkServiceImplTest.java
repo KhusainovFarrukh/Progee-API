@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
@@ -210,13 +211,13 @@ class FrameworkServiceImplTest {
     void userWithOnlyCreatePermissionCreatesFrameworkWithWaitingState() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK));
-        FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com", role)));
 
         // when
-        underTest.addFramework(frameworkDto);
+        underTest.addFramework(frameworkRequestDto);
 
         // then
         ArgumentCaptor<Framework> languageArgCaptor = ArgumentCaptor.forClass(Framework.class);
@@ -234,13 +235,13 @@ class FrameworkServiceImplTest {
         // given
         Role role = new Role(List.of(Permission.CAN_CREATE_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE));
         AppUser user = new AppUser("user@mail.com", role);
-        FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
-        underTest.addFramework(frameworkDto);
+        underTest.addFramework(frameworkRequestDto);
 
         // then
         ArgumentCaptor<Framework> languageArgCaptor = ArgumentCaptor.forClass(Framework.class);
@@ -257,12 +258,12 @@ class FrameworkServiceImplTest {
     void throwsExceptionIfFrameworkExistsWithName() {
         // given
         String name = "test";
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, "", 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, "", 1, 1L);
         when(frameworkRepository.existsByName(name)).thenReturn(true);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addFramework(frameworkDto))
+        assertThatThrownBy(() -> underTest.addFramework(frameworkRequestDto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("Framework")
                 .hasMessageContaining(name);
@@ -273,13 +274,13 @@ class FrameworkServiceImplTest {
     void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
-        FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1, languageId);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, languageId);
         when(languageRepository.findById(any())).thenReturn(Optional.empty());
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addFramework(frameworkDto))
+        assertThatThrownBy(() -> underTest.addFramework(frameworkRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
                 .hasMessageContaining(String.valueOf(languageId));
@@ -292,7 +293,7 @@ class FrameworkServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, desc, 1);
         Framework existingFramework = new Framework("test", ResourceState.APPROVED, new Language(1));
         existingFramework.setAuthor(author);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
@@ -306,7 +307,7 @@ class FrameworkServiceImplTest {
 //        when(frameworkRepository.save(any())).thenReturn(updatedFramework);
 
         // when
-        underTest.updateFramework(1, frameworkDto);
+        underTest.updateFramework(1, frameworkRequestDto);
 
         // then
         ArgumentCaptor<Framework> frameworkArgCaptor = ArgumentCaptor.forClass(Framework.class);
@@ -324,7 +325,7 @@ class FrameworkServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser author = new AppUser("test@mail.com", new Role(List.of(Permission.CAN_UPDATE_OWN_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE)));
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, desc, 1, 1L);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(author);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
@@ -332,7 +333,7 @@ class FrameworkServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        underTest.updateFramework(1, frameworkDto);
+        underTest.updateFramework(1, frameworkRequestDto);
 
         // then
         ArgumentCaptor<Framework> frameworkArgCaptor = ArgumentCaptor.forClass(Framework.class);
@@ -350,7 +351,7 @@ class FrameworkServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, desc, 1, 1L);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(author);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
@@ -358,7 +359,7 @@ class FrameworkServiceImplTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkDto))
+        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkRequestDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -369,7 +370,7 @@ class FrameworkServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHERS_FRAMEWORK)));
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, desc, 1, 1L);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(1));
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
@@ -377,7 +378,7 @@ class FrameworkServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        underTest.updateFramework(1, frameworkDto);
+        underTest.updateFramework(1, frameworkRequestDto);
 
         // then
         ArgumentCaptor<Framework> frameworkArgCaptor = ArgumentCaptor.forClass(Framework.class);
@@ -395,7 +396,7 @@ class FrameworkServiceImplTest {
         String name = "test name";
         String desc = "test desc";
         AppUser user = new AppUser(2, new Role(List.of(Permission.CAN_UPDATE_OTHERS_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE)));
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, desc, 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, desc, 1, 1L);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(1));
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
@@ -403,7 +404,7 @@ class FrameworkServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        underTest.updateFramework(1, frameworkDto);
+        underTest.updateFramework(1, frameworkRequestDto);
 
         // then
         ArgumentCaptor<Framework> frameworkArgCaptor = ArgumentCaptor.forClass(Framework.class);
@@ -419,7 +420,7 @@ class FrameworkServiceImplTest {
     void throwsExceptionIfNonAuthorWithoutUpdateOthersPermissionUpdatesFramework() {
         // given
         AppUser user = new AppUser(1, new Role(Collections.emptyList()));
-        FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(2));
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
@@ -427,7 +428,7 @@ class FrameworkServiceImplTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkDto))
+        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkRequestDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -436,12 +437,12 @@ class FrameworkServiceImplTest {
     void throwsExceptionIfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
-        FrameworkDTO frameworkDto = new FrameworkDTO("", "", 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
         when(frameworkRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateFramework(frameworkId, frameworkDto))
+        assertThatThrownBy(() -> underTest.updateFramework(frameworkId, frameworkRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Framework")
                 .hasMessageContaining(String.valueOf(frameworkId));
@@ -455,14 +456,14 @@ class FrameworkServiceImplTest {
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(user);
-        FrameworkDTO frameworkDto = new FrameworkDTO(name, "", 1, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, "", 1, 1L);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
         when(languageRepository.existsByName(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkDto))
+        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkRequestDto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("Framework")
                 .hasMessageContaining(name);
@@ -476,13 +477,13 @@ class FrameworkServiceImplTest {
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(user);
-        FrameworkDTO frameworkDto = new FrameworkDTO("", "", imageId, 1L);
+        FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", imageId, 1L);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkDto))
+        assertThatThrownBy(() -> underTest.updateFramework(1, frameworkRequestDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
                 .hasMessageContaining(String.valueOf(imageId));

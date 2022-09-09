@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -25,12 +27,12 @@ public class AuthController {
     /**
      * Registering new user
      *
-     * @param registrationRequest The request object that contains new user details.
+     * @param registrationRequestDTO The request object that contains new user details.
      * @return A ResponseEntity with the AppUser object and a status of OK.
      */
     @PostMapping(ENDPOINT_REGISTRATION)
-    public ResponseEntity<AppUser> register(@Valid @RequestBody RegistrationRequest registrationRequest) {
-        return new ResponseEntity<>(authService.register(registrationRequest), HttpStatus.OK);
+    public ResponseEntity<AppUser> register(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
+        return new ResponseEntity<>(authService.register(registrationRequestDTO), HttpStatus.OK);
     }
 
     /**
@@ -39,7 +41,7 @@ public class AuthController {
      * @param authHeader The HttpHeader (AUTHORIZATION Header) that contains the token.
      */
     @GetMapping(ENDPOINT_REFRESH_TOKEN)
-    public ResponseEntity<AuthResponse> refreshToken(
+    public ResponseEntity<AuthResponseDTO> refreshToken(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader
     ) throws IOException {
         return new ResponseEntity<>(

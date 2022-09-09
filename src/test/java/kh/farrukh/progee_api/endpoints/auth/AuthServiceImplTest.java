@@ -4,11 +4,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.AppUserDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.JwtConfiguration;
@@ -52,37 +54,37 @@ class AuthServiceImplTest {
     @Test
     void canRegister() {
         // given
-        RegistrationRequest registrationRequest = new RegistrationRequest(
+        RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(
                 "test", "test_lover", "user@mail.com", "1234", 1
         );
         when(emailValidator.test(any())).thenReturn(true);
         when(roleRepository.findFirstByIsDefaultIsTrue()).thenReturn(Optional.of(new Role()));
 
         // when
-        underTest.register(registrationRequest);
+        underTest.register(registrationRequestDTO);
 
         // then
-        ArgumentCaptor<AppUserDTO> appUserDTOArgCaptor = ArgumentCaptor.forClass(AppUserDTO.class);
+        ArgumentCaptor<AppUserRequestDTO> appUserDTOArgCaptor = ArgumentCaptor.forClass(AppUserRequestDTO.class);
         verify(userService).addUser(appUserDTOArgCaptor.capture());
 
-        AppUserDTO capturedAppUSerDto = appUserDTOArgCaptor.getValue();
-        assertThat(capturedAppUSerDto.getEmail()).isEqualTo(registrationRequest.getEmail());
-        assertThat(capturedAppUSerDto.getUsername()).isEqualTo(registrationRequest.getUsername());
-        assertThat(capturedAppUSerDto.getName()).isEqualTo(registrationRequest.getName());
-        assertThat(capturedAppUSerDto.getPassword()).isEqualTo(registrationRequest.getPassword());
-        assertThat(capturedAppUSerDto.getImageId()).isEqualTo(registrationRequest.getImageId());
+        AppUserRequestDTO capturedAppUSerRequestDto = appUserDTOArgCaptor.getValue();
+        assertThat(capturedAppUSerRequestDto.getEmail()).isEqualTo(registrationRequestDTO.getEmail());
+        assertThat(capturedAppUSerRequestDto.getUsername()).isEqualTo(registrationRequestDTO.getUsername());
+        assertThat(capturedAppUSerRequestDto.getName()).isEqualTo(registrationRequestDTO.getName());
+        assertThat(capturedAppUSerRequestDto.getPassword()).isEqualTo(registrationRequestDTO.getPassword());
+        assertThat(capturedAppUSerRequestDto.getImageId()).isEqualTo(registrationRequestDTO.getImageId());
     }
 
     @Test
     void throwsExceptionIfEmailIsNotValid() {
         // given
-        RegistrationRequest registrationRequest = new RegistrationRequest(
+        RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(
                 "test", "test_lover", "user-mail.com", "1234", 1
         );
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.register(registrationRequest))
+        assertThatThrownBy(() -> underTest.register(registrationRequestDTO))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Email");
     }
@@ -106,7 +108,7 @@ class AuthServiceImplTest {
         DecodedJWT decodedJWT = jwtVerifier.verify(refreshToken);
         when(tokenProvider.validateToken(anyString(), anyBoolean())).thenReturn(decodedJWT);
         when(tokenProvider.generateTokens(any())).thenReturn(
-                new AuthResponse(
+                new AuthResponseDTO(
                         role,
                         "test",
                         "test",
@@ -116,10 +118,10 @@ class AuthServiceImplTest {
         );
 
         // when
-        AuthResponse authResponse = underTest.refreshToken("Bearer " + refreshToken);
+        AuthResponseDTO authResponseDTO = underTest.refreshToken("Bearer " + refreshToken);
 
         // then
-        assertThat(authResponse.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
+        assertThat(authResponseDTO.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
     }
 
     @Test

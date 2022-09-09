@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.security.utils;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.endpoints.auth.AuthResponse;
+import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -52,12 +52,12 @@ public class SecurityUtils {
     /**
      * It takes a map of data and an HttpServletResponse object, and writes the data to the response as JSON
      *
-     * @param authResponse This is the AuthResponse that you want to send back to the client.
+     * @param authResponseDTO This is the AuthResponse that you want to send back to the client.
      * @param response     The HttpServletResponse object.
      */
-    public static void sendTokenInResponse(AuthResponse authResponse, HttpServletResponse response) throws IOException {
+    public static void sendTokenInResponse(AuthResponseDTO authResponseDTO, HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        Map<String, Object> data = new ObjectMapper().convertValue(authResponse,
+        Map<String, Object> data = new ObjectMapper().convertValue(authResponseDTO,
                 new TypeReference<>() {
                 }
         );

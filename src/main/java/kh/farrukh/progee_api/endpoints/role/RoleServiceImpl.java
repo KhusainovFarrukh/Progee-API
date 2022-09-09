@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.role;
 
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -31,25 +32,25 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role addRole(RoleDTO roleDto) {
-        checkRoleIsUnique(roleRepository, roleDto);
-        return roleRepository.save(new Role(roleDto));
+    public Role addRole(RoleRequestDTO roleRequestDto) {
+        checkRoleIsUnique(roleRepository, roleRequestDto);
+        return roleRepository.save(new Role(roleRequestDto));
     }
 
     @Override
-    public Role updateRole(long id, RoleDTO roleDto) {
+    public Role updateRole(long id, RoleRequestDTO roleRequestDto) {
         Role existingRole = roleRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Role", "id", id)
         );
 
         // It checks if the username of the user is changed and if the new username is already taken.
-        if (!roleDto.getTitle().equals(existingRole.getTitle()) &&
-                roleRepository.existsByTitle(roleDto.getTitle())) {
-            throw new DuplicateResourceException("Role", "title", roleDto.getTitle());
+        if (!roleRequestDto.getTitle().equals(existingRole.getTitle()) &&
+                roleRepository.existsByTitle(roleRequestDto.getTitle())) {
+            throw new DuplicateResourceException("Role", "title", roleRequestDto.getTitle());
         }
 
-        existingRole.setTitle(roleDto.getTitle());
-        existingRole.setPermissions(roleDto.getPermissions());
+        existingRole.setTitle(roleRequestDto.getTitle());
+        existingRole.setPermissions(roleRequestDto.getPermissions());
 
         return roleRepository.save(existingRole);
     }

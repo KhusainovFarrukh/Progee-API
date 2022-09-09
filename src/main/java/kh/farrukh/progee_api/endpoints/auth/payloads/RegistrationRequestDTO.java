@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.auth;
+package kh.farrukh.progee_api.endpoints.auth.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationRequest {
+public class RegistrationRequestDTO {
 
     @NotBlank(message = "Name must not be blank")
     private String name;

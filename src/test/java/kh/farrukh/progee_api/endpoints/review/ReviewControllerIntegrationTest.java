@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
@@ -168,21 +170,21 @@ class ReviewControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_REVIEW)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
-        ReviewDTO reviewDto = new ReviewDTO("test body", ReviewValue.LIKE, existingLanguage.getId());
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId());
 
         // when
         MvcResult result = mvc
                 .perform(post(ENDPOINT_REVIEW)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reviewDto)))
+                        .content(objectMapper.writeValueAsString(reviewRequestDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
 
         // then
         Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
-        assertThat(review.getBody()).isEqualTo(reviewDto.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewDto.getValue());
+        assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
+        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getValue());
     }
 
     @Test
@@ -193,15 +195,15 @@ class ReviewControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewService.addReview(
-                new ReviewDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
+                new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
         );
-        ReviewDTO reviewDto = new ReviewDTO("test body update", ReviewValue.LIKE);
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("test body update", ReviewValue.LIKE);
 
         // when
         MvcResult result = mvc
                 .perform(put(ENDPOINT_REVIEW + "/" + existingReview.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reviewDto)))
+                        .content(objectMapper.writeValueAsString(reviewRequestDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -209,8 +211,8 @@ class ReviewControllerIntegrationTest {
         // then
         Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
         assertThat(review.getId()).isEqualTo(existingReview.getId());
-        assertThat(review.getBody()).isEqualTo(reviewDto.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewDto.getValue());
+        assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
+        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getValue());
     }
 
     @Test
@@ -221,7 +223,7 @@ class ReviewControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewService.addReview(
-                new ReviewDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
+                new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
         );
 
         // when
@@ -239,7 +241,7 @@ class ReviewControllerIntegrationTest {
         AppUser existingUser = userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewRepository.save(new Review("", ReviewValue.LIKE, existingLanguage));
-        ReviewVoteDTO voteDTO = new ReviewVoteDTO(true);
+        ReviewVoteRequestDTO voteDTO = new ReviewVoteRequestDTO(true);
 
         // when
         MvcResult result = mvc
