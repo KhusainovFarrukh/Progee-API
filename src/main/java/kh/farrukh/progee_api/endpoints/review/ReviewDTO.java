@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.review;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,11 @@ public class ReviewDTO {
     private String body;
     @NotNull(message = "ReviewValue must not be null")
     private ReviewValue value;
-//    @JsonProperty("language_id")
-//    private long languageId;
+    @JsonProperty("language_id")
+    private Long languageId;
+
+    public ReviewDTO(String body, ReviewValue value) {
+        this.body = body;
+        this.value = value;
+    }
 }

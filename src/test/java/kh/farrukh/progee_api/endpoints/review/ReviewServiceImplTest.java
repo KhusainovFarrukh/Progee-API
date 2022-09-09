@@ -53,11 +53,11 @@ class ReviewServiceImplTest {
         when(languageRepository.existsById(any())).thenReturn(true);
 
         // when
-        underTest.getReviewsByLanguage(1, null, 1, 10, "id", "ASC");
+        underTest.getReviews(1L, null, 1, 10, "id", "ASC");
 
         // then
-        verify(reviewRepository).findByLanguage_Id(
-                1,
+        verify(reviewRepository).findAll(
+                new ReviewSpecification(1L, null),
                 PageRequest.of(
                         0,
                         10,
@@ -73,12 +73,11 @@ class ReviewServiceImplTest {
         when(languageRepository.existsById(any())).thenReturn(true);
 
         // when
-        underTest.getReviewsByLanguage(1, ReviewValue.LIKE, 1, 10, "id", "ASC");
+        underTest.getReviews(1L, ReviewValue.LIKE, 1, 10, "id", "ASC");
 
         // then
-        verify(reviewRepository).findByLanguage_IdAndReviewValue(
-                1,
-                ReviewValue.LIKE,
+        verify(reviewRepository).findAll(
+                new ReviewSpecification(1L, ReviewValue.LIKE),
                 PageRequest.of(
                         0,
                         10,
@@ -96,7 +95,7 @@ class ReviewServiceImplTest {
         // when
         // then
         assertThatThrownBy(() ->
-                underTest.getReviewsByLanguage(
+                underTest.getReviews(
                         languageId, null, 1, 10, "id", "ASC"
                 ))
                 .isInstanceOf(ResourceNotFoundException.class)
@@ -108,11 +107,10 @@ class ReviewServiceImplTest {
     void canGetReviewById() {
         // given
         long reviewId = 1;
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
 
         // when
-        underTest.getReviewById(1, reviewId);
+        underTest.getReviewById(reviewId);
 
         // then
         verify(reviewRepository).findById(reviewId);
@@ -122,27 +120,13 @@ class ReviewServiceImplTest {
     void throwsExceptionIfReviewDoesNotExistWithId() {
         // given
         long reviewId = 1;
-        when(languageRepository.existsById(any())).thenReturn(true);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.getReviewById(1, reviewId))
+        assertThatThrownBy(() -> underTest.getReviewById(reviewId))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Review")
                 .hasMessageContaining(String.valueOf(reviewId));
-    }
-
-    @Test
-    void throwsExceptionIfLanguageOfReviewDoesNotExistWithId() {
-        // given
-        long languageId = 1;
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.getReviewById(languageId, 1))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
     }
 
     @Test
@@ -151,12 +135,12 @@ class ReviewServiceImplTest {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
-        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
+        ReviewDTO reviewDto = new ReviewDTO(body, reviewValue, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com")));
 
         // when
-        underTest.addReview(1, reviewDto);
+        underTest.addReview(reviewDto);
 
         // then
         ArgumentCaptor<Review> languageArgCaptor = ArgumentCaptor.forClass(Review.class);
@@ -174,12 +158,12 @@ class ReviewServiceImplTest {
     void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
-        ReviewDTO reviewDto = new ReviewDTO("", ReviewValue.LIKE);
+        ReviewDTO reviewDto = new ReviewDTO("", ReviewValue.LIKE, languageId);
         when(languageRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addReview(languageId, reviewDto))
+        assertThatThrownBy(() -> underTest.addReview(reviewDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
                 .hasMessageContaining(String.valueOf(languageId));
@@ -195,14 +179,16 @@ class ReviewServiceImplTest {
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(author);
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
-        Review actual = underTest.updateReview(1, 1, reviewDto);
+        underTest.updateReview(1, reviewDto);
 
         // then
+        ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewArgCaptor.capture());
+        Review actual = reviewArgCaptor.getValue();
         assertThat(actual.getBody()).isEqualTo(body);
         assertThat(actual.getReviewValue()).isEqualTo(reviewValue);
     }
@@ -217,13 +203,12 @@ class ReviewServiceImplTest {
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(author);
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateReview(1, 1, reviewDto))
+        assertThatThrownBy(() -> underTest.updateReview(1, reviewDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -237,14 +222,16 @@ class ReviewServiceImplTest {
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
-        Review actual = underTest.updateReview(1, 1, reviewDto);
+        underTest.updateReview(1, reviewDto);
 
         // then
+        ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewArgCaptor.capture());
+        Review actual = reviewArgCaptor.getValue();
         assertThat(actual.getBody()).isEqualTo(body);
         assertThat(actual.getReviewValue()).isEqualTo(reviewValue);
     }
@@ -259,13 +246,12 @@ class ReviewServiceImplTest {
         ReviewDTO reviewDto = new ReviewDTO(body, reviewValue);
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateReview(1, 1, reviewDto))
+        assertThatThrownBy(() -> underTest.updateReview(1, reviewDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -275,30 +261,14 @@ class ReviewServiceImplTest {
         // given
         long frameworkId = 1;
         ReviewDTO reviewDto = new ReviewDTO("", ReviewValue.LIKE);
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateReview(1, frameworkId, reviewDto))
+        assertThatThrownBy(() -> underTest.updateReview(frameworkId, reviewDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Review")
                 .hasMessageContaining(String.valueOf(frameworkId));
-    }
-
-    @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
-    void throwsExceptionIfLanguageOfReviewToUpdateDoesNotExistWithId() {
-        // given
-        long languageId = 1;
-        ReviewDTO reviewDTto = new ReviewDTO("", ReviewValue.LIKE);
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.updateReview(languageId, 1, reviewDTto))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
     }
 
     @Test
@@ -309,12 +279,11 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OTHERS_REVIEW)));
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
-        underTest.deleteReview(1, reviewId);
+        underTest.deleteReview(reviewId);
 
         // then
         verify(reviewRepository).deleteById(reviewId);
@@ -328,13 +297,12 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.deleteReview(1, reviewId))
+        assertThatThrownBy(() -> underTest.deleteReview(reviewId))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -346,12 +314,11 @@ class ReviewServiceImplTest {
         AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
         Review existingReview = new Review();
         existingReview.setAuthor(author);
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
-        underTest.deleteReview(1, reviewId);
+        underTest.deleteReview(reviewId);
 
         // then
         verify(reviewRepository).deleteById(reviewId);
@@ -365,13 +332,12 @@ class ReviewServiceImplTest {
         AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         Review existingReview = new Review();
         existingReview.setAuthor(author);
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.deleteReview(1, reviewId))
+        assertThatThrownBy(() -> underTest.deleteReview(reviewId))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -380,28 +346,13 @@ class ReviewServiceImplTest {
     void throwsExceptionIfReviewToDeleteDoesNotExistWithId() {
         // given
         long reviewId = 1;
-        when(languageRepository.existsById(any())).thenReturn(true);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.deleteReview(1, reviewId))
+        assertThatThrownBy(() -> underTest.deleteReview(reviewId))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Review")
                 .hasMessageContaining(String.valueOf(reviewId));
-    }
-
-    @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
-    void throwsExceptionIfLanguageOfReviewToDeleteDoesNotExistWithId() {
-        // given
-        long languageId = 1;
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.deleteReview(languageId, 1))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
     }
 
     @Test
@@ -412,14 +363,16 @@ class ReviewServiceImplTest {
         ReviewVoteDTO voteDto = new ReviewVoteDTO(true);
         AppUser user = new AppUser(1);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
 
         // when
-        Review review = underTest.voteReview(1, reviewId, voteDto);
+        underTest.voteReview(reviewId, voteDto);
 
         // then
-        assertThat(user.getId()).isIn(review.getUpVotes());
+        ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewArgCaptor.capture());
+        Review actual = reviewArgCaptor.getValue();
+        assertThat(user.getId()).isIn(actual.getUpVotes());
     }
 
     @Test
@@ -430,14 +383,16 @@ class ReviewServiceImplTest {
         ReviewVoteDTO voteDto = new ReviewVoteDTO(false);
         AppUser user = new AppUser(1);
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
 
         // when
-        Review review = underTest.voteReview(1, reviewId, voteDto);
+        underTest.voteReview(reviewId, voteDto);
 
         // then
-        assertThat(user.getId()).isIn(review.getDownVotes());
+        ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewArgCaptor.capture());
+        Review actual = reviewArgCaptor.getValue();
+        assertThat(user.getId()).isIn(actual.getDownVotes());
     }
 
     @Test
@@ -450,14 +405,16 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.getDownVotes().add(user.getId());
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
-        Review review = underTest.voteReview(1, reviewId, voteDto);
+        underTest.voteReview(reviewId, voteDto);
 
         // then
-        assertThat(user.getId()).isIn(review.getUpVotes());
+        ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewArgCaptor.capture());
+        Review actual = reviewArgCaptor.getValue();
+        assertThat(user.getId()).isIn(actual.getUpVotes());
     }
 
     @Test
@@ -470,14 +427,16 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.getUpVotes().add(user.getId());
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
-        Review review = underTest.voteReview(1, reviewId, voteDto);
+        underTest.voteReview(reviewId, voteDto);
 
         // then
-        assertThat(user.getId()).isIn(review.getDownVotes());
+        ArgumentCaptor<Review> reviewArgCaptor = ArgumentCaptor.forClass(Review.class);
+        verify(reviewRepository).save(reviewArgCaptor.capture());
+        Review actual = reviewArgCaptor.getValue();
+        assertThat(user.getId()).isIn(actual.getDownVotes());
     }
 
     @Test
@@ -490,12 +449,11 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.getUpVotes().add(user.getId());
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.voteReview(1, reviewId, voteDto))
+        assertThatThrownBy(() -> underTest.voteReview(reviewId, voteDto))
                 .isInstanceOf(ReviewDuplicateVoteException.class)
                 .hasMessageContaining("up-vote");
     }
@@ -510,12 +468,11 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.getDownVotes().add(user.getId());
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.voteReview(1, reviewId, voteDto))
+        assertThatThrownBy(() -> underTest.voteReview(reviewId, voteDto))
                 .isInstanceOf(ReviewDuplicateVoteException.class)
                 .hasMessageContaining("down-vote");
     }
@@ -526,29 +483,13 @@ class ReviewServiceImplTest {
         // given
         long reviewId = 1;
         ReviewVoteDTO stateDto = new ReviewVoteDTO(true);
-        when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.voteReview(1, reviewId, stateDto))
+        assertThatThrownBy(() -> underTest.voteReview(reviewId, stateDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Review")
                 .hasMessageContaining(String.valueOf(reviewId));
-    }
-
-    @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
-    void throwsExceptionIfLanguageOfReviewToVOteDoesNotExistWithId() {
-        // given
-        long languageId = 1;
-        ReviewVoteDTO stateDto = new ReviewVoteDTO(true);
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.voteReview(languageId, 1, stateDto))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
     }
 }

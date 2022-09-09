@@ -2,9 +2,11 @@ package kh.farrukh.progee_api.endpoints.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.global.entity.EntityWithId;
 import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -79,11 +81,12 @@ public class Review extends EntityWithId {
     @JsonProperty("created_at")
     private ZonedDateTime createdAt;
 
-    // This is a constructor that takes a ReviewDTO object and sets the values of the current object to the values of
-    // the given object.
-    public Review(ReviewDTO reviewDto) {
+    public Review(ReviewDTO reviewDto, LanguageRepository languageRepository) {
         this.body = reviewDto.getBody();
         this.reviewValue = reviewDto.getValue();
+        this.language = languageRepository.findById(reviewDto.getLanguageId()).orElseThrow(
+                () -> new ResourceNotFoundException("Language", "id", reviewDto.getLanguageId())
+        );
     }
 
     public Review(Language language) {

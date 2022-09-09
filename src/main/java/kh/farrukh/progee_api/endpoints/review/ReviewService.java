@@ -9,8 +9,8 @@ import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
  */
 public interface ReviewService {
 
-    PagingResponse<Review> getReviewsByLanguage(
-            long languageId,
+    PagingResponse<Review> getReviews(
+            Long languageId,
             ReviewValue value,
             int page,
             int pageSize,
@@ -18,13 +18,13 @@ public interface ReviewService {
             String orderBy
     );
 
-    Review getReviewById(long languageId, long id);
+    Review getReviewById(long id);
 
-    Review addReview(long languageId, ReviewDTO reviewDto);
+    Review addReview(ReviewDTO reviewDto);
 
-    Review updateReview(long languageId, long id, ReviewDTO reviewDto);
+    Review updateReview(long id, ReviewDTO reviewDto);
 
-    void deleteReview(long languageId, long id);
+    void deleteReview(long id);
 
-    Review voteReview(long languageId, long id, ReviewVoteDTO reviewVoteDto);
+    Review voteReview(long id, ReviewVoteDTO reviewVoteDto);
 }

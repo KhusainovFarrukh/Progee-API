@@ -18,7 +18,7 @@ import static kh.farrukh.progee_api.endpoints.review.ReviewController.ENDPOINT_R
 @RequiredArgsConstructor
 public class ReviewController {
 
-    public static final String ENDPOINT_REVIEW = "/api/v1/languages/{languageId}/reviews";
+    public static final String ENDPOINT_REVIEW = "/api/v1/reviews";
 
     private final ReviewService reviewService;
 
@@ -34,15 +34,15 @@ public class ReviewController {
      * @return A list of reviews for a given language.
      */
     @GetMapping
-    public ResponseEntity<PagingResponse<Review>> getReviewsByLanguage(
-            @PathVariable long languageId,
+    public ResponseEntity<PagingResponse<Review>> getReviews(
+            @RequestParam(name = "language_id", required = false) Long languageId,
             @RequestParam(name = "value", required = false) ReviewValue value,
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
-        return new ResponseEntity<>(reviewService.getReviewsByLanguage(
+        return new ResponseEntity<>(reviewService.getReviews(
                 languageId, value, page, pageSize, sortBy, orderBy
         ), HttpStatus.OK);
     }
@@ -50,74 +50,64 @@ public class ReviewController {
     /**
      * This function returns a review with the given id, if it exists
      *
-     * @param languageId The id of the language that the review is for.
-     * @param id         The id of the review you want to get.
+     * @param id The id of the review you want to get.
      * @return A review object
      */
     @GetMapping("{id}")
-    public ResponseEntity<Review> getReviewById(@PathVariable long languageId, @PathVariable long id) {
-        return new ResponseEntity<>(reviewService.getReviewById(languageId, id), HttpStatus.OK);
+    public ResponseEntity<Review> getReviewById(@PathVariable long id) {
+        return new ResponseEntity<>(reviewService.getReviewById(id), HttpStatus.OK);
     }
 
     /**
      * This function takes creates review if it does not exist.
      *
-     * @param languageId The id of the language that the review is for.
-     * @param reviewDto  Values for the review to be created.
+     * @param reviewDto Values for the review to be created.
      * @return A ResponseEntity containing created Review object and HttpStatus.
      */
     @PostMapping
-    public ResponseEntity<Review> addReview(
-            @PathVariable long languageId,
-            @Valid @RequestBody ReviewDTO reviewDto
-    ) {
-        return new ResponseEntity<>(reviewService.addReview(languageId, reviewDto), HttpStatus.CREATED);
+    public ResponseEntity<Review> addReview(@Valid @RequestBody ReviewDTO reviewDto) {
+        return new ResponseEntity<>(reviewService.addReview(reviewDto), HttpStatus.CREATED);
     }
 
     /**
      * This function updates a review.
      *
-     * @param languageId The id of the language that the review is for.
      * @param id         The id of the review to update
      * @param reviewDto  The review values that we want to update.
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<Review> updateReview(
-            @PathVariable long languageId,
             @PathVariable long id,
             @Valid @RequestBody ReviewDTO reviewDto
     ) {
-        return new ResponseEntity<>(reviewService.updateReview(languageId, id, reviewDto), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.updateReview(id, reviewDto), HttpStatus.OK);
     }
 
     /**
      * This function deletes a review from a language
      *
-     * @param languageId The id of the language that the review is for.
      * @param id         The id of the review to delete
      * @return A ResponseEntity with HttpStatus.
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteReview(@PathVariable long languageId, @PathVariable long id) {
-        reviewService.deleteReview(languageId, id);
+    public ResponseEntity<Void> deleteReview(@PathVariable long id) {
+        reviewService.deleteReview(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
      * Function for voting on a review. Up-vote or down-vote.
      *
-     * @param languageId    The id of the language that the review is for.
      * @param id            the id of the review
      * @param reviewVoteDto This is the object that contains the vote value.
      * @return Review
      */
     @PostMapping("{id}/vote")
     public ResponseEntity<Review> voteReview(
-            @PathVariable long languageId,
             @PathVariable long id,
             @Valid @RequestBody ReviewVoteDTO reviewVoteDto
     ) {
-        return new ResponseEntity<>(reviewService.voteReview(languageId, id, reviewVoteDto), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.voteReview(id, reviewVoteDto), HttpStatus.OK);
     }
 }

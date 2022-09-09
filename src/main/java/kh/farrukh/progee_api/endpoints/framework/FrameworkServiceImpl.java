@@ -124,7 +124,7 @@ public class FrameworkServiceImpl implements FrameworkService {
      */
     @Override
     public Framework updateFramework(long id, FrameworkDTO frameworkDto) {
-        Framework existingFramework = frameworkRepository.findById(id).orElseThrow(
+        Framework framework = frameworkRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Framework", "id", id)
         );
 
@@ -132,29 +132,29 @@ public class FrameworkServiceImpl implements FrameworkService {
                 CurrentUserUtils.hasPermissionOrIsAuthor(
                         Permission.CAN_UPDATE_OTHERS_FRAMEWORK,
                         Permission.CAN_UPDATE_OWN_FRAMEWORK,
-                        existingFramework.getAuthor().getId(),
+                        framework.getAuthor().getId(),
                         userRepository
                 )
         ) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
-            if (!frameworkDto.getName().equals(existingFramework.getName()) &&
+            if (!frameworkDto.getName().equals(framework.getName()) &&
                     languageRepository.existsByName(frameworkDto.getName())) {
                 throw new DuplicateResourceException("Framework", "name", frameworkDto.getName());
             }
 
-            existingFramework.setName(frameworkDto.getName());
-            existingFramework.setDescription(frameworkDto.getDescription());
-            existingFramework.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
+            framework.setName(frameworkDto.getName());
+            framework.setDescription(frameworkDto.getDescription());
+            framework.setImage(imageRepository.findById(frameworkDto.getImageId()).orElseThrow(
                     () -> new ResourceNotFoundException("Image", "id", frameworkDto.getImageId())
             ));
             if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
-                existingFramework.setState(ResourceState.APPROVED);
+                framework.setState(ResourceState.APPROVED);
             } else {
-                existingFramework.setState(ResourceState.WAITING);
+                framework.setState(ResourceState.WAITING);
             }
 
-            return frameworkRepository.save(existingFramework);
+            return frameworkRepository.save(framework);
         } else {
             throw new NotEnoughPermissionException();
         }

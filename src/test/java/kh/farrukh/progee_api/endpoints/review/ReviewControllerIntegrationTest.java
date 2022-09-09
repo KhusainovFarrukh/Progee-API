@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Collections;
 import java.util.List;
 
-import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.endpoints.review.ReviewController.ENDPOINT_REVIEW;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -87,10 +87,8 @@ class ReviewControllerIntegrationTest {
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/reviews")
-                                .param("page_size", String.valueOf(reviews.size()))
-                )
+                .perform(get(ENDPOINT_REVIEW)
+                        .param("page_size", String.valueOf(reviews.size())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -123,7 +121,7 @@ class ReviewControllerIntegrationTest {
         // when
         MvcResult result = mvc
                 .perform(
-                        get(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/reviews")
+                        get(ENDPOINT_REVIEW)
                                 .param("page_size", String.valueOf(likeReviews.size() + dislikeReviews.size()))
                                 .param("state", String.valueOf(ReviewValue.LIKE.getScore()))
                 )
@@ -153,10 +151,7 @@ class ReviewControllerIntegrationTest {
 
         // when
         MvcResult result = mvc
-                .perform(get(ENDPOINT_LANGUAGE + "/"
-                        + existingLanguage.getId() +
-                        "/reviews/" + existingReview.getId()
-                ))
+                .perform(get(ENDPOINT_REVIEW + "/" + existingReview.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -173,11 +168,11 @@ class ReviewControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_REVIEW)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
-        ReviewDTO reviewDto = new ReviewDTO("test body", ReviewValue.LIKE);
+        ReviewDTO reviewDto = new ReviewDTO("test body", ReviewValue.LIKE, existingLanguage.getId());
 
         // when
         MvcResult result = mvc
-                .perform(post(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/reviews")
+                .perform(post(ENDPOINT_REVIEW)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reviewDto)))
                 .andDo(print())
@@ -198,13 +193,13 @@ class ReviewControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewService.addReview(
-                existingLanguage.getId(), new ReviewDTO("test body", ReviewValue.LIKE)
+                new ReviewDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
         );
         ReviewDTO reviewDto = new ReviewDTO("test body update", ReviewValue.LIKE);
 
         // when
         MvcResult result = mvc
-                .perform(put(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/reviews/" + existingReview.getId())
+                .perform(put(ENDPOINT_REVIEW + "/" + existingReview.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reviewDto)))
                 .andDo(print())
@@ -226,14 +221,12 @@ class ReviewControllerIntegrationTest {
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewService.addReview(
-                existingLanguage.getId(), new ReviewDTO("test body", ReviewValue.LIKE)
+                new ReviewDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
         );
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_LANGUAGE + "/"
-                        + existingLanguage.getId()
-                        + "/reviews/" + existingReview.getId()))
+        mvc.perform(delete(ENDPOINT_REVIEW + "/" + existingReview.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -250,8 +243,7 @@ class ReviewControllerIntegrationTest {
 
         // when
         MvcResult result = mvc
-                .perform(post(ENDPOINT_LANGUAGE + "/"
-                        + existingLanguage.getId() + "/reviews/"
+                .perform(post(ENDPOINT_REVIEW + "/"
                         + existingReview.getId() + "/vote")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteDTO)))

@@ -1,9 +1,7 @@
-package kh.farrukh.progee_api.endpoints.framework;
+package kh.farrukh.progee_api.endpoints.review;
 
-import kh.farrukh.progee_api.global.entity.ResourceState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,17 +12,16 @@ import javax.persistence.criteria.Root;
 import java.util.Objects;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class FrameworkSpecification implements Specification<Framework> {
+public class ReviewSpecification implements Specification<Review> {
 
     private Long languageId;
-    private ResourceState state;
+    private ReviewValue reviewValue;
 
     @Override
     public Predicate toPredicate(
-            Root<Framework> root,
+            Root<Review> root,
             CriteriaQuery<?> query,
             CriteriaBuilder criteriaBuilder
     ) {
@@ -34,8 +31,8 @@ public class FrameworkSpecification implements Specification<Framework> {
             predicate.getExpressions().add(criteriaBuilder.equal(root.get("language").get("id"), languageId));
         }
 
-        if (state != null) {
-            predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"), state));
+        if (reviewValue != null) {
+            predicate.getExpressions().add(criteriaBuilder.equal(root.get("reviewValue"), reviewValue));
         }
 
         return predicate;
@@ -44,8 +41,12 @@ public class FrameworkSpecification implements Specification<Framework> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FrameworkSpecification that = (FrameworkSpecification) o;
-        return Objects.equals(languageId, that.languageId) && state == that.state;
+        if (!(o instanceof ReviewSpecification that)) return false;
+        return Objects.equals(languageId, that.languageId) && reviewValue == that.reviewValue;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(languageId, reviewValue);
     }
 }
