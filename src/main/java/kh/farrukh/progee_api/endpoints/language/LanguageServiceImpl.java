@@ -1,7 +1,5 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
@@ -9,6 +7,8 @@ import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
 import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
@@ -116,7 +114,6 @@ public class LanguageServiceImpl implements LanguageService {
      * @return The updated language.
      */
     @Override
-    @Transactional
     public Language updateLanguage(long id, LanguageDTO languageDto) {
         Language existingLanguage = languageRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", id)
@@ -149,7 +146,7 @@ public class LanguageServiceImpl implements LanguageService {
                     () -> new ResourceNotFoundException("Image", "id", languageDto.getImageId())
             ));
 
-            return existingLanguage;
+            return languageRepository.save(existingLanguage);
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -174,12 +171,11 @@ public class LanguageServiceImpl implements LanguageService {
      * @return Language
      */
     @Override
-    @Transactional
     public Language setLanguageState(long id, ResourceStateDTO resourceStateDto) {
         Language language = languageRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
         language.setState(resourceStateDto.getState());
-        return language;
+        return languageRepository.save(language);
     }
 }

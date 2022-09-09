@@ -206,9 +206,12 @@ class UserServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        AppUser actual = underTest.updateUser(1, userDto);
+        underTest.updateUser(1, userDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(userDto.getName());
         assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUsername());
         assertThat(actual.getEmail()).isEqualTo(userDto.getEmail());
@@ -258,9 +261,12 @@ class UserServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        AppUser actual = underTest.updateUser(2, userDto);
+        underTest.updateUser(2, userDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(userDto.getName());
         assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUsername());
         assertThat(actual.getEmail()).isEqualTo(userDto.getEmail());
@@ -423,9 +429,12 @@ class UserServiceImplTest {
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE))));
 
         // when
-        AppUser actual = underTest.setUserRole(1, roleDto);
+        underTest.setUserRole(1, roleDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(Permission.CAN_VIEW_ROLE).isIn(actual.getRole().getPermissions());
     }
 
@@ -468,9 +477,12 @@ class UserServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
 
         // when
-        AppUser actual = underTest.setUserImage(userId, imageDto);
+        underTest.setUserImage(userId, imageDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getImage().getId()).isEqualTo(imageDto.getImageId());
     }
 
@@ -501,9 +513,12 @@ class UserServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
 
         // when
-        AppUser actual = underTest.setUserImage(1, imageDto);
+        underTest.setUserImage(1, imageDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getImage().getId()).isEqualTo(imageDto.getImageId());
     }
 
@@ -574,9 +589,12 @@ class UserServiceImplTest {
         when(passwordEncoder.encode(any())).thenReturn(newPassword);
 
         // when
-        AppUser actual = underTest.setUserPassword(userId, passwordDto);
+        underTest.setUserPassword(userId, passwordDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getPassword()).isEqualTo(passwordDto.getNewPassword());
     }
 
@@ -612,9 +630,12 @@ class UserServiceImplTest {
         when(passwordEncoder.encode(any())).thenReturn(newPassword);
 
         // when
-        AppUser actual = underTest.setUserPassword(userId, passwordDto);
+        underTest.setUserPassword(userId, passwordDto);
 
         // then
+        ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
+        verify(userRepository).save(userArgCaptor.capture());
+        AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getPassword()).isEqualTo(passwordDto.getNewPassword());
     }
 

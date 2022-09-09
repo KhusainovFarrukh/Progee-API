@@ -1,7 +1,5 @@
 package kh.farrukh.progee_api.endpoints.language;
 
-import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
-import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
@@ -11,6 +9,8 @@ import kh.farrukh.progee_api.endpoints.user.UserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -241,9 +241,12 @@ class LanguageServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        Language actual = underTest.updateLanguage(1, languageDto);
+        underTest.updateLanguage(1, languageDto);
 
         // then
+        ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
+        verify(languageRepository).save(languageArgCaptor.capture());
+        Language actual = languageArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
         assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
@@ -264,9 +267,12 @@ class LanguageServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        Language actual = underTest.updateLanguage(1, languageDto);
+        underTest.updateLanguage(1, languageDto);
 
         // then
+        ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
+        verify(languageRepository).save(languageArgCaptor.capture());
+        Language actual = languageArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
         assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
@@ -306,9 +312,12 @@ class LanguageServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        Language actual = underTest.updateLanguage(1, languageDTO);
+        underTest.updateLanguage(1, languageDTO);
 
         // then
+        ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
+        verify(languageRepository).save(languageArgCaptor.capture());
+        Language actual = languageArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
         assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
@@ -329,9 +338,12 @@ class LanguageServiceImplTest {
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
-        Language actual = underTest.updateLanguage(1, languageDTO);
+        underTest.updateLanguage(1, languageDTO);
 
         // then
+        ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
+        verify(languageRepository).save(languageArgCaptor.capture());
+        Language actual = languageArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
         assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
@@ -448,10 +460,13 @@ class LanguageServiceImplTest {
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language()));
 
         // when
-        Language language = underTest.setLanguageState(languageId, stateDto);
+        underTest.setLanguageState(languageId, stateDto);
 
         // then
-        assertThat(language.getState()).isEqualTo(stateDto.getState());
+        ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
+        verify(languageRepository).save(languageArgCaptor.capture());
+        Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(stateDto.getState());
     }
 
     @Test

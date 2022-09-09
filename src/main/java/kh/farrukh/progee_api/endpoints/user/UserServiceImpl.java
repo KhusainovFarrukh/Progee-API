@@ -19,8 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 import static kh.farrukh.progee_api.utils.checkers.Checkers.*;
 
 /**
@@ -124,9 +122,8 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    @Transactional
     public AppUser updateUser(long id, AppUserDTO appUserDto) {
-        AppUser existingAppUser = userRepository.findById(id).orElseThrow(
+        AppUser user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
         );
 
@@ -134,31 +131,31 @@ public class UserServiceImpl implements UserService {
                 CurrentUserUtils.hasPermissionOrIsAuthor(
                         Permission.CAN_UPDATE_OTHER_USER,
                         Permission.CAN_UPDATE_OWN_USER,
-                        existingAppUser.getId(),
+                        user.getId(),
                         userRepository
                 )
         ) {
 
             // It checks if the username of the user is changed and if the new username is already taken.
-            if (!appUserDto.getUsername().equals(existingAppUser.getUniqueUsername()) &&
+            if (!appUserDto.getUsername().equals(user.getUniqueUsername()) &&
                     userRepository.existsByUniqueUsername(appUserDto.getUsername())) {
                 throw new DuplicateResourceException("User", "username", appUserDto.getUsername());
             }
 
             // It checks if the email of the user is changed and if the new email is already taken.
-            if (!appUserDto.getEmail().equals(existingAppUser.getEmail()) &&
+            if (!appUserDto.getEmail().equals(user.getEmail()) &&
                     userRepository.existsByEmail(appUserDto.getEmail())) {
                 throw new DuplicateResourceException("User", "email", appUserDto.getEmail());
             }
 
-            existingAppUser.setName(appUserDto.getName());
-            existingAppUser.setEmail(appUserDto.getEmail());
-            existingAppUser.setUniqueUsername(appUserDto.getUsername());
-            existingAppUser.setImage(imageRepository.findById(appUserDto.getImageId()).orElseThrow(
+            user.setName(appUserDto.getName());
+            user.setEmail(appUserDto.getEmail());
+            user.setUniqueUsername(appUserDto.getUsername());
+            user.setImage(imageRepository.findById(appUserDto.getImageId()).orElseThrow(
                     () -> new ResourceNotFoundException("Image", "id", appUserDto.getImageId())
             ));
 
-            return existingAppUser;
+            return userRepository.save(user);
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -184,7 +181,6 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    @Transactional
     public AppUser setUserRole(long id, UserRoleDTO roleDto) {
         AppUser user = userRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", id)
@@ -193,7 +189,7 @@ public class UserServiceImpl implements UserService {
                 () -> new ResourceNotFoundException("Role", "id", roleDto.getRoleId())
         );
         user.setRole(role);
-        return user;
+        return userRepository.save(user);
     }
 
     /**
@@ -205,7 +201,6 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    @Transactional
     public AppUser setUserImage(long id, UserImageDTO imageDto) {
         if (
                 CurrentUserUtils.hasPermissionOrIsAuthor(
@@ -223,7 +218,7 @@ public class UserServiceImpl implements UserService {
             user.setImage(imageRepository.findById(imageDto.getImageId()).orElseThrow(
                     () -> new ResourceNotFoundException("Image", "id", imageDto.getImageId())
             ));
-            return user;
+            return userRepository.save(user);
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -239,7 +234,6 @@ public class UserServiceImpl implements UserService {
      * @return The updated user.
      */
     @Override
-    @Transactional
     public AppUser setUserPassword(long id, UserPasswordDTO passwordDto) {
         if (
                 CurrentUserUtils.hasPermissionOrIsAuthor(
@@ -250,12 +244,12 @@ public class UserServiceImpl implements UserService {
                 )
         ) {
 
-            AppUser currentUser = userRepository.findById(id).orElseThrow(
+            AppUser user = userRepository.findById(id).orElseThrow(
                     () -> new ResourceNotFoundException("User", "id", id)
             );
-            if (passwordEncoder.matches(passwordDto.getPassword(), currentUser.getPassword())) {
-                currentUser.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-                return currentUser;
+            if (passwordEncoder.matches(passwordDto.getPassword(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+                return userRepository.save(user);
             } else {
                 throw new BadRequestException("Password");
             }
