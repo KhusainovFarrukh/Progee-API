@@ -1,7 +1,6 @@
 package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.global.entity.ResourceState;
-import kh.farrukh.progee_api.utils.paging_sorting.AllowedSortFields;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -29,8 +28,6 @@ public interface LanguageRepository extends JpaRepository<Language, Long>, JpaSp
     /**
      * "Find all languages with the given state, and return them in the given pageable."
      * <p>
-     * The @AllowedSortFields annotation is a custom annotation that I created to ensure that the user can only sort by the
-     * fields that I want them to
      *
      * @param state    The state of the resource.
      * @param pageable The pageable object that contains the page number, page size, and sort information.
@@ -38,7 +35,7 @@ public interface LanguageRepository extends JpaRepository<Language, Long>, JpaSp
      */
     Page<Language> findByState(
             ResourceState state,
-            @AllowedSortFields({"id", "name", "description", "state", "createdAt"}) Pageable pageable
+            Pageable pageable
     );
 
     @EntityGraph(value = "language_with_frameworks", type = EntityGraph.EntityGraphType.LOAD)

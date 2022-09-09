@@ -9,9 +9,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import static kh.farrukh.progee_api.exceptions.ExceptionMessages.EXCEPTION_METHOD_ARGUMENT_NOT_VALID;
 
@@ -48,27 +50,6 @@ public class ApiExceptionHandler {
                         ZonedDateTime.now()
                 ),
                 exception.getHttpStatus()
-        );
-    }
-
-    /**
-     * It handles exceptions from AllowedSortFields annotation
-     *
-     * @param exception The exception object that was thrown.
-     * @return A ResponseEntity<Object>
-     */
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleSortParamValidationException(ConstraintViolationException exception) {
-        exception.printStackTrace();
-        String errorMessage = new ArrayList<>(exception.getConstraintViolations()).get(0).getMessage();
-        return new ResponseEntity<>(
-                new ErrorResponse(
-                        errorMessage,
-                        HttpStatus.BAD_REQUEST,
-                        HttpStatus.BAD_REQUEST.value(),
-                        ZonedDateTime.now()
-                ),
-                HttpStatus.BAD_REQUEST
         );
     }
 

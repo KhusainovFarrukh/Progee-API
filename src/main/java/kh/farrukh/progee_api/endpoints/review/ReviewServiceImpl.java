@@ -16,11 +16,13 @@ import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
-import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
+import java.util.List;
+
+import static kh.farrukh.progee_api.utils.checkers.Checkers.*;
 
 /**
  * It implements the ReviewService interface and uses the ReviewRepository
@@ -56,9 +58,13 @@ public class ReviewServiceImpl implements ReviewService {
     ) {
         checkPageNumber(page);
         if (languageId != null) checkLanguageId(languageRepository, languageId);
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy));
+        // TODO: 6/12/22 add custom (transient) field: score
+        checkSortParams(pageable, List.of("id", "body", "reviewValue", "upVotes", "downVotes", "createdAt"));
+
         return new PagingResponse<>(reviewRepository.findAll(
                 new ReviewSpecification(languageId, value),
-                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                pageable
         ).map(ReviewMappers::toReviewResponseDTO));
     }
 

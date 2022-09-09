@@ -16,11 +16,13 @@ import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
-import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
+import java.util.List;
+
+import static kh.farrukh.progee_api.utils.checkers.Checkers.*;
 
 /**
  * It implements the LanguageService interface and uses the LanguageRepository and ImageRepository
@@ -53,6 +55,8 @@ public class LanguageServiceImpl implements LanguageService {
             String orderBy
     ) {
         checkPageNumber(page);
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy));
+        checkSortParams(pageable, List.of("id", "name", "description", "state", "createdAt"));
 
         if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
@@ -61,7 +65,7 @@ public class LanguageServiceImpl implements LanguageService {
 
         return new PagingResponse<>(languageRepository.findAll(
                 new LanguageSpecification(state),
-                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                pageable
         ).map(LanguageMappers::toLanguageResponseDTO));
     }
 

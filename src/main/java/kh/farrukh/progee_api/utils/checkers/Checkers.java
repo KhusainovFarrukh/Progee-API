@@ -3,13 +3,18 @@ package kh.farrukh.progee_api.utils.checkers;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.review.ReviewRepository;
-import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.SortParamException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 /**
  * It contains static methods that check if a resource exists in the database,
@@ -21,7 +26,7 @@ public class Checkers {
      * If the image with the given ID doesn't exist, throw a ResourceNotFoundException
      *
      * @param imageRepository The repository that will be used to check if the image exists.
-     * @param imageId The id of the image to be checked.
+     * @param imageId         The id of the image to be checked.
      */
     public static void checkImageId(ImageRepository imageRepository, long imageId) {
         if (!imageRepository.existsById(imageId)) {
@@ -38,12 +43,31 @@ public class Checkers {
         if (page < 1) throw new BadRequestException("Page index");
     }
 
+    public static void checkSortParams(Pageable pageable, List<String> allowedSortFields) {
+        Sort sort = pageable.getSort();
+        if (sort.isUnsorted()) {
+            return;
+        }
+
+        List<String> notAllowedFields = sort.stream()
+                .map(Sort.Order::getProperty)
+                .filter(property -> !allowedSortFields.contains(property))
+                .toList();
+
+        // if all found fields are allowed, then it is valid request
+        if (notAllowedFields.size() == 0) {
+            return;
+        }
+
+        // else it is not valid request
+        throw new SortParamException(notAllowedFields, allowedSortFields);
+    }
 
     /**
      * If the languageId does not exist in the database, throw a ResourceNotFoundException
      *
      * @param languageRepository The repository that will be used to check if the language exists.
-     * @param languageId The id of the language to be checked
+     * @param languageId         The id of the language to be checked
      */
     public static void checkLanguageId(LanguageRepository languageRepository, long languageId) {
         if (!languageRepository.existsById(languageId)) {
@@ -55,7 +79,7 @@ public class Checkers {
      * If the review with the given id doesn't exist, throw a ResourceNotFoundException
      *
      * @param reviewRepository The repository that we are using to check if the review exists.
-     * @param id The id of the review to be deleted.
+     * @param id               The id of the review to be deleted.
      */
     public static void checkReviewId(ReviewRepository reviewRepository, long id) {
         if (!reviewRepository.existsById(id)) {
@@ -67,7 +91,7 @@ public class Checkers {
      * If the user doesn't exist, throw a ResourceNotFoundException.
      *
      * @param appUserRepository The repository that we are using to check if the user exists.
-     * @param id The id of the user to be checked
+     * @param id                The id of the user to be checked
      */
     public static void checkUserId(AppUserRepository appUserRepository, long id) {
         if (!appUserRepository.existsById(id)) {

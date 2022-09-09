@@ -1,7 +1,5 @@
 package kh.farrukh.progee_api.endpoints.user;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
@@ -38,17 +36,4 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
      * @return A boolean value.
      */
     boolean existsByEmail(String email);
-
-    /**
-     * This function returns a page of AppUser objects, and the page
-     *
-     * @param pageable The pageable object that contains the page number, page size, and sort information.
-     * @return A Page of AppUser objects.
-     */
-    @Override
-    Page<AppUser> findAll(
-            // TODO: 6/12/22 add @AllowedSortFields
-//            @AllowedSortFields({"id", "name", "email", "uniqueUsername", "isEnabled", "isLocked", "role"})
-            Pageable pageable
-    );
 }

@@ -12,6 +12,7 @@ public class ExceptionMessages {
     public static final String EXCEPTION_REVIEW_DUPLICATE_VOTE = "message.exception.review_duplicate_vote";
     public static final String EXCEPTION_UNKNOWN = "message.exception.unknown";
     public static final String EXCEPTION_METHOD_ARGUMENT_NOT_VALID = "message.exception.method_argument_not_valid";
+    public static final String EXCEPTION_SORT_PARAM = "message.exception.sort_param";
     public static final String EXCEPTION_EMAIL_PASSWORD_WRONG = "message.exception.email_password_wrong";
     public static final String EXCEPTION_ENDPOINT_ACCESS_DENIED = "message.exception.endpoint_access_denied";
     public static final String EXCEPTION_TOKEN_EXPIRED = "message.exception.token_expired";

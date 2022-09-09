@@ -18,11 +18,13 @@ import kh.farrukh.progee_api.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.utils.user.CurrentUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import static kh.farrukh.progee_api.utils.checkers.Checkers.checkLanguageId;
-import static kh.farrukh.progee_api.utils.checkers.Checkers.checkPageNumber;
+import java.util.List;
+
+import static kh.farrukh.progee_api.utils.checkers.Checkers.*;
 
 /**
  * It implements the `FrameworkService` interface and uses the `FrameworkRepository`
@@ -59,6 +61,8 @@ public class FrameworkServiceImpl implements FrameworkService {
     ) {
         checkPageNumber(page);
         if (languageId != null) checkLanguageId(languageRepository, languageId);
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy));
+        checkSortParams(pageable, List.of("id", "name", "description", "state", "createdAt"));
 
         if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
@@ -67,7 +71,7 @@ public class FrameworkServiceImpl implements FrameworkService {
 
         return new PagingResponse<>(frameworkRepository.findAll(
                 new FrameworkSpecification(languageId, state),
-                PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
+                pageable
         ).map(FrameworkMappers::toFrameworkResponseDTO));
     }
 
