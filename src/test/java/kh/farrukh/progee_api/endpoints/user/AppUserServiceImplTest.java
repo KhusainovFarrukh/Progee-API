@@ -20,7 +20,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
@@ -39,10 +41,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @SecurityTestExecutionListeners
-class UserServiceImplTest {
+class AppUserServiceImplTest {
 
     @Mock
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
     @Mock
     private ImageRepository imageRepository;
     @Mock
@@ -50,19 +52,19 @@ class UserServiceImplTest {
     @Mock
     private RoleRepository roleRepository;
     @InjectMocks
-    private UserServiceImpl underTest;
+    private AppUserServiceImpl underTest;
 
     @Test
     void canLoadUserByUsername() {
         // given
         String username = "user@gmail.com";
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
 
         // when
         underTest.loadUserByUsername(username);
 
         // then
-        verify(userRepository).findByEmail(username);
+        verify(appUserRepository).findByEmail(username);
     }
 
     @Test
@@ -78,11 +80,13 @@ class UserServiceImplTest {
 
     @Test
     void canGetUsers() {
+        // given
+        when(appUserRepository.findAll(any(Pageable.class))).thenReturn(Page.empty(Pageable.ofSize(10)));
         // when
         underTest.getUsers(1, 10, "id", "ASC");
 
         // then
-        verify(userRepository).findAll(
+        verify(appUserRepository).findAll(
                 PageRequest.of(0, 10, SortUtils.parseDirection("ASC"), "id")
         );
 
@@ -92,13 +96,13 @@ class UserServiceImplTest {
     void canGetUserById() {
         // given
         long userId = 1;
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
 
         // when
         underTest.getUserById(userId);
 
         // then
-        verify(userRepository).findById(userId);
+        verify(appUserRepository).findById(userId);
     }
 
     @Test
@@ -136,7 +140,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
 
         AppUser capturedUser = userArgCaptor.getValue();
         assertThat(capturedUser.getUniqueUsername()).isEqualTo(userDto.getUsername());
@@ -157,7 +161,7 @@ class UserServiceImplTest {
                 1,
                 1
         );
-        when(userRepository.existsByEmail(any())).thenReturn(true);
+        when(appUserRepository.existsByEmail(any())).thenReturn(true);
 
         // when
         // then
@@ -180,7 +184,7 @@ class UserServiceImplTest {
                 1,
                 1
         );
-        when(userRepository.existsByUniqueUsername(any())).thenReturn(true);
+        when(appUserRepository.existsByUniqueUsername(any())).thenReturn(true);
 
         // when
         // then
@@ -205,8 +209,8 @@ class UserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -214,7 +218,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(userDto.getName());
         assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUsername());
@@ -236,8 +240,8 @@ class UserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.emptyList());
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
 
         // when
         // then
@@ -260,8 +264,8 @@ class UserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -269,7 +273,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(userDto.getName());
         assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUsername());
@@ -291,8 +295,8 @@ class UserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.emptyList());
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
 
         // when
         // then
@@ -313,7 +317,7 @@ class UserServiceImplTest {
                 1,
                 1
         );
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        when(appUserRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then
@@ -336,9 +340,9 @@ class UserServiceImplTest {
                 1,
                 1
         );
-        when(userRepository.existsByUniqueUsername(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.existsByUniqueUsername(any())).thenReturn(true);
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
         // then
@@ -362,9 +366,9 @@ class UserServiceImplTest {
                 1,
                 1
         );
-        when(userRepository.existsByEmail(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.existsByEmail(any())).thenReturn(true);
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
         // then
@@ -388,8 +392,8 @@ class UserServiceImplTest {
                 1,
                 1
         );
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
         // then
@@ -403,13 +407,13 @@ class UserServiceImplTest {
     void canDeleteUserById() {
         // given
         long userId = 1;
-        when(userRepository.existsById(any())).thenReturn(true);
+        when(appUserRepository.existsById(any())).thenReturn(true);
 
         // when
         underTest.deleteUser(userId);
 
         // then
-        verify(userRepository).deleteById(userId);
+        verify(appUserRepository).deleteById(userId);
     }
 
     @Test
@@ -429,7 +433,7 @@ class UserServiceImplTest {
     void canSetUserRole() {
         // given
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE))));
 
         // when
@@ -437,7 +441,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(Permission.CAN_VIEW_ROLE).isIn(actual.getRole().getPermissions());
     }
@@ -446,7 +450,7 @@ class UserServiceImplTest {
     void throwsExceptionIfRoleToSetDoesNotExistWithId() {
         // given
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
 
         // when
         // then
@@ -476,8 +480,8 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
 
         // when
@@ -485,7 +489,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getImage().getId()).isEqualTo(imageDto.getImageId());
     }
@@ -497,7 +501,7 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.emptyList()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -512,8 +516,8 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
 
         // when
@@ -521,7 +525,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getImage().getId()).isEqualTo(imageDto.getImageId());
     }
@@ -533,7 +537,7 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(2, new Role(Collections.emptyList()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -548,7 +552,7 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -566,8 +570,8 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -587,8 +591,8 @@ class UserServiceImplTest {
         String newPassword = "4321";
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(any(), any())).thenReturn(true);
         when(passwordEncoder.encode(any())).thenReturn(newPassword);
 
@@ -597,7 +601,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getPassword()).isEqualTo(passwordDto.getNewPassword());
     }
@@ -611,7 +615,7 @@ class UserServiceImplTest {
         String newPassword = "4321";
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.emptyList()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -628,8 +632,8 @@ class UserServiceImplTest {
         String newPassword = "4321";
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
         when(passwordEncoder.matches(any(), any())).thenReturn(true);
         when(passwordEncoder.encode(any())).thenReturn(newPassword);
 
@@ -638,7 +642,7 @@ class UserServiceImplTest {
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
-        verify(userRepository).save(userArgCaptor.capture());
+        verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getPassword()).isEqualTo(passwordDto.getNewPassword());
     }
@@ -652,7 +656,7 @@ class UserServiceImplTest {
         String newPassword = "4321";
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(2, new Role(Collections.emptyList()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -669,8 +673,8 @@ class UserServiceImplTest {
         String newPassword = "4321";
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -686,8 +690,8 @@ class UserServiceImplTest {
         long userId = 1;
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO("", "");
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
         // then

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.auth.payloads.LoginRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.EmailPasswordWrongException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.security.utils.SecurityUtils;
@@ -34,7 +34,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
 
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final HandlerExceptionResolver resolver;
 
     /**
@@ -70,7 +70,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        AppUser appUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
+        AppUser appUser = appUserRepository.findByEmail(user.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("User not found in the database")
         );
         AuthResponseDTO authResponseDTO = tokenProvider.generateTokens(appUser);
@@ -81,7 +81,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         LoginRequestDTO loginRequestDTO = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDTO.class);
         EmailPasswordWrongException.Type type;
-        if (userRepository.existsByEmail(loginRequestDTO.getEmail())) {
+        if (appUserRepository.existsByEmail(loginRequestDTO.getEmail())) {
             type = EmailPasswordWrongException.Type.PASSWORD;
         } else {
             type = EmailPasswordWrongException.Type.EMAIL;

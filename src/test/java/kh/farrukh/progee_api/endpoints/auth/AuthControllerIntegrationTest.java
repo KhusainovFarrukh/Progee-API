@@ -10,7 +10,7 @@ import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ class AuthControllerIntegrationTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private ImageRepository imageRepository;
@@ -57,7 +57,7 @@ class AuthControllerIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
+        appUserRepository.deleteAll();
         imageRepository.deleteAll();
         roleRepository.deleteAll();
     }
@@ -95,7 +95,7 @@ class AuthControllerIntegrationTest {
     void canLogin() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role("user", true, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
-        AppUser user = userRepository.save(
+        AppUser user = appUserRepository.save(
                 new AppUser("user@mail.com", existingRole.getId(), passwordEncoder.encode("12345678"), roleRepository)
         );
         LoginRequestDTO request = new LoginRequestDTO(user.getEmail(), "12345678");
@@ -124,7 +124,7 @@ class AuthControllerIntegrationTest {
     void canRefreshToken() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE)));
-        AppUser user = userRepository.save(
+        AppUser user = appUserRepository.save(
                 new AppUser("user@mail.com", existingRole.getId(), passwordEncoder.encode("12345678"), roleRepository)
         );
         LoginRequestDTO request = new LoginRequestDTO(user.getEmail(), "12345678");

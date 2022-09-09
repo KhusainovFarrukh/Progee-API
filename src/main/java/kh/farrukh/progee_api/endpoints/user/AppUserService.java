@@ -9,28 +9,28 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * <p>
  * Methods implemented in UserServiceImpl
  */
-public interface UserService extends UserDetailsService {
+public interface AppUserService extends UserDetailsService {
 
-    PagingResponse<AppUser> getUsers(
+    PagingResponse<AppUserResponseDTO> getUsers(
             int page,
             int pageSize,
             String sortBy,
             String orderBy
     );
 
-    AppUser getUserById(Long id);
+    AppUserResponseDTO getUserById(Long id);
 
-    AppUser getUserByEmail(String email);
+    AppUserResponseDTO getUserByEmail(String email);
 
     AppUserResponseDTO addUser(AppUserRequestDTO appUserRequestDto);
 
-    AppUser updateUser(long id, AppUserRequestDTO appUserRequestDto);
+    AppUserResponseDTO updateUser(long id, AppUserRequestDTO appUserRequestDto);
 
     void deleteUser(long id);
 
-    AppUser setUserRole(long id, SetUserRoleRequestDTO roleDto);
+    AppUserResponseDTO setUserRole(long id, SetUserRoleRequestDTO roleDto);
 
-    AppUser setUserImage(long id, SetUserImageRequestDTO imageDto);
+    AppUserResponseDTO setUserImage(long id, SetUserImageRequestDTO imageDto);
 
-    AppUser setUserPassword(long id, SetUserPasswordRequestDTO passwordDto);
+    AppUserResponseDTO setUserPassword(long id, SetUserPasswordRequestDTO passwordDto);
 }

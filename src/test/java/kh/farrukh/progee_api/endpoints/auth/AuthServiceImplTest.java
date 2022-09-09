@@ -11,7 +11,7 @@ import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.UserService;
+import kh.farrukh.progee_api.endpoints.user.AppUserService;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.JwtConfiguration;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -43,7 +43,7 @@ class AuthServiceImplTest {
     @Mock
     private EmailValidator emailValidator;
     @Mock
-    private UserService userService;
+    private AppUserService appUserService;
     @Mock
     private RoleRepository roleRepository;
     @Mock
@@ -65,7 +65,7 @@ class AuthServiceImplTest {
 
         // then
         ArgumentCaptor<AppUserRequestDTO> appUserDTOArgCaptor = ArgumentCaptor.forClass(AppUserRequestDTO.class);
-        verify(userService).addUser(appUserDTOArgCaptor.capture());
+        verify(appUserService).addUser(appUserDTOArgCaptor.capture());
 
         AppUserRequestDTO capturedAppUSerRequestDto = appUserDTOArgCaptor.getValue();
         assertThat(capturedAppUSerRequestDto.getEmail()).isEqualTo(registrationRequestDTO.getEmail());

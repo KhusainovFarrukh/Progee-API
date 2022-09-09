@@ -12,10 +12,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-class UserRepositoryTest {
+class AppUserRepositoryTest {
 
     @Autowired
-    private UserRepository underTest;
+    private AppUserRepository underTest;
 
     @AfterEach
     void tearDown() {

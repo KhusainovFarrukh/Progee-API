@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.utils.user;
 
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -16,10 +16,10 @@ public class CurrentUserUtils {
             Permission permissionToChangeOthers,
             Permission permissionToChangeOwn,
             long authorId,
-            UserRepository userRepository
+            AppUserRepository appUserRepository
     ) {
         try {
-            AppUser currentUser = getCurrentUser(userRepository);
+            AppUser currentUser = getCurrentUser(appUserRepository);
             return (currentUser.getId() != authorId && currentUser.getRole().getPermissions().contains(permissionToChangeOthers)) ||
                     (currentUser.getId() == authorId && currentUser.getRole().getPermissions().contains(permissionToChangeOwn));
         } catch (ResourceNotFoundException e) {
@@ -27,9 +27,9 @@ public class CurrentUserUtils {
         }
     }
 
-    public static boolean hasPermission(Permission permission, UserRepository userRepository) {
+    public static boolean hasPermission(Permission permission, AppUserRepository appUserRepository) {
         try {
-            AppUser currentUser = getCurrentUser(userRepository);
+            AppUser currentUser = getCurrentUser(appUserRepository);
             return currentUser.getRole().getPermissions().contains(permission);
         } catch (ResourceNotFoundException e) {
             return false;
@@ -41,9 +41,9 @@ public class CurrentUserUtils {
      *
      * @return The user that is currently logged in.
      */
-    public static AppUser getCurrentUser(UserRepository userRepository) {
+    public static AppUser getCurrentUser(AppUserRepository appUserRepository) {
         String email = getEmail();
-        return userRepository.findByEmail(email).orElseThrow(
+        return appUserRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("User", "email", email)
         );
     }

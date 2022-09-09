@@ -6,7 +6,7 @@ import kh.farrukh.progee_api.endpoints.review.ReviewRepository;
 import kh.farrukh.progee_api.endpoints.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -68,11 +68,11 @@ public class Checkers {
     /**
      * If the user doesn't exist, throw a ResourceNotFoundException.
      *
-     * @param userRepository The repository that we are using to check if the user exists.
+     * @param appUserRepository The repository that we are using to check if the user exists.
      * @param id The id of the user to be checked
      */
-    public static void checkUserId(UserRepository userRepository, long id) {
-        if (!userRepository.existsById(id)) {
+    public static void checkUserId(AppUserRepository appUserRepository, long id) {
+        if (!appUserRepository.existsById(id)) {
             throw new ResourceNotFoundException("User", "id", id);
         }
     }
@@ -80,14 +80,14 @@ public class Checkers {
     /**
      * If the user with given username or email already exists, throw an exception.
      *
-     * @param userRepository The repository that will be used to check if the user exists.
+     * @param appUserRepository The repository that will be used to check if the user exists.
      * @param appUserRequestDto The DTO that is being validated.
      */
-    public static void checkUserIsUnique(UserRepository userRepository, AppUserRequestDTO appUserRequestDto) {
-        if (userRepository.existsByUniqueUsername(appUserRequestDto.getUsername())) {
+    public static void checkUserIsUnique(AppUserRepository appUserRepository, AppUserRequestDTO appUserRequestDto) {
+        if (appUserRepository.existsByUniqueUsername(appUserRequestDto.getUsername())) {
             throw new DuplicateResourceException("User", "username", appUserRequestDto.getUsername());
         }
-        if (userRepository.existsByEmail(appUserRequestDto.getEmail())) {
+        if (appUserRepository.existsByEmail(appUserRequestDto.getEmail())) {
             throw new DuplicateResourceException("User", "email", appUserRequestDto.getEmail());
         }
     }

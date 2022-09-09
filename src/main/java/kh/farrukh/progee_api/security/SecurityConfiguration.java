@@ -21,7 +21,7 @@ import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMA
 import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
 import static kh.farrukh.progee_api.endpoints.review.ReviewController.ENDPOINT_REVIEW;
 import static kh.farrukh.progee_api.endpoints.role.RoleController.ENDPOINT_ROLE;
-import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.endpoints.user.AppUserController.ENDPOINT_USER;
 import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
 
 /**

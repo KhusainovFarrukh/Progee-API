@@ -12,7 +12,7 @@ import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.test_utils.ReviewValueDeserializer;
 import kh.farrukh.progee_api.test_utils.ReviewValueSerializer;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -53,7 +53,7 @@ class ReviewControllerIntegrationTest {
     private ReviewRepository reviewRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -73,7 +73,7 @@ class ReviewControllerIntegrationTest {
     void tearDown() {
         reviewRepository.deleteAll();
         languageRepository.deleteAll();
-        userRepository.deleteAll();
+        appUserRepository.deleteAll();
         roleRepository.deleteAll();
     }
 
@@ -169,7 +169,7 @@ class ReviewControllerIntegrationTest {
     void canAddReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_REVIEW)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId());
 
@@ -193,7 +193,7 @@ class ReviewControllerIntegrationTest {
     void canUpdateReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewResponseDTO existingReview = reviewService.addReview(
                 new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
@@ -221,7 +221,7 @@ class ReviewControllerIntegrationTest {
     void canDeleteReviewById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewResponseDTO existingReview = reviewService.addReview(
                 new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
@@ -239,7 +239,7 @@ class ReviewControllerIntegrationTest {
     void canVoteReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
-        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewRepository.save(new Review("", ReviewValue.LIKE, existingLanguage));
         ReviewVoteRequestDTO voteDTO = new ReviewVoteRequestDTO(true);

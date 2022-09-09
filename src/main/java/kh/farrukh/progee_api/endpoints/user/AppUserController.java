@@ -1,9 +1,6 @@
 package kh.farrukh.progee_api.endpoints.user;
 
-import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserImageRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserPasswordRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.payloads.SetUserRoleRequestDTO;
+import kh.farrukh.progee_api.endpoints.user.payloads.*;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.endpoints.user.AppUserController.ENDPOINT_USER;
 
 /**
  * Controller that exposes endpoints for managing users
@@ -20,11 +17,11 @@ import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
 @RestController
 @RequestMapping(ENDPOINT_USER)
 @RequiredArgsConstructor
-public class UserController {
+public class AppUserController {
 
     public static final String ENDPOINT_USER = "/api/v1/users";
 
-    private final UserService userService;
+    private final AppUserService appUserService;
 
     /**
      * It returns a list of users.
@@ -36,14 +33,14 @@ public class UserController {
      * @return A ResponseEntity with a PagingResponse of AppUser objects.
      */
     @GetMapping
-    public ResponseEntity<PagingResponse<AppUser>> getUsers(
+    public ResponseEntity<PagingResponse<AppUserResponseDTO>> getUsers(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
         return new ResponseEntity<>(
-                userService.getUsers(page, pageSize, sortBy, orderBy), HttpStatus.OK
+                appUserService.getUsers(page, pageSize, sortBy, orderBy), HttpStatus.OK
         );
     }
 
@@ -54,8 +51,8 @@ public class UserController {
      * @return A ResponseEntity with found AppUser.
      */
     @GetMapping("{id}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable long id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    public ResponseEntity<AppUserResponseDTO> getUserById(@PathVariable long id) {
+        return new ResponseEntity<>(appUserService.getUserById(id), HttpStatus.OK);
     }
 
     /**
@@ -66,8 +63,8 @@ public class UserController {
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
     @PutMapping("{id}")
-    public ResponseEntity<AppUser> updateUser(@PathVariable long id, @RequestBody AppUserRequestDTO appUserRequestDto) {
-        return new ResponseEntity<>(userService.updateUser(id, appUserRequestDto), HttpStatus.OK);
+    public ResponseEntity<AppUserResponseDTO> updateUser(@PathVariable long id, @RequestBody AppUserRequestDTO appUserRequestDto) {
+        return new ResponseEntity<>(appUserService.updateUser(id, appUserRequestDto), HttpStatus.OK);
     }
 
     /**
@@ -78,7 +75,7 @@ public class UserController {
      */
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
+        appUserService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -91,11 +88,11 @@ public class UserController {
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
     @PatchMapping("{id}/role")
-    public ResponseEntity<AppUser> setUserRole(
+    public ResponseEntity<AppUserResponseDTO> setUserRole(
             @PathVariable long id,
             @Valid @RequestBody SetUserRoleRequestDTO roleDto
     ) {
-        return new ResponseEntity<>(userService.setUserRole(id, roleDto), HttpStatus.OK);
+        return new ResponseEntity<>(appUserService.setUserRole(id, roleDto), HttpStatus.OK);
     }
 
     /**
@@ -107,11 +104,11 @@ public class UserController {
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
     @PatchMapping("{id}/image")
-    public ResponseEntity<AppUser> setUserImage(
+    public ResponseEntity<AppUserResponseDTO> setUserImage(
             @PathVariable long id,
             @Valid @RequestBody SetUserImageRequestDTO imageDto
     ) {
-        return new ResponseEntity<>(userService.setUserImage(id, imageDto), HttpStatus.OK);
+        return new ResponseEntity<>(appUserService.setUserImage(id, imageDto), HttpStatus.OK);
     }
 
     /**
@@ -122,10 +119,10 @@ public class UserController {
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
     @PatchMapping("{id}/password")
-    public ResponseEntity<AppUser> setUserPassword(
+    public ResponseEntity<AppUserResponseDTO> setUserPassword(
             @PathVariable long id,
             @Valid @RequestBody SetUserPasswordRequestDTO passwordDto
     ) {
-        return new ResponseEntity<>(userService.setUserPassword(id, passwordDto), HttpStatus.OK);
+        return new ResponseEntity<>(appUserService.setUserPassword(id, passwordDto), HttpStatus.OK);
     }
 }

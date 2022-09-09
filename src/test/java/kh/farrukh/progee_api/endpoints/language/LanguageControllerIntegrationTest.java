@@ -10,7 +10,7 @@ import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -47,7 +47,7 @@ class LanguageControllerIntegrationTest {
     private LanguageRepository languageRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private ImageRepository imageRepository;
@@ -62,7 +62,7 @@ class LanguageControllerIntegrationTest {
     @AfterEach
     void tearDown() {
         languageRepository.deleteAll();
-        userRepository.deleteAll();
+        appUserRepository.deleteAll();
         imageRepository.deleteAll();
         roleRepository.deleteAll();
     }
@@ -101,7 +101,7 @@ class LanguageControllerIntegrationTest {
     void canGetLanguagesWithFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         List<Language> waitingLanguages = List.of(
                 new Language("test2", ResourceState.WAITING),
                 new Language("test3", ResourceState.WAITING)
@@ -156,7 +156,7 @@ class LanguageControllerIntegrationTest {
     void canAddLanguage() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test", "test", existingImage.getId());
 
@@ -181,7 +181,7 @@ class LanguageControllerIntegrationTest {
     void canUpdateLanguage() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageResponseDTO existingLanguage = languageService.addLanguage(new LanguageRequestDTO("test", "test", existingImage.getId()));
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test-update", "test-update", existingImage.getId());
@@ -208,7 +208,7 @@ class LanguageControllerIntegrationTest {
     void canDeleteUserById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_LANGUAGE)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageResponseDTO existingLanguage = languageService.addLanguage(new LanguageRequestDTO("", "", existingImage.getId()));
 

@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kh.farrukh.progee_api.endpoints.user.UserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.endpoints.user.AppUserController.ENDPOINT_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-class UserControllerIntegrationTest {
+class AppUserControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
@@ -46,10 +46,10 @@ class UserControllerIntegrationTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserService userService;
+    private AppUserService appUserService;
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private ImageRepository imageRepository;
@@ -59,7 +59,7 @@ class UserControllerIntegrationTest {
 
     @AfterEach
     void tearDown() {
-        userRepository.deleteAll();
+        appUserRepository.deleteAll();
         roleRepository.deleteAll();
     }
 
@@ -72,7 +72,7 @@ class UserControllerIntegrationTest {
                 new AppUser("user2@mail.com"),
                 new AppUser("user3@mail.com")
         );
-        userRepository.saveAll(users);
+        appUserRepository.saveAll(users);
 
         // when
         MvcResult result = mvc
@@ -97,7 +97,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(username = "user@mail.com")
     void canGetUserById() throws Exception {
         // given
-        AppUser existingUser = userRepository.save(new AppUser());
+        AppUser existingUser = appUserRepository.save(new AppUser());
 
         // when
         MvcResult result = mvc
@@ -116,7 +116,7 @@ class UserControllerIntegrationTest {
     void canUpdateUser() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        AppUser existingUser = userRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "test",
@@ -151,7 +151,7 @@ class UserControllerIntegrationTest {
     @WithMockUser(username = "user@mail.com")
     void canDeleteUserById() throws Exception {
         // given
-        AppUser existingUser = userRepository.save(new AppUser());
+        AppUser existingUser = appUserRepository.save(new AppUser());
 
         // when
         // then
@@ -166,7 +166,7 @@ class UserControllerIntegrationTest {
         // given
         Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         Role newRole = roleRepository.save(new Role("2", false, Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
-        AppUser existingUser = userRepository.save(new AppUser(
+        AppUser existingUser = appUserRepository.save(new AppUser(
                 "user@mail.com", "test", existingRole.getId(), roleRepository
         ));
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(newRole.getId());
@@ -193,7 +193,7 @@ class UserControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         String password = "12345678";
         String newPassword = "87654321";
-        AppUser existingUser = userRepository.save(new AppUser(
+        AppUser existingUser = appUserRepository.save(new AppUser(
                 "user@mail.com", "test", passwordEncoder.encode(password), existingRole
         ));
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(password, newPassword);
@@ -206,7 +206,7 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         // then
-        existingUser = userService.getUserById(existingUser.getId());
+        existingUser = appUserRepository.findById(existingUser.getId()).orElseThrow();
         assertThat(passwordEncoder.matches(passwordDto.getNewPassword(), existingUser.getPassword())).isTrue();
     }
 }

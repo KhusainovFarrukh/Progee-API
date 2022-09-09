@@ -1,6 +1,6 @@
 package kh.farrukh.progee_api.security.utils;
 
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.security.filters.EmailPasswordAuthenticationFilter;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,16 +22,16 @@ public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<Authe
     public static final String ENDPOINT_LOGIN = "/api/v1/login";
 
     private final TokenProvider tokenProvider;
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final HandlerExceptionResolver resolver;
 
     public AuthenticationFilterConfigurer(
             TokenProvider tokenProvider,
-            UserRepository userRepository,
+            AppUserRepository appUserRepository,
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
     ) {
         this.tokenProvider = tokenProvider;
-        this.userRepository = userRepository;
+        this.appUserRepository = appUserRepository;
         this.resolver = resolver;
     }
 
@@ -44,7 +44,7 @@ public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<Authe
     public void configure(HttpSecurity http) {
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         EmailPasswordAuthenticationFilter authenticationFilter = new EmailPasswordAuthenticationFilter(
-                authenticationManager, tokenProvider, userRepository, resolver
+                authenticationManager, tokenProvider, appUserRepository, resolver
         );
         authenticationFilter.setFilterProcessesUrl(ENDPOINT_LOGIN);
         http.addFilter(authenticationFilter);

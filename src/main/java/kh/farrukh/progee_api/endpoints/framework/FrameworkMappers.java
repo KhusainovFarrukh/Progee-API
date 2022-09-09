@@ -13,4 +13,12 @@ public class FrameworkMappers {
         frameworkResponseDTO.setAuthor(AppUserMappers.toAppUserResponseDTO(framework.getAuthor()));
         return frameworkResponseDTO;
     }
+
+    public static Framework toFramework(FrameworkResponseDTO frameworkResponseDTO) {
+        if (frameworkResponseDTO == null) return null;
+        Framework framework = new Framework();
+        BeanUtils.copyProperties(frameworkResponseDTO, framework);
+        framework.setAuthor(AppUserMappers.toAppUser(frameworkResponseDTO.getAuthor()));
+        return framework;
+    }
 }

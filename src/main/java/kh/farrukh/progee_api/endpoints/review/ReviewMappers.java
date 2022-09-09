@@ -15,4 +15,13 @@ public class ReviewMappers {
         reviewResponseDTO.setLanguage(LanguageMappers.toLanguageResponseDTO(review.getLanguage()));
         return reviewResponseDTO;
     }
+
+    public static Review toReview(ReviewResponseDTO reviewResponseDTO) {
+        if (reviewResponseDTO == null) return null;
+        Review review = new Review();
+        BeanUtils.copyProperties(reviewResponseDTO, review);
+        review.setAuthor(AppUserMappers.toAppUser(reviewResponseDTO.getAuthor()));
+        review.setLanguage(LanguageMappers.toLanguage(reviewResponseDTO.getLanguage()));
+        return review;
+    }
 }

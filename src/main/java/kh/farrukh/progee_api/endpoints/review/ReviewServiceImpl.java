@@ -6,7 +6,7 @@ import kh.farrukh.progee_api.endpoints.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -32,7 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final LanguageRepository languageRepository;
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
     /**
      * "Get all reviews for a given language, sorted by a given field, in a given order, and return a page of them."
@@ -87,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new BadRequestException("Language id");
         }
         Review review = new Review(reviewRequestDto, languageRepository);
-        review.setAuthor(CurrentUserUtils.getCurrentUser(userRepository));
+        review.setAuthor(CurrentUserUtils.getCurrentUser(appUserRepository));
         return ReviewMappers.toReviewResponseDTO(reviewRepository.save(review));
     }
 
@@ -109,7 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
                         Permission.CAN_UPDATE_OTHERS_REVIEW,
                         Permission.CAN_UPDATE_OWN_REVIEW,
                         review.getAuthor().getId(),
-                        userRepository
+                        appUserRepository
                 )
         ) {
 
@@ -138,7 +138,7 @@ public class ReviewServiceImpl implements ReviewService {
                         Permission.CAN_DELETE_OTHERS_REVIEW,
                         Permission.CAN_DELETE_OWN_REVIEW,
                         existingReview.getAuthor().getId(),
-                        userRepository
+                        appUserRepository
                 )
         ) {
 
@@ -162,7 +162,7 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         // Get the user who is currently logged in.
-        AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
+        AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);
 
         // Checking if the currentUser has already voted on the review. If the current user has already voted on the review, then
         // throw a ReviewDuplicateVoteException.

@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Repository
 @Validated
-public interface UserRepository extends JpaRepository<AppUser, Long> {
+public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     /**
      * Find an AppUser by email.

@@ -6,7 +6,7 @@ import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -47,7 +47,7 @@ class LanguageServiceImplTest {
     @Mock
     private ImageRepository imageRepository;
     @Mock
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
     @InjectMocks
     private LanguageServiceImpl underTest;
 
@@ -141,7 +141,7 @@ class LanguageServiceImplTest {
     void userWithRequiredPermissionCanGetLanguagesFilteredByState() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -164,7 +164,7 @@ class LanguageServiceImplTest {
     void userWithRequiredPermissionCanGetAllLanguages() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -213,7 +213,7 @@ class LanguageServiceImplTest {
     void userWithOnlyCreatePermissionCreatesLanguageWithWaitingState() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", 1);
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
@@ -233,7 +233,7 @@ class LanguageServiceImplTest {
     void userWithCreateAndSetStatePermissionsCreatesLanguageWithApprovedState() {
         // given
         Role role = new Role(List.of(Permission.CAN_CREATE_LANGUAGE, Permission.CAN_SET_LANGUAGE_STATE));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", 1);
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
@@ -275,7 +275,7 @@ class LanguageServiceImplTest {
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(author);
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -301,7 +301,7 @@ class LanguageServiceImplTest {
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(author);
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -327,7 +327,7 @@ class LanguageServiceImplTest {
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(author);
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
         // then
@@ -346,7 +346,7 @@ class LanguageServiceImplTest {
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(new AppUser(1));
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -372,7 +372,7 @@ class LanguageServiceImplTest {
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(new AppUser(1));
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -396,7 +396,7 @@ class LanguageServiceImplTest {
         Language existingLanguage = new Language();
         existingLanguage.setAuthor(new AppUser(2));
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -431,7 +431,7 @@ class LanguageServiceImplTest {
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO(name, "", 1);
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
         when(languageRepository.existsByName(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -451,7 +451,7 @@ class LanguageServiceImplTest {
         existingLanguage.setAuthor(user);
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", imageId);
         when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then

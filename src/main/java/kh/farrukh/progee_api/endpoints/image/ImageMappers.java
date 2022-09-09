@@ -11,4 +11,11 @@ public class ImageMappers {
         BeanUtils.copyProperties(image, imageResponseDTO);
         return imageResponseDTO;
     }
+
+    public static Image toImage(ImageResponseDTO imageResponseDTO) {
+        if (imageResponseDTO == null) return null;
+        Image image = new Image();
+        BeanUtils.copyProperties(imageResponseDTO, image);
+        return image;
+    }
 }

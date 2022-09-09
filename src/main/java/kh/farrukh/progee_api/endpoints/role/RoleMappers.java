@@ -11,4 +11,11 @@ public class RoleMappers {
         BeanUtils.copyProperties(role, roleResponseDTO);
         return roleResponseDTO;
     }
+
+    public static Role toRole(RoleResponseDTO roleResponseDTO) {
+        if (roleResponseDTO == null) return null;
+        Role role = new Role();
+        BeanUtils.copyProperties(roleResponseDTO, role);
+        return role;
+    }
 }

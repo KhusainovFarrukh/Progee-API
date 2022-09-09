@@ -5,7 +5,7 @@ import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -32,7 +32,7 @@ public class LanguageServiceImpl implements LanguageService {
 
     private final LanguageRepository languageRepository;
     private final ImageRepository imageRepository;
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
     /**
      * This function returns a list of languages
@@ -54,7 +54,7 @@ public class LanguageServiceImpl implements LanguageService {
     ) {
         checkPageNumber(page);
 
-        if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, userRepository)) {
+        if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
             state = ResourceState.APPROVED;
         }
@@ -91,9 +91,9 @@ public class LanguageServiceImpl implements LanguageService {
             throw new DuplicateResourceException("Language", "name", languageRequestDto.getName());
         }
         Language language = new Language(languageRequestDto, imageRepository);
-        AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
+        AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);
         language.setAuthor(currentUser);
-        if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, userRepository)) {
+        if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, appUserRepository)) {
             language.setState(ResourceState.APPROVED);
         } else {
             language.setState(ResourceState.WAITING);
@@ -120,7 +120,7 @@ public class LanguageServiceImpl implements LanguageService {
                         Permission.CAN_UPDATE_OTHERS_LANGUAGE,
                         Permission.CAN_UPDATE_OWN_LANGUAGE,
                         existingLanguage.getAuthor().getId(),
-                        userRepository
+                        appUserRepository
                 )
         ) {
 
@@ -133,7 +133,7 @@ public class LanguageServiceImpl implements LanguageService {
 
             existingLanguage.setName(languageRequestDto.getName());
             existingLanguage.setDescription(languageRequestDto.getDescription());
-            if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, userRepository)) {
+            if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, appUserRepository)) {
                 existingLanguage.setState(ResourceState.APPROVED);
             } else {
                 existingLanguage.setState(ResourceState.WAITING);

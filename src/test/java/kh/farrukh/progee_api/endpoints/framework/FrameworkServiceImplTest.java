@@ -8,7 +8,7 @@ import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -49,7 +49,7 @@ class FrameworkServiceImplTest {
     @Mock
     private ImageRepository imageRepository;
     @Mock
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
     @InjectMocks
     private FrameworkServiceImpl underTest;
 
@@ -151,7 +151,7 @@ class FrameworkServiceImplTest {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
         when(languageRepository.existsById(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -221,7 +221,7 @@ class FrameworkServiceImplTest {
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com", role)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com", role)));
 
         // when
         underTest.addFramework(frameworkRequestDto);
@@ -245,7 +245,7 @@ class FrameworkServiceImplTest {
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         underTest.addFramework(frameworkRequestDto);
@@ -304,7 +304,7 @@ class FrameworkServiceImplTest {
         Framework existingFramework = new Framework("test", ResourceState.APPROVED, new Language(1));
         existingFramework.setAuthor(author);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 //        Framework updatedFramework = new Framework(name, ResourceState.APPROVED, new Language(1));
 //        updatedFramework.setAuthor(author);
@@ -336,7 +336,7 @@ class FrameworkServiceImplTest {
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(author);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -362,7 +362,7 @@ class FrameworkServiceImplTest {
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(author);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
         // then
@@ -381,7 +381,7 @@ class FrameworkServiceImplTest {
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(1));
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -407,7 +407,7 @@ class FrameworkServiceImplTest {
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(1));
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
 
         // when
@@ -431,7 +431,7 @@ class FrameworkServiceImplTest {
         Framework existingFramework = new Framework();
         existingFramework.setAuthor(new AppUser(2));
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -466,7 +466,7 @@ class FrameworkServiceImplTest {
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, "", 1, 1L);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
         when(languageRepository.existsByName(any())).thenReturn(true);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -486,7 +486,7 @@ class FrameworkServiceImplTest {
         existingFramework.setAuthor(user);
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", imageId, 1L);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(existingFramework));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then

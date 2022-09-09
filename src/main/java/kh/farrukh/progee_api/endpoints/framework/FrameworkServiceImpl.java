@@ -6,7 +6,7 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
@@ -35,7 +35,7 @@ public class FrameworkServiceImpl implements FrameworkService {
     private final FrameworkRepository frameworkRepository;
     private final LanguageRepository languageRepository;
     private final ImageRepository imageRepository;
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
     /**
      * This function returns a list of frameworks that are associated with a specific language
@@ -60,7 +60,7 @@ public class FrameworkServiceImpl implements FrameworkService {
         checkPageNumber(page);
         if (languageId != null) checkLanguageId(languageRepository, languageId);
 
-        if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, userRepository)) {
+        if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
             state = ResourceState.APPROVED;
         }
@@ -103,9 +103,9 @@ public class FrameworkServiceImpl implements FrameworkService {
         }
 
         Framework framework = new Framework(frameworkRequestDto, languageRepository, imageRepository);
-        AppUser currentUser = CurrentUserUtils.getCurrentUser(userRepository);
+        AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);
         framework.setAuthor(currentUser);
-        if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
+        if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, appUserRepository)) {
             framework.setState(ResourceState.APPROVED);
         } else {
             framework.setState(ResourceState.WAITING);
@@ -132,7 +132,7 @@ public class FrameworkServiceImpl implements FrameworkService {
                         Permission.CAN_UPDATE_OTHERS_FRAMEWORK,
                         Permission.CAN_UPDATE_OWN_FRAMEWORK,
                         framework.getAuthor().getId(),
-                        userRepository
+                        appUserRepository
                 )
         ) {
 
@@ -147,7 +147,7 @@ public class FrameworkServiceImpl implements FrameworkService {
             framework.setImage(imageRepository.findById(frameworkRequestDto.getImageId()).orElseThrow(
                     () -> new ResourceNotFoundException("Image", "id", frameworkRequestDto.getImageId())
             ));
-            if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, userRepository)) {
+            if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, appUserRepository)) {
                 framework.setState(ResourceState.APPROVED);
             } else {
                 framework.setState(ResourceState.WAITING);

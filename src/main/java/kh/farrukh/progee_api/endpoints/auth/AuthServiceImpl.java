@@ -4,9 +4,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.endpoints.user.AppUser;
+import kh.farrukh.progee_api.endpoints.user.AppUserMappers;
+import kh.farrukh.progee_api.endpoints.user.AppUserService;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.endpoints.user.UserService;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -23,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final TokenProvider tokenProvider;
     private final EmailValidator emailValidator;
-    private final UserService userService;
+    private final AppUserService appUserService;
     private final RoleRepository roleRepository;
 
     /**
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
         if (!emailValidator.test(registrationRequestDTO.getEmail())) {
             throw new BadRequestException("Email");
         }
-        return userService.addUser(new AppUserRequestDTO(registrationRequestDTO, roleRepository));
+        return appUserService.addUser(new AppUserRequestDTO(registrationRequestDTO, roleRepository));
     }
 
     /**
@@ -52,8 +52,8 @@ public class AuthServiceImpl implements AuthService {
             DecodedJWT decodedJWT = tokenProvider.validateToken(authHeader, true);
             if (decodedJWT != null) {
                 String username = decodedJWT.getSubject();
-                AppUser user = userService.getUserByEmail(username);
-                return tokenProvider.generateTokens(user);
+                AppUserResponseDTO user = appUserService.getUserByEmail(username);
+                return tokenProvider.generateTokens(AppUserMappers.toAppUser(user));
             } else {
                 throw new BadRequestException("Refresh token");
             }

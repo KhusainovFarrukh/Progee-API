@@ -7,7 +7,7 @@ import kh.farrukh.progee_api.endpoints.review.payloads.ReviewVoteRequestDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ReviewDuplicateVoteException;
@@ -46,7 +46,7 @@ class ReviewServiceImplTest {
     @Mock
     private LanguageRepository languageRepository;
     @Mock
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
     @InjectMocks
     private ReviewServiceImpl underTest;
 
@@ -145,7 +145,7 @@ class ReviewServiceImplTest {
         ReviewValue reviewValue = ReviewValue.LIKE;
         ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue, 1L);
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com")));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com")));
 
         // when
         underTest.addReview(reviewRequestDto);
@@ -188,7 +188,7 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.setAuthor(author);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
         underTest.updateReview(1, reviewRequestDto);
@@ -212,7 +212,7 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.setAuthor(author);
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
         // then
@@ -231,7 +231,7 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         underTest.updateReview(1, reviewRequestDto);
@@ -255,7 +255,7 @@ class ReviewServiceImplTest {
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -287,7 +287,7 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OTHERS_REVIEW)));
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -305,7 +305,7 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         Review existingReview = new Review();
         existingReview.setAuthor(new AppUser(1));
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -322,7 +322,7 @@ class ReviewServiceImplTest {
         AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
         Review existingReview = new Review();
         existingReview.setAuthor(author);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -340,7 +340,7 @@ class ReviewServiceImplTest {
         AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         Review existingReview = new Review();
         existingReview.setAuthor(author);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(author));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -370,7 +370,7 @@ class ReviewServiceImplTest {
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
         AppUser user = new AppUser(1);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
 
         // when
@@ -390,7 +390,7 @@ class ReviewServiceImplTest {
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
         AppUser user = new AppUser(1);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
 
         // when
@@ -412,7 +412,7 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getDownVotes().add(user.getId());
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -434,7 +434,7 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getUpVotes().add(user.getId());
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -456,7 +456,7 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getUpVotes().add(user.getId());
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when
@@ -475,7 +475,7 @@ class ReviewServiceImplTest {
         AppUser user = new AppUser(1);
         Review existingReview = new Review();
         existingReview.getDownVotes().add(user.getId());
-        when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(reviewRepository.findById(any())).thenReturn(Optional.of(existingReview));
 
         // when

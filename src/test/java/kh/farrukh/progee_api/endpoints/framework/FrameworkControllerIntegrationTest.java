@@ -12,7 +12,7 @@ import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.UserRepository;
+import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -53,7 +53,7 @@ class FrameworkControllerIntegrationTest {
     private FrameworkRepository frameworkRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -68,7 +68,7 @@ class FrameworkControllerIntegrationTest {
     void tearDown() {
         frameworkRepository.deleteAll();
         languageRepository.deleteAll();
-        userRepository.deleteAll();
+        appUserRepository.deleteAll();
         roleRepository.deleteAll();
     }
 
@@ -111,7 +111,7 @@ class FrameworkControllerIntegrationTest {
     void canGetFrameworksWithFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         List<Framework> waitingFrameworks = List.of(
                 new Framework("test2", ResourceState.WAITING, existingLanguage),
@@ -171,7 +171,7 @@ class FrameworkControllerIntegrationTest {
     void canAddFramework() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkRequestDTO languageDto = new FrameworkRequestDTO("test", "test", existingImage.getId(), existingLanguage.getId());
@@ -197,7 +197,7 @@ class FrameworkControllerIntegrationTest {
     void canUpdateFramework() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkResponseDTO existingFramework = frameworkService.addFramework(
@@ -227,7 +227,7 @@ class FrameworkControllerIntegrationTest {
     void canDeleteFrameworkById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_FRAMEWORK)));
-        userRepository.save(new AppUser("user@mail.com", existingRole));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkResponseDTO existingFramework = frameworkService.addFramework(
