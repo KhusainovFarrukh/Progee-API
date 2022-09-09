@@ -10,8 +10,8 @@ import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUserService;
+import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.security.jwt.JwtConfiguration;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -112,8 +113,8 @@ class AuthServiceImplTest {
                         role,
                         "test",
                         "test",
-                        "test",
-                        "test"
+                        ZonedDateTime.now(),
+                        ZonedDateTime.now()
                 )
         );
 

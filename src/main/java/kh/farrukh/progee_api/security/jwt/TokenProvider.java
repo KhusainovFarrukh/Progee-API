@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 import static kh.farrukh.progee_api.security.jwt.JWTKeys.KEY_ROLE_ID;
@@ -44,16 +45,15 @@ public class TokenProvider implements InitializingBean {
      * @param user The user details object that contains the user's information.
      */
     public AuthResponseDTO generateTokens(AppUser user) {
-        long currentMillis = System.currentTimeMillis();
-        Date accessExpireDate = new Date(currentMillis + jwtConfiguration.getAccessTokenValidityInSeconds() * 1000);
-        Date refreshExpireDate = new Date(currentMillis + jwtConfiguration.getRefreshTokenValidityInSeconds() * 1000);
+        ZonedDateTime accessExpireDate = ZonedDateTime.now().plusSeconds(jwtConfiguration.getAccessTokenValidityInSeconds());
+        ZonedDateTime refreshExpireDate = ZonedDateTime.now().plusSeconds(jwtConfiguration.getRefreshTokenValidityInSeconds());
 
         return new AuthResponseDTO(
                 user.getRole(),
                 createToken(user, accessExpireDate, accessTokenAlgorithm),
                 createToken(user, refreshExpireDate, refreshTokenAlgorithm),
-                formatter.format(accessExpireDate),
-                formatter.format(refreshExpireDate)
+                accessExpireDate,
+                refreshExpireDate
         );
     }
 
@@ -88,10 +88,10 @@ public class TokenProvider implements InitializingBean {
      * @param algorithm  The algorithm to use for signing the token.
      * @return A JWT token
      */
-    private String createToken(AppUser user, Date expireDate, Algorithm algorithm) {
+    private String createToken(AppUser user, ZonedDateTime expireDate, Algorithm algorithm) {
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(expireDate)
+                .withExpiresAt(Date.from(expireDate.toInstant()))
                 .withClaim(KEY_ROLE_ID, user.getRole().getId())
                 .sign(algorithm);
     }

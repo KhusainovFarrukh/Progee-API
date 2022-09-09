@@ -36,6 +36,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
     private final TokenProvider tokenProvider;
     private final AppUserRepository appUserRepository;
     private final HandlerExceptionResolver resolver;
+    private final ObjectMapper objectMapper;
 
     /**
      * This function is called when the user submits the login form. It takes the username and password from the form,
@@ -74,7 +75,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
                 () -> new UsernameNotFoundException("User not found in the database")
         );
         AuthResponseDTO authResponseDTO = tokenProvider.generateTokens(appUser);
-        SecurityUtils.sendTokenInResponse(authResponseDTO, response);
+        SecurityUtils.sendTokenInResponse(authResponseDTO, response, objectMapper);
     }
 
     @Override

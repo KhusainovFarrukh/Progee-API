@@ -15,4 +15,13 @@ public class LanguageMappers {
         languageResponseDTO.setImage(ImageMappers.toImageDto(language.getImage()));
         return languageResponseDTO;
     }
+
+    public static Language toLanguage(LanguageResponseDTO languageResponseDTO) {
+        if (languageResponseDTO == null) return null;
+        Language language = new Language();
+        BeanUtils.copyProperties(languageResponseDTO, language);
+        language.setAuthor(AppUserMappers.toAppUser(languageResponseDTO.getAuthor()));
+        language.setImage(ImageMappers.toImage(languageResponseDTO.getImage()));
+        return language;
+    }
 }

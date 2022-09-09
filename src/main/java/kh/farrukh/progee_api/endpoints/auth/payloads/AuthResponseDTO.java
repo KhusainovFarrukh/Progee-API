@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class AuthResponseDTO {
     @JsonProperty("refresh_token")
     private String refreshToken;
     @JsonProperty("access_token_expires")
-    private String accessTokenExpires;
+    private ZonedDateTime accessTokenExpires;
     @JsonProperty("refresh_token_expires")
-    private String refreshTokenExpires;
+    private ZonedDateTime refreshTokenExpires;
 }

@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.security.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.security.filters.EmailPasswordAuthenticationFilter;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
@@ -24,15 +25,18 @@ public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<Authe
     private final TokenProvider tokenProvider;
     private final AppUserRepository appUserRepository;
     private final HandlerExceptionResolver resolver;
+    private final ObjectMapper objectMapper;
 
     public AuthenticationFilterConfigurer(
             TokenProvider tokenProvider,
             AppUserRepository appUserRepository,
-            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
+            @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver,
+            ObjectMapper objectMapper
     ) {
         this.tokenProvider = tokenProvider;
         this.appUserRepository = appUserRepository;
         this.resolver = resolver;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -44,7 +48,7 @@ public class AuthenticationFilterConfigurer extends AbstractHttpConfigurer<Authe
     public void configure(HttpSecurity http) {
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         EmailPasswordAuthenticationFilter authenticationFilter = new EmailPasswordAuthenticationFilter(
-                authenticationManager, tokenProvider, appUserRepository, resolver
+                authenticationManager, tokenProvider, appUserRepository, resolver, objectMapper
         );
         authenticationFilter.setFilterProcessesUrl(ENDPOINT_LOGIN);
         http.addFilter(authenticationFilter);

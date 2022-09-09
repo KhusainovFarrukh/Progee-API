@@ -53,15 +53,18 @@ public class SecurityUtils {
      * It takes a map of data and an HttpServletResponse object, and writes the data to the response as JSON
      *
      * @param authResponseDTO This is the AuthResponse that you want to send back to the client.
-     * @param response     The HttpServletResponse object.
+     * @param response        The HttpServletResponse object.
      */
-    public static void sendTokenInResponse(AuthResponseDTO authResponseDTO, HttpServletResponse response) throws IOException {
+    public static void sendTokenInResponse(
+            AuthResponseDTO authResponseDTO,
+            HttpServletResponse response,
+            ObjectMapper objectMapper
+    ) throws IOException {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        Map<String, Object> data = new ObjectMapper().convertValue(authResponseDTO,
+        Map<String, Object> data = objectMapper.convertValue(authResponseDTO,
                 new TypeReference<>() {
-                }
-        );
-        new ObjectMapper().writeValue(response.getOutputStream(), data);
+                });
+        objectMapper.writeValue(response.getOutputStream(), data);
     }
 
     /**
