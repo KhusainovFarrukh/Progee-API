@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.image;
 
+import kh.farrukh.progee_api.endpoints.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -24,9 +25,9 @@ public class ImageServiceImpl implements ImageService {
      * @return The image object is being returned.
      */
     @Override
-    public Image addImage(MultipartFile multipartImage) {
+    public ImageResponseDTO addImage(MultipartFile multipartImage) {
         try {
-            return imageRepository.save(new Image(multipartImage.getBytes()));
+            return ImageMappers.toImageDto(imageRepository.save(new Image(multipartImage.getBytes())));
         } catch (Exception exception) {
             throw new RuntimeException("Error on image upload: " + exception.getMessage());
         }
@@ -39,10 +40,10 @@ public class ImageServiceImpl implements ImageService {
      * @return The image with the given id.
      */
     @Override
-    public Image getImageById(long id) {
-        return imageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", id)
-        );
+    public ImageResponseDTO getImageById(long id) {
+        return imageRepository.findById(id)
+                .map(ImageMappers::toImageDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id));
     }
 
     /**

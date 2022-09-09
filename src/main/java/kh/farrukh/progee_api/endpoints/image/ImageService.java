@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.image;
 
+import kh.farrukh.progee_api.endpoints.image.payloads.ImageResponseDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ImageService {
 
-    Image addImage(MultipartFile multipartImage);
+    ImageResponseDTO addImage(MultipartFile multipartImage);
 
-    Image getImageById(long id);
+    ImageResponseDTO getImageById(long id);
 
     Resource downloadImage(long id);
 }

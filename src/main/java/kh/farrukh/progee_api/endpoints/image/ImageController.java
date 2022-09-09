@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.image;
 
+import kh.farrukh.progee_api.endpoints.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.utils.file.NotEmptyFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -32,7 +33,7 @@ public class ImageController {
      * @return The image object is being returned.
      */
     @PostMapping
-    public ResponseEntity<Image> uploadImage(@NotEmptyFile @RequestParam("image") MultipartFile multipartImage) {
+    public ResponseEntity<ImageResponseDTO> uploadImage(@NotEmptyFile @RequestParam("image") MultipartFile multipartImage) {
         return new ResponseEntity<>(imageService.addImage(multipartImage), HttpStatus.CREATED);
     }
 
@@ -43,7 +44,7 @@ public class ImageController {
      * @return A ResponseEntity object is being returned.
      */
     @GetMapping(value = "{id}")
-    public ResponseEntity<Image> getImageById(@PathVariable long id) {
+    public ResponseEntity<ImageResponseDTO> getImageById(@PathVariable long id) {
         return new ResponseEntity<>(imageService.getImageById(id), HttpStatus.OK);
     }
 
