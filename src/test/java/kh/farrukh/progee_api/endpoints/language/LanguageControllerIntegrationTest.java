@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import kh.farrukh.progee_api.endpoints.role.RoleRepository;
@@ -182,7 +183,7 @@ class LanguageControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
-        Language existingLanguage = languageService.addLanguage(new LanguageRequestDTO("test", "test", existingImage.getId()));
+        LanguageResponseDTO existingLanguage = languageService.addLanguage(new LanguageRequestDTO("test", "test", existingImage.getId()));
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test-update", "test-update", existingImage.getId());
 
         // when
@@ -209,7 +210,7 @@ class LanguageControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_LANGUAGE)));
         userRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
-        Language existingLanguage = languageService.addLanguage(new LanguageRequestDTO("", "", existingImage.getId()));
+        LanguageResponseDTO existingLanguage = languageService.addLanguage(new LanguageRequestDTO("", "", existingImage.getId()));
 
         // when
         // then

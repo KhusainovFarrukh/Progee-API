@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.global.dto.ResourceStateDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.utils.paging_sorting.PagingResponse;
@@ -34,7 +35,7 @@ public class LanguageController {
      * @return A list of languages
      */
     @GetMapping
-    public ResponseEntity<PagingResponse<Language>> getLanguages(
+    public ResponseEntity<PagingResponse<LanguageResponseDTO>> getLanguages(
             @RequestParam(name = "state", required = false) ResourceState state,
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize,
@@ -53,7 +54,7 @@ public class LanguageController {
      * @return A ResponseEntity containing Language object and HttpStatus.
      */
     @GetMapping("{id}")
-    public ResponseEntity<Language> getLanguageById(@PathVariable long id) {
+    public ResponseEntity<LanguageResponseDTO> getLanguageById(@PathVariable long id) {
         return new ResponseEntity<>(languageService.getLanguageById(id), HttpStatus.OK);
     }
 
@@ -64,7 +65,7 @@ public class LanguageController {
      * @return A ResponseEntity containing created Language object and HttpStatus.
      */
     @PostMapping
-    public ResponseEntity<Language> addLanguage(@Valid @RequestBody LanguageRequestDTO languageRequestDto) {
+    public ResponseEntity<LanguageResponseDTO> addLanguage(@Valid @RequestBody LanguageRequestDTO languageRequestDto) {
         return new ResponseEntity<>(languageService.addLanguage(languageRequestDto), HttpStatus.CREATED);
     }
 
@@ -76,7 +77,7 @@ public class LanguageController {
      * @return A ResponseEntity with the updated Language object and HttpStatus.
      */
     @PutMapping("{id}")
-    public ResponseEntity<Language> updateLanguage(
+    public ResponseEntity<LanguageResponseDTO> updateLanguage(
             @PathVariable long id,
             @Valid @RequestBody LanguageRequestDTO languageRequestDto
     ) {
@@ -104,7 +105,7 @@ public class LanguageController {
      * @return A ResponseEntity with the updated Language object and HttpStatus.
      */
     @PatchMapping("{id}/state")
-    public ResponseEntity<Language> setLanguageState(
+    public ResponseEntity<LanguageResponseDTO> setLanguageState(
             @PathVariable long id,
             @Valid @RequestBody ResourceStateDTO resourceStateDto
     ) {

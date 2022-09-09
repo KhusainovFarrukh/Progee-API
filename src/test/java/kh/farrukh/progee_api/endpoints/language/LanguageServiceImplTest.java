@@ -19,7 +19,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
@@ -53,6 +55,8 @@ class LanguageServiceImplTest {
     void unauthenticatedUserCanGetApprovedLanguages() {
         // given
         SecurityContextHolder.clearContext();
+        when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getLanguages(null, 1, 10, "id", "ASC");
@@ -83,6 +87,10 @@ class LanguageServiceImplTest {
     @Test
     @WithMockUser
     void simpleUserCanGetApprovedLanguages() {
+        // given
+        when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
+
         // when
         underTest.getLanguages(null, 1, 10, "id", "ASC");
 
@@ -110,6 +118,10 @@ class LanguageServiceImplTest {
     @Test
     @WithMockUser
     void userWithoutRequiredPermissionCanGetApprovedLanguages() {
+        // given
+        when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
+
         // when
         underTest.getLanguages(null, 1, 10, "id", "ASC");
 
@@ -130,6 +142,8 @@ class LanguageServiceImplTest {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC");
@@ -151,6 +165,8 @@ class LanguageServiceImplTest {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
+        when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
 
         // when
         underTest.getLanguages(null, 1, 10, "id", "ASC");

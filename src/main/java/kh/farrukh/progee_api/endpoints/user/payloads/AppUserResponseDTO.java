@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.user.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kh.farrukh.progee_api.endpoints.image.Image;
+import kh.farrukh.progee_api.endpoints.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.endpoints.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,5 +31,5 @@ public class AppUserResponseDTO {
 
     private Role role;
 
-    private Image image;
+    private ImageResponseDTO image;
 }

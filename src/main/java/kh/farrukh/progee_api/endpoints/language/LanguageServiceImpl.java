@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.language;
 
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.UserRepository;
@@ -44,7 +45,7 @@ public class LanguageServiceImpl implements LanguageService {
      * @return A list of frameworks
      */
     @Override
-    public PagingResponse<Language> getLanguages(
+    public PagingResponse<LanguageResponseDTO> getLanguages(
             ResourceState state,
             int page,
             int pageSize,
@@ -61,7 +62,7 @@ public class LanguageServiceImpl implements LanguageService {
         return new PagingResponse<>(languageRepository.findAll(
                 new LanguageSpecification(state),
                 PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy))
-        ));
+        ).map(LanguageMappers::toLanguageResponseDTO));
     }
 
     /**
@@ -72,10 +73,10 @@ public class LanguageServiceImpl implements LanguageService {
      * @return Language
      */
     @Override
-    public Language getLanguageById(long id) {
-        return languageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", id)
-        );
+    public LanguageResponseDTO getLanguageById(long id) {
+        return languageRepository.findById(id)
+                .map(LanguageMappers::toLanguageResponseDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
     }
 
     /**
@@ -85,7 +86,7 @@ public class LanguageServiceImpl implements LanguageService {
      * @return Language
      */
     @Override
-    public Language addLanguage(LanguageRequestDTO languageRequestDto) {
+    public LanguageResponseDTO addLanguage(LanguageRequestDTO languageRequestDto) {
         if (languageRepository.existsByName(languageRequestDto.getName())) {
             throw new DuplicateResourceException("Language", "name", languageRequestDto.getName());
         }
@@ -98,18 +99,18 @@ public class LanguageServiceImpl implements LanguageService {
             language.setState(ResourceState.WAITING);
         }
 
-        return languageRepository.save(language);
+        return LanguageMappers.toLanguageResponseDTO(languageRepository.save(language));
     }
 
     /**
      * This function updates a language in the database
      *
-     * @param id          The id of the framework to update
+     * @param id                 The id of the framework to update
      * @param languageRequestDto The DTO object that contains the new values for the language.
      * @return The updated language.
      */
     @Override
-    public Language updateLanguage(long id, LanguageRequestDTO languageRequestDto) {
+    public LanguageResponseDTO updateLanguage(long id, LanguageRequestDTO languageRequestDto) {
         Language existingLanguage = languageRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
@@ -141,7 +142,7 @@ public class LanguageServiceImpl implements LanguageService {
                     () -> new ResourceNotFoundException("Image", "id", languageRequestDto.getImageId())
             ));
 
-            return languageRepository.save(existingLanguage);
+            return LanguageMappers.toLanguageResponseDTO(languageRepository.save(existingLanguage));
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -166,11 +167,11 @@ public class LanguageServiceImpl implements LanguageService {
      * @return Language
      */
     @Override
-    public Language setLanguageState(long id, ResourceStateDTO resourceStateDto) {
+    public LanguageResponseDTO setLanguageState(long id, ResourceStateDTO resourceStateDto) {
         Language language = languageRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Language", "id", id)
         );
         language.setState(resourceStateDto.getState());
-        return languageRepository.save(language);
+        return LanguageMappers.toLanguageResponseDTO(languageRepository.save(language));
     }
 }
