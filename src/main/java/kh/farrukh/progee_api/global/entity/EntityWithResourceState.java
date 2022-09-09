@@ -19,12 +19,4 @@ public abstract class EntityWithResourceState extends EntityWithId{
 
     @Enumerated(EnumType.STRING)
     private ResourceState state = ResourceState.WAITING;
-
-    public void setStateAccordingToRole(boolean isAdmin) {
-        if (isAdmin) {
-            this.state = ResourceState.APPROVED;
-        } else {
-            this.state = ResourceState.WAITING;
-        }
-    }
 }

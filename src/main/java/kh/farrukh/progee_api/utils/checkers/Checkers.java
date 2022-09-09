@@ -35,9 +35,7 @@ public class Checkers {
      * @param page The page number to return.
      */
     public static void checkPageNumber(int page) {
-        if (page < 1) {
-            throw new BadRequestException("Page index");
-        }
+        if (page < 1) throw new BadRequestException("Page index");
     }
 
 

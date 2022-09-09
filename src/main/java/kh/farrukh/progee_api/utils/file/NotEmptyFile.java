@@ -1,7 +1,5 @@
 package kh.farrukh.progee_api.utils.file;
 
-import kh.farrukh.progee_api.utils.paging_sorting.NotEmptyFileValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

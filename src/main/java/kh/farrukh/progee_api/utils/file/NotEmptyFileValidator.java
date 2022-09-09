@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.utils.paging_sorting;
+package kh.farrukh.progee_api.utils.file;
 
 import kh.farrukh.progee_api.utils.file.NotEmptyFile;
 import org.springframework.web.multipart.MultipartFile;
