@@ -54,9 +54,9 @@ public class ImageServiceImpl implements ImageService {
      */
     @Override
     public Resource downloadImage(long id) {
-        byte[] content = imageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", id)
-        ).getContent();
+        byte[] content = imageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id))
+                .getContent();
 
         return new ByteArrayResource(content);
     }

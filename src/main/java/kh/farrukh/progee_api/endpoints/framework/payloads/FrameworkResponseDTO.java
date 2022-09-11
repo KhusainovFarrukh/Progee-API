@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.framework.payloads;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.endpoints.image.Image;
 import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
 import lombok.AllArgsConstructor;
@@ -33,5 +34,5 @@ public class FrameworkResponseDTO {
     @JsonProperty("created_at")
     private ZonedDateTime createdAt;
 
-    private Language language;
+    private LanguageResponseDTO language;
 }

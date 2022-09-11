@@ -34,7 +34,9 @@ public class ImageController {
      */
     @PostMapping
     public ResponseEntity<ImageResponseDTO> uploadImage(@NotEmptyFile @RequestParam("image") MultipartFile multipartImage) {
-        return new ResponseEntity<>(imageService.addImage(multipartImage), HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(imageService.addImage(multipartImage));
     }
 
     /**
@@ -45,7 +47,7 @@ public class ImageController {
      */
     @GetMapping(value = "{id}")
     public ResponseEntity<ImageResponseDTO> getImageById(@PathVariable long id) {
-        return new ResponseEntity<>(imageService.getImageById(id), HttpStatus.OK);
+        return ResponseEntity.ok(imageService.getImageById(id));
     }
 
     /**

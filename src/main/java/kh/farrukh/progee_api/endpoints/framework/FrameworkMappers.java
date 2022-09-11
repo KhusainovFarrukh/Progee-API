@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
+import kh.farrukh.progee_api.endpoints.language.LanguageMappers;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
 import kh.farrukh.progee_api.endpoints.user.AppUserMappers;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -15,15 +16,8 @@ public class FrameworkMappers {
         FrameworkResponseDTO frameworkResponseDTO = new FrameworkResponseDTO();
         BeanUtils.copyProperties(framework, frameworkResponseDTO);
         frameworkResponseDTO.setAuthor(AppUserMappers.toAppUserResponseDTO(framework.getAuthor()));
+        frameworkResponseDTO.setLanguage(LanguageMappers.toLanguageResponseDTO(framework.getLanguage()));
         return frameworkResponseDTO;
-    }
-
-    public static Framework toFramework(FrameworkResponseDTO frameworkResponseDTO) {
-        if (frameworkResponseDTO == null) return null;
-        Framework framework = new Framework();
-        BeanUtils.copyProperties(frameworkResponseDTO, framework);
-        framework.setAuthor(AppUserMappers.toAppUser(frameworkResponseDTO.getAuthor()));
-        return framework;
     }
 
     public static Framework toFramework(
