@@ -84,9 +84,15 @@ public class FrameworkServiceImpl implements FrameworkService {
      */
     @Override
     public FrameworkResponseDTO getFrameworkById(long id) {
-        return frameworkRepository.findById(id)
-                .map(FrameworkMappers::toFrameworkResponseDTO)
+        Framework framework = frameworkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
+
+        if (framework.getState() != ResourceState.APPROVED &&
+                !CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, appUserRepository)) {
+            throw new NotEnoughPermissionException();
+        }
+
+        return FrameworkMappers.toFrameworkResponseDTO(framework);
     }
 
     /**

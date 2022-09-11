@@ -188,10 +188,11 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void canGetFrameworkById() {
+    void canGetApprovedFrameworkById() {
         // given
         long frameworkId = 1;
-        when(frameworkRepository.findById(any())).thenReturn(Optional.of(new Framework()));
+        when(frameworkRepository.findById(any()))
+                .thenReturn(Optional.of(new Framework("test", ResourceState.APPROVED, new Language(1))));
 
         // when
         underTest.getFrameworkById(frameworkId);

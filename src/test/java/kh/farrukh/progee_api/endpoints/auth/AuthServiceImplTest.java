@@ -13,6 +13,7 @@ import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserService;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.BadRequestException;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.token_exceptions.UnknownTokenException;
 import kh.farrukh.progee_api.security.jwt.JwtConfiguration;
 import kh.farrukh.progee_api.security.jwt.TokenProvider;
 import org.junit.jupiter.api.Test;
@@ -133,8 +134,7 @@ class AuthServiceImplTest {
         // when
         // then
         assertThatThrownBy(() -> underTest.refreshToken(refreshToken))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("Refresh token");
+                .isInstanceOf(UnknownTokenException.class);
     }
 
     @Test
@@ -145,8 +145,7 @@ class AuthServiceImplTest {
         // when
         // then
         assertThatThrownBy(() -> underTest.refreshToken(refreshToken))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("Refresh token");
+                .isInstanceOf(UnknownTokenException.class);
     }
 
     @Test
@@ -157,7 +156,6 @@ class AuthServiceImplTest {
         // when
         // then
         assertThatThrownBy(() -> underTest.refreshToken(refreshToken))
-                .isInstanceOf(BadRequestException.class)
-                .hasMessageContaining("Refresh token");
+                .isInstanceOf(UnknownTokenException.class);
     }
 }
