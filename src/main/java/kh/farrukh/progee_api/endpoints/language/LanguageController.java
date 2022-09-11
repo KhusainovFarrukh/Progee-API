@@ -42,9 +42,7 @@ public class LanguageController {
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
-        return new ResponseEntity<>(
-                languageService.getLanguages(state, page, pageSize, sortBy, orderBy), HttpStatus.OK
-        );
+        return ResponseEntity.ok(languageService.getLanguages(state, page, pageSize, sortBy, orderBy));
     }
 
     /**
@@ -55,7 +53,7 @@ public class LanguageController {
      */
     @GetMapping("{id}")
     public ResponseEntity<LanguageResponseDTO> getLanguageById(@PathVariable long id) {
-        return new ResponseEntity<>(languageService.getLanguageById(id), HttpStatus.OK);
+        return ResponseEntity.ok(languageService.getLanguageById(id));
     }
 
     /**
@@ -66,13 +64,15 @@ public class LanguageController {
      */
     @PostMapping
     public ResponseEntity<LanguageResponseDTO> addLanguage(@Valid @RequestBody LanguageRequestDTO languageRequestDto) {
-        return new ResponseEntity<>(languageService.addLanguage(languageRequestDto), HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(languageService.addLanguage(languageRequestDto));
     }
 
     /**
      * This function updates a language.
      *
-     * @param id          The id of the language to update
+     * @param id                 The id of the language to update
      * @param languageRequestDto The language values that we want to update.
      * @return A ResponseEntity with the updated Language object and HttpStatus.
      */
@@ -81,7 +81,7 @@ public class LanguageController {
             @PathVariable long id,
             @Valid @RequestBody LanguageRequestDTO languageRequestDto
     ) {
-        return new ResponseEntity<>(languageService.updateLanguage(id, languageRequestDto), HttpStatus.OK);
+        return ResponseEntity.ok(languageService.updateLanguage(id, languageRequestDto));
     }
 
     /**
@@ -93,7 +93,7 @@ public class LanguageController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteLanguage(@PathVariable long id) {
         languageService.deleteLanguage(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -109,6 +109,6 @@ public class LanguageController {
             @PathVariable long id,
             @Valid @RequestBody ResourceStateDTO resourceStateDto
     ) {
-        return new ResponseEntity<>(languageService.setLanguageState(id, resourceStateDto), HttpStatus.OK);
+        return ResponseEntity.ok(languageService.setLanguageState(id, resourceStateDto));
     }
 }

@@ -3,15 +3,12 @@ package kh.farrukh.progee_api.endpoints.language;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
-import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
-import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.framework.Framework;
 import kh.farrukh.progee_api.endpoints.image.Image;
-import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.review.Review;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -85,16 +82,5 @@ public class Language extends EntityWithResourceState {
     public Language(String name, ResourceState state) {
         this.name = name;
         super.setState(state);
-    }
-
-    // This is a constructor that takes a LanguageDTO object and
-    // sets the values of the current object to the values of
-    // the given object.
-    public Language(LanguageRequestDTO languageRequestDto, ImageRepository imageRepository) {
-        this.name = languageRequestDto.getName();
-        this.description = languageRequestDto.getDescription();
-        this.image = imageRepository.findById(languageRequestDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", languageRequestDto.getImageId())
-        );
     }
 }

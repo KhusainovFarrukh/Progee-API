@@ -4,7 +4,6 @@ import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.endpoints.role.Permission;
-import kh.farrukh.progee_api.endpoints.user.AppUser;
 import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.exceptions.custom_exceptions.NotEnoughPermissionException;
@@ -78,9 +77,15 @@ public class LanguageServiceImpl implements LanguageService {
      */
     @Override
     public LanguageResponseDTO getLanguageById(long id) {
-        return languageRepository.findById(id)
-                .map(LanguageMappers::toLanguageResponseDTO)
+        Language language = languageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
+
+        if (language.getState() != ResourceState.APPROVED &&
+                !CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
+            throw new NotEnoughPermissionException();
+        }
+
+        return LanguageMappers.toLanguageResponseDTO(language);
     }
 
     /**
@@ -94,9 +99,10 @@ public class LanguageServiceImpl implements LanguageService {
         if (languageRepository.existsByName(languageRequestDto.getName())) {
             throw new DuplicateResourceException("Language", "name", languageRequestDto.getName());
         }
-        Language language = new Language(languageRequestDto, imageRepository);
-        AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);
-        language.setAuthor(currentUser);
+
+        Language language = LanguageMappers.toLanguage(languageRequestDto, imageRepository);
+        language.setAuthor(CurrentUserUtils.getCurrentUser(appUserRepository));
+
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, appUserRepository)) {
             language.setState(ResourceState.APPROVED);
         } else {
@@ -115,19 +121,15 @@ public class LanguageServiceImpl implements LanguageService {
      */
     @Override
     public LanguageResponseDTO updateLanguage(long id, LanguageRequestDTO languageRequestDto) {
-        Language existingLanguage = languageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", id)
-        );
+        Language existingLanguage = languageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
 
-        if (
-                CurrentUserUtils.hasPermissionOrIsAuthor(
-                        Permission.CAN_UPDATE_OTHERS_LANGUAGE,
-                        Permission.CAN_UPDATE_OWN_LANGUAGE,
-                        existingLanguage.getAuthor().getId(),
-                        appUserRepository
-                )
-        ) {
-
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_UPDATE_OTHERS_LANGUAGE,
+                Permission.CAN_UPDATE_OWN_LANGUAGE,
+                existingLanguage.getAuthor().getId(),
+                appUserRepository
+        )) {
 
             // It checks if the name of the language is changed and if the new name is already taken.
             if (!languageRequestDto.getName().equals(existingLanguage.getName()) &&
@@ -142,9 +144,8 @@ public class LanguageServiceImpl implements LanguageService {
             } else {
                 existingLanguage.setState(ResourceState.WAITING);
             }
-            existingLanguage.setImage(imageRepository.findById(languageRequestDto.getImageId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Image", "id", languageRequestDto.getImageId())
-            ));
+            existingLanguage.setImage(imageRepository.findById(languageRequestDto.getImageId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Image", "id", languageRequestDto.getImageId())));
 
             return LanguageMappers.toLanguageResponseDTO(languageRepository.save(existingLanguage));
         } else {
@@ -172,9 +173,8 @@ public class LanguageServiceImpl implements LanguageService {
      */
     @Override
     public LanguageResponseDTO setLanguageState(long id, ResourceStateDTO resourceStateDto) {
-        Language language = languageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", id)
-        );
+        Language language = languageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
         language.setState(resourceStateDto.getState());
         return LanguageMappers.toLanguageResponseDTO(languageRepository.save(language));
     }

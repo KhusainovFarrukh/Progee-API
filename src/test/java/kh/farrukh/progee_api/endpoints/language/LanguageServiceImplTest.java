@@ -183,10 +183,10 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    void canGetLanguageById() {
+    void canGetApprovedLanguageById() {
         // given
         long id = 1;
-        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language()));
+        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language("test", ResourceState.APPROVED)));
 
         // when
         underTest.getLanguageById(id);
