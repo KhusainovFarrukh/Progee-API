@@ -1,16 +1,11 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
-import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
-import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
-import kh.farrukh.progee_api.global.entity.ResourceState;
 import kh.farrukh.progee_api.endpoints.image.Image;
-import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.Language;
 import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.entity.EntityWithResourceState;
+import kh.farrukh.progee_api.global.entity.ResourceState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,7 +54,6 @@ public class Framework extends EntityWithResourceState {
     private AppUser author;
 
     @CreationTimestamp
-    @JsonProperty("created_at")
     private ZonedDateTime createdAt;
 
     @ManyToOne
@@ -68,20 +62,6 @@ public class Framework extends EntityWithResourceState {
             foreignKey = @ForeignKey(name = "fk_language_id_of_framework")
     )
     private Language language;
-
-    // This is a constructor that takes a FrameworkDTO object and
-    // sets the values of the current object to the values of
-    // the given object.
-    public Framework(FrameworkRequestDTO frameworkRequestDto, LanguageRepository languageRepository, ImageRepository imageRepository) {
-        this.name = frameworkRequestDto.getName();
-        this.description = frameworkRequestDto.getDescription();
-        this.image = imageRepository.findById(frameworkRequestDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", frameworkRequestDto.getImageId())
-        );
-        this.language = languageRepository.findById(frameworkRequestDto.getLanguageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Language", "id", frameworkRequestDto.getLanguageId())
-        );
-    }
 
     public Framework(String name) {
         this.name = name;

@@ -46,20 +46,20 @@ public class FrameworkController {
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
-        return new ResponseEntity<>(frameworkService.getFrameworks(
+        return ResponseEntity.ok(frameworkService.getFrameworks(
                 languageId, state, page, pageSize, sortBy, orderBy
-        ), HttpStatus.OK);
+        ));
     }
 
     /**
      * This function returns a framework with the given id, if it exists
      *
-     * @param id         The id of the framework you want to get
+     * @param id The id of the framework you want to get
      * @return A ResponseEntity containing Framework object and HttpStatus.
      */
     @GetMapping("{id}")
     public ResponseEntity<FrameworkResponseDTO> getFrameworkById(@PathVariable long id) {
-        return new ResponseEntity<>(frameworkService.getFrameworkById(id), HttpStatus.OK);
+        return ResponseEntity.ok(frameworkService.getFrameworkById(id));
     }
 
     /**
@@ -72,13 +72,15 @@ public class FrameworkController {
     public ResponseEntity<FrameworkResponseDTO> addFramework(
             @Valid @RequestBody FrameworkRequestDTO frameworkRequestDto
     ) {
-        return new ResponseEntity<>(frameworkService.addFramework(frameworkRequestDto), HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(frameworkService.addFramework(frameworkRequestDto));
     }
 
     /**
      * This function updates a framework.
      *
-     * @param id           The id of the framework to update
+     * @param id                  The id of the framework to update
      * @param frameworkRequestDto The framework values that we want to update.
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
@@ -87,19 +89,19 @@ public class FrameworkController {
             @PathVariable long id,
             @Valid @RequestBody FrameworkRequestDTO frameworkRequestDto
     ) {
-        return new ResponseEntity<>(frameworkService.updateFramework(id, frameworkRequestDto), HttpStatus.OK);
+        return ResponseEntity.ok(frameworkService.updateFramework(id, frameworkRequestDto));
     }
 
     /**
      * This function deletes a framework from a language
      *
-     * @param id         The id of the framework to delete
+     * @param id The id of the framework to delete
      * @return A ResponseEntity with HttpStatus.
      */
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteFramework(@PathVariable long id) {
         frameworkService.deleteFramework(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -115,6 +117,6 @@ public class FrameworkController {
             @PathVariable long id,
             @Valid @RequestBody ResourceStateDTO resourceStateDto
     ) {
-        return new ResponseEntity<>(frameworkService.setFrameworkState(id, resourceStateDto), HttpStatus.OK);
+        return ResponseEntity.ok(frameworkService.setFrameworkState(id, resourceStateDto));
     }
 }

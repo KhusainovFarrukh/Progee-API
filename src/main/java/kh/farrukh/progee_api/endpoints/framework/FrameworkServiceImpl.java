@@ -86,9 +86,7 @@ public class FrameworkServiceImpl implements FrameworkService {
     public FrameworkResponseDTO getFrameworkById(long id) {
         return frameworkRepository.findById(id)
                 .map(FrameworkMappers::toFrameworkResponseDTO)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Framework", "id", id)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
     }
 
     /**
@@ -106,7 +104,7 @@ public class FrameworkServiceImpl implements FrameworkService {
             throw new DuplicateResourceException("Framework", "name", frameworkRequestDto.getName());
         }
 
-        Framework framework = new Framework(frameworkRequestDto, languageRepository, imageRepository);
+        Framework framework = FrameworkMappers.toFramework(frameworkRequestDto, languageRepository, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);
         framework.setAuthor(currentUser);
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, appUserRepository)) {
@@ -127,18 +125,15 @@ public class FrameworkServiceImpl implements FrameworkService {
      */
     @Override
     public FrameworkResponseDTO updateFramework(long id, FrameworkRequestDTO frameworkRequestDto) {
-        Framework framework = frameworkRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Framework", "id", id)
-        );
+        Framework framework = frameworkRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
 
-        if (
-                CurrentUserUtils.hasPermissionOrIsAuthor(
-                        Permission.CAN_UPDATE_OTHERS_FRAMEWORK,
-                        Permission.CAN_UPDATE_OWN_FRAMEWORK,
-                        framework.getAuthor().getId(),
-                        appUserRepository
-                )
-        ) {
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_UPDATE_OTHERS_FRAMEWORK,
+                Permission.CAN_UPDATE_OWN_FRAMEWORK,
+                framework.getAuthor().getId(),
+                appUserRepository
+        )) {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
             if (!frameworkRequestDto.getName().equals(framework.getName()) &&
@@ -185,9 +180,8 @@ public class FrameworkServiceImpl implements FrameworkService {
      */
     @Override
     public FrameworkResponseDTO setFrameworkState(long id, ResourceStateDTO resourceStateDto) {
-        Framework framework = frameworkRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Framework", "id", id)
-        );
+        Framework framework = frameworkRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
         framework.setState(resourceStateDto.getState());
         return FrameworkMappers.toFrameworkResponseDTO(frameworkRepository.save(framework));
     }

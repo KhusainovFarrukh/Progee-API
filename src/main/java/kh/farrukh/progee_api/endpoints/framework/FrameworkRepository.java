@@ -22,31 +22,4 @@ public interface FrameworkRepository extends JpaRepository<Framework, Long>, Jpa
      * @return A boolean value.
      */
     boolean existsByName(String name);
-
-    /**
-     * "Find all frameworks that have a language with the given id, and return them in a pageable format."
-     *
-     * @param languageId The id of the language to filter by.
-     * @param pageable   The pageable object that contains the page number, page size, and sort information.
-     * @return A Page of Framework objects.
-     */
-    Page<Framework> findByLanguage_Id(
-            long languageId,
-            Pageable pageable
-    );
-
-    /**
-     * "Find all frameworks with the given state and language id, and return them in the given pageable."
-     * <p>
-     *
-     * @param state      The state of the resource.
-     * @param languageId The id of the language to filter by.
-     * @param pageable   The pageable object that contains the page number, page size, and sort order.
-     * @return A Page of Framework objects.
-     */
-    Page<Framework> findByStateAndLanguage_Id(
-            ResourceState state,
-            long languageId,
-            Pageable pageable
-    );
 }
