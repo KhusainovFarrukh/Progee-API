@@ -45,9 +45,7 @@ public class ReviewController {
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
-        return new ResponseEntity<>(reviewService.getReviews(
-                languageId, value, page, pageSize, sortBy, orderBy
-        ), HttpStatus.OK);
+        return ResponseEntity.ok(reviewService.getReviews(languageId, value, page, pageSize, sortBy, orderBy));
     }
 
     /**
@@ -58,7 +56,7 @@ public class ReviewController {
      */
     @GetMapping("{id}")
     public ResponseEntity<ReviewResponseDTO> getReviewById(@PathVariable long id) {
-        return new ResponseEntity<>(reviewService.getReviewById(id), HttpStatus.OK);
+        return ResponseEntity.ok(reviewService.getReviewById(id));
     }
 
     /**
@@ -69,14 +67,16 @@ public class ReviewController {
      */
     @PostMapping
     public ResponseEntity<ReviewResponseDTO> addReview(@Valid @RequestBody ReviewRequestDTO reviewRequestDto) {
-        return new ResponseEntity<>(reviewService.addReview(reviewRequestDto), HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reviewService.addReview(reviewRequestDto));
     }
 
     /**
      * This function updates a review.
      *
-     * @param id         The id of the review to update
-     * @param reviewRequestDto  The review values that we want to update.
+     * @param id               The id of the review to update
+     * @param reviewRequestDto The review values that we want to update.
      * @return A ResponseEntity with the updated Framework object and HttpStatus.
      */
     @PutMapping("{id}")
@@ -84,25 +84,25 @@ public class ReviewController {
             @PathVariable long id,
             @Valid @RequestBody ReviewRequestDTO reviewRequestDto
     ) {
-        return new ResponseEntity<>(reviewService.updateReview(id, reviewRequestDto), HttpStatus.OK);
+        return ResponseEntity.ok(reviewService.updateReview(id, reviewRequestDto));
     }
 
     /**
      * This function deletes a review from a language
      *
-     * @param id         The id of the review to delete
+     * @param id The id of the review to delete
      * @return A ResponseEntity with HttpStatus.
      */
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable long id) {
         reviewService.deleteReview(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * Function for voting on a review. Up-vote or down-vote.
      *
-     * @param id            the id of the review
+     * @param id                   the id of the review
      * @param reviewVoteRequestDto This is the object that contains the vote value.
      * @return Review
      */
@@ -111,6 +111,6 @@ public class ReviewController {
             @PathVariable long id,
             @Valid @RequestBody ReviewVoteRequestDTO reviewVoteRequestDto
     ) {
-        return new ResponseEntity<>(reviewService.voteReview(id, reviewVoteRequestDto), HttpStatus.OK);
+        return ResponseEntity.ok(reviewService.voteReview(id, reviewVoteRequestDto));
     }
 }

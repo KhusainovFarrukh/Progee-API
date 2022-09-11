@@ -1,8 +1,11 @@
 package kh.farrukh.progee_api.endpoints.review;
 
 import kh.farrukh.progee_api.endpoints.language.LanguageMappers;
+import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
+import kh.farrukh.progee_api.endpoints.review.payloads.ReviewRequestDTO;
 import kh.farrukh.progee_api.endpoints.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.endpoints.user.AppUserMappers;
+import kh.farrukh.progee_api.exceptions.custom_exceptions.ResourceNotFoundException;
 import org.springframework.beans.BeanUtils;
 
 public class ReviewMappers {
@@ -16,12 +19,12 @@ public class ReviewMappers {
         return reviewResponseDTO;
     }
 
-    public static Review toReview(ReviewResponseDTO reviewResponseDTO) {
-        if (reviewResponseDTO == null) return null;
+    public static Review toReview(ReviewRequestDTO reviewRequestDTO, LanguageRepository languageRepository) {
+        if (reviewRequestDTO == null) return null;
         Review review = new Review();
-        BeanUtils.copyProperties(reviewResponseDTO, review);
-        review.setAuthor(AppUserMappers.toAppUser(reviewResponseDTO.getAuthor()));
-        review.setLanguage(LanguageMappers.toLanguage(reviewResponseDTO.getLanguage()));
+        BeanUtils.copyProperties(reviewRequestDTO, review);
+        review.setLanguage(languageRepository.findById(reviewRequestDTO.getLanguageId())
+                .orElseThrow(() -> new ResourceNotFoundException("Language", "id", reviewRequestDTO.getLanguageId())));
         return review;
     }
 }

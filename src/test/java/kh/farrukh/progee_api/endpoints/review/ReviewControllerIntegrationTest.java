@@ -185,7 +185,7 @@ class ReviewControllerIntegrationTest {
         // then
         Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
         assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getValue());
+        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
     }
 
     @Test
@@ -213,7 +213,7 @@ class ReviewControllerIntegrationTest {
         Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
         assertThat(review.getId()).isEqualTo(existingReview.getId());
         assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getValue());
+        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
     }
 
     @Test

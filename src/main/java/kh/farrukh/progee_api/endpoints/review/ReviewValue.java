@@ -31,17 +31,12 @@ public enum ReviewValue {
      */
     @JsonCreator
     public static ReviewValue fromIntValue(int intValue) {
-        switch (intValue) {
-            case -1:
-                return ReviewValue.DISLIKE;
-            case 0:
-                return ReviewValue.DONT_HAVE_PRACTICE;
-            case 1:
-                return ReviewValue.WANT_TO_LEARN;
-            case 2:
-                return ReviewValue.LIKE;
-            default:
-                return ReviewValueConverter.DEFAULT_REVIEW_VALUE;
-        }
+        return switch (intValue) {
+            case -1 -> ReviewValue.DISLIKE;
+            case 0 -> ReviewValue.DONT_HAVE_PRACTICE;
+            case 1 -> ReviewValue.WANT_TO_LEARN;
+            case 2 -> ReviewValue.LIKE;
+            default -> ReviewValueConverter.DEFAULT_REVIEW_VALUE;
+        };
     }
 }

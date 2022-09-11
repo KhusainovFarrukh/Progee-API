@@ -13,32 +13,4 @@ import org.springframework.validation.annotation.Validated;
 @Repository
 @Validated
 public interface ReviewRepository extends JpaRepository<Review, Long>, JpaSpecificationExecutor<Review> {
-
-    /**
-     * "Find all reviews for a given language, and return them in a pageable format."
-     * <p>
-     *
-     * @param languageId the id of the language to filter by
-     * @param pageable   the pageable object that contains the page number, page size, and sort information.
-     * @return A Page of Reviews.
-     */
-    Page<Review> findByLanguage_Id(
-            long languageId,
-            Pageable pageable
-    );
-
-    /**
-     * "Find all reviews with given reviewValue for a given language, and return them in a pageable format."
-     * <p>
-     *
-     * @param languageId the id of the language to filter by
-     * @param value      ReviewValue to filter by (optional).
-     * @param pageable   the pageable object that contains the page number, page size, and sort information.
-     * @return A Page of Reviews.
-     */
-    Page<Review> findByLanguage_IdAndReviewValue(
-            long languageId,
-            ReviewValue value,
-            Pageable pageable
-    );
 }

@@ -92,7 +92,7 @@ public class ReviewServiceImpl implements ReviewService {
         if (reviewRequestDto.getLanguageId() == null) {
             throw new BadRequestException("Language id");
         }
-        Review review = new Review(reviewRequestDto, languageRepository);
+        Review review = ReviewMappers.toReview(reviewRequestDto, languageRepository);
         review.setAuthor(CurrentUserUtils.getCurrentUser(appUserRepository));
         return ReviewMappers.toReviewResponseDTO(reviewRepository.save(review));
     }
@@ -106,21 +106,17 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public ReviewResponseDTO updateReview(long id, ReviewRequestDTO reviewRequestDto) {
-        Review review = reviewRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Review", "id", id)
-        );
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review", "id", id));
 
-        if (
-                CurrentUserUtils.hasPermissionOrIsAuthor(
-                        Permission.CAN_UPDATE_OTHERS_REVIEW,
-                        Permission.CAN_UPDATE_OWN_REVIEW,
-                        review.getAuthor().getId(),
-                        appUserRepository
-                )
-        ) {
-
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_UPDATE_OTHERS_REVIEW,
+                Permission.CAN_UPDATE_OWN_REVIEW,
+                review.getAuthor().getId(),
+                appUserRepository
+        )) {
             review.setBody(reviewRequestDto.getBody());
-            review.setReviewValue(reviewRequestDto.getValue());
+            review.setReviewValue(reviewRequestDto.getReviewValue());
         } else {
             throw new NotEnoughPermissionException();
         }
@@ -135,19 +131,15 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public void deleteReview(long id) {
-        Review existingReview = reviewRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Review", "id", id)
-        );
+        Review existingReview = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review", "id", id));
 
-        if (
-                CurrentUserUtils.hasPermissionOrIsAuthor(
-                        Permission.CAN_DELETE_OTHERS_REVIEW,
-                        Permission.CAN_DELETE_OWN_REVIEW,
-                        existingReview.getAuthor().getId(),
-                        appUserRepository
-                )
-        ) {
-
+        if (CurrentUserUtils.hasPermissionOrIsAuthor(
+                Permission.CAN_DELETE_OTHERS_REVIEW,
+                Permission.CAN_DELETE_OWN_REVIEW,
+                existingReview.getAuthor().getId(),
+                appUserRepository
+        )) {
             reviewRepository.deleteById(id);
         } else {
             throw new NotEnoughPermissionException();
@@ -163,9 +155,8 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public ReviewResponseDTO voteReview(long id, ReviewVoteRequestDTO reviewVoteRequestDto) {
-        Review review = reviewRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Review", "id", id)
-        );
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review", "id", id));
 
         // Get the user who is currently logged in.
         AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);

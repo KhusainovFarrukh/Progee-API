@@ -24,12 +24,13 @@ public class ReviewRequestDTO {
     @Size(min = 8, message = "Body must not be shorter than 8 characters")
     private String body;
     @NotNull(message = "ReviewValue must not be null")
-    private ReviewValue value;
+    @JsonProperty("value")
+    private ReviewValue reviewValue;
     @JsonProperty("language_id")
     private Long languageId;
 
-    public ReviewRequestDTO(String body, ReviewValue value) {
+    public ReviewRequestDTO(String body, ReviewValue reviewValue) {
         this.body = body;
-        this.value = value;
+        this.reviewValue = reviewValue;
     }
 }
