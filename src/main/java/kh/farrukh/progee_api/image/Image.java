@@ -32,6 +32,10 @@ public class Image extends EntityWithId {
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] content;
 
+    public Image(long id) {
+        super.setId(id);
+    }
+
     public Image(byte[] content) {
         this.content = content;
     }

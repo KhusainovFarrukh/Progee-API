@@ -1,13 +1,11 @@
 package kh.farrukh.progee_api.role;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.util.List;
@@ -43,6 +41,10 @@ public class Role extends EntityWithId {
             foreignKey = @ForeignKey(name = "fk_role_id_of_permissions")
     )
     private List<Permission> permissions;
+
+    public Role(long id) {
+        super.setId(id);
+    }
 
     public Role(List<Permission> permissions) {
         this.title = "test";
