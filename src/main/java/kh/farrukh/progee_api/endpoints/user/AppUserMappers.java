@@ -11,7 +11,7 @@ public class AppUserMappers {
         if (appUser == null) return null;
         AppUserResponseDTO appUserResponseDTO = new AppUserResponseDTO();
         BeanUtils.copyProperties(appUser, appUserResponseDTO);
-        appUserResponseDTO.setImage(ImageMappers.toImageDto(appUser.getImage()));
+        appUserResponseDTO.setImage(ImageMappers.toImageResponseDto(appUser.getImage()));
         appUserResponseDTO.setRole(RoleMappers.toRoleResponseDTO(appUser.getRole()));
         return appUserResponseDTO;
     }

@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
 import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REGISTRATION;
 import static kh.farrukh.progee_api.endpoints.framework.FrameworkController.ENDPOINT_FRAMEWORK;
+import static kh.farrukh.progee_api.endpoints.home.HomeController.ENDPOINT_HOME;
 import static kh.farrukh.progee_api.endpoints.image.ImageController.ENDPOINT_IMAGE;
 import static kh.farrukh.progee_api.endpoints.language.LanguageController.ENDPOINT_LANGUAGE;
 import static kh.farrukh.progee_api.endpoints.review.ReviewController.ENDPOINT_REVIEW;
@@ -61,6 +62,8 @@ public class SecurityConfiguration {
                 .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests()
+                //home endpoint
+                .antMatchers(HttpMethod.GET, ENDPOINT_HOME).permitAll()
                 //image endpoints
                 .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_IMAGE)).permitAll()
                 .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_IMAGE)).permitAll()

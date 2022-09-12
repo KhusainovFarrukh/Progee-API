@@ -15,7 +15,7 @@ public class LanguageMappers {
         LanguageResponseDTO languageResponseDTO = new LanguageResponseDTO();
         BeanUtils.copyProperties(language, languageResponseDTO);
         languageResponseDTO.setAuthor(AppUserMappers.toAppUserResponseDTO(language.getAuthor()));
-        languageResponseDTO.setImage(ImageMappers.toImageDto(language.getImage()));
+        languageResponseDTO.setImage(ImageMappers.toImageResponseDto(language.getImage()));
         return languageResponseDTO;
     }
 

@@ -1,8 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import kh.farrukh.progee_api.endpoints.image.Image;
-import kh.farrukh.progee_api.endpoints.language.Language;
+import kh.farrukh.progee_api.endpoints.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.endpoints.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.endpoints.user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.global.entity.ResourceState;
@@ -27,7 +26,7 @@ public class FrameworkResponseDTO {
 
     private String description;
 
-    private Image image;
+    private ImageResponseDTO image;
 
     private AppUserResponseDTO author;
 

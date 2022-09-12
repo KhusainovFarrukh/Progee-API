@@ -27,7 +27,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageResponseDTO addImage(MultipartFile multipartImage) {
         try {
-            return ImageMappers.toImageDto(imageRepository.save(new Image(multipartImage.getBytes())));
+            return ImageMappers.toImageResponseDto(imageRepository.save(new Image(multipartImage.getBytes())));
         } catch (Exception exception) {
             throw new RuntimeException("Error on image upload: " + exception.getMessage());
         }
@@ -42,7 +42,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageResponseDTO getImageById(long id) {
         return imageRepository.findById(id)
-                .map(ImageMappers::toImageDto)
+                .map(ImageMappers::toImageResponseDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id));
     }
 

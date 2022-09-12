@@ -2,6 +2,7 @@ package kh.farrukh.progee_api.endpoints.framework;
 
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.endpoints.framework.payloads.FrameworkResponseDTO;
+import kh.farrukh.progee_api.endpoints.image.ImageMappers;
 import kh.farrukh.progee_api.endpoints.image.ImageRepository;
 import kh.farrukh.progee_api.endpoints.language.LanguageMappers;
 import kh.farrukh.progee_api.endpoints.language.LanguageRepository;
@@ -15,6 +16,7 @@ public class FrameworkMappers {
         if (framework == null) return null;
         FrameworkResponseDTO frameworkResponseDTO = new FrameworkResponseDTO();
         BeanUtils.copyProperties(framework, frameworkResponseDTO);
+        frameworkResponseDTO.setImage(ImageMappers.toImageResponseDto(framework.getImage()));
         frameworkResponseDTO.setAuthor(AppUserMappers.toAppUserResponseDTO(framework.getAuthor()));
         frameworkResponseDTO.setLanguage(LanguageMappers.toLanguageResponseDTO(framework.getLanguage()));
         return frameworkResponseDTO;

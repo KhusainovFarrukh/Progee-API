@@ -5,7 +5,7 @@ import org.springframework.beans.BeanUtils;
 
 public class ImageMappers {
 
-    public static ImageResponseDTO toImageDto(Image image) {
+    public static ImageResponseDTO toImageResponseDto(Image image) {
         if (image == null) return null;
         ImageResponseDTO imageResponseDTO = new ImageResponseDTO();
         BeanUtils.copyProperties(image, imageResponseDTO);
