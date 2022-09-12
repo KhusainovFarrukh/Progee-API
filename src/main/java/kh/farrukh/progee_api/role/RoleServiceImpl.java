@@ -1,10 +1,10 @@
 package kh.farrukh.progee_api.role;
 
-import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
-import kh.farrukh.progee_api.role.payloads.RoleResponseDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
+import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
+import kh.farrukh.progee_api.role.payloads.RoleResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public PagingResponse<RoleResponseDTO> getRoles(int page, int pageSize) {
         checkPageNumber(page);
-        return new PagingResponse<>(roleRepository.findAll(
-                PageRequest.of(page - 1, pageSize)
-        ).map(RoleMappers::toRoleResponseDTO));
+        return new PagingResponse<>(
+                roleRepository.findAll(PageRequest.of(page - 1, pageSize))
+                        .map(RoleMappers::toRoleResponseDTO)
+        );
     }
 
     @Override
@@ -35,14 +36,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleResponseDTO addRole(RoleRequestDTO roleRequestDto) {
         checkRoleIsUnique(roleRepository, roleRequestDto);
-        return RoleMappers.toRoleResponseDTO(roleRepository.save(new Role(roleRequestDto)));
+        Role role = roleRepository.save(RoleMappers.toRole(roleRequestDto));
+        return RoleMappers.toRoleResponseDTO(role);
     }
 
     @Override
     public RoleResponseDTO updateRole(long id, RoleRequestDTO roleRequestDto) {
-        Role existingRole = roleRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", id)
-        );
+        Role existingRole = roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 
         // It checks if the username of the user is changed and if the new username is already taken.
         if (!roleRequestDto.getTitle().equals(existingRole.getTitle()) &&

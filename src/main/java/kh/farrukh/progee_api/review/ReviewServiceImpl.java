@@ -62,10 +62,10 @@ public class ReviewServiceImpl implements ReviewService {
         // TODO: 6/12/22 add custom (transient) field: score
         checkSortParams(pageable, List.of("id", "body", "reviewValue", "upVotes", "downVotes", "createdAt"));
 
-        return new PagingResponse<>(reviewRepository.findAll(
-                new ReviewSpecification(languageId, value),
-                pageable
-        ).map(ReviewMappers::toReviewResponseDTO));
+        return new PagingResponse<>(
+                reviewRepository.findAll(new ReviewSpecification(languageId, value), pageable)
+                        .map(ReviewMappers::toReviewResponseDTO)
+        );
     }
 
     /**

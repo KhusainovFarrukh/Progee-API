@@ -44,10 +44,6 @@ public class Role extends EntityWithId {
     )
     private List<Permission> permissions;
 
-    public Role(RoleRequestDTO roleRequestDTO) {
-        BeanUtils.copyProperties(roleRequestDTO, this);
-    }
-
     public Role(List<Permission> permissions) {
         this.title = "test";
         this.permissions = permissions;

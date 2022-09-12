@@ -19,15 +19,6 @@ public class LanguageMappers {
         return languageResponseDTO;
     }
 
-    public static Language toLanguage(LanguageResponseDTO languageResponseDTO) {
-        if (languageResponseDTO == null) return null;
-        Language language = new Language();
-        BeanUtils.copyProperties(languageResponseDTO, language);
-        language.setAuthor(AppUserMappers.toAppUser(languageResponseDTO.getAuthor()));
-        language.setImage(ImageMappers.toImage(languageResponseDTO.getImage()));
-        return language;
-    }
-
     public static Language toLanguage(LanguageRequestDTO languageRequestDTO, ImageRepository imageRepository) {
         if (languageRequestDTO == null) return null;
         Language language = new Language();
