@@ -60,7 +60,10 @@ public class AppUserController {
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
     @PutMapping("{id}")
-    public ResponseEntity<AppUserResponseDTO> updateUser(@PathVariable long id, @RequestBody AppUserRequestDTO appUserRequestDto) {
+    public ResponseEntity<AppUserResponseDTO> updateUser(
+            @PathVariable long id,
+            @RequestBody AppUserRequestDTO appUserRequestDto
+    ) {
         return ResponseEntity.ok(appUserService.updateUser(id, appUserRequestDto));
     }
 

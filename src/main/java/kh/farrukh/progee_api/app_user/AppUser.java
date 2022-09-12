@@ -7,6 +7,7 @@ import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.image.Image;
+import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.language.Language;
 import kh.farrukh.progee_api.review.Review;
 import kh.farrukh.progee_api.role.Role;
@@ -122,25 +123,36 @@ public class AppUser extends EntityWithId implements UserDetails {
 
     public AppUser(String email, long roleId, RoleRepository roleRepository) {
         this.email = email;
-        this.role = roleRepository.findById(roleId).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", roleId)
-        );
+        this.role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", roleId));
+    }
+
+    public AppUser(
+            String email,
+            long roleId,
+            RoleRepository roleRepository,
+            long imageId,
+            ImageRepository imageRepository
+    ) {
+        this.email = email;
+        this.role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", roleId));
+        this.image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new ResourceNotFoundException("Image", "id", imageId));
     }
 
     public AppUser(String email, long roleId, String password, RoleRepository roleRepository) {
         this.email = email;
-        this.role = roleRepository.findById(roleId).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", roleId)
-        );
+        this.role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", roleId));
         this.password = password;
     }
 
     public AppUser(String name, String uniqueUsername, long roleId, RoleRepository roleRepository) {
         this.name = name;
         this.uniqueUsername = uniqueUsername;
-        this.role = roleRepository.findById(roleId).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", roleId)
-        );
+        this.role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", roleId));
     }
 
     public AppUser(String email, String uniqueUsername, String password, Role role) {
