@@ -1,10 +1,5 @@
 package kh.farrukh.progee_api.app_user;
 
-import kh.farrukh.progee_api.image.Image;
-import kh.farrukh.progee_api.image.ImageRepository;
-import kh.farrukh.progee_api.role.Permission;
-import kh.farrukh.progee_api.role.Role;
-import kh.farrukh.progee_api.role.RoleRepository;
 import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.SetUserImageRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.SetUserPasswordRequestDTO;
@@ -14,6 +9,11 @@ import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResour
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
+import kh.farrukh.progee_api.image.Image;
+import kh.farrukh.progee_api.image.ImageRepository;
+import kh.farrukh.progee_api.role.Permission;
+import kh.farrukh.progee_api.role.Role;
+import kh.farrukh.progee_api.role.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -116,6 +116,32 @@ class AppUserServiceImplTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("User")
                 .hasMessageContaining(String.valueOf(userId));
+    }
+
+    @Test
+    void canGetUserByEmail() {
+        // given
+        String email = "test@mail.com";
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
+
+        // when
+        underTest.getUserByEmail(email);
+
+        // then
+        verify(appUserRepository).findByEmail(email);
+    }
+
+    @Test
+    void throwsExceptionIfUserDoesNotExistWithEmail() {
+        // given
+        String email = "test@mail.com";
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.getUserByEmail(email))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("User")
+                .hasMessageContaining(email);
     }
 
     @Test
