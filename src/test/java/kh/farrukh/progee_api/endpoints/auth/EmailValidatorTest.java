@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
+import kh.farrukh.progee_api.auth.EmailValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

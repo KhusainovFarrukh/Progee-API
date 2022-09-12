@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import kh.farrukh.progee_api.endpoints.review.ReviewValue;
-import kh.farrukh.progee_api.endpoints.review.ReviewValueConverter;
+import kh.farrukh.progee_api.review.ReviewValue;
+import kh.farrukh.progee_api.review.ReviewValueConverter;
 
 import java.io.IOException;
 

@@ -1,16 +1,16 @@
 package kh.farrukh.progee_api.endpoints.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.endpoints.auth.payloads.AuthResponseDTO;
-import kh.farrukh.progee_api.endpoints.auth.payloads.LoginRequestDTO;
-import kh.farrukh.progee_api.endpoints.auth.payloads.RegistrationRequestDTO;
-import kh.farrukh.progee_api.endpoints.image.Image;
-import kh.farrukh.progee_api.endpoints.image.ImageRepository;
-import kh.farrukh.progee_api.endpoints.role.Permission;
-import kh.farrukh.progee_api.endpoints.role.Role;
-import kh.farrukh.progee_api.endpoints.role.RoleRepository;
-import kh.farrukh.progee_api.endpoints.user.AppUser;
-import kh.farrukh.progee_api.endpoints.user.AppUserRepository;
+import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.auth.payloads.LoginRequestDTO;
+import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
+import kh.farrukh.progee_api.image.Image;
+import kh.farrukh.progee_api.image.ImageRepository;
+import kh.farrukh.progee_api.role.Permission;
+import kh.farrukh.progee_api.role.Role;
+import kh.farrukh.progee_api.role.RoleRepository;
+import kh.farrukh.progee_api.user.AppUser;
+import kh.farrukh.progee_api.user.AppUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Collections;
 
-import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
-import static kh.farrukh.progee_api.endpoints.auth.AuthController.ENDPOINT_REGISTRATION;
-import static kh.farrukh.progee_api.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
+import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.global.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

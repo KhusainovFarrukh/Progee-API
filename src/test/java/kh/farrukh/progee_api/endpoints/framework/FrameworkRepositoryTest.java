@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.endpoints.framework;
 
+import kh.farrukh.progee_api.framework.Framework;
+import kh.farrukh.progee_api.framework.FrameworkRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
