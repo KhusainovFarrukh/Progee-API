@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.review;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.language.Language;
-import kh.farrukh.progee_api.user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

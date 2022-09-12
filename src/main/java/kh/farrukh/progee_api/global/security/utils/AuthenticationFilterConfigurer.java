@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.global.security.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.security.filters.EmailPasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Qualifier;

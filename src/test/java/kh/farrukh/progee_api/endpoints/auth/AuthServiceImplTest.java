@@ -11,9 +11,9 @@ import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.user.AppUser;
-import kh.farrukh.progee_api.user.AppUserService;
-import kh.farrukh.progee_api.user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserService;
+import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.token_exceptions.UnknownTokenException;
 import kh.farrukh.progee_api.global.security.jwt.JwtConfiguration;
@@ -73,7 +73,7 @@ class AuthServiceImplTest {
 
         AppUserRequestDTO capturedAppUSerRequestDto = appUserDTOArgCaptor.getValue();
         assertThat(capturedAppUSerRequestDto.getEmail()).isEqualTo(registrationRequestDTO.getEmail());
-        assertThat(capturedAppUSerRequestDto.getUsername()).isEqualTo(registrationRequestDTO.getUsername());
+        assertThat(capturedAppUSerRequestDto.getUniqueUsername()).isEqualTo(registrationRequestDTO.getUniqueUsername());
         assertThat(capturedAppUSerRequestDto.getName()).isEqualTo(registrationRequestDTO.getName());
         assertThat(capturedAppUSerRequestDto.getPassword()).isEqualTo(registrationRequestDTO.getPassword());
         assertThat(capturedAppUSerRequestDto.getImageId()).isEqualTo(registrationRequestDTO.getImageId());

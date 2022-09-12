@@ -1,8 +1,8 @@
 package kh.farrukh.progee_api.global.utils.user;
 
 import kh.farrukh.progee_api.role.Permission;
-import kh.farrukh.progee_api.user.AppUser;
-import kh.farrukh.progee_api.user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;

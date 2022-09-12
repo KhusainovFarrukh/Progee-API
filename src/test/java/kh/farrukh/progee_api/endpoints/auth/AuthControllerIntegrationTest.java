@@ -9,8 +9,8 @@ import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.user.AppUser;
-import kh.farrukh.progee_api.user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +85,7 @@ class AuthControllerIntegrationTest {
         // then
         AppUser user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUser.class);
         assertThat(user.getName()).isEqualTo(request.getName());
-        assertThat(user.getUniqueUsername()).isEqualTo(request.getUsername());
+        assertThat(user.getUniqueUsername()).isEqualTo(request.getUniqueUsername());
         assertThat(user.getEmail()).isEqualTo(request.getEmail());
         assertThat(user.getImage().getId()).isEqualTo(request.getImageId());
         assertThat(user.getRole().getId()).isEqualTo(existingRole.getId());

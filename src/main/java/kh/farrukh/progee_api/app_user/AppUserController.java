@@ -1,15 +1,14 @@
-package kh.farrukh.progee_api.user;
+package kh.farrukh.progee_api.app_user;
 
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
-import kh.farrukh.progee_api.user.payloads.*;
+import kh.farrukh.progee_api.app_user.payloads.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.user.AppUserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
 
 /**
  * Controller that exposes endpoints for managing users
@@ -39,9 +38,7 @@ public class AppUserController {
             @RequestParam(name = "sort_by", defaultValue = "id") String sortBy,
             @RequestParam(name = "order_by", defaultValue = "asc") String orderBy
     ) {
-        return new ResponseEntity<>(
-                appUserService.getUsers(page, pageSize, sortBy, orderBy), HttpStatus.OK
-        );
+        return ResponseEntity.ok(appUserService.getUsers(page, pageSize, sortBy, orderBy));
     }
 
     /**
@@ -52,19 +49,19 @@ public class AppUserController {
      */
     @GetMapping("{id}")
     public ResponseEntity<AppUserResponseDTO> getUserById(@PathVariable long id) {
-        return new ResponseEntity<>(appUserService.getUserById(id), HttpStatus.OK);
+        return ResponseEntity.ok(appUserService.getUserById(id));
     }
 
     /**
      * This function updates a user.
      *
-     * @param id         The id of the user to update
+     * @param id                The id of the user to update
      * @param appUserRequestDto The user values that we want to update.
      * @return A ResponseEntity with the updated AppUser object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<AppUserResponseDTO> updateUser(@PathVariable long id, @RequestBody AppUserRequestDTO appUserRequestDto) {
-        return new ResponseEntity<>(appUserService.updateUser(id, appUserRequestDto), HttpStatus.OK);
+        return ResponseEntity.ok(appUserService.updateUser(id, appUserRequestDto));
     }
 
     /**
@@ -76,7 +73,7 @@ public class AppUserController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id) {
         appUserService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -92,7 +89,7 @@ public class AppUserController {
             @PathVariable long id,
             @Valid @RequestBody SetUserRoleRequestDTO roleDto
     ) {
-        return new ResponseEntity<>(appUserService.setUserRole(id, roleDto), HttpStatus.OK);
+        return ResponseEntity.ok(appUserService.setUserRole(id, roleDto));
     }
 
     /**
@@ -108,7 +105,7 @@ public class AppUserController {
             @PathVariable long id,
             @Valid @RequestBody SetUserImageRequestDTO imageDto
     ) {
-        return new ResponseEntity<>(appUserService.setUserImage(id, imageDto), HttpStatus.OK);
+        return ResponseEntity.ok(appUserService.setUserImage(id, imageDto));
     }
 
     /**
@@ -123,6 +120,6 @@ public class AppUserController {
             @PathVariable long id,
             @Valid @RequestBody SetUserPasswordRequestDTO passwordDto
     ) {
-        return new ResponseEntity<>(appUserService.setUserPassword(id, passwordDto), HttpStatus.OK);
+        return ResponseEntity.ok(appUserService.setUserPassword(id, passwordDto));
     }
 }

@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.user.payloads;
+package kh.farrukh.progee_api.app_user.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

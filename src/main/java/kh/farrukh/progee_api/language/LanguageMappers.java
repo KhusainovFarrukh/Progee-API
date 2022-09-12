@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.image.ImageMappers;
 import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
-import kh.farrukh.progee_api.user.AppUserMappers;
+import kh.farrukh.progee_api.app_user.AppUserMappers;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import org.springframework.beans.BeanUtils;
 

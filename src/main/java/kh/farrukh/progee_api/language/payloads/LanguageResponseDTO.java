@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.language.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
-import kh.farrukh.progee_api.user.payloads.AppUserResponseDTO;
+import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

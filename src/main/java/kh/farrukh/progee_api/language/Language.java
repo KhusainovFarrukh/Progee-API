@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.review.Review;
-import kh.farrukh.progee_api.user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithResourceState;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import lombok.*;

@@ -5,8 +5,8 @@ import kh.farrukh.progee_api.language.LanguageRepository;
 import kh.farrukh.progee_api.review.ReviewRepository;
 import kh.farrukh.progee_api.role.RoleRepository;
 import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
-import kh.farrukh.progee_api.user.AppUserRepository;
-import kh.farrukh.progee_api.user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -106,8 +106,8 @@ public class Checkers {
      * @param appUserRequestDto The DTO that is being validated.
      */
     public static void checkUserIsUnique(AppUserRepository appUserRepository, AppUserRequestDTO appUserRequestDto) {
-        if (appUserRepository.existsByUniqueUsername(appUserRequestDto.getUsername())) {
-            throw new DuplicateResourceException("User", "username", appUserRequestDto.getUsername());
+        if (appUserRepository.existsByUniqueUsername(appUserRequestDto.getUniqueUsername())) {
+            throw new DuplicateResourceException("User", "username", appUserRequestDto.getUniqueUsername());
         }
         if (appUserRepository.existsByEmail(appUserRequestDto.getEmail())) {
             throw new DuplicateResourceException("User", "email", appUserRequestDto.getEmail());

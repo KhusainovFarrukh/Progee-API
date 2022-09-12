@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.auth;
 
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
-import kh.farrukh.progee_api.user.payloads.AppUserResponseDTO;
+import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

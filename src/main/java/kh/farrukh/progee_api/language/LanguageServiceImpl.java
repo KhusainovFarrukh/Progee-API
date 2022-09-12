@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.role.Permission;
-import kh.farrukh.progee_api.user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;

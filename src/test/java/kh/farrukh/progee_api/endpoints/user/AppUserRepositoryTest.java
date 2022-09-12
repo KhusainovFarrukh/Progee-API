@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.endpoints.user;
 
-import kh.farrukh.progee_api.user.AppUser;
-import kh.farrukh.progee_api.user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

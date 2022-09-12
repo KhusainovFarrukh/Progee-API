@@ -7,12 +7,12 @@ import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.user.AppUser;
-import kh.farrukh.progee_api.user.AppUserRepository;
-import kh.farrukh.progee_api.user.AppUserService;
-import kh.farrukh.progee_api.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.user.payloads.SetUserPasswordRequestDTO;
-import kh.farrukh.progee_api.user.payloads.SetUserRoleRequestDTO;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUserService;
+import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.app_user.payloads.SetUserPasswordRequestDTO;
+import kh.farrukh.progee_api.app_user.payloads.SetUserRoleRequestDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static kh.farrukh.progee_api.user.AppUserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -146,7 +146,7 @@ class AppUserControllerIntegrationTest {
         assertThat(user.getId()).isEqualTo(existingUser.getId());
         assertThat(user.getName()).isEqualTo(userDto.getName());
         assertThat(user.getEmail()).isEqualTo(userDto.getEmail());
-        assertThat(user.getUniqueUsername()).isEqualTo(userDto.getUsername());
+        assertThat(user.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
         assertThat(user.getImage().getId()).isEqualTo(userDto.getImageId());
     }
 

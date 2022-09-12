@@ -7,14 +7,13 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
-import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.user.AppUserMappers;
-import kh.farrukh.progee_api.user.AppUserService;
-import kh.farrukh.progee_api.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.token_exceptions.*;
 import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
+import kh.farrukh.progee_api.role.RoleRepository;
+import kh.farrukh.progee_api.app_user.AppUserMappers;
+import kh.farrukh.progee_api.app_user.AppUserService;
+import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
         if (!emailValidator.test(registrationRequestDTO.getEmail())) {
             throw new BadRequestException("Email");
         }
-        return appUserService.addUser(new AppUserRequestDTO(registrationRequestDTO, roleRepository));
+        return appUserService.addUser(AuthMappers.toAppUserRequestDTO(registrationRequestDTO, roleRepository));
     }
 
     /**

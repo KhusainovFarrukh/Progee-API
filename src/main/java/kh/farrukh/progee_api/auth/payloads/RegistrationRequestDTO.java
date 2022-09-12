@@ -21,9 +21,10 @@ public class RegistrationRequestDTO {
 
     @NotBlank(message = "Name must not be blank")
     private String name;
+    @JsonProperty("username")
     @NotBlank(message = "Username must not be blank")
     @Size(max = 16, message = "Username must be shorter than 16 characters")
-    private String username;
+    private String uniqueUsername;
     @NotBlank(message = "Email must not be blank")
     private String email;
     @NotBlank(message = "Password must not be blank")

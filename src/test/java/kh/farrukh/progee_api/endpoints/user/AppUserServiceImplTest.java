@@ -5,13 +5,13 @@ import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.user.AppUser;
-import kh.farrukh.progee_api.user.AppUserRepository;
-import kh.farrukh.progee_api.user.AppUserServiceImpl;
-import kh.farrukh.progee_api.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.user.payloads.SetUserImageRequestDTO;
-import kh.farrukh.progee_api.user.payloads.SetUserPasswordRequestDTO;
-import kh.farrukh.progee_api.user.payloads.SetUserRoleRequestDTO;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.app_user.AppUserServiceImpl;
+import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
+import kh.farrukh.progee_api.app_user.payloads.SetUserImageRequestDTO;
+import kh.farrukh.progee_api.app_user.payloads.SetUserPasswordRequestDTO;
+import kh.farrukh.progee_api.app_user.payloads.SetUserRoleRequestDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
@@ -146,7 +146,7 @@ class AppUserServiceImplTest {
         verify(appUserRepository).save(userArgCaptor.capture());
 
         AppUser capturedUser = userArgCaptor.getValue();
-        assertThat(capturedUser.getUniqueUsername()).isEqualTo(userDto.getUsername());
+        assertThat(capturedUser.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
         assertThat(capturedUser.getEmail()).isEqualTo(userDto.getEmail());
         assertThat(capturedUser.getPassword()).isEqualTo("encoded-password");
     }
@@ -224,7 +224,7 @@ class AppUserServiceImplTest {
         verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(userDto.getName());
-        assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUsername());
+        assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
         assertThat(actual.getEmail()).isEqualTo(userDto.getEmail());
     }
 
@@ -279,7 +279,7 @@ class AppUserServiceImplTest {
         verify(appUserRepository).save(userArgCaptor.capture());
         AppUser actual = userArgCaptor.getValue();
         assertThat(actual.getName()).isEqualTo(userDto.getName());
-        assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUsername());
+        assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
         assertThat(actual.getEmail()).isEqualTo(userDto.getEmail());
     }
 

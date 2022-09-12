@@ -1,18 +1,16 @@
-package kh.farrukh.progee_api.user;
+package kh.farrukh.progee_api.app_user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.user.payloads.AppUserRequestDTO;
-import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import kh.farrukh.progee_api.framework.Framework;
+import kh.farrukh.progee_api.global.base_entity.EntityWithId;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.image.Image;
-import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.language.Language;
 import kh.farrukh.progee_api.review.Review;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -99,24 +97,6 @@ public class AppUser extends EntityWithId implements UserDetails {
         createdReviews.forEach(review -> review.setAuthor(null));
     }
 
-    // This is a constructor that takes a AppUserDTO object and
-    // sets the values of the current object to the values of
-    // the given object.
-    public AppUser(AppUserRequestDTO appUserRequestDto, ImageRepository imageRepository, RoleRepository roleRepository) {
-        this.name = appUserRequestDto.getName();
-        this.email = appUserRequestDto.getEmail();
-        this.uniqueUsername = appUserRequestDto.getUsername();
-        this.password = appUserRequestDto.getPassword();
-        this.role = roleRepository.findById(appUserRequestDto.getRoleId()).orElseThrow(
-                () -> new ResourceNotFoundException("Role", "id", appUserRequestDto.getRoleId())
-        );
-        this.isLocked = appUserRequestDto.isLocked();
-        this.isEnabled = appUserRequestDto.isEnabled();
-        this.image = imageRepository.findById(appUserRequestDto.getImageId()).orElseThrow(
-                () -> new ResourceNotFoundException("Image", "id", appUserRequestDto.getImageId())
-        );
-    }
-
     public AppUser(long id) {
         super.setId(id);
     }
@@ -185,9 +165,11 @@ public class AppUser extends EntityWithId implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getPermissions().stream().map(
-                permission -> new SimpleGrantedAuthority(permission.name())
-        ).toList();
+        return role
+                .getPermissions()
+                .stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+                .toList();
     }
 
     @JsonIgnore

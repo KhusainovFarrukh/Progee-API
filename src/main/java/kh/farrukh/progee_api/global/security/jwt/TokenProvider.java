@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
-import kh.farrukh.progee_api.user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.token_exceptions.MissingTokenException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

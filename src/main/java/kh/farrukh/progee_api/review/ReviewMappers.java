@@ -4,7 +4,7 @@ import kh.farrukh.progee_api.language.LanguageMappers;
 import kh.farrukh.progee_api.language.LanguageRepository;
 import kh.farrukh.progee_api.review.payloads.ReviewRequestDTO;
 import kh.farrukh.progee_api.review.payloads.ReviewResponseDTO;
-import kh.farrukh.progee_api.user.AppUserMappers;
+import kh.farrukh.progee_api.app_user.AppUserMappers;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import org.springframework.beans.BeanUtils;
 

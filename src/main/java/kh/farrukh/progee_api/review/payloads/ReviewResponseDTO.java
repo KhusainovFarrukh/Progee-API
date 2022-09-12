@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.review.payloads;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.review.ReviewValue;
-import kh.farrukh.progee_api.user.payloads.AppUserResponseDTO;
+import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

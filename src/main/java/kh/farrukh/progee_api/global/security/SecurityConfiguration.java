@@ -22,7 +22,7 @@ import static kh.farrukh.progee_api.image.ImageController.ENDPOINT_IMAGE;
 import static kh.farrukh.progee_api.language.LanguageController.ENDPOINT_LANGUAGE;
 import static kh.farrukh.progee_api.review.ReviewController.ENDPOINT_REVIEW;
 import static kh.farrukh.progee_api.role.RoleController.ENDPOINT_ROLE;
-import static kh.farrukh.progee_api.user.AppUserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
 
 /**
  * It configures the security of the application using Spring Security via JWT.
