@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.image;
+package kh.farrukh.progee_api.image;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.image.Image;

@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.review;
 
 import kh.farrukh.progee_api.review.ReviewValue;
 import kh.farrukh.progee_api.review.ReviewValueConverter;

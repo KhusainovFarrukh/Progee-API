@@ -1,13 +1,10 @@
-package kh.farrukh.progee_api.endpoints.user;
+package kh.farrukh.progee_api.app_user;
 
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.app_user.AppUser;
-import kh.farrukh.progee_api.app_user.AppUserRepository;
-import kh.farrukh.progee_api.app_user.AppUserServiceImpl;
 import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.SetUserImageRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.SetUserPasswordRequestDTO;

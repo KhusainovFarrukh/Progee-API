@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.auth;
+package kh.farrukh.progee_api.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;

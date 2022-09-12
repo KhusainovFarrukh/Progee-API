@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.language;
+package kh.farrukh.progee_api.language;
 
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;

@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.review;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

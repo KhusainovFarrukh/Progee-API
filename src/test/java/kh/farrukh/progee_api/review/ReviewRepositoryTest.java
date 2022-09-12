@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.review;
 
 import kh.farrukh.progee_api.review.ReviewRepository;
 import org.junit.jupiter.api.AfterEach;

@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.image;
+package kh.farrukh.progee_api.image;
 
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.image.Image;

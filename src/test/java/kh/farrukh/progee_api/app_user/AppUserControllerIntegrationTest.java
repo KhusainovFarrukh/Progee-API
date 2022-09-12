@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.user;
+package kh.farrukh.progee_api.app_user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,9 +7,6 @@ import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.app_user.AppUser;
-import kh.farrukh.progee_api.app_user.AppUserRepository;
-import kh.farrukh.progee_api.app_user.AppUserService;
 import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.SetUserPasswordRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.SetUserRoleRequestDTO;

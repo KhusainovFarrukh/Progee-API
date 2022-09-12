@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.home;
+package kh.farrukh.progee_api.home;
 
 import kh.farrukh.progee_api.home.HomeController;
 import org.junit.jupiter.api.Test;

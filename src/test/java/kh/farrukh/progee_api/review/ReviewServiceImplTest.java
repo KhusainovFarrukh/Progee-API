@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.review;
+package kh.farrukh.progee_api.review;
 
 import kh.farrukh.progee_api.language.Language;
 import kh.farrukh.progee_api.language.LanguageRepository;

@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.auth;
+package kh.farrukh.progee_api.auth;
 
 import kh.farrukh.progee_api.auth.EmailValidator;
 import org.junit.jupiter.api.Test;

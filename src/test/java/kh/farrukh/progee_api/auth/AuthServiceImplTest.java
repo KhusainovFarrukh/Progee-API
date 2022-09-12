@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.auth;
+package kh.farrukh.progee_api.auth;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

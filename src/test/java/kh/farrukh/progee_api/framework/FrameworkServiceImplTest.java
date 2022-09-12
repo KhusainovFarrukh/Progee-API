@@ -1,4 +1,4 @@
-package kh.farrukh.progee_api.endpoints.framework;
+package kh.farrukh.progee_api.framework;
 
 import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.framework.FrameworkRepository;
