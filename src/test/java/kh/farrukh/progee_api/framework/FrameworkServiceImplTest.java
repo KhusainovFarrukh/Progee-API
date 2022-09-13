@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.framework;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -245,6 +246,18 @@ class FrameworkServiceImplTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Framework")
                 .hasMessageContaining(String.valueOf(frameworkId));
+    }
+
+    @Test
+    void throwsExceptionIfLanguageIdIsNullOnRequestDto() {
+        // given
+        FrameworkRequestDTO requestDto = new FrameworkRequestDTO("Test", "Test", 1L);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.addFramework(requestDto))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Language id");
     }
 
     @Test
