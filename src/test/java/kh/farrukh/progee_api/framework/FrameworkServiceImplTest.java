@@ -1,31 +1,30 @@
 package kh.farrukh.progee_api.framework;
 
-import kh.farrukh.progee_api.framework.Framework;
-import kh.farrukh.progee_api.framework.FrameworkRepository;
-import kh.farrukh.progee_api.framework.FrameworkServiceImpl;
-import kh.farrukh.progee_api.framework.FrameworkSpecification;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.resource_state.ResourceState;
+import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.language.Language;
 import kh.farrukh.progee_api.language.LanguageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
-import kh.farrukh.progee_api.app_user.AppUser;
-import kh.farrukh.progee_api.app_user.AppUserRepository;
-import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
-import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
-import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
-import kh.farrukh.progee_api.global.resource_state.ResourceState;
-import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -192,11 +191,41 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void canGetApprovedFrameworkById() {
+    void userWithoutPermissionCanGetApprovedFrameworkById() {
         // given
         long frameworkId = 1;
         when(frameworkRepository.findById(any()))
                 .thenReturn(Optional.of(new Framework("test", ResourceState.APPROVED, new Language(1))));
+
+        // when
+        underTest.getFrameworkById(frameworkId);
+
+        // then
+        verify(frameworkRepository).findById(frameworkId);
+    }
+
+    @Test
+    void throwsExceptionIfUserWithoutPermissionTriesToGetNonApprovedFrameworkById() {
+        // given
+        long frameworkId = 1;
+        when(frameworkRepository.findById(any()))
+                .thenReturn(Optional.of(new Framework("test", ResourceState.WAITING, new Language(1))));
+
+        // when
+        // then
+        assertThatThrownBy(
+                () -> underTest.getFrameworkById(frameworkId)
+        ).isInstanceOf(NotEnoughPermissionException.class);
+    }
+
+    @Test
+    void userWithPermissionCanGetNonApprovedFrameworkById() {
+        // given
+        long frameworkId = 1;
+        Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
+        when(frameworkRepository.findById(any()))
+                .thenReturn(Optional.of(new Framework("test", ResourceState.WAITING, new Language(1))));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("user@mail.com", role)));
 
         // when
         underTest.getFrameworkById(frameworkId);
