@@ -28,7 +28,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static kh.farrukh.progee_api.framework.FrameworkController.ENDPOINT_FRAMEWORK;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -73,7 +72,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
-    void canGetFrameworksWithoutFilter() throws Exception {
+    void canGetFrameworksWithoutStateAndLanguageIdFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         List<Framework> approvedFrameworks = List.of(
@@ -87,7 +86,6 @@ class FrameworkControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(
                         get(ENDPOINT_FRAMEWORK)
-                                .param("languageId", String.valueOf(existingLanguage.getId()))
                                 .param("page_size", String.valueOf(approvedFrameworks.size()))
                 )
                 .andDo(print())
@@ -108,7 +106,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canGetFrameworksWithFilter() throws Exception {
+    void canGetFrameworksWithStateAndWithoutLanguageIdFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
         appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -121,12 +119,12 @@ class FrameworkControllerIntegrationTest {
                 new Framework("test1", ResourceState.APPROVED, existingLanguage)
         );
         frameworkRepository.saveAll(waitingFrameworks);
+        frameworkRepository.saveAll(approvedFrameworks);
 
         // when
         MvcResult result = mvc
                 .perform(
                         get(ENDPOINT_FRAMEWORK)
-                                .param("languageId", String.valueOf(existingLanguage.getId()))
                                 .param("page_size", String.valueOf(waitingFrameworks.size() + approvedFrameworks.size()))
                                 .param("state", ResourceState.WAITING.name())
                 )
@@ -141,8 +139,115 @@ class FrameworkControllerIntegrationTest {
         );
         assertThat(response.getTotalItems()).isEqualTo(waitingFrameworks.size());
         assertThat(waitingFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(Framework::getName).collect(Collectors.toList())
+                response.getItems().stream().map(Framework::getName).toList()
                         .contains(framework.getName())
+        )).isTrue();
+        assertThat(response.getItems().stream().allMatch(
+                framework -> framework.getState().equals(ResourceState.WAITING)
+        )).isTrue();
+    }
+
+    @Test
+    void canGetFrameworksWithoutStateAndWithLanguageIdFilter() throws Exception {
+        // given
+        Language existingLanguage1 = languageRepository.save(new Language());
+        Language existingLanguage2 = languageRepository.save(new Language());
+        List<Framework> language1Frameworks = List.of(
+                new Framework("test2", ResourceState.APPROVED, existingLanguage1),
+                new Framework("test3", ResourceState.APPROVED, existingLanguage1)
+        );
+        List<Framework> language2Frameworks = List.of(
+                new Framework("test1", ResourceState.APPROVED, existingLanguage2)
+        );
+        frameworkRepository.saveAll(language1Frameworks);
+        frameworkRepository.saveAll(language2Frameworks);
+
+        // when
+        MvcResult result = mvc
+                .perform(
+                        get(ENDPOINT_FRAMEWORK)
+                                .param("language_id", String.valueOf(existingLanguage1.getId()))
+                                .param("page_size", String.valueOf(language1Frameworks.size() + language2Frameworks.size()))
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // then
+        PagingResponse<Framework> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<>() {
+                }
+        );
+        assertThat(response.getTotalItems()).isEqualTo(language1Frameworks.size());
+        assertThat(language1Frameworks.stream().allMatch(framework ->
+                response.getItems().stream().map(Framework::getName).toList()
+                        .contains(framework.getName())
+        )).isTrue();
+        assertThat(response.getItems().stream().allMatch(
+                framework -> framework.getLanguage().getId() == existingLanguage1.getId()
+        )).isTrue();
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com")
+    void canGetFrameworksWithStateAndLanguageIdFilter() throws Exception {
+        // given
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
+        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        Language existingLanguage1 = languageRepository.save(new Language());
+        Language existingLanguage2 = languageRepository.save(new Language());
+        List<Framework> language1ApprovedFrameworks = List.of(
+                new Framework("test1", ResourceState.APPROVED, existingLanguage1),
+                new Framework("test2", ResourceState.APPROVED, existingLanguage1)
+        );
+        List<Framework> language1WaitingFrameworks = List.of(
+                new Framework("test3", ResourceState.WAITING, existingLanguage1),
+                new Framework("test4", ResourceState.WAITING, existingLanguage1)
+        );
+        List<Framework> language2ApprovedFrameworks = List.of(
+                new Framework("test5", ResourceState.APPROVED, existingLanguage2)
+        );
+        List<Framework> language2WaitingFrameworks = List.of(
+                new Framework("test6", ResourceState.WAITING, existingLanguage2)
+        );
+        frameworkRepository.saveAll(language1WaitingFrameworks);
+        frameworkRepository.saveAll(language1ApprovedFrameworks);
+        frameworkRepository.saveAll(language2WaitingFrameworks);
+        frameworkRepository.saveAll(language2ApprovedFrameworks);
+
+        // when
+        MvcResult result = mvc
+                .perform(
+                        get(ENDPOINT_FRAMEWORK)
+                                .param("language_id", String.valueOf(existingLanguage1.getId()))
+                                .param("page_size", String.valueOf(
+                                        language1ApprovedFrameworks.size() +
+                                                language1WaitingFrameworks.size() +
+                                                language2ApprovedFrameworks.size() +
+                                                language2WaitingFrameworks.size()
+                                ))
+                                .param("state", ResourceState.WAITING.name())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // then
+        PagingResponse<Framework> response = objectMapper.readValue(
+                result.getResponse().getContentAsString(), new TypeReference<>() {
+                }
+        );
+
+        assertThat(response.getTotalItems()).isEqualTo(language1WaitingFrameworks.size());
+        assertThat(language1WaitingFrameworks.stream().allMatch(framework ->
+                response.getItems().stream().map(Framework::getName).toList()
+                        .contains(framework.getName())
+        )).isTrue();
+        assertThat(response.getItems().stream().allMatch(
+                framework -> framework.getLanguage().getId() == existingLanguage1.getId()
+        )).isTrue();
+        assertThat(response.getItems().stream().allMatch(
+                framework -> framework.getState().equals(ResourceState.WAITING)
         )).isTrue();
     }
 
