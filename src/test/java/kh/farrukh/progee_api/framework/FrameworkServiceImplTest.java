@@ -126,11 +126,12 @@ class FrameworkServiceImplTest {
         ).isInstanceOf(NotEnoughPermissionException.class);
     }
 
-    //this test is unnecessary for current logic
     @Test
     @WithMockUser(username = "test@mail.com")
-    void userWithRequiredPermissionCanGetApprovedFrameworks() {
+    void userWithRequiredPermissionCanGetAllFrameworks() {
         // given
+        Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         when(languageRepository.existsById(any())).thenReturn(true);
         when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -140,7 +141,7 @@ class FrameworkServiceImplTest {
 
         // then
         verify(frameworkRepository).findAll(
-                new FrameworkSpecification(1L, ResourceState.APPROVED),
+                new FrameworkSpecification(1L, null),
                 PageRequest.of(
                         0,
                         10,

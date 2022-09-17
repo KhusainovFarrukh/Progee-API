@@ -1,22 +1,18 @@
 package kh.farrukh.progee_api.language;
 
-import kh.farrukh.progee_api.image.Image;
-import kh.farrukh.progee_api.image.ImageRepository;
-import kh.farrukh.progee_api.language.Language;
-import kh.farrukh.progee_api.language.LanguageRepository;
-import kh.farrukh.progee_api.language.LanguageServiceImpl;
-import kh.farrukh.progee_api.language.LanguageSpecification;
-import kh.farrukh.progee_api.language.payloads.LanguageRequestDTO;
-import kh.farrukh.progee_api.role.Permission;
-import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
+import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
+import kh.farrukh.progee_api.image.Image;
+import kh.farrukh.progee_api.image.ImageRepository;
+import kh.farrukh.progee_api.language.payloads.LanguageRequestDTO;
+import kh.farrukh.progee_api.role.Permission;
+import kh.farrukh.progee_api.role.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -90,7 +86,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void simpleUserCanGetApprovedLanguages() {
+    void userWithoutRequiredPermissionCanGetApprovedLanguages() {
         // given
         when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -117,27 +113,6 @@ class LanguageServiceImplTest {
         assertThatThrownBy(() -> underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC"))
                 .isInstanceOf(NotEnoughPermissionException.class);
         verify(languageRepository, never()).findByState(any(), any());
-    }
-
-    @Test
-    @WithMockUser
-    void userWithoutRequiredPermissionCanGetApprovedLanguages() {
-        // given
-        when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
-                .thenReturn(Page.empty(Pageable.ofSize(10)));
-
-        // when
-        underTest.getLanguages(null, 1, 10, "id", "ASC");
-
-        // then
-        verify(languageRepository).findAll(
-                new LanguageSpecification(ResourceState.APPROVED),
-                PageRequest.of(
-                        0,
-                        10,
-                        Sort.by(SortUtils.parseDirection("ASC"), "id")
-                )
-        );
     }
 
     @Test
@@ -197,6 +172,18 @@ class LanguageServiceImplTest {
 
         // then
         verify(languageRepository).findById(id);
+    }
+
+    @Test
+    void throwsExceptionIfUserWithoutRequiredPermissionTriesToGetsNonApprovedLanguageById() {
+        // given
+        long id = 1;
+        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language("test", ResourceState.WAITING)));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.getLanguageById(id))
+                .isInstanceOf(NotEnoughPermissionException.class);
     }
 
     @Test
