@@ -33,6 +33,18 @@ class ImageMappersTest {
     }
 
     @Test
+    void returnsNullIfImageResponseDTOIsNull() {
+        // given
+        ImageResponseDTO imageResponseDTO = null;
+
+        // when
+        Image image = ImageMappers.toImage(imageResponseDTO);
+
+        // then
+        assertThat(image).isNull();
+    }
+
+    @Test
     void canMapImageResponseDTOToImage() {
         // given
         ImageResponseDTO imageResponseDTO = new ImageResponseDTO(1);

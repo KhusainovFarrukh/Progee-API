@@ -3,12 +3,12 @@ package kh.farrukh.progee_api.language;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.framework.Framework;
-import kh.farrukh.progee_api.image.Image;
-import kh.farrukh.progee_api.review.Review;
 import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.global.base_entity.EntityWithResourceState;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
+import kh.farrukh.progee_api.image.Image;
+import kh.farrukh.progee_api.review.Review;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -73,6 +73,26 @@ public class Language extends EntityWithResourceState {
 
     public Language(long id) {
         super.setId(id);
+    }
+
+    public Language(
+            long id,
+            String name,
+            String description,
+            Image image,
+            List<Review> reviews,
+            List<Framework> frameworks,
+            AppUser author,
+            ZonedDateTime createdAt
+    ) {
+        super.setId(id);
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.reviews = reviews;
+        this.frameworks = frameworks;
+        this.author = author;
+        this.createdAt = createdAt;
     }
 
     public Language(String name) {
