@@ -2,9 +2,9 @@ package kh.farrukh.progee_api.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import kh.farrukh.progee_api.language.Language;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
+import kh.farrukh.progee_api.language.Language;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -78,6 +78,28 @@ public class Review extends EntityWithId {
     @CreationTimestamp
     @JsonProperty("created_at")
     private ZonedDateTime createdAt;
+
+    public Review(
+            long id,
+            String body,
+            ReviewValue reviewValue,
+            Set<Long> upVotes,
+            Set<Long> downVotes,
+            int score,
+            Language language,
+            AppUser author,
+            ZonedDateTime createdAt
+    ) {
+        super.setId(id);
+        this.body = body;
+        this.reviewValue = reviewValue;
+        this.upVotes = upVotes;
+        this.downVotes = downVotes;
+        this.score = score;
+        this.language = language;
+        this.author = author;
+        this.createdAt = createdAt;
+    }
 
     public Review(Language language) {
         this.language = language;
