@@ -1,18 +1,18 @@
 package kh.farrukh.progee_api.review;
 
-import kh.farrukh.progee_api.language.Language;
-import kh.farrukh.progee_api.language.LanguageRepository;
-import kh.farrukh.progee_api.review.*;
-import kh.farrukh.progee_api.review.payloads.ReviewRequestDTO;
-import kh.farrukh.progee_api.review.payloads.ReviewVoteRequestDTO;
-import kh.farrukh.progee_api.role.Permission;
-import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ReviewDuplicateVoteException;
 import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
+import kh.farrukh.progee_api.language.Language;
+import kh.farrukh.progee_api.language.LanguageRepository;
+import kh.farrukh.progee_api.review.payloads.ReviewRequestDTO;
+import kh.farrukh.progee_api.review.payloads.ReviewVoteRequestDTO;
+import kh.farrukh.progee_api.role.Permission;
+import kh.farrukh.progee_api.role.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -160,6 +160,21 @@ class ReviewServiceImplTest {
         assertThat(capturedReview.getAuthor().getUsername()).isEqualTo("user@mail.com");
         assertThat(capturedReview.getBody()).isEqualTo(body);
         assertThat(capturedReview.getReviewValue()).isEqualTo(reviewValue);
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com")
+    void throwsExceptionIfLanguageIdIsNull() {
+        // given
+        String body = "test review";
+        ReviewValue reviewValue = ReviewValue.LIKE;
+        ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO(body, reviewValue, null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.addReview(reviewRequestDto))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessageContaining("Language id");
     }
 
     @Test
