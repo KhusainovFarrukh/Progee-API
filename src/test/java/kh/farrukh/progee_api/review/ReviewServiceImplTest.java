@@ -52,7 +52,49 @@ class ReviewServiceImplTest {
     private ReviewServiceImpl underTest;
 
     @Test
-    void canGetAllReviews() {
+    void canGetReviewsWithoutLanguageIdAndReviewValueFilter() {
+        // given
+        SecurityContextHolder.clearContext();
+        when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
+
+        // when
+        underTest.getReviews(null, null, 1, 10, "id", "ASC");
+
+        // then
+        verify(reviewRepository).findAll(
+                new ReviewSpecification(null, null),
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    void canGetReviewsWithoutLanguageIdAndWithReviewValueFilter() {
+        // given
+        SecurityContextHolder.clearContext();
+        when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
+
+        // when
+        underTest.getReviews(null, ReviewValue.LIKE, 1, 10, "id", "ASC");
+
+        // then
+        verify(reviewRepository).findAll(
+                new ReviewSpecification(null, ReviewValue.LIKE),
+                PageRequest.of(
+                        0,
+                        10,
+                        Sort.by(SortUtils.parseDirection("ASC"), "id")
+                )
+        );
+    }
+
+    @Test
+    void canGetReviewsWithLanguageIdAndWithoutReviewValueFilter() {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -74,7 +116,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    void canGetReviewsByReviewValue() {
+    void canGetReviewsWithLanguageIdAndReviewValueFilter() {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
