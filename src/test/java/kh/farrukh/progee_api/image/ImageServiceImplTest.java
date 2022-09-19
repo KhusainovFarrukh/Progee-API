@@ -1,9 +1,6 @@
 package kh.farrukh.progee_api.image;
 
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.image.Image;
-import kh.farrukh.progee_api.image.ImageRepository;
-import kh.farrukh.progee_api.image.ImageServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,8 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,9 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
-@SecurityTestExecutionListeners
 class ImageServiceImplTest {
 
     @Mock

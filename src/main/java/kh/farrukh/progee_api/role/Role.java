@@ -1,6 +1,8 @@
 package kh.farrukh.progee_api.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,8 +44,26 @@ public class Role extends EntityWithId {
     )
     private List<Permission> permissions;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "role")
+    private List<AppUser> users;
+
+    @PreRemove
+    private void preRemove() {
+        if (isDefault) {
+            throw new IllegalStateException("Default role cannot be deleted");
+        }
+        users.forEach(user -> user.setRole(null));
+    }
+
     public Role(long id) {
         super.setId(id);
+    }
+
+    public Role(String title, boolean isDefault, List<Permission> permissions) {
+        this.title = title;
+        this.isDefault = isDefault;
+        this.permissions = permissions;
     }
 
     public Role(long id, String title, boolean isDefault, List<Permission> permissions) {
