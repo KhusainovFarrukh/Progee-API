@@ -46,6 +46,13 @@ public class Role extends EntityWithId {
         super.setId(id);
     }
 
+    public Role(long id, String title, boolean isDefault, List<Permission> permissions) {
+        super.setId(id);
+        this.title = title;
+        this.isDefault = isDefault;
+        this.permissions = permissions;
+    }
+
     public Role(List<Permission> permissions) {
         this.title = "test";
         this.permissions = permissions;
