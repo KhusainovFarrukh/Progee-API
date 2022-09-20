@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.role;
 
 
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DefaultRoleDeletionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
@@ -160,6 +161,19 @@ class RoleServiceImplTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Role")
                 .hasMessageContaining(String.valueOf(id));
+    }
+
+    @Test
+    void throwsExceptionIfRoleToDeleteIsDefault() {
+        // given
+        long id = 1L;
+        when(roleRepository.findById(any()))
+                .thenReturn(Optional.of(new Role("test", true, Collections.emptyList())));
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.deleteRoleById(id))
+                .isInstanceOf(DefaultRoleDeletionException.class);
     }
 
 }
