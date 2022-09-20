@@ -11,4 +11,8 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     boolean existsByTitle(String title);
 
     Optional<Role> findFirstByIsDefaultIsTrue();
+
+    Optional<Role> findFirstByIsDefaultIsTrueAndIdNot(Long id);
+
+    long countByIsDefaultIsTrue();
 }

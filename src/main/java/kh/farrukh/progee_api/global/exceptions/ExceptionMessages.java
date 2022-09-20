@@ -21,4 +21,5 @@ public class ExceptionMessages {
     public static final String EXCEPTION_TOKEN_MISSING = "message.exception.token_missing";
     public static final String EXCEPTION_TOKEN_WRONG_TYPE = "message.exception.token_wrong_type";
     public static final String EXCEPTION_TOKEN_UNKNOWN = "message.exception.token_unknown";
+    public static final String EXCEPTION_DEFAULT_ROLE_DELETION = "message.exception.default_role_deletion";
 }

@@ -156,6 +156,9 @@ class RoleControllerIntegrationTest {
     @WithMockUser(username = "test@mail.com")
     void canDeleteRole() throws Exception {
         // given
+        Role defaultRole = roleRepository.save(
+                new Role("USER", true, Collections.singletonList(Permission.CAN_VIEW_ROLE))
+        );
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_DELETE_ROLE))
         );

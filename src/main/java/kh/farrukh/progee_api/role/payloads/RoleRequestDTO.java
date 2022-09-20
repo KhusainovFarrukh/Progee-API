@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,11 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class RoleRequestDTO {
 
+    @NotNull
     private String title;
 
     @JsonProperty("is_default")
     private boolean isDefault;
 
     @Enumerated(EnumType.STRING)
-    private List<Permission> permissions;
+    private List<Permission> permissions = new ArrayList<>();
 }

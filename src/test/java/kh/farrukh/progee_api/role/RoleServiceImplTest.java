@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -139,7 +139,8 @@ class RoleServiceImplTest {
     void canDeleteRole() {
         // given
         long id = 1L;
-        when(roleRepository.existsById(any())).thenReturn(true);
+        when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
+        when(roleRepository.findFirstByIsDefaultIsTrueAndIdNot(any())).thenReturn(Optional.of(new Role()));
 
         // when
         underTest.deleteRoleById(id);

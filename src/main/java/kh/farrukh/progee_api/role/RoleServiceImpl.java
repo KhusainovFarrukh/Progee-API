@@ -1,5 +1,7 @@
 package kh.farrukh.progee_api.role;
 
+import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DefaultRoleDeletionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
@@ -9,13 +11,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import static kh.farrukh.progee_api.global.utils.checkers.Checkers.*;
+import static kh.farrukh.progee_api.global.utils.checkers.Checkers.checkPageNumber;
+import static kh.farrukh.progee_api.global.utils.checkers.Checkers.checkRoleIsUnique;
 
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+    private final AppUserRepository appUserRepository;
 
     @Override
     public PagingResponse<RoleResponseDTO> getRoles(int page, int pageSize) {
@@ -59,7 +63,19 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRoleById(long id) {
-        checkRoleId(roleRepository, id);
+        Role role = roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
+
+        if (role.isDefault() && roleRepository.countByIsDefaultIsTrue() <= 1) {
+            throw new DefaultRoleDeletionException();
+        }
+
+        Role defaultRole = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "isDefault", true));
+        role.getUsers().forEach(user -> {
+            user.setRole(defaultRole);
+            appUserRepository.save(user);
+        });
         roleRepository.deleteById(id);
     }
 }
