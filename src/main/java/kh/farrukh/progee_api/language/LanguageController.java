@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static kh.farrukh.progee_api.language.LanguageConstants.ENDPOINT_LANGUAGE;
+
 /**
  * Controller that exposes endpoints for managing frameworks
  */
 @RestController
-@RequestMapping(LanguageController.ENDPOINT_LANGUAGE)
+@RequestMapping(ENDPOINT_LANGUAGE)
 @RequiredArgsConstructor
 public class LanguageController {
-
-    public static final String ENDPOINT_LANGUAGE = "/api/v1/languages";
 
     private final LanguageService languageService;
 

@@ -17,8 +17,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.SEQUENCE_NAME_REVIEW_ID;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TABLE_NAME_REVIEW;
+import static kh.farrukh.progee_api.review.ReviewConstants.SEQUENCE_NAME_REVIEW_ID;
+import static kh.farrukh.progee_api.review.ReviewConstants.TABLE_NAME_REVIEW;
 
 /**
  * Review is a simple entity

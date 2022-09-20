@@ -1,14 +1,14 @@
 package kh.farrukh.progee_api.app_user;
 
-import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.app_user.payloads.*;
+import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.app_user.AppUserConstants.ENDPOINT_USER;
 
 /**
  * Controller that exposes endpoints for managing users
@@ -17,8 +17,6 @@ import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
 @RequestMapping(ENDPOINT_USER)
 @RequiredArgsConstructor
 public class AppUserController {
-
-    public static final String ENDPOINT_USER = "/api/v1/users";
 
     private final AppUserService appUserService;
 

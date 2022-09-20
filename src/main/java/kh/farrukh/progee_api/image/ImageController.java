@@ -1,7 +1,7 @@
 package kh.farrukh.progee_api.image;
 
-import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.global.utils.file.NotEmptyFile;
+import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static kh.farrukh.progee_api.image.ImageController.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
 
 /**
  * Controller that exposes endpoints for managing images
@@ -21,8 +21,6 @@ import static kh.farrukh.progee_api.image.ImageController.ENDPOINT_IMAGE;
 @RequiredArgsConstructor
 @Validated
 public class ImageController {
-
-    public static final String ENDPOINT_IMAGE = "/api/v1/images";
 
     private final ImageService imageService;
 

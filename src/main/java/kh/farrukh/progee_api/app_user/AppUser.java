@@ -21,9 +21,9 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
+import static kh.farrukh.progee_api.app_user.AppUserConstants.SEQUENCE_NAME_USER_ID;
+import static kh.farrukh.progee_api.app_user.AppUserConstants.TABLE_NAME_USER;
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.SEQUENCE_NAME_USER_ID;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TABLE_NAME_USER;
 
 /**
  * AppUser is a simple entity

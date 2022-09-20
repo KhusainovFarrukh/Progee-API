@@ -24,8 +24,8 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Collections;
 
-import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
-import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REGISTRATION;
 import static kh.farrukh.progee_api.global.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

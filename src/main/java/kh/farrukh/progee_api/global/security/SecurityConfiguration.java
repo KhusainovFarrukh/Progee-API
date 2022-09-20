@@ -1,10 +1,10 @@
 package kh.farrukh.progee_api.global.security;
 
-import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.global.security.filters.JWTAuthorizationFilter;
 import kh.farrukh.progee_api.global.security.handlers.JWTAccessDeniedHandler;
 import kh.farrukh.progee_api.global.security.utils.AuthenticationFilterConfigurer;
 import kh.farrukh.progee_api.global.security.utils.request_wrapper.LoginRequestWrapperFilter;
+import kh.farrukh.progee_api.role.Permission;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,15 +14,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
-import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REGISTRATION;
-import static kh.farrukh.progee_api.framework.FrameworkController.ENDPOINT_FRAMEWORK;
-import static kh.farrukh.progee_api.home.HomeController.ENDPOINT_HOME;
-import static kh.farrukh.progee_api.image.ImageController.ENDPOINT_IMAGE;
-import static kh.farrukh.progee_api.language.LanguageController.ENDPOINT_LANGUAGE;
-import static kh.farrukh.progee_api.review.ReviewController.ENDPOINT_REVIEW;
-import static kh.farrukh.progee_api.role.RoleController.ENDPOINT_ROLE;
-import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.app_user.AppUserConstants.ENDPOINT_USER;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.framework.FrameworkConstants.ENDPOINT_FRAMEWORK;
+import static kh.farrukh.progee_api.global.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
+import static kh.farrukh.progee_api.home.HomeConstants.ENDPOINT_HOME;
+import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.language.LanguageConstants.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.review.ReviewConstants.ENDPOINT_REVIEW;
+import static kh.farrukh.progee_api.role.RoleConstants.ENDPOINT_ROLE;
 
 /**
  * It configures the security of the application using Spring Security via JWT.
@@ -105,7 +106,7 @@ public class SecurityConfiguration {
                 //auth endpoints
                 .antMatchers(
                         withChildEndpoints(ENDPOINT_REGISTRATION),
-                        withChildEndpoints(AuthenticationFilterConfigurer.ENDPOINT_LOGIN),
+                        withChildEndpoints(ENDPOINT_LOGIN),
                         withChildEndpoints(ENDPOINT_REFRESH_TOKEN)
                 ).permitAll()
                 .anyRequest().authenticated()

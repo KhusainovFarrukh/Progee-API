@@ -1,9 +1,9 @@
 package kh.farrukh.progee_api.review;
 
+import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.review.payloads.ReviewRequestDTO;
 import kh.farrukh.progee_api.review.payloads.ReviewResponseDTO;
 import kh.farrukh.progee_api.review.payloads.ReviewVoteRequestDTO;
-import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.review.ReviewController.ENDPOINT_REVIEW;
+import static kh.farrukh.progee_api.review.ReviewConstants.ENDPOINT_REVIEW;
 
 /**
  * Controller that exposes endpoints for managing reviews
@@ -20,8 +20,6 @@ import static kh.farrukh.progee_api.review.ReviewController.ENDPOINT_REVIEW;
 @RequestMapping(ENDPOINT_REVIEW)
 @RequiredArgsConstructor
 public class ReviewController {
-
-    public static final String ENDPOINT_REVIEW = "/api/v1/reviews";
 
     private final ReviewService reviewService;
 

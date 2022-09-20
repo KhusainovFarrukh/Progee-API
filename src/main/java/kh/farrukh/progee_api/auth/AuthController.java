@@ -1,8 +1,8 @@
 package kh.farrukh.progee_api.auth;
 
+import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
-import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REGISTRATION;
+
 /**
  * Controller for Auth-related endpoints (login, register, refresh token and etc.)
  */
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
-
-    public static final String ENDPOINT_REGISTRATION = "/api/v1/registration";
-    public static final String ENDPOINT_REFRESH_TOKEN = "/api/v1/token/refresh";
 
     private final AuthService authService;
 

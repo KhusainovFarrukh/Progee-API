@@ -13,8 +13,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.SEQUENCE_NAME_IMAGE_ID;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TABLE_NAME_IMAGE;
+import static kh.farrukh.progee_api.image.ImageConstants.SEQUENCE_NAME_IMAGE_ID;
+import static kh.farrukh.progee_api.image.ImageConstants.TABLE_NAME_IMAGE;
 
 /**
  * Image is a simple entity
@@ -27,7 +27,6 @@ import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TAB
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_IMAGE_ID)
 public class Image extends EntityWithId {
 
-    @JsonIgnore
     @Lob
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] content;

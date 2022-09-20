@@ -15,9 +15,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
+import static kh.farrukh.progee_api.framework.FrameworkConstants.SEQUENCE_NAME_FRAMEWORK_ID;
+import static kh.farrukh.progee_api.framework.FrameworkConstants.TABLE_NAME_FRAMEWORK;
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.SEQUENCE_NAME_FRAMEWORK_ID;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TABLE_NAME_FRAMEWORK;
 
 /**
  * Framework is a simple entity

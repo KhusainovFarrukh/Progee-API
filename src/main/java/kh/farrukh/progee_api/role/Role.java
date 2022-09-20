@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.SEQUENCE_NAME_ROLE_ID;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TABLE_NAME_ROLE;
+import static kh.farrukh.progee_api.role.RoleConstants.SEQUENCE_NAME_ROLE_ID;
+import static kh.farrukh.progee_api.role.RoleConstants.TABLE_NAME_ROLE;
 
 
 @Getter

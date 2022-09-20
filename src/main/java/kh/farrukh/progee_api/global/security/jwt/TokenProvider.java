@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.token_exceptions.MissingTokenException;
+import kh.farrukh.progee_api.role.RoleMappers;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
@@ -43,7 +44,7 @@ public class TokenProvider implements InitializingBean {
         ZonedDateTime refreshExpireDate = ZonedDateTime.now().plusSeconds(jwtConfiguration.getRefreshTokenValidityInSeconds());
 
         return new AuthResponseDTO(
-                user.getRole(),
+                RoleMappers.toRoleResponseDTO(user.getRole()),
                 createToken(user, accessExpireDate, accessTokenAlgorithm),
                 createToken(user, refreshExpireDate, refreshTokenAlgorithm),
                 accessExpireDate,

@@ -17,8 +17,8 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.SEQUENCE_NAME_LANGUAGE_ID;
-import static kh.farrukh.progee_api.global.utils.constants.DatabaseConstants.TABLE_NAME_LANGUAGE;
+import static kh.farrukh.progee_api.language.LanguageConstants.SEQUENCE_NAME_LANGUAGE_ID;
+import static kh.farrukh.progee_api.language.LanguageConstants.TABLE_NAME_LANGUAGE;
 
 /**
  * Language is a simple entity

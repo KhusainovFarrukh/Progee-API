@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Collections;
 import java.util.List;
 
-import static kh.farrukh.progee_api.app_user.AppUserController.ENDPOINT_USER;
+import static kh.farrukh.progee_api.app_user.AppUserConstants.ENDPOINT_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,9 +41,6 @@ class AppUserControllerIntegrationTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AppUserService appUserService;
 
     @Autowired
     private AppUserRepository appUserRepository;

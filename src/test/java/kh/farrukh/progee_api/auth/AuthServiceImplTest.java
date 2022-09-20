@@ -15,6 +15,7 @@ import kh.farrukh.progee_api.global.security.jwt.JwtConfiguration;
 import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
+import kh.farrukh.progee_api.role.RoleMappers;
 import kh.farrukh.progee_api.role.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -107,7 +108,7 @@ class AuthServiceImplTest {
         when(tokenProvider.validateToken(anyString(), anyBoolean())).thenReturn(decodedJWT);
         when(tokenProvider.generateTokens(any())).thenReturn(
                 new AuthResponseDTO(
-                        role,
+                        RoleMappers.toRoleResponseDTO(role),
                         "test",
                         "test",
                         ZonedDateTime.now(),

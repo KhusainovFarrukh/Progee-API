@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Collections;
 import java.util.List;
 
-import static kh.farrukh.progee_api.framework.FrameworkController.ENDPOINT_FRAMEWORK;
+import static kh.farrukh.progee_api.framework.FrameworkConstants.ENDPOINT_FRAMEWORK;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

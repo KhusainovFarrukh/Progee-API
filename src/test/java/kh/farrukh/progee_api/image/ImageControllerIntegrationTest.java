@@ -1,8 +1,6 @@
 package kh.farrukh.progee_api.image;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.image.Image;
-import kh.farrukh.progee_api.image.ImageRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,7 +11,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
-import static kh.farrukh.progee_api.image.ImageController.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;

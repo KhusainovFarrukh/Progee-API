@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.role.RoleController.ENDPOINT_ROLE;
+import static kh.farrukh.progee_api.role.RoleConstants.ENDPOINT_ROLE;
 
 @RestController
 @RequestMapping(ENDPOINT_ROLE)
 @RequiredArgsConstructor
 public class RoleController {
-
-    public static final String ENDPOINT_ROLE = "/api/v1/roles";
 
     private final RoleService roleService;
 

@@ -2,8 +2,8 @@ package kh.farrukh.progee_api.framework;
 
 import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.framework.payloads.FrameworkResponseDTO;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
+import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static kh.farrukh.progee_api.framework.FrameworkController.ENDPOINT_FRAMEWORK;
+import static kh.farrukh.progee_api.framework.FrameworkConstants.ENDPOINT_FRAMEWORK;
 
 /**
  * Controller that exposes endpoints for managing frameworks
@@ -21,8 +21,6 @@ import static kh.farrukh.progee_api.framework.FrameworkController.ENDPOINT_FRAME
 @RequestMapping(ENDPOINT_FRAMEWORK)
 @RequiredArgsConstructor
 public class FrameworkController {
-
-    public static final String ENDPOINT_FRAMEWORK = "/api/v1/frameworks";
 
     private final FrameworkService frameworkService;
 

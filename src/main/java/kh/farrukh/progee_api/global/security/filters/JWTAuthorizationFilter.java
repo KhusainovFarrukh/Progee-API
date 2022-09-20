@@ -22,13 +22,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REFRESH_TOKEN;
-import static kh.farrukh.progee_api.auth.AuthController.ENDPOINT_REGISTRATION;
-import static kh.farrukh.progee_api.framework.FrameworkController.ENDPOINT_FRAMEWORK;
-import static kh.farrukh.progee_api.home.HomeController.ENDPOINT_HOME;
-import static kh.farrukh.progee_api.image.ImageController.ENDPOINT_IMAGE;
-import static kh.farrukh.progee_api.language.LanguageController.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REFRESH_TOKEN;
+import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REGISTRATION;
+import static kh.farrukh.progee_api.framework.FrameworkConstants.ENDPOINT_FRAMEWORK;
 import static kh.farrukh.progee_api.global.security.utils.AuthenticationFilterConfigurer.ENDPOINT_LOGIN;
+import static kh.farrukh.progee_api.home.HomeConstants.ENDPOINT_HOME;
+import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.language.LanguageConstants.ENDPOINT_LANGUAGE;
 
 /**
  * If the request is not for the login or refresh token endpoints, then decode the JWT and set the authentication in the
