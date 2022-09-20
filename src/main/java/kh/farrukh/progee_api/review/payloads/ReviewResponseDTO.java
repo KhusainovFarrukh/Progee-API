@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.review.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.review.ReviewValue;
 import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonPropertyOrder({"id", "body", "value", "score", "language", "up_votes", "down_votes"})
 public class ReviewResponseDTO {
 
     private long id;

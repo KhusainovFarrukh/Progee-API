@@ -85,13 +85,13 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Language> response = objectMapper.readValue(
+        PagingResponse<LanguageResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(approvedLanguages.size());
         assertThat(approvedLanguages.stream().allMatch(language ->
-                response.getItems().stream().map(Language::getName).toList()
+                response.getItems().stream().map(LanguageResponseDTO::getName).toList()
                         .contains(language.getName())
         )).isTrue();
     }
@@ -123,13 +123,13 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Language> response = objectMapper.readValue(
+        PagingResponse<LanguageResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(waitingLanguages.size());
         assertThat(waitingLanguages.stream().allMatch(language ->
-                response.getItems().stream().map(Language::getName).toList()
+                response.getItems().stream().map(LanguageResponseDTO::getName).toList()
                         .contains(language.getName())
         )).isTrue();
     }
@@ -147,7 +147,7 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
+        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
         assertThat(language.getId()).isEqualTo(existingLanguage.getId());
     }
 
@@ -170,7 +170,7 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
+        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
         assertThat(language.getName()).isEqualTo(languageRequestDto.getName());
         assertThat(language.getDescription()).isEqualTo(languageRequestDto.getDescription());
         assertThat(language.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
@@ -196,7 +196,7 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
+        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
         assertThat(language.getId()).isEqualTo(existingLanguage.getId());
         assertThat(language.getName()).isEqualTo(languageRequestDto.getName());
         assertThat(language.getDescription()).isEqualTo(languageRequestDto.getDescription());
@@ -236,7 +236,7 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Language language = objectMapper.readValue(result.getResponse().getContentAsString(), Language.class);
+        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
         assertThat(language.getId()).isEqualTo(existingLanguage.getId());
         assertThat(language.getState()).isEqualTo(stateDto.getState());
     }

@@ -93,13 +93,13 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Framework> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(approvedFrameworks.size());
         assertThat(approvedFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(Framework::getName).toList()
+                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
                         .contains(framework.getName())
         )).isTrue();
     }
@@ -133,13 +133,13 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Framework> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(waitingFrameworks.size());
         assertThat(waitingFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(Framework::getName).toList()
+                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
                         .contains(framework.getName())
         )).isTrue();
         assertThat(response.getItems().stream().allMatch(
@@ -174,13 +174,13 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Framework> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(language1Frameworks.size());
         assertThat(language1Frameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(Framework::getName).toList()
+                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
                         .contains(framework.getName())
         )).isTrue();
         assertThat(response.getItems().stream().allMatch(
@@ -233,14 +233,14 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Framework> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
 
         assertThat(response.getTotalItems()).isEqualTo(language1WaitingFrameworks.size());
         assertThat(language1WaitingFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(Framework::getName).toList()
+                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
                         .contains(framework.getName())
         )).isTrue();
         assertThat(response.getItems().stream().allMatch(
@@ -267,7 +267,7 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Framework framework = objectMapper.readValue(result.getResponse().getContentAsString(), Framework.class);
+        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
         assertThat(framework.getId()).isEqualTo(existingFramework.getId());
     }
 
@@ -291,7 +291,7 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Framework framework = objectMapper.readValue(result.getResponse().getContentAsString(), Framework.class);
+        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
         assertThat(framework.getName()).isEqualTo(languageDto.getName());
         assertThat(framework.getDescription()).isEqualTo(languageDto.getDescription());
         assertThat(framework.getImage().getId()).isEqualTo(languageDto.getImageId());
@@ -320,7 +320,7 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Framework framework = objectMapper.readValue(result.getResponse().getContentAsString(), Framework.class);
+        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
         assertThat(framework.getId()).isEqualTo(existingFramework.getId());
         assertThat(framework.getName()).isEqualTo(frameworkRequestDto.getName());
         assertThat(framework.getDescription()).isEqualTo(frameworkRequestDto.getDescription());
@@ -365,7 +365,7 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Framework framework = objectMapper.readValue(result.getResponse().getContentAsString(), Framework.class);
+        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
         assertThat(framework.getId()).isEqualTo(existingFramework.getId());
         assertThat(framework.getState()).isEqualTo(stateDto.getState());
     }

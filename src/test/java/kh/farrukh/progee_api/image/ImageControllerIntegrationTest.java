@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.image;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,7 +42,7 @@ class ImageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Image image = new ObjectMapper().readValue(result.getResponse().getContentAsString(), Image.class);
+        ImageResponseDTO image = new ObjectMapper().readValue(result.getResponse().getContentAsString(), ImageResponseDTO.class);
         assertThat(image.getId()).isEqualTo(image.getId());
     }
 

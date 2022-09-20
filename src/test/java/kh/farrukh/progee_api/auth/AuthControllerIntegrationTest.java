@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.LoginRequestDTO;
 import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
@@ -83,7 +84,7 @@ class AuthControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUser user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUser.class);
+        AppUserResponseDTO user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
         assertThat(user.getName()).isEqualTo(request.getName());
         assertThat(user.getUniqueUsername()).isEqualTo(request.getUniqueUsername());
         assertThat(user.getEmail()).isEqualTo(request.getEmail());

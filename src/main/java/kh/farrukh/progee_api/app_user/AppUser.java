@@ -2,7 +2,6 @@ package kh.farrukh.progee_api.app_user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -34,7 +33,6 @@ import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NA
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "name", "role", "image", "email", "username"})
 @Entity
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_USER_ID)
 @Table(name = TABLE_NAME_USER,
@@ -49,16 +47,13 @@ public class AppUser extends EntityWithId implements UserDetails {
     private String email;
 
     @Column(name = "username")
-    @JsonProperty("username")
     private String uniqueUsername;
 
     private String password;
 
-    @JsonProperty("is_enabled")
     // TODO: 6/7/22 set default to false and implement email verification
     private boolean isEnabled = true;
 
-    @JsonProperty("is_locked")
     private boolean isLocked = false;
 
     @ManyToOne
@@ -75,17 +70,14 @@ public class AppUser extends EntityWithId implements UserDetails {
     )
     private Image image;
 
-    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "author")
     private List<Language> createdLanguages;
 
-    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "author")
     private List<Framework> createdFrameworks;
 
-    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "author")
     private List<Review> createdReviews;

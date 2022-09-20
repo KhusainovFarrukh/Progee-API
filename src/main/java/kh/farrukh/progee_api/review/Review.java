@@ -1,7 +1,5 @@
 package kh.farrukh.progee_api.review;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import kh.farrukh.progee_api.language.Language;
@@ -29,13 +27,11 @@ import static kh.farrukh.progee_api.review.ReviewConstants.TABLE_NAME_REVIEW;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "body", "value", "score", "language", "up_votes", "down_votes"})
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_REVIEW_ID)
 public class Review extends EntityWithId {
 
     private String body;
 
-    @JsonProperty("value")
     private ReviewValue reviewValue;
 
     @Column(name = "up_voter_id")
@@ -45,7 +41,6 @@ public class Review extends EntityWithId {
             joinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id"),
             foreignKey = @ForeignKey(name = "fk_review_id_of_up_votes")
     )
-    @JsonProperty("up_votes")
     private Set<Long> upVotes = new HashSet<>();
 
     @Column(name = "down_voter_id")
@@ -55,7 +50,6 @@ public class Review extends EntityWithId {
             joinColumns = @JoinColumn(name = "review_id", referencedColumnName = "id"),
             foreignKey = @ForeignKey(name = "fk_review_id_of_down_votes")
     )
-    @JsonProperty("down_votes")
     private Set<Long> downVotes = new HashSet<>();
 
     @Transient
@@ -76,7 +70,6 @@ public class Review extends EntityWithId {
     private AppUser author;
 
     @CreationTimestamp
-    @JsonProperty("created_at")
     private ZonedDateTime createdAt;
 
     public Review(

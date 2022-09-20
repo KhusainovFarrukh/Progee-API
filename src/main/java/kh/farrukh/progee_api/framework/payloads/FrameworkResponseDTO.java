@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.framework.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
 import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
@@ -16,6 +17,7 @@ import java.time.ZonedDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonPropertyOrder({"id", "name", "description", "state", "image", "language"})
 public class FrameworkResponseDTO {
 
     private long id;

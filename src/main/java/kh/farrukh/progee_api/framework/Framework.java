@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api.framework;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithResourceState;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
@@ -27,7 +26,6 @@ import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NA
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "name", "description", "state", "image", "language"})
 @Entity
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_FRAMEWORK_ID)
 @Table(

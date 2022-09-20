@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api.role;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import lombok.AllArgsConstructor;
@@ -31,7 +30,6 @@ public class Role extends EntityWithId {
     private String title;
 
     @Column(nullable = false)
-    @JsonProperty("is_default")
     private boolean isDefault = false;
 
     @Column(name = "permission_name")

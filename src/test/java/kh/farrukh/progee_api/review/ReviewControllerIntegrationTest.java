@@ -97,13 +97,13 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Review> response = objectMapper.readValue(
+        PagingResponse<ReviewResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(reviews.size());
         assertThat(reviews.stream().allMatch(review ->
-                response.getItems().stream().map(Review::getBody).toList()
+                response.getItems().stream().map(ReviewResponseDTO::getBody).toList()
                         .contains(review.getBody())
         )).isTrue();
     }
@@ -133,13 +133,13 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<Review> response = objectMapper.readValue(
+        PagingResponse<ReviewResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(likeReviews.size());
         assertThat(likeReviews.stream().allMatch(review ->
-                response.getItems().stream().map(Review::getBody).toList()
+                response.getItems().stream().map(ReviewResponseDTO::getBody).toList()
                         .contains(review.getBody())
         )).isTrue();
     }
@@ -160,7 +160,7 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
+        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
         assertThat(review.getId()).isEqualTo(existingReview.getId());
     }
 
@@ -183,7 +183,7 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
+        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
         assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
         assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
     }
@@ -210,7 +210,7 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
+        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
         assertThat(review.getId()).isEqualTo(existingReview.getId());
         assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
         assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
@@ -255,7 +255,7 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        Review review = objectMapper.readValue(result.getResponse().getContentAsString(), Review.class);
+        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
         assertThat(review.getId()).isEqualTo(existingReview.getId());
         assertThat(existingUser.getId()).isIn(review.getUpVotes());
         assertThat(existingUser.getId()).isNotIn(review.getDownVotes());

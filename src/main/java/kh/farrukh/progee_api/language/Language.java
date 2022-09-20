@@ -1,8 +1,5 @@
 package kh.farrukh.progee_api.language;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.global.base_entity.EntityWithResourceState;
@@ -27,7 +24,6 @@ import static kh.farrukh.progee_api.language.LanguageConstants.TABLE_NAME_LANGUA
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "name", "description", "state", "image"})
 @Entity
 @SequenceGenerator(name = GENERATOR_NAME, sequenceName = SEQUENCE_NAME_LANGUAGE_ID)
 @Table(
@@ -50,12 +46,10 @@ public class Language extends EntityWithResourceState {
     )
     private Image image;
 
-    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "language", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
 
-    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "language", cascade = CascadeType.REMOVE)
     private List<Framework> frameworks;
@@ -68,7 +62,6 @@ public class Language extends EntityWithResourceState {
     private AppUser author;
 
     @CreationTimestamp
-    @JsonProperty("created_at")
     private ZonedDateTime createdAt;
 
     public Language(long id) {

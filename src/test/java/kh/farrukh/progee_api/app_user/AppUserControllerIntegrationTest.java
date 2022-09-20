@@ -76,13 +76,13 @@ class AppUserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<AppUser> response = objectMapper.readValue(
+        PagingResponse<AppUserResponseDTO> response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
         assertThat(response.getTotalItems()).isEqualTo(users.size());
         assertThat(users.stream().allMatch(user ->
-                response.getItems().stream().map(AppUser::getEmail).toList()
+                response.getItems().stream().map(AppUserResponseDTO::getEmail).toList()
                         .contains(user.getEmail())
         )).isTrue();
     }

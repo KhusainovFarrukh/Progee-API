@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.app_user.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.role.payloads.RoleResponseDTO;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonPropertyOrder({"id", "name", "role", "image", "email", "username"})
 public class AppUserResponseDTO {
 
     private long id;
