@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.home;
 
+/**
+ * It's a class that contains constants for the Home package
+ */
 public class HomeConstants {
 
     public static final String ENDPOINT_HOME = "/";
