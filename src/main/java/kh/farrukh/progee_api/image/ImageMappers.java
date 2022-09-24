@@ -3,6 +3,9 @@ package kh.farrukh.progee_api.image;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * It contains two methods that map between an ImageRequestDTO, ImageResponseDTO and an Image
+ */
 public class ImageMappers {
 
     public static ImageResponseDTO toImageResponseDto(Image image) {

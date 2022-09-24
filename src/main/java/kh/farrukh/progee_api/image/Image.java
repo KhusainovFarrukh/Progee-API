@@ -1,6 +1,5 @@
 package kh.farrukh.progee_api.image;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ import static kh.farrukh.progee_api.image.ImageConstants.SEQUENCE_NAME_IMAGE_ID;
 import static kh.farrukh.progee_api.image.ImageConstants.TABLE_NAME_IMAGE;
 
 /**
- * Image is a simple entity
+ * It's a simple entity with a byte array field for storing images.
  */
 @Entity
 @Getter

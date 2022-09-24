@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.image;
 
+/**
+ * It's a class that contains constants that are used in the Image package.
+ */
 public class ImageConstants {
 
     public static final String ENDPOINT_IMAGE = "/api/v1/images";

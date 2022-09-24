@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * A base interface for service of Image endpoints
- *
+ * <p>
  * Methods implemented in ImageServiceImpl
  */
 public interface ImageService {

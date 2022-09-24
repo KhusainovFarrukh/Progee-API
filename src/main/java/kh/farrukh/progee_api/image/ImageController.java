@@ -28,7 +28,7 @@ public class ImageController {
      * It takes a multipart image, adds it to the database, and returns the image as a response entity
      *
      * @param multipartImage The image file that is being uploaded.
-     * @return The image object is being returned.
+     * @return The ImageResponseDTO object is being returned.
      */
     @PostMapping
     public ResponseEntity<ImageResponseDTO> uploadImage(@NotEmptyFile @RequestParam("image") MultipartFile multipartImage) {
@@ -49,7 +49,7 @@ public class ImageController {
     }
 
     /**
-     * It takes an id, finds the image with that id, and returns it as a resource
+     * It takes an id, finds the image with that id, and returns its content as a resource
      *
      * @param id The id of the image to download
      * @return A Resource object.
