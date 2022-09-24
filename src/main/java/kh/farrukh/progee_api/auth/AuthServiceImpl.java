@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * It implements the AuthService interface and uses the EmailValidator and UserServiceImpl classes
+ * It implements the AuthService interface and uses the EmailValidator and AppUserService classes
  * to register a new user or refresh the token
  */
 @Service
@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
             String username = decodedJWT.getSubject();
             AppUserResponseDTO user = appUserService.getUserByEmail(username);
             return tokenProvider.generateTokens(AppUserMappers.toAppUser(user));
+        // Catching the exceptions that can be thrown by the validateToken method and throwing the custom exceptions.
         } catch (AlgorithmMismatchException exception) {
             throw new WrongTypeTokenException();
         } catch (SignatureVerificationException exception) {

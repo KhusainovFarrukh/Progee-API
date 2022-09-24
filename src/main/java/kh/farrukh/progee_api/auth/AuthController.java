@@ -26,7 +26,7 @@ public class AuthController {
      * Registering new user
      *
      * @param registrationRequestDTO The request object that contains new user details.
-     * @return A ResponseEntity with the AppUser object and a status of OK.
+     * @return A ResponseEntity with the AppUserResponseDTO object and a status of OK.
      */
     @PostMapping(ENDPOINT_REGISTRATION)
     public ResponseEntity<AppUserResponseDTO> register(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {

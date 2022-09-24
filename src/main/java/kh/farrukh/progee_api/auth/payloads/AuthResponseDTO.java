@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 
+/**
+ * It's a DTO that contains the access token, refresh token, and their expiration dates
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

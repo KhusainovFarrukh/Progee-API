@@ -6,6 +6,9 @@ import kh.farrukh.progee_api.role.RoleRepository;
 import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * It maps a RegistrationRequestDTO to an AppUserRequestDTO
+ */
 public class AuthMappers {
 
     public static AppUserRequestDTO toAppUserRequestDTO(
