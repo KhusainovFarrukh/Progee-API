@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 
 /**
- * It's a DTO that represents a role
+ * It's a DTO that contains a role id to change the user's role
  */
 @Getter
 @Setter

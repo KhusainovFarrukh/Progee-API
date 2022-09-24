@@ -9,6 +9,9 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * It's a DTO that contains the user's current password and the new password they want to set
+ */
 @Getter
 @Setter
 @AllArgsConstructor

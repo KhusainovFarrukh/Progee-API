@@ -9,6 +9,9 @@ import kh.farrukh.progee_api.app_user.payloads.AppUserRequestDTO;
 import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * It contains methods that map between AppUser, AppUserResponseDTO, and AppUserRequestDTO
+ */
 public class AppUserMappers {
 
     public static AppUserResponseDTO toAppUserResponseDTO(AppUser appUser) {

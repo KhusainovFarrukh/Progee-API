@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * It's a DTO that represents a user response
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -27,7 +27,7 @@ public class AppUserController {
      * @param pageSize The number of items to be returned in a page.
      * @param sortBy   The field to sort by.
      * @param orderBy  asc or desc
-     * @return A ResponseEntity with a PagingResponse of AppUser objects.
+     * @return A ResponseEntity with a PagingResponse of AppUserResponseDTO objects.
      */
     @GetMapping
     public ResponseEntity<PagingResponse<AppUserResponseDTO>> getUsers(
@@ -43,7 +43,7 @@ public class AppUserController {
      * It returns a user by id.
      *
      * @param id The id of the user you want to get.
-     * @return A ResponseEntity with found AppUser.
+     * @return A ResponseEntity with found AppUserResponseDTO.
      */
     @GetMapping("{id}")
     public ResponseEntity<AppUserResponseDTO> getUserById(@PathVariable long id) {
@@ -55,7 +55,7 @@ public class AppUserController {
      *
      * @param id                The id of the user to update
      * @param appUserRequestDto The user values that we want to update.
-     * @return A ResponseEntity with the updated AppUser object and HttpStatus.
+     * @return A ResponseEntity with the updated AppUserResponseDTO object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<AppUserResponseDTO> updateUser(
@@ -83,7 +83,7 @@ public class AppUserController {
      *
      * @param id      The id of the user to be updated
      * @param roleDto This is the object that contains the role that we want to set the user to.
-     * @return A ResponseEntity with the updated AppUser object and HttpStatus.
+     * @return A ResponseEntity with the updated AppUserResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/role")
     public ResponseEntity<AppUserResponseDTO> setUserRole(
@@ -99,7 +99,7 @@ public class AppUserController {
      *
      * @param id       The id of the user to be updated
      * @param imageDto This is the object that contains the image id that we want to set the user to.
-     * @return A ResponseEntity with the updated AppUser object and HttpStatus.
+     * @return A ResponseEntity with the updated AppUserResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/image")
     public ResponseEntity<AppUserResponseDTO> setUserImage(
@@ -114,7 +114,7 @@ public class AppUserController {
      *
      * @param id          The id of the user to be updated
      * @param passwordDto This is the object that contains the current and new passwords.
-     * @return A ResponseEntity with the updated AppUser object and HttpStatus.
+     * @return A ResponseEntity with the updated AppUserResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/password")
     public ResponseEntity<AppUserResponseDTO> setUserPassword(

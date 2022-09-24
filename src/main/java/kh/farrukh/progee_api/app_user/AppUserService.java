@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * A base interface for service of User endpoints
  * <p>
  * Methods implemented in UserServiceImpl
+ * <p>
+ * Implements UserDetailsService to be used in Spring Security.
+ * It means that this class is injected as bean dependency to Spring Security Configurations
  */
 public interface AppUserService extends UserDetailsService {
 

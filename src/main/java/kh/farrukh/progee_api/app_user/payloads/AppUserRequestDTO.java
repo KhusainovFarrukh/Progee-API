@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * It's a DTO that represents a user
+ * It's a DTO class that contains all the fields that are required to create a new user
  */
 @Getter
 @Setter

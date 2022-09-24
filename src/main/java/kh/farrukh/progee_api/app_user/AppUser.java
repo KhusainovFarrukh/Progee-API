@@ -1,7 +1,6 @@
 package kh.farrukh.progee_api.app_user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import kh.farrukh.progee_api.framework.Framework;
 import kh.farrukh.progee_api.global.base_entity.EntityWithId;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -25,9 +24,7 @@ import static kh.farrukh.progee_api.app_user.AppUserConstants.TABLE_NAME_USER;
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
 
 /**
- * AppUser is a simple entity
- * <p>
- * Implements UserDetails to be used in Spring Security logic.
+ * It's a class that represents an application user
  */
 @Getter
 @Setter
@@ -82,9 +79,11 @@ public class AppUser extends EntityWithId implements UserDetails {
     @OneToMany(mappedBy = "author")
     private List<Review> createdReviews;
 
+    /**
+     * Before removing a user, make the author of all his/her created resources null.
+     */
     @PreRemove
     public void beforeRemove() {
-        // if user has created some resources, make their author null ("anonymous" in frontend)
         createdLanguages.forEach(language -> language.setAuthor(null));
         createdFrameworks.forEach(framework -> framework.setAuthor(null));
         createdReviews.forEach(review -> review.setAuthor(null));
@@ -166,6 +165,11 @@ public class AppUser extends EntityWithId implements UserDetails {
         return password;
     }
 
+    /**
+     * It returns a list of all the permissions that the user has, based on the role that they have
+     *
+     * @return A list of permissions
+     */
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

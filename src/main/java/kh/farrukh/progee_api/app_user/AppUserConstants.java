@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.app_user;
 
+/**
+ * It contains constants that are used in the AppUser package
+ */
 public class AppUserConstants {
 
     public static final String ENDPOINT_USER = "/api/v1/users";

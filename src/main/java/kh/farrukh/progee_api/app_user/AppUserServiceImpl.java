@@ -25,9 +25,6 @@ import static kh.farrukh.progee_api.global.utils.checkers.Checkers.*;
 /**
  * It implements the UserService interface and the UserDetailsService interface,
  * uses the UserRepository, PasswordEncoder and ImageRepository to perform CRUD operations on the AppUser entity
- * <p>
- * Implements UserDetailsService to be used in Spring Security.
- * It means that this class is injected as bean dependency to Spring Security Configurations
  */
 @Service
 @RequiredArgsConstructor
@@ -77,7 +74,7 @@ public class AppUserServiceImpl implements AppUserService {
      * If the user exists, return the user, otherwise throw an exception.
      *
      * @param id The id of the user to retrieve
-     * @return The userRepository.findById(id) is being returned.
+     * @return The AppUserResponseDTO is being returned.
      */
     @Override
     public AppUserResponseDTO getUserById(Long id) {
@@ -90,7 +87,7 @@ public class AppUserServiceImpl implements AppUserService {
      * If the user exists, return the user, otherwise throw an exception.
      *
      * @param email The email of the user to retrieve
-     * @return The userRepository.findByEmail(email) is being returned.
+     * @return The AppUserResponseDTO is being returned.
      */
     @Override
     public AppUserResponseDTO getUserByEmail(String email) {
@@ -186,8 +183,8 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     /**
-     * It takes in a user id and a UserImageDTO object, finds the user in the database,
-     * sets the user's image to the image with id in the UserImageDTO object, and returns the user
+     * It takes in a user id and a SetUserImageRequestDTO object, finds the user in the database,
+     * sets the user's image to the image with id in the SetUserImageRequestDTO object, and returns the user
      *
      * @param id       The id of the user to be updated
      * @param imageDto This is the object that will be passed in the request body.
@@ -214,8 +211,8 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     /**
-     * It takes in a user id and a UserPasswordDTO object, finds the user in the database,
-     * checks the current password, sets the user's password to the password in the UserPasswordDTO object,
+     * It takes in a user id and a SetUserPasswordRequestDTO object, finds the user in the database,
+     * checks the current password, sets the user's password to the password in the SetUserPasswordRequestDTO object,
      * and returns the user
      *
      * @param id          The id of the user to be updated
