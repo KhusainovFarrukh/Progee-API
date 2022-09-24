@@ -40,7 +40,7 @@ public class FrameworkServiceImpl implements FrameworkService {
     private final AppUserRepository appUserRepository;
 
     /**
-     * This function returns a list of frameworks that are associated with a specific language
+     * This function returns a list of frameworks
      *
      * @param languageId The id of the language to filter by.
      * @param state      The state of the framework.
@@ -64,6 +64,7 @@ public class FrameworkServiceImpl implements FrameworkService {
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy));
         checkSortParams(pageable, List.of("id", "name", "description", "state", "createdAt"));
 
+        // Checking if the user has permission to view frameworks by state. If not, it will throw an exception.
         if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
             state = ResourceState.APPROVED;
@@ -80,13 +81,14 @@ public class FrameworkServiceImpl implements FrameworkService {
      * framework doesn't exist.
      *
      * @param id The id of the framework to be retrieved
-     * @return Framework
+     * @return FrameworkResponseDTO
      */
     @Override
     public FrameworkResponseDTO getFrameworkById(long id) {
         Framework framework = frameworkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
 
+        // It checks if the current user has permission to view frameworks by state. If not, it will throw an exception.
         if (framework.getState() != ResourceState.APPROVED &&
                 !CurrentUserUtils.hasPermission(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE, appUserRepository)) {
             throw new NotEnoughPermissionException();
@@ -99,7 +101,7 @@ public class FrameworkServiceImpl implements FrameworkService {
      * This function adds a framework to the database
      *
      * @param frameworkRequestDto The DTO object that contains the framework information.
-     * @return Framework
+     * @return FrameworkResponseDTO
      */
     @Override
     public FrameworkResponseDTO addFramework(FrameworkRequestDTO frameworkRequestDto) {
@@ -113,6 +115,8 @@ public class FrameworkServiceImpl implements FrameworkService {
         Framework framework = FrameworkMappers.toFramework(frameworkRequestDto, languageRepository, imageRepository);
         AppUser currentUser = CurrentUserUtils.getCurrentUser(appUserRepository);
         framework.setAuthor(currentUser);
+        // It checks if the current user has permission to set the state of the framework. If not, it sets the state to
+        // `WAITING`.
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_FRAMEWORK_STATE, appUserRepository)) {
             framework.setState(ResourceState.APPROVED);
         } else {
@@ -134,6 +138,7 @@ public class FrameworkServiceImpl implements FrameworkService {
         Framework framework = frameworkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
 
+        // It checks if the current user has permission to update the framework. If not, it throws an exception.
         if (CurrentUserUtils.hasPermissionOrIsAuthor(
                 Permission.CAN_UPDATE_OTHERS_FRAMEWORK,
                 Permission.CAN_UPDATE_OWN_FRAMEWORK,

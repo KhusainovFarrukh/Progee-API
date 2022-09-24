@@ -19,9 +19,8 @@ import static kh.farrukh.progee_api.framework.FrameworkConstants.TABLE_NAME_FRAM
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;
 
 /**
- * Framework is a simple entity
+ * It's a framework entity that has a name, description, image, author, creation date, and language
  */
-
 @Getter
 @Setter
 @AllArgsConstructor

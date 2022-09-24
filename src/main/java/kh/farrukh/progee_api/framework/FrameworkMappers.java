@@ -10,6 +10,9 @@ import kh.farrukh.progee_api.language.LanguageMappers;
 import kh.farrukh.progee_api.language.LanguageRepository;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * It contains methods that map between Framework, FrameworkRequestDTO and FrameworkResponseDTO
+ */
 public class FrameworkMappers {
 
     public static FrameworkResponseDTO toFrameworkResponseDTO(Framework framework) {

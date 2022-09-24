@@ -33,9 +33,9 @@ import static kh.farrukh.progee_api.role.RoleConstants.ENDPOINT_ROLE;
 public class SecurityConfiguration {
 
     public static final String ENDPOINT_REVIEW_VOTE = ENDPOINT_REVIEW + "/**/vote";
-    public static final String SECURITY_ENDPOINT_LANGUAGE_STATE = ENDPOINT_LANGUAGE + "/**/state";
+    public static final String ENDPOINT_LANGUAGE_STATE = ENDPOINT_LANGUAGE + "/**/state";
     public static final String ENDPOINT_FRAMEWORK_STATE = ENDPOINT_FRAMEWORK + "/**/state";
-    public static final String SECURITY_ENDPOINT_USER_ROLE = ENDPOINT_USER + "/**/role";
+    public static final String ENDPOINT_USER_ROLE = ENDPOINT_USER + "/**/role";
 
     /**
      * A function that is used to configure the security filter chain.
@@ -86,14 +86,14 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_FRAMEWORK)).hasAuthority(Permission.CAN_DELETE_FRAMEWORK.name())
                 //language endpoints
                 .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_LANGUAGE)).permitAll()
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_LANGUAGE_STATE)).hasAuthority(Permission.CAN_SET_LANGUAGE_STATE.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_LANGUAGE_STATE)).hasAuthority(Permission.CAN_SET_LANGUAGE_STATE.name())
                 .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAuthority(Permission.CAN_CREATE_LANGUAGE.name())
                 .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_LANGUAGE.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_LANGUAGE.name(), Permission.CAN_UPDATE_OTHERS_FRAMEWORK.name())
                 .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_LANGUAGE)).hasAuthority(Permission.CAN_DELETE_LANGUAGE.name())
                 //user endpoints
                 .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_USER)).permitAll()
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(SECURITY_ENDPOINT_USER_ROLE)).hasAuthority(Permission.CAN_SET_USER_ROLE.name())
+                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_USER_ROLE)).hasAuthority(Permission.CAN_SET_USER_ROLE.name())
                 .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_USER)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_USER.name(), Permission.CAN_UPDATE_OTHER_USER.name())
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_USER)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_USER.name(), Permission.CAN_UPDATE_OTHER_USER.name())
                 .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_USER)).hasAuthority(Permission.CAN_DELETE_USER.name())

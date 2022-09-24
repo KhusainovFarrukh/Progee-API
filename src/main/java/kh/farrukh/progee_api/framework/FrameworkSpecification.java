@@ -13,6 +13,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Objects;
 
+/**
+ * It's a specification that can be used to filter frameworks by language and state
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -41,6 +44,13 @@ public class FrameworkSpecification implements Specification<Framework> {
         return predicate;
     }
 
+    /**
+     * If the languageId and state of the current object are equal to the languageId and state of the object passed in,
+     * then return true. Otherwise, return false
+     *
+     * @param o The object to compare with
+     * @return The hashcode of the object.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

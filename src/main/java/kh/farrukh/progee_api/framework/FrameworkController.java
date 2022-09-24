@@ -25,10 +25,10 @@ public class FrameworkController {
     private final FrameworkService frameworkService;
 
     /**
-     * It returns a list (with pagination) of frameworks for a given language
+     * It returns a list (with pagination) of frameworks
      *
-     * @param languageId The id of the language to get frameworks for.
-     * @param state      The state of the resource. (Only for admins. Requires access token)
+     * @param languageId The id of the language to get frameworks for (Optional).
+     * @param state      The state of the resource. (Optional. Only for admins. Requires access token)
      * @param page       The page number to return. One-based index.
      * @param pageSize   The number of items to return per page. Default is 10.
      * @param sortBy     The field to sort by. Allowed values: id, name, description, state, createdAt. Default is id.
@@ -53,7 +53,7 @@ public class FrameworkController {
      * This function returns a framework with the given id, if it exists
      *
      * @param id The id of the framework you want to get
-     * @return A ResponseEntity containing Framework object and HttpStatus.
+     * @return A ResponseEntity containing FrameworkResponseDTO object and HttpStatus.
      */
     @GetMapping("{id}")
     public ResponseEntity<FrameworkResponseDTO> getFrameworkById(@PathVariable long id) {
@@ -64,7 +64,7 @@ public class FrameworkController {
      * This function creates framework if it does not exist.
      *
      * @param frameworkRequestDto Values for the framework to be created.
-     * @return A ResponseEntity containing created Framework object and HttpStatus.
+     * @return A ResponseEntity containing created FrameworkResponseDTO object and HttpStatus.
      */
     @PostMapping
     public ResponseEntity<FrameworkResponseDTO> addFramework(
@@ -80,7 +80,7 @@ public class FrameworkController {
      *
      * @param id                  The id of the framework to update
      * @param frameworkRequestDto The framework values that we want to update.
-     * @return A ResponseEntity with the updated Framework object and HttpStatus.
+     * @return A ResponseEntity with the updated FrameworkResponseDTO object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<FrameworkResponseDTO> updateFramework(
@@ -103,12 +103,12 @@ public class FrameworkController {
     }
 
     /**
-     * This function sets the state of the framework with the given id, which belongs to the language with the given id, to the state
+     * This function sets the state of the framework with the given id, to the state
      * given in the request body.
      *
      * @param id               The id of the framework to be updated
      * @param resourceStateDto This is the object that contains the state that we want to set the framework to.
-     * @return A ResponseEntity with the updated Framework object and HttpStatus.
+     * @return A ResponseEntity with the updated FrameworkResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/state")
     public ResponseEntity<FrameworkResponseDTO> setFrameworkState(

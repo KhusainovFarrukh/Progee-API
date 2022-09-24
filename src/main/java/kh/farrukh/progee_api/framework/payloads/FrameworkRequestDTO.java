@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * It's a DTO that represents a framework
+ * It's a DTO that represents a framework request
  */
 @Getter
 @Setter
