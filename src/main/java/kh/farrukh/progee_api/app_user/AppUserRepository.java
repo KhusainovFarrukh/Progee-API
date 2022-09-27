@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.Optional;
 
 /**
- * Repository for managing frameworks
+ * Repository for managing users of application
  */
 @Repository
 @Validated

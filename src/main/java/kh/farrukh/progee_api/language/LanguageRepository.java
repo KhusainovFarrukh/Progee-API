@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Repository for managing frameworks
+ * Repository for managing languages
  */
 @Repository
 @Validated

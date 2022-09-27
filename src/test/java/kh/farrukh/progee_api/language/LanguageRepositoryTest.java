@@ -1,8 +1,6 @@
 package kh.farrukh.progee_api.language;
 
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
-import kh.farrukh.progee_api.language.Language;
-import kh.farrukh.progee_api.language.LanguageRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
