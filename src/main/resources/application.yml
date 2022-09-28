@@ -19,9 +19,12 @@ spring:
     encoding: UTF-8
     fallback-to-system-locale: true
     use-code-as-default-message: false
+  flyway:
+    placeholders:
+      DEFAULT_ENCRYPTED_PASSWORD: ${DEFAULT_ENCRYPTED_PASSWORD}
 
 jwt:
-  secret: ${MY_JWT_SECRET}
+  secret: ${JWT_SECRET}
   access-token-validity-in-seconds: 1800
   refresh-token-validity-in-seconds: 604800
 
