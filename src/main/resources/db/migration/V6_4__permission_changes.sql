@@ -8,11 +8,9 @@ WHERE permission_name = 'CAN_VIEW_LANGUAGE'
    OR permission_name = 'CAN_CREATE_IMAGE';
 
 INSERT INTO role_permissions (role_id, permission_name)
-VALUES (1, 'CAN_UPDATE_OTHERS_LANGUAGE');
-INSERT INTO role_permissions (role_id, permission_name)
-VALUES (1, 'CAN_UPDATE_OTHERS_FRAMEWORK');
+VALUES (1, 'CAN_UPDATE_OTHERS_LANGUAGE'),
+       (1, 'CAN_UPDATE_OTHERS_FRAMEWORK');
 
 INSERT INTO role_permissions (role_id, permission_name)
-VALUES (2, 'CAN_UPDATE_OTHERS_LANGUAGE');
-INSERT INTO role_permissions (role_id, permission_name)
-VALUES (2, 'CAN_UPDATE_OTHERS_FRAMEWORK');
+VALUES (2, 'CAN_UPDATE_OTHERS_LANGUAGE'),
+       (2, 'CAN_UPDATE_OTHERS_FRAMEWORK');
