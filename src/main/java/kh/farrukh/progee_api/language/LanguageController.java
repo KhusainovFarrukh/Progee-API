@@ -49,7 +49,7 @@ public class LanguageController {
      * This function returns a language with the given id, if it exists
      *
      * @param id The id of the language you want to get
-     * @return A ResponseEntity containing Language object and HttpStatus.
+     * @return A ResponseEntity containing LanguageResponseDTO object and HttpStatus.
      */
     @GetMapping("{id}")
     public ResponseEntity<LanguageResponseDTO> getLanguageById(@PathVariable long id) {
@@ -60,7 +60,7 @@ public class LanguageController {
      * This function creates language if it does not exist.
      *
      * @param languageRequestDto Values for the language to be created.
-     * @return A ResponseEntity containing created Language object and HttpStatus.
+     * @return A ResponseEntity containing created LanguageResponseDTO object and HttpStatus.
      */
     @PostMapping
     public ResponseEntity<LanguageResponseDTO> addLanguage(@Valid @RequestBody LanguageRequestDTO languageRequestDto) {
@@ -74,7 +74,7 @@ public class LanguageController {
      *
      * @param id                 The id of the language to update
      * @param languageRequestDto The language values that we want to update.
-     * @return A ResponseEntity with the updated Language object and HttpStatus.
+     * @return A ResponseEntity with the updated LanguageResponseDTO object and HttpStatus.
      */
     @PutMapping("{id}")
     public ResponseEntity<LanguageResponseDTO> updateLanguage(
@@ -102,7 +102,7 @@ public class LanguageController {
      *
      * @param id               The id of the language to be updated
      * @param resourceStateDto This is the object that contains the state that we want to set the language to.
-     * @return A ResponseEntity with the updated Language object and HttpStatus.
+     * @return A ResponseEntity with the updated LanguageResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/state")
     public ResponseEntity<LanguageResponseDTO> setLanguageState(

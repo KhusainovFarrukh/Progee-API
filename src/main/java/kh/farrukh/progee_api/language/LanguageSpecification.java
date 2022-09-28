@@ -11,6 +11,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+/**
+ * It's a specification that can be used to filter languages by their state
+ */
 @AllArgsConstructor
 @Getter
 @Setter

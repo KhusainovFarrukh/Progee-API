@@ -12,6 +12,9 @@ import lombok.Setter;
 
 import java.time.ZonedDateTime;
 
+/**
+ * It's a DTO that represents a language
+ */
 @Getter
 @Setter
 @AllArgsConstructor

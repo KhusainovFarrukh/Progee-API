@@ -24,7 +24,7 @@ import java.util.List;
 import static kh.farrukh.progee_api.global.utils.checkers.Checkers.*;
 
 /**
- * It implements the LanguageService interface and uses the LanguageRepository and ImageRepository
+ * It implements the LanguageService interface and uses the LanguageRepository
  * to perform CRUD operations on the Language entity
  */
 @Service
@@ -57,6 +57,8 @@ public class LanguageServiceImpl implements LanguageService {
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(SortUtils.parseDirection(orderBy), sortBy));
         checkSortParams(pageable, List.of("id", "name", "description", "state", "createdAt"));
 
+        // If the user doesn't have the permission to view languages by state, then if the state is not null, then throw an
+        // exception, otherwise set the state to APPROVED.
         if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
             state = ResourceState.APPROVED;
@@ -80,6 +82,9 @@ public class LanguageServiceImpl implements LanguageService {
         Language language = languageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
 
+        // It checks if the user has the permission to view languages by state. If the user doesn't have the permission,
+        // then if the state is not null, then throw an
+        // exception, otherwise set the state to APPROVED.
         if (language.getState() != ResourceState.APPROVED &&
                 !CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
             throw new NotEnoughPermissionException();
@@ -103,6 +108,8 @@ public class LanguageServiceImpl implements LanguageService {
         Language language = LanguageMappers.toLanguage(languageRequestDto, imageRepository);
         language.setAuthor(CurrentUserUtils.getCurrentUser(appUserRepository));
 
+        // It checks if the user has the permission to set the state of the language. If the user has the permission, then
+        // the state of the language is set to APPROVED, otherwise it is set to WAITING.
         if (CurrentUserUtils.hasPermission(Permission.CAN_SET_LANGUAGE_STATE, appUserRepository)) {
             language.setState(ResourceState.APPROVED);
         } else {
@@ -124,6 +131,8 @@ public class LanguageServiceImpl implements LanguageService {
         Language existingLanguage = languageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
 
+        // Checking if the user has the permission to update the language. If the user has the permission, then it updates
+        // the language, otherwise it throws an exception.
         if (CurrentUserUtils.hasPermissionOrIsAuthor(
                 Permission.CAN_UPDATE_OTHERS_LANGUAGE,
                 Permission.CAN_UPDATE_OWN_LANGUAGE,

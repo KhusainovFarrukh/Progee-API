@@ -38,10 +38,22 @@ public interface LanguageRepository extends JpaRepository<Language, Long>, JpaSp
             Pageable pageable
     );
 
+    /**
+     * Find all languages, and load their frameworks.
+     *
+     * @param pageable This is the pageable object that contains the page number, page size, and sort order.
+     * @return A Page of Language objects with the frameworks loaded.
+     */
     @EntityGraph(value = "language_with_frameworks", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select l from Language l")
     Page<Language> findAllWithFrameworks(Pageable pageable);
 
+    /**
+     * Find all languages, and load their reviews.
+     *
+     * @param pageable This is the Pageable object that we created in the controller.
+     * @return A Page of Language objects with their reviews loaded.
+     */
     @EntityGraph(value = "language_with_reviews", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select l from Language l")
     Page<Language> findAllWithReviews(Pageable pageable);

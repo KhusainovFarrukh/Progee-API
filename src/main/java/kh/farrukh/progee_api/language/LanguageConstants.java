@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.language;
 
+/**
+ * It's a class that contains constants that are used in the Language package
+ */
 public class LanguageConstants {
 
     public static final String ENDPOINT_LANGUAGE = "/api/v1/languages";

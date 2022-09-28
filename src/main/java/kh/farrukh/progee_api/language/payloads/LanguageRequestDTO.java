@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * It's a DTO that represents a language
+ * It's a DTO that contains the data that is required to create a new language
  */
 @Getter
 @Setter
