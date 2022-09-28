@@ -1,5 +1,8 @@
 package kh.farrukh.progee_api.role;
 
+/**
+ * It's a class that contains constants that are used in the Role package
+ */
 public class RoleConstants {
 
     public static final String ENDPOINT_ROLE = "/api/v1/roles";

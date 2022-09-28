@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.role;
 
+// A list of permissions of users. Used in Role entity
 public enum Permission {
 
     CAN_VIEW_LANGUAGES_BY_STATE,

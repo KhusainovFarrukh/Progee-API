@@ -16,6 +16,9 @@ import static kh.farrukh.progee_api.role.RoleConstants.SEQUENCE_NAME_ROLE_ID;
 import static kh.farrukh.progee_api.role.RoleConstants.TABLE_NAME_ROLE;
 
 
+/**
+ * It's a class that represents a role of a user in the application
+ */
 @Getter
 @Setter
 @NoArgsConstructor

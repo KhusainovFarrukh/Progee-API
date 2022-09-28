@@ -4,6 +4,9 @@ import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.role.payloads.RoleResponseDTO;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * It contains static methods that convert between Role, RoleRequestDTO and RoleResponseDTO
+ */
 public class RoleMappers {
 
     public static RoleResponseDTO toRoleResponseDTO(Role role) {

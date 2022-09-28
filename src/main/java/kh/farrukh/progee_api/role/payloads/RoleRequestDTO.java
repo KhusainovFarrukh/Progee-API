@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * It's a DTO that represents a request to create a new role
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

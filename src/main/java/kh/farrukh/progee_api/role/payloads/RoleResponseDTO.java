@@ -9,6 +9,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * It's a DTO that represents a role
+ */
 @Getter
 @Setter
 @AllArgsConstructor

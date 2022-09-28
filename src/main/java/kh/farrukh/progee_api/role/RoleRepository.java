@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+// A repository for the Role entity.
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
