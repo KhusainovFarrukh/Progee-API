@@ -19,7 +19,6 @@ import java.util.Map;
 public class ErrorResponse {
 
     private String message;
-//    private Throwable throwable;
     @JsonProperty("http_status")
     private HttpStatus httpStatus;
     @JsonProperty("http_code")

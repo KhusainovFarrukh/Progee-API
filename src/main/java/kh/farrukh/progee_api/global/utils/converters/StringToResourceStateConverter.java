@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 /**
  * It converts a String to a ResourceState enum
- * User when ResourceStateDTO comes in RequestBody
  */
 @ControllerAdvice
 public class StringToResourceStateConverter implements Converter<String, ResourceState> {

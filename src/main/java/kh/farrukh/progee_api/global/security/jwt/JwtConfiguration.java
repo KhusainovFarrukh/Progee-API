@@ -5,6 +5,10 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * It's a configuration class that reads the values from the application.yml file and makes them available to the
+ * application
+ */
 @Getter
 @Setter
 @Configuration

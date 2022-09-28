@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.language;
 
 import kh.farrukh.progee_api.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
@@ -101,14 +101,14 @@ public class LanguageController {
      * given in the request body.
      *
      * @param id               The id of the language to be updated
-     * @param resourceStateDto This is the object that contains the state that we want to set the language to.
+     * @param setResourceStateRequestDto This is the object that contains the state that we want to set the language to.
      * @return A ResponseEntity with the updated LanguageResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/state")
     public ResponseEntity<LanguageResponseDTO> setLanguageState(
             @PathVariable long id,
-            @Valid @RequestBody ResourceStateDTO resourceStateDto
+            @Valid @RequestBody SetResourceStateRequestDTO setResourceStateRequestDto
     ) {
-        return ResponseEntity.ok(languageService.setLanguageState(id, resourceStateDto));
+        return ResponseEntity.ok(languageService.setLanguageState(id, setResourceStateRequestDto));
     }
 }

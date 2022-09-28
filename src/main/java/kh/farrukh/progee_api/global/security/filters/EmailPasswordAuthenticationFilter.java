@@ -78,6 +78,14 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
         SecurityUtils.sendTokenInResponse(authResponseDTO, response, objectMapper);
     }
 
+    /**
+     * If the authentication fails, we check if the email exists in the database. If it does, we throw an exception saying
+     * that the password is wrong. If it doesn't, we throw an exception saying that the email is wrong
+     *
+     * @param request The request object.
+     * @param response The response object that will be used to send the error message to the client.
+     * @param failed The AuthenticationException that was thrown by the authentication provider.
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         LoginRequestDTO loginRequestDTO = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDTO.class);

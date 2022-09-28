@@ -8,6 +8,10 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
+/**
+ * It's a custom exception class that extends the ApiException class that is thrown when there are
+ * invalid sorting parameters in a request
+ */
 @Getter
 @Setter
 public class SortParamException extends ApiException {

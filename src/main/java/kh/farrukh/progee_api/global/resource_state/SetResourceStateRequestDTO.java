@@ -6,10 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * It's a DTO that contains field `state`, which is the new state of the resource
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResourceStateDTO {
+public class SetResourceStateRequestDTO {
 
     @NotNull
     private ResourceState state;

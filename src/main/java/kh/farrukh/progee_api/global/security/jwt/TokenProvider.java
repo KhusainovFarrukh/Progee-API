@@ -18,6 +18,9 @@ import java.util.Date;
 
 import static kh.farrukh.progee_api.global.security.jwt.JWTKeys.KEY_ROLE_ID;
 
+/**
+ * Component for providing and validating tokens
+ */
 @Getter
 @Component
 @RequiredArgsConstructor
@@ -35,9 +38,9 @@ public class TokenProvider implements InitializingBean {
     }
 
     /**
-     * It creates two tokens, one for access and one for refresh, and returns them in an AuthResponse object
+     * It creates two tokens, one for access and one for refresh, and returns them in an AuthResponseDTO object
      *
-     * @param user The user details object that contains the user's information.
+     * @param user The AuthResponseDTO object that contains the tokens' information.
      */
     public AuthResponseDTO generateTokens(AppUser user) {
         ZonedDateTime accessExpireDate = ZonedDateTime.now().plusSeconds(jwtConfiguration.getAccessTokenValidityInSeconds());

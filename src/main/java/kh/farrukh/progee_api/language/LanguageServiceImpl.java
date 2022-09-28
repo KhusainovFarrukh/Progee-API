@@ -8,7 +8,7 @@ import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
@@ -177,14 +177,14 @@ public class LanguageServiceImpl implements LanguageService {
      * This function sets the state of a language
      *
      * @param id               The id of the language to update
-     * @param resourceStateDto This is the object that contains the state that we want to set.
+     * @param setResourceStateRequestDto This is the object that contains the state that we want to set.
      * @return Language
      */
     @Override
-    public LanguageResponseDTO setLanguageState(long id, ResourceStateDTO resourceStateDto) {
+    public LanguageResponseDTO setLanguageState(long id, SetResourceStateRequestDTO setResourceStateRequestDto) {
         Language language = languageRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Language", "id", id));
-        language.setState(resourceStateDto.getState());
+        language.setState(setResourceStateRequestDto.getState());
         return LanguageMappers.toLanguageResponseDTO(languageRepository.save(language));
     }
 }

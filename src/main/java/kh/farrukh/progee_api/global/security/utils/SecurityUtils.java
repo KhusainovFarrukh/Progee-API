@@ -48,7 +48,7 @@ public class SecurityUtils {
     }
 
     /**
-     * It takes a map of data and an HttpServletResponse object, and writes the data to the response as JSON
+     * It takes AuthResponseDTO object and an HttpServletResponse object, and writes the data to the response as JSON
      *
      * @param authResponseDTO This is the AuthResponse that you want to send back to the client.
      * @param response        The HttpServletResponse object.
@@ -63,16 +63,5 @@ public class SecurityUtils {
                 new TypeReference<>() {
                 });
         objectMapper.writeValue(response.getOutputStream(), data);
-    }
-
-    /**
-     * It sets the access token and refresh token in the response header
-     *
-     * @param data     The map that contains the access token and refresh token.
-     * @param response The response object of the request.
-     */
-    public static void sendTokenInHeader(Map<String, String> data, HttpServletResponse response) {
-        response.setHeader(KEY_ACCESS_TOKEN, data.get(KEY_ACCESS_TOKEN));
-        response.setHeader(KEY_REFRESH_TOKEN, data.get(KEY_REFRESH_TOKEN));
     }
 }

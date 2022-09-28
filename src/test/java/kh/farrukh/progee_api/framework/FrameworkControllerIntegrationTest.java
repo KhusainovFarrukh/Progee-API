@@ -7,7 +7,7 @@ import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
@@ -352,7 +352,7 @@ class FrameworkControllerIntegrationTest {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkRepository.save(new Framework("", ResourceState.WAITING, existingLanguage));
-        ResourceStateDTO stateDto = new ResourceStateDTO(ResourceState.APPROVED);
+        SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
 
         // when
         MvcResult result = mvc

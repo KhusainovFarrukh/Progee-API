@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.language;
 
 import kh.farrukh.progee_api.language.payloads.LanguageRequestDTO;
 import kh.farrukh.progee_api.language.payloads.LanguageResponseDTO;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 
@@ -28,5 +28,5 @@ public interface LanguageService {
 
     void deleteLanguage(long id);
 
-    LanguageResponseDTO setLanguageState(long id, ResourceStateDTO resourceStateDto);
+    LanguageResponseDTO setLanguageState(long id, SetResourceStateRequestDTO setResourceStateRequestDto);
 }

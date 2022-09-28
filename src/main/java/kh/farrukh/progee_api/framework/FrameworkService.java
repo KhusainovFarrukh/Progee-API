@@ -2,7 +2,7 @@ package kh.farrukh.progee_api.framework;
 
 import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.framework.payloads.FrameworkResponseDTO;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 
@@ -30,5 +30,5 @@ public interface FrameworkService {
 
     void deleteFramework(long id);
 
-    FrameworkResponseDTO setFrameworkState(long id, ResourceStateDTO resourceStateDto);
+    FrameworkResponseDTO setFrameworkState(long id, SetResourceStateRequestDTO setResourceStateRequestDto);
 }

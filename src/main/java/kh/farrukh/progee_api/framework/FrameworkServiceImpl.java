@@ -11,7 +11,7 @@ import kh.farrukh.progee_api.global.exceptions.custom_exceptions.BadRequestExcep
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
@@ -186,14 +186,14 @@ public class FrameworkServiceImpl implements FrameworkService {
      * This function sets the state of a framework
      *
      * @param id               The id of the framework to update
-     * @param resourceStateDto This is the object that contains the state that we want to set.
+     * @param setResourceStateRequestDto This is the object that contains the state that we want to set.
      * @return Framework
      */
     @Override
-    public FrameworkResponseDTO setFrameworkState(long id, ResourceStateDTO resourceStateDto) {
+    public FrameworkResponseDTO setFrameworkState(long id, SetResourceStateRequestDTO setResourceStateRequestDto) {
         Framework framework = frameworkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Framework", "id", id));
-        framework.setState(resourceStateDto.getState());
+        framework.setState(setResourceStateRequestDto.getState());
         return FrameworkMappers.toFrameworkResponseDTO(frameworkRepository.save(framework));
     }
 }

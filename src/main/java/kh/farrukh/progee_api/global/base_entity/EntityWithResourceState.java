@@ -11,12 +11,12 @@ import javax.persistence.MappedSuperclass;
 /**
  * It's a base class for entities that have a resource state
  * <p>
- * WARN: extends from EntityWithImage
+ * Extends from EntityWithId
  */
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class EntityWithResourceState extends EntityWithId{
+public abstract class EntityWithResourceState extends EntityWithId {
 
     @Enumerated(EnumType.STRING)
     private ResourceState state = ResourceState.WAITING;

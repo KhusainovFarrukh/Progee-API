@@ -116,6 +116,12 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    /**
+     * It takes an endpoint and returns the endpoint with a wildcard appended to it
+     *
+     * @param endpoint The endpoint to be secured.
+     * @return A string with the endpoint and a wildcard.
+     */
     public static String withChildEndpoints(String endpoint) {
         return endpoint + "/**";
     }

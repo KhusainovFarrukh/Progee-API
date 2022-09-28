@@ -44,7 +44,6 @@ public class ApiExceptionHandler {
                                 exception.getMessageArgs(),
                                 locale
                         ),
-//                        exception,
                         exception.getHttpStatus(),
                         exception.getHttpStatus().value(),
                         ZonedDateTime.now()
@@ -54,7 +53,7 @@ public class ApiExceptionHandler {
     }
 
     /**
-     * It handles exceptions from Valid annotation on the RequestBody
+     * It handles MethodArgumentNotValidException exceptions from Validation
      *
      * @param exception The exception object that was thrown.
      * @return A ResponseEntity<Object>
@@ -80,7 +79,7 @@ public class ApiExceptionHandler {
     }
 
     /**
-     * It handles all other exceptions (not handled exceptions)
+     * It handles all other unknown exceptions (not handled exceptions)
      *
      * @param exception The exception object that was thrown.
      * @return A ResponseEntity<Object>
@@ -95,7 +94,6 @@ public class ApiExceptionHandler {
                                 null,
                                 locale
                         ) + ": " + exception.getMessage(),
-//                        exception,
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         ZonedDateTime.now()

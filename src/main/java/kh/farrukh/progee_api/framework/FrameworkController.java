@@ -3,7 +3,7 @@ package kh.farrukh.progee_api.framework;
 import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -107,14 +107,14 @@ public class FrameworkController {
      * given in the request body.
      *
      * @param id               The id of the framework to be updated
-     * @param resourceStateDto This is the object that contains the state that we want to set the framework to.
+     * @param setResourceStateRequestDto This is the object that contains the state that we want to set the framework to.
      * @return A ResponseEntity with the updated FrameworkResponseDTO object and HttpStatus.
      */
     @PatchMapping("{id}/state")
     public ResponseEntity<FrameworkResponseDTO> setFrameworkState(
             @PathVariable long id,
-            @Valid @RequestBody ResourceStateDTO resourceStateDto
+            @Valid @RequestBody SetResourceStateRequestDTO setResourceStateRequestDto
     ) {
-        return ResponseEntity.ok(frameworkService.setFrameworkState(id, resourceStateDto));
+        return ResponseEntity.ok(frameworkService.setFrameworkState(id, setResourceStateRequestDto));
     }
 }

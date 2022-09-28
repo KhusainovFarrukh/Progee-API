@@ -5,6 +5,10 @@ import org.springframework.http.HttpStatus;
 
 import static kh.farrukh.progee_api.global.exceptions.ExceptionMessages.EXCEPTION_DEFAULT_ROLE_DELETION;
 
+/**
+ * `DefaultRoleDeletionException` is a custom exception class that extends `ApiException` and is thrown when a user tries
+ * to delete the single default role
+ */
 public class DefaultRoleDeletionException extends ApiException {
 
     public DefaultRoleDeletionException() {

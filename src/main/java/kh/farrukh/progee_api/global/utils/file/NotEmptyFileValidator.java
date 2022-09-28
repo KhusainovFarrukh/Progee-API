@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Validates a file.
+ * Validator for NotEmptyFile annotation.
  */
 public class NotEmptyFileValidator implements ConstraintValidator<NotEmptyFile, MultipartFile> {
 

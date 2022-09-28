@@ -12,6 +12,16 @@ import org.springframework.security.core.userdetails.User;
  */
 public class CurrentUserUtils {
 
+    /**
+     * If the current user is the author of the resource, they need permissionToChangeOwn, otherwise they need
+     * permissionToChangeOthers.
+     *
+     * @param permissionToChangeOthers The permission that the user needs to have to change other users' resources.
+     * @param permissionToChangeOwn The permission that the user needs to have to change their own resources.
+     * @param authorId The id of the author of the resource you're trying to change.
+     * @param appUserRepository The repository that contains the current user.
+     * @return A boolean value.
+     */
     public static boolean hasPermissionOrIsAuthor(
             Permission permissionToChangeOthers,
             Permission permissionToChangeOwn,
@@ -27,6 +37,13 @@ public class CurrentUserUtils {
         }
     }
 
+    /**
+     * If the current user has the given permission, return true, otherwise return false."
+     *
+     * @param permission The permission you want to check for.
+     * @param appUserRepository The repository that contains the current user.
+     * @return A boolean value.
+     */
     public static boolean hasPermission(Permission permission, AppUserRepository appUserRepository) {
         try {
             AppUser currentUser = getCurrentUser(appUserRepository);

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
@@ -224,7 +224,7 @@ class LanguageControllerIntegrationTest {
     void canSetLanguageState() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language("", ResourceState.WAITING));
-        ResourceStateDTO stateDto = new ResourceStateDTO(ResourceState.APPROVED);
+        SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
 
         // when
         MvcResult result = mvc

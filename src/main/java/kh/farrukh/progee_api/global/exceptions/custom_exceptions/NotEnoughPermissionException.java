@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 
 import static kh.farrukh.progee_api.global.exceptions.ExceptionMessages.EXCEPTION_NOT_ENOUGH_PERMISSION;
 
+/**
+ * `NotEnoughPermissionException` is a subclass of `ApiException` that is thrown when the user doesn't have enough
+ * permission to perform the requested action
+ */
 @Getter
 public class NotEnoughPermissionException extends ApiException {
 

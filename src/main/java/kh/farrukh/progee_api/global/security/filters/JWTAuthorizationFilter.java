@@ -51,12 +51,17 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         this.resolver = resolver;
     }
 
+    /**
+     * If the request is for the home/register/login/refresh-token endpoints or simple user request for getting list of
+     * languages/frameworks/reviews, then don't check JWT token
+     *
+     * @param request The request object.
+     * @return The method returns true if the request is for the home/register/login/refresh-token endpoints or simple user
+     * request for getting list of languages/frameworks/reviews.
+     */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // This is the shouldNotFilter logic of the filter. If the request is for the home/register/login/refresh-token endpoints or
-        // simple user request for getting list of languages/frameworks/reviews, then don't check JWT token.
 
-        // if..
         // home request
         return request.getRequestURI().equals(ENDPOINT_HOME) ||
 
@@ -79,6 +84,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 (request.getMethod().equals(HttpMethod.GET.name()) && request.getRequestURI().contains(ENDPOINT_FRAMEWORK) && (request.getParameter("state") == null) && request.getHeader(HttpHeaders.AUTHORIZATION) == null);
     }
 
+    /**
+     * It validates the token, sets the authentication token, and then passes the request to the next filter
+     *
+     * @param request The request object
+     * @param response The response object that will be used to send the error response.
+     * @param filterChain The filter chain that the request will be passed through.
+     */
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,

@@ -8,7 +8,7 @@ import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResour
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.NotEnoughPermissionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
-import kh.farrukh.progee_api.global.resource_state.ResourceStateDTO;
+import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
 import kh.farrukh.progee_api.global.utils.paging_sorting.SortUtils;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
@@ -573,7 +573,7 @@ class FrameworkServiceImplTest {
     void canSetFrameworkState() {
         // given
         long frameworkId = 1;
-        ResourceStateDTO stateDto = new ResourceStateDTO(ResourceState.APPROVED);
+        SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
         when(frameworkRepository.findById(any())).thenReturn(Optional.of(new Framework()));
 
         // when
@@ -591,7 +591,7 @@ class FrameworkServiceImplTest {
     void throwsExceptionIfFrameworkToSetStateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
-        ResourceStateDTO stateDto = new ResourceStateDTO(ResourceState.APPROVED);
+        SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
         when(frameworkRepository.findById(any())).thenReturn(Optional.empty());
 
         // when
