@@ -26,6 +26,7 @@ class ImageServiceImplTest {
 
     @Mock
     private ImageRepository imageRepository;
+
     @InjectMocks
     private ImageServiceImpl underTest;
 

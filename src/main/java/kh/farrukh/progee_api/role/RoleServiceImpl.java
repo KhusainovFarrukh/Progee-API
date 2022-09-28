@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
     /**
      * Get all roles from the database, map them to a DTO, and return them in a paged response
      *
-     * @param page The page number to return.
+     * @param page     The page number to return.
      * @param pageSize The number of items to return per page.
      * @return A PagingResponse object that contains a list of RoleResponseDTO objects.
      */
@@ -70,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
     /**
      * It updates the role with the given id with the given roleRequestDto
      *
-     * @param id The id of the role to be updated.
+     * @param id             The id of the role to be updated.
      * @param roleRequestDto The request body that contains the new role information.
      * @return A RoleResponseDTO object.
      */
@@ -110,10 +110,12 @@ public class RoleServiceImpl implements RoleService {
         // Getting the default role and setting all the users with the role to be deleted to the default role.
         Role defaultRole = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "isDefault", true));
-        role.getUsers().forEach(user -> {
-            user.setRole(defaultRole);
-            appUserRepository.save(user);
-        });
+        if (role.getUsers() != null) {
+            role.getUsers().forEach(user -> {
+                user.setRole(defaultRole);
+                appUserRepository.save(user);
+            });
+        }
 
         roleRepository.deleteById(id);
     }

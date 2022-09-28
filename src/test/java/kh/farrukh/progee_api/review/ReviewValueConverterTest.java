@@ -1,7 +1,5 @@
 package kh.farrukh.progee_api.review;
 
-import kh.farrukh.progee_api.review.ReviewValue;
-import kh.farrukh.progee_api.review.ReviewValueConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

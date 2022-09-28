@@ -1,6 +1,8 @@
 package kh.farrukh.progee_api.role;
 
 
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DefaultRoleDeletionException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.DuplicateResourceException;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
@@ -16,16 +18,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RoleServiceImplTest {
+
+    @Mock
+    private AppUserRepository appUserRepository;
 
     @Mock
     private RoleRepository roleRepository;
@@ -151,6 +156,30 @@ class RoleServiceImplTest {
     }
 
     @Test
+    void canDeleteDefaultRoleIfThereAreUsersWithThisRole() {
+        // given
+        long id = 1L;
+        List<AppUser> users = List.of(
+                new AppUser("test1@mail.com"),
+                new AppUser("test2@mail.com"),
+                new AppUser("test3@mail.com")
+        );
+        when(roleRepository.findById(any()))
+                .thenReturn(Optional.of(new Role(true, users)));
+        when(roleRepository.countByIsDefaultIsTrue())
+                .thenReturn(2L);
+        when(roleRepository.findFirstByIsDefaultIsTrueAndIdNot(any()))
+                .thenReturn(Optional.of(new Role(true, Collections.emptyList())));
+
+        // when
+        underTest.deleteRoleById(id);
+
+        // then
+        verify(appUserRepository, times(3)).save(any());
+        verify(roleRepository).deleteById(id);
+    }
+
+    @Test
     void throwsExceptionIfRoleToDeleteDoesNotExist() {
         // given
         long id = 1L;
@@ -164,7 +193,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRoleToDeleteIsDefault() {
+    void throwsExceptionIfRoleToDeleteIsSingleDefault() {
         // given
         long id = 1L;
         when(roleRepository.findById(any()))

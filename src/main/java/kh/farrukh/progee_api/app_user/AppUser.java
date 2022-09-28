@@ -84,9 +84,9 @@ public class AppUser extends EntityWithId implements UserDetails {
      */
     @PreRemove
     public void beforeRemove() {
-        createdLanguages.forEach(language -> language.setAuthor(null));
-        createdFrameworks.forEach(framework -> framework.setAuthor(null));
-        createdReviews.forEach(review -> review.setAuthor(null));
+        if (createdLanguages != null) createdLanguages.forEach(language -> language.setAuthor(null));
+        if (createdFrameworks != null) createdFrameworks.forEach(framework -> framework.setAuthor(null));
+        if (createdReviews != null) createdReviews.forEach(review -> review.setAuthor(null));
     }
 
     public AppUser(long id) {

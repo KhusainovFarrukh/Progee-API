@@ -46,7 +46,7 @@ public class Role extends EntityWithId {
     private List<Permission> permissions;
 
     @OneToMany(mappedBy = "role")
-    private List<AppUser> users = new ArrayList<>();
+    private List<AppUser> users;
 
     public Role(long id) {
         super.setId(id);
@@ -68,5 +68,10 @@ public class Role extends EntityWithId {
     public Role(List<Permission> permissions) {
         this.title = "test";
         this.permissions = permissions;
+    }
+
+    public Role(boolean isDefault, List<AppUser> users) {
+        this.isDefault = isDefault;
+        this.users = users;
     }
 }

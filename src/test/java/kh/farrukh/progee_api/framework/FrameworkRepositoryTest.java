@@ -1,17 +1,13 @@
 package kh.farrukh.progee_api.framework;
 
-import kh.farrukh.progee_api.framework.Framework;
-import kh.farrukh.progee_api.framework.FrameworkRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
-@AutoConfigureTestDatabase
+@DataJpaTest
 class FrameworkRepositoryTest {
 
     @Autowired
