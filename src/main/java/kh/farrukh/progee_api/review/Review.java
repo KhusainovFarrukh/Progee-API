@@ -19,7 +19,7 @@ import static kh.farrukh.progee_api.review.ReviewConstants.SEQUENCE_NAME_REVIEW_
 import static kh.farrukh.progee_api.review.ReviewConstants.TABLE_NAME_REVIEW;
 
 /**
- * Review is a simple entity
+ * It's a review of a language
  */
 @Entity
 @Table(name = TABLE_NAME_REVIEW)

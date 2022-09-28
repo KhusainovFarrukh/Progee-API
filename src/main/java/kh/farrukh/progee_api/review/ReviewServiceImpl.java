@@ -37,9 +37,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final AppUserRepository appUserRepository;
 
     /**
-     * "Get all reviews for a given language, sorted by a given field, in a given order, and return a page of them."
+     * "Get all sorted by a given field, in a given order, and return a page of them."
      *
-     * @param languageId The id of the language to get reviews for.
+     * @param languageId The id of the language to get reviews for (optional).
      * @param value      ReviewValue to filter by (optional).
      * @param page       The page number to return.
      * @param pageSize   The number of items to return per page.
@@ -69,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     /**
-     * If the languageId is valid, return the review with the given id, otherwise throw a ResourceNotFoundException.
+     * Return the review with the given id.
      *
      * @param id The id of the review to be retrieved.
      * @return Review
@@ -109,6 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review", "id", id));
 
+        // Checking if the current user has the permission to update the review.
         if (CurrentUserUtils.hasPermissionOrIsAuthor(
                 Permission.CAN_UPDATE_OTHERS_REVIEW,
                 Permission.CAN_UPDATE_OWN_REVIEW,
@@ -134,6 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review existingReview = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review", "id", id));
 
+        // Checking if the current user has the permission to delete the review.
         if (CurrentUserUtils.hasPermissionOrIsAuthor(
                 Permission.CAN_DELETE_OTHERS_REVIEW,
                 Permission.CAN_DELETE_OWN_REVIEW,

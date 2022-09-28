@@ -11,6 +11,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Objects;
 
+/**
+ * It's a specification that allows you to filter reviews by language and review value
+ */
 @AllArgsConstructor
 @Getter
 @Setter

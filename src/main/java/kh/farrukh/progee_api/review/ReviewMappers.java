@@ -8,6 +8,9 @@ import kh.farrukh.progee_api.app_user.AppUserMappers;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * It contains methods that map between the Review entity, ReviewRequestDTO and ReviewResponseDTO DTOs
+ */
 public class ReviewMappers {
 
     public static ReviewResponseDTO toReviewResponseDTO(Review review) {

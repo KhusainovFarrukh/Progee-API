@@ -14,6 +14,9 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * It's a DTO that represents a review
+ */
 @Getter
 @Setter
 @AllArgsConstructor

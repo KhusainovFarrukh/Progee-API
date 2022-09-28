@@ -7,7 +7,6 @@ import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 
 /**
  * A base interface for service of Review endpoints
- * <p>
  * Methods implemented in ReviewServiceImpl
  */
 public interface ReviewService {

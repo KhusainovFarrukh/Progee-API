@@ -24,7 +24,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     /**
-     * It returns a list (with pagination) of reviews for a given language
+     * It returns a list (with pagination) of reviews
      *
      * @param languageId The id of the language to get reviews for.
      * @param value      ReviewValue to filter by (optional).

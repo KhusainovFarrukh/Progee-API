@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * It's a DTO that represents a review
+ * It's a DTO that contains the data that is required to create a new review
  */
 @Getter
 @Setter
