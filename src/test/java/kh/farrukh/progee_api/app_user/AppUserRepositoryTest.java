@@ -21,7 +21,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsUserIfUserFoundByEmail() {
+    void findByEmail_returnsUser_whenUserExistsByEmail() {
         // given
         String email = "test@mail.com";
         AppUser user = new AppUser(email);
@@ -35,7 +35,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsNullIfUserDidNotFoundByEmail() {
+    void findByEmail_returnsNull_whenUserDoesNotExistByEmail() {
         // given
         String email = "test@mail.com";
         AppUser user = new AppUser("other-email@mail.com");
@@ -49,7 +49,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsNullIfEmailIsEmpty() {
+    void findByEmail_returnsNull_whenEmailIsEmpty() {
         // given
         AppUser user = new AppUser("test@mail.com");
         underTest.save(user);
@@ -62,7 +62,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsNullIfEmailIsNull() {
+    void findByEmail_returnsNull_whenEmailIsNull() {
         // given
         AppUser user = new AppUser("test@mail.com");
         underTest.save(user);
@@ -75,7 +75,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsTrueIfUserExistsByEmail() {
+    void existsByEmail_returnsTrue_whenUserExistsByEmail() {
         // given
         String email = "test@mail.com";
         AppUser user = new AppUser(email);
@@ -89,7 +89,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfUserDoesNotExistByEmail() {
+    void existsByEmail_returnsFalse_whenUserDoesNotExistByEmail() {
         // given
         String email = "test@mail.com";
         AppUser user = new AppUser("other-email@mail.com");
@@ -103,7 +103,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfEmailIsEmpty() {
+    void existsByEmail_returnsFalse_whenEmailIsEmpty() {
         // given
         AppUser user = new AppUser("test@mail.com");
         underTest.save(user);
@@ -116,7 +116,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfEmailIsNull() {
+    void existsByEmail_returnsFalse_whenEmailIsNull() {
         // given
         AppUser user = new AppUser("test@mail.com");
         underTest.save(user);
@@ -129,7 +129,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsTrueIfUserExistsByUsername() {
+    void existsByUniqueUsername_returnsTrue_whenUserExistsByUsername() {
         // given
         String username = "test_user";
         AppUser user = new AppUser("", username);
@@ -143,7 +143,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfUserDoesNotExistByUsername() {
+    void existsByUniqueUsername_returnsFalse_whenUserDoesNotExistByUsername() {
         // given
         String username = "test_user";
 
@@ -155,7 +155,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfUsernameIsEmpty() {
+    void existsByUniqueUsername_returnsFalse_whenUsernameIsEmpty() {
         // given
         String username = "test_user";
         AppUser user = new AppUser("", username);
@@ -169,7 +169,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfUsernameIsNull() {
+    void existsByUniqueUsername_returnsFalse_whenUsernameIsNull() {
         // given
         String username = "test_user";
         AppUser user = new AppUser("", username);

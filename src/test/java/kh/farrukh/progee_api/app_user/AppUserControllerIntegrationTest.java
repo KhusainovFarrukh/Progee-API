@@ -59,7 +59,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canGetUsers() throws Exception {
+    void getUsers_canGetUsers() throws Exception {
         // given
         List<AppUser> users = List.of(
                 new AppUser("user1@mail.com"),
@@ -89,7 +89,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canGetUserById() throws Exception {
+    void getUserById_canGetUserById() throws Exception {
         // given
         AppUser existingUser = appUserRepository.save(new AppUser());
 
@@ -107,7 +107,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canUpdateUser() throws Exception {
+    void updateUser_canUpdateUser() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -143,7 +143,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canDeleteUserById() throws Exception {
+    void deleteUserById_canDeleteUserById() throws Exception {
         // given
         AppUser existingUser = appUserRepository.save(new AppUser());
 
@@ -156,7 +156,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canSetUserImage() throws Exception {
+    void setUserImage_canSetUserImage() throws Exception {
         // given
         Role role = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         Image existingImage = imageRepository.save(new Image());
@@ -183,7 +183,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canSetUserRole() throws Exception {
+    void setUserRole_canSetUserRole() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         Role newRole = roleRepository.save(new Role("2", false, Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
@@ -209,7 +209,7 @@ class AppUserControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canSetUserPassword() throws Exception {
+    void setUserPassword_canSetUserPassword() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         String password = "12345678";

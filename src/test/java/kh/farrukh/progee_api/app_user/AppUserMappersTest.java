@@ -32,7 +32,7 @@ class AppUserMappersTest {
     private ImageRepository imageRepository;
 
     @Test
-    void canMapAppUserToAppUserRequestDTO() {
+    void toAppUserResponseDTO_canMap_whenAppUserIsValid() {
         // given
         AppUser appUser = new AppUser(
                 "Test",
@@ -63,7 +63,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void returnsNullIfAppUserIsNull() {
+    void toAppUserResponseDTO_returnsNull_whenAppUserIsNull() {
         // given
         AppUser appUser = null;
 
@@ -75,7 +75,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void canMapAppUserResponseDTOToAppUser() {
+    void toAppUser_canMap_whenAppUserResponseDTOIsValid() {
         // given
         AppUserResponseDTO appUserResponseDTO = new AppUserResponseDTO(
                 1L,
@@ -103,7 +103,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void returnsNullIfAppUserResponseDTOIsNull() {
+    void toAppUser_returnsNull_whenAppUserResponseDTOIsNull() {
         // given
         AppUserResponseDTO appUserResponseDTO = null;
 
@@ -115,7 +115,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void canMapAppUserRequestDTOtoAppUser() {
+    void toAppUser_canMap_whenAppUserRequestDTOIsValid() {
         // given
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role(1L)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(2L)));
@@ -145,7 +145,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void returnsNullIfAppUserRequestDTOIsNull() {
+    void toAppUser_returnsNull_whenAppUserRequestDTOIsNull() {
         // given
         AppUserRequestDTO appUserRequestDTO = null;
 
@@ -157,7 +157,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void throwsExceptionIfRoleDoesNotExistWithId() {
+    void toAppUser_throwsException_whenRoleDoesNotExistWithId() {
         // given
         when(roleRepository.findById(any())).thenReturn(Optional.empty());
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(2L)));
@@ -180,7 +180,7 @@ class AppUserMappersTest {
     }
 
     @Test
-    void throwsExceptionIfImageDoesNotExistWithId() {
+    void toAppUser_throwsException_whenImageDoesNotExistWithId() {
         // given
         when(imageRepository.findById(any())).thenReturn(Optional.empty());
         AppUserRequestDTO appUserRequestDTO = new AppUserRequestDTO(

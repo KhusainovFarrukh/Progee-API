@@ -51,7 +51,7 @@ class AppUserServiceImplTest {
     private AppUserServiceImpl underTest;
 
     @Test
-    void canLoadUserByUsername() {
+    void loadUserByUsername_canLoad_whenUsernameIsValid() {
         // given
         String username = "user@gmail.com";
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
@@ -64,7 +64,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfWrongUsername() {
+    void loadUserByUsername_throwsException_whenUsernameIsWrong() {
         // given
         String username = "user@gmail.com";
 
@@ -75,7 +75,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void canGetUsers() {
+    void getUsers_canGetUsers() {
         // given
         when(appUserRepository.findAll(any(Pageable.class))).thenReturn(Page.empty(Pageable.ofSize(10)));
         // when
@@ -89,7 +89,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void canGetUserById() {
+    void getUserById_canGetUserById() {
         // given
         long userId = 1;
         when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
@@ -102,7 +102,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfUserDoesNotExistWithId() {
+    void getUserById_throwsException_whenUserDoesNotExistWithId() {
         // given
         long userId = 1;
 
@@ -115,7 +115,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void canGetUserByEmail() {
+    void getUserByEmail_canGetUserByEmail() {
         // given
         String email = "test@mail.com";
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
@@ -128,7 +128,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfUserDoesNotExistWithEmail() {
+    void getUserByEmail_throwsException_whenUserDoesNotExistWithEmail() {
         // given
         String email = "test@mail.com";
 
@@ -141,7 +141,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void canAddUser() {
+    void addUser_canAddUser() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -171,7 +171,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfDuplicateEmail() {
+    void addUser_throwsException_whenDuplicateEmail() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -194,7 +194,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfDuplicateUsername() {
+    void addUser_throwsException_whenDuplicateUsername() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -218,7 +218,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void userWithUpdateOwnPermissionCanUpdateUser() {
+    void updateUser_canUpdateUser_whenUserWithUpdateOwnPermission() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -249,7 +249,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserWithoutUpdateOwnPermissionUpdatesUser() {
+    void updateUser_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -273,7 +273,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void userWithUpdateOthersPermissionCanUpdateUser() {
+    void updateUser_canUpdateUser_whenUserWithUpdateOthersPermission() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -304,7 +304,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserWithoutUpdateOthersPermissionUpdatesUser() {
+    void updateUser_throwsException_whenUserWithoutUpdateOthersPermissionUpdatesUser() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -327,7 +327,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfUserToUpdateDoesNotExistWithId() {
+    void updateUser_throwsException_whenUserToUpdateDoesNotExistWithId() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -350,7 +350,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUsernameOfUserToUpdateIsAlreadyUsed() {
+    void updateUser_throwsException_whenUsernameOfUserToUpdateIsAlreadyUsed() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -376,7 +376,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfEmailOfUserToUpdateIsAlreadyUsed() {
+    void updateUser_throwsException_whenEmailOfUserToUpdateIsAlreadyUsed() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -402,7 +402,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfImageOfUserToUpdateDoesNotExistWithId() {
+    void updateUser_throwsException_whenImageOfUserToUpdateDoesNotExistWithId() {
         // given
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
@@ -426,7 +426,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void canDeleteUserById() {
+    void deleteById_canDeleteUserById() {
         // given
         long userId = 1;
         when(appUserRepository.existsById(any())).thenReturn(true);
@@ -439,7 +439,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfUserToDeleteDoesNotExistWithId() {
+    void deleteById_throwsException_whenUserToDeleteDoesNotExistWithId() {
         // given
         long userId = 1;
 
@@ -452,7 +452,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void canSetUserRole() {
+    void setUserRole_canSetUserRole() {
         // given
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
         when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
@@ -469,7 +469,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRoleToSetDoesNotExistWithId() {
+    void setUserRole_throwsException_whenRoleToSetDoesNotExistWithId() {
         // given
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
         when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
@@ -483,7 +483,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfUserToSetRoleDoesNotExistWithId() {
+    void setUserRole_throwsException_whenUserToSetRoleDoesNotExistWithId() {
         // given
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
 
@@ -497,7 +497,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void userWithUpdateOwnPermissionCanSetUserImage() {
+    void setUserImage_canSetUserImage_whenUserWithUpdateOwnPermission() {
         // given
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
@@ -518,7 +518,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserWithoutUpdateOwnPermissionSetsUserImage() {
+    void setUserImage_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
@@ -533,7 +533,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void userWithUpdateOtherPermissionCanSetUserImage() {
+    void setUserImage_canSetUserImage_whenUserWithUpdateOtherPermission() {
         // given
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
@@ -554,7 +554,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserWithoutUpdateOtherPermissionSetsUserImage() {
+    void setUserImage_throwsException_whenUserWithoutUpdateOtherPermission() {
         // given
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
@@ -569,7 +569,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserToSetImageDoesNotExistWithId() {
+    void setUserImage_throwsException_whenUserToSetImageDoesNotExistWithId() {
         // given
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
@@ -587,7 +587,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfImageToSetDoesNotExistWithId() {
+    void setUserImage_throwsException_when_ImageToSetDoesNotExistWithId() {
         // given
         long userId = 1;
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
@@ -606,7 +606,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void userWithUpdateOwnPermissionCanSetUserPassword() {
+    void setUserPassword_canSetPassword_whenUserWithUpdateOwnPermission() {
         // given
         long userId = 1;
         String currentPassword = "1234";
@@ -630,7 +630,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserWithoutUpdateOwnPermissionSetsUserPassword() {
+    void setUserPassword_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
         long userId = 1;
         String currentPassword = "1234";
@@ -647,7 +647,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void userWithUpdateOtherPermissionCanSetUserPassword() {
+    void setUserPassword_canSetPassword_whenUserWithUpdateOtherPermission() {
         // given
         long userId = 1;
         String currentPassword = "1234";
@@ -671,7 +671,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfUserWithoutUpdateOtherPermissionSetsUserPassword() {
+    void setUserPassword_throwsException_whenUserWithoutUpdateOtherPermission() {
         // given
         long userId = 1;
         String currentPassword = "1234";
@@ -688,7 +688,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void throwsExceptionIfCurrentPasswordIsWrong() {
+    void setUserPassword_throwsException_whenCurrentPasswordIsWrong() {
         // given
         long userId = 1;
         String currentPassword = "1234";
@@ -707,7 +707,7 @@ class AppUserServiceImplTest {
 
     @Test
     @WithMockUser(username = "user@mail.com", authorities = "USER")
-    void throwsExceptionIfUserToSetPasswordDoesNotExistWithId() {
+    void setUserPassword_throwsException_whenUserToSetPasswordDoesNotExistWithId() {
         // given
         long userId = 1;
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO("", "");
