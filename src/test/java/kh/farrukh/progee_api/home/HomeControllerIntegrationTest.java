@@ -21,7 +21,7 @@ class HomeControllerIntegrationTest {
     private MockMvc mvc;
 
     @Test
-    void canGetImageById() throws Exception {
+    void home_returnsValidGreeting() throws Exception {
         // when
         // then
         mvc.perform(get(ENDPOINT_HOME))
