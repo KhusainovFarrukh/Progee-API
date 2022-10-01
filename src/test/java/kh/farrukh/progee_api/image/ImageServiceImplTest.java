@@ -31,7 +31,7 @@ class ImageServiceImplTest {
     private ImageServiceImpl underTest;
 
     @Test
-    void canAddImage() throws IOException {
+    void addImage_canAddImage_whenFileIsValid() throws IOException {
         // given
         MultipartFile multipartImage = new MockMultipartFile("test.png", new byte[]{});
 
@@ -47,7 +47,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfFileIsNull() {
+    void addImage_throwsException_whenFileIsNull() {
         // given
         MultipartFile multipartImage = null;
 
@@ -58,7 +58,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void canGetImageById() {
+    void getImageById_canGetImageById_whenIdIsValid() {
         // given
         long id = 1;
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
@@ -71,7 +71,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfImageDoesNotExistWithId() {
+    void getImageById_throwsException_whenImageDoesNotExistWithId() {
         // given
         long id = 1;
         when(imageRepository.findById(any())).thenReturn(Optional.empty());
@@ -85,7 +85,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void canDownloadImage() {
+    void downloadImage_canDownloadImage_whenIdIsValid() {
         // given
         Image existingImage = new Image(1, new byte[]{});
         when(imageRepository.findById(any())).thenReturn(Optional.of(existingImage));
@@ -98,7 +98,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfImageToDownloadDoesNotExist() {
+    void downloadImage_throwsException_whenImageToDownloadDoesNotExist() {
         // given
         long imageId = 1;
         when(imageRepository.findById(any())).thenReturn(Optional.empty());

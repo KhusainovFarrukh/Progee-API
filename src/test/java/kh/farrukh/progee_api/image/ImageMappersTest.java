@@ -8,7 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class ImageMappersTest {
 
     @Test
-    void returnsNullIfImageIsNull() {
+    void toImageResponseDto_returnsNull_whenImageIsNull() {
         // given
         Image image = null;
 
@@ -20,7 +20,7 @@ class ImageMappersTest {
     }
 
     @Test
-    void canMapImageToImageResponseDTO() {
+    void toImageResponseDto_canMap_whenImageIsValid() {
         // given
         Image image = new Image(1, null);
 
@@ -33,7 +33,7 @@ class ImageMappersTest {
     }
 
     @Test
-    void returnsNullIfImageResponseDTOIsNull() {
+    void toImage_returnsNull_whenImageResponseDTOIsNull() {
         // given
         ImageResponseDTO imageResponseDTO = null;
 
@@ -45,7 +45,7 @@ class ImageMappersTest {
     }
 
     @Test
-    void canMapImageResponseDTOToImage() {
+    void toImage_canMap_whenImageResponseDTOIsValid() {
         // given
         ImageResponseDTO imageResponseDTO = new ImageResponseDTO(1);
 

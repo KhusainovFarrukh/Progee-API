@@ -30,7 +30,7 @@ class ImageControllerIntegrationTest {
     private ImageRepository imageRepository;
 
     @Test
-    void canGetImageById() throws Exception {
+    void getImageById_canGetImageById() throws Exception {
         // given
         Image existingImage = imageRepository.save(new Image());
 
@@ -47,7 +47,7 @@ class ImageControllerIntegrationTest {
     }
 
     @Test
-    void canUploadImage() throws Exception {
+    void uploadImage_canUploadImage() throws Exception {
         // given
         MockMultipartFile mockImage = new MockMultipartFile("image", "test".getBytes());
 
@@ -62,7 +62,7 @@ class ImageControllerIntegrationTest {
     }
 
     @Test
-    void canDownloadImage() throws Exception {
+    void downloadImageById_canDownloadImage() throws Exception {
         // given
         Image existingImage = imageRepository.save(new Image("test".getBytes()));
 
