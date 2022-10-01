@@ -51,7 +51,7 @@ class AuthServiceImplTest {
     private AuthServiceImpl underTest;
 
     @Test
-    void canRegister() {
+    void register_canRegister_whenRegistrationRequestDTOIsValid() {
         // given
         RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(
                 "test", "test_lover", "user@mail.com", "1234", 1
@@ -75,7 +75,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfEmailIsNotValid() {
+    void register_throwsException_whenEmailIsNotValid() {
         // given
         RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(
                 "test", "test_lover", "user-mail.com", "1234", 1
@@ -89,7 +89,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void canRefreshToken() {
+    void refreshToken_canRefreshToken_whenTokenIsValid() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE));
         when(roleRepository.findById(any())).thenReturn(Optional.of(role));
@@ -124,7 +124,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRefreshTokenIsEmpty() {
+    void refreshToken_throwsException_whenTokenIsEmpty() {
         // given
         String refreshToken = "";
 
@@ -135,7 +135,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRefreshTokenIsNull() {
+    void refreshToken_throwsException_whenTokenIsNull() {
         // given
         String refreshToken = null;
 
@@ -146,7 +146,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRefreshTokenIsInvalid() {
+    void refreshToken_throwsException_whenTokenIsInvalid() {
         // given
         String refreshToken = "test";
 

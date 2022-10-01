@@ -16,7 +16,7 @@ class EmailValidatorTest {
     private EmailValidator validator;
 
     @Test
-    void returnTrueIfValidEmail() {
+    void test_returnsTrue_whenEmailIsValid() {
         // given
         String email = "farrukh@mail.com";
 
@@ -28,7 +28,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void returnFalseIfInvalidEmail() {
+    void test_returnsFalse_whenEmailIsInvalid() {
         // given
         String email = "farrukh.mail.com";
 
@@ -40,7 +40,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void returnFalseIfEmpty() {
+    void test_returnsFalse_whenEmailIsEmpty() {
         // given
         String email = "";
 
@@ -52,7 +52,7 @@ class EmailValidatorTest {
     }
 
     @Test
-    void returnFalseIfNull() {
+    void test_returnsFalse_whenEmailIsNull() {
         // given
         String email = null;
 

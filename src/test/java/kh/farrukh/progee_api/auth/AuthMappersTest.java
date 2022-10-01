@@ -23,7 +23,7 @@ class AuthMappersTest {
     private RoleRepository roleRepository;
 
     @Test
-    void canMapRegistrationRequestDTOToAppUserRequestDTO() {
+    void toAppUserRequestDTO_canMap_whenRegistrationRequestDTOIsValid() {
         // given
         when(roleRepository.findFirstByIsDefaultIsTrue()).thenReturn(Optional.of(new Role(1)));
         RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(
@@ -50,7 +50,7 @@ class AuthMappersTest {
     }
 
     @Test
-    void returnsNullIfRegistrationRequestDTOIsNull() {
+    void toAppUserRequestDTO_returnsNull_whenRegistrationRequestDTOIsNull() {
         // given
         RegistrationRequestDTO registrationRequestDTO = null;
 
@@ -62,7 +62,7 @@ class AuthMappersTest {
     }
 
     @Test
-    void throwsExceptionIfDefaultRoleDoesNotExist() {
+    void toAppUserRequestDTO_throwsException_whenDefaultRoleDoesNotExist() {
         // given
         when(roleRepository.findFirstByIsDefaultIsTrue()).thenReturn(Optional.empty());
         RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(

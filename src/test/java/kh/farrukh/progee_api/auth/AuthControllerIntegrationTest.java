@@ -64,7 +64,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    void canRegister() throws Exception {
+    void register_canRegister() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role("user", true, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
         Image existingImage = imageRepository.save(new Image());
@@ -93,7 +93,7 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    void canLogin() throws Exception {
+    void login_canLogin() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role("user", true, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
         AppUser user = appUserRepository.save(
@@ -122,7 +122,7 @@ class AuthControllerIntegrationTest {
 
     // TODO: 7/29/22 giving 403 error if refresh token is valid
     @Test
-    void canRefreshToken() throws Exception {
+    void refreshToken_canRefreshToken() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE)));
         AppUser user = appUserRepository.save(
