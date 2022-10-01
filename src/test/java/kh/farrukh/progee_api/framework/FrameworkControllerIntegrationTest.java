@@ -72,7 +72,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
-    void canGetFrameworksWithoutStateAndLanguageIdFilter() throws Exception {
+    void getFrameworks_canGetFrameworks_withoutStateAndLanguageIdFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         List<Framework> approvedFrameworks = List.of(
@@ -106,7 +106,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canGetFrameworksWithStateAndWithoutLanguageIdFilter() throws Exception {
+    void getFrameworks_canGetFrameworks_withStateAndWithoutLanguageIdFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
         appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -148,7 +148,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
-    void canGetFrameworksWithoutStateAndWithLanguageIdFilter() throws Exception {
+    void getFrameworks_canGetFrameworks_withoutStateAndWithLanguageIdFilter() throws Exception {
         // given
         Language existingLanguage1 = languageRepository.save(new Language());
         Language existingLanguage2 = languageRepository.save(new Language());
@@ -190,7 +190,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canGetFrameworksWithStateAndLanguageIdFilter() throws Exception {
+    void getFrameworks_canGetFrameworks_withStateAndLanguageIdFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
         appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -252,7 +252,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
-    void canGetFrameworkById() throws Exception {
+    void getFrameworkById_canGetFrameworkById_whenIdIsValid() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkRepository.save(
@@ -273,7 +273,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canAddFramework() throws Exception {
+    void addFramework_canAddFramework_whenFrameworkRequestDTOIsValid() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK)));
         appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -299,7 +299,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canUpdateFramework() throws Exception {
+    void updateFramework_canUpdateFramework_whenFrameworkRequestDTOIsValid() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
         appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -329,7 +329,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canDeleteFrameworkById() throws Exception {
+    void deleteFramework_canDeleteFrameworkById_whenIdIsValid() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_FRAMEWORK)));
         appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -348,7 +348,7 @@ class FrameworkControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canSetFrameworkState() throws Exception {
+    void setFrameworkState_canSetFrameworkState_whenSetResourceStateRequestDTOIsValid() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkRepository.save(new Framework("", ResourceState.WAITING, existingLanguage));

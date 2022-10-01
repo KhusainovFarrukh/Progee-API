@@ -54,7 +54,7 @@ class FrameworkServiceImplTest {
     private FrameworkServiceImpl underTest;
 
     @Test
-    void unauthenticatedUserCanGetApprovedFrameworks() {
+    void getFrameworks_canGetApprovedFrameworks_whenUnauthenticatedUser() {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -76,7 +76,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void unauthenticatedUserCanNotGetFrameworksFilteredByState() {
+    void getFrameworks_canGetFrameworksFilteredByState_whenUnauthenticatedUser() {
         // given
         SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -89,7 +89,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithoutRequiredPermissionCanGetApprovedFrameworks() {
+    void getFrameworks_canGetApprovedFrameworks_whenUserWithoutRequiredPermission() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
         when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
@@ -111,7 +111,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfUserWithoutRequiredPermissionFiltersFrameworksByState() {
+    void getFrameworks_throwsException_whenUserWithoutRequiredPermissionFiltersFrameworksByState() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
 
@@ -124,7 +124,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser(username = "test@mail.com")
-    void userWithRequiredPermissionCanGetAllFrameworks() {
+    void getFrameworks_canGetAllFrameworks_whenUserWithRequiredPermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
@@ -148,7 +148,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithRequiredPermissionCanGetFrameworksFilteredByState() {
+    void getFrameworks_canGetFrameworksFilteredByState_whenUserWithRequiredPermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -172,16 +172,14 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageOfFrameworksDoesNotExistWithId() {
+    void getFrameworks_throwsException_whenLanguageOfFrameworksDoesNotExistWithId() {
         // given
         long languageId = 1;
 
         // when
         // then
         assertThatThrownBy(
-                () -> underTest.getFrameworks(
-                        languageId, null, 1, 10, "id", "ASC"
-                )
+                () -> underTest.getFrameworks(languageId, null, 1, 10, "id", "ASC")
         )
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
@@ -189,7 +187,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void userWithoutPermissionCanGetApprovedFrameworkById() {
+    void getFrameworkById_canGetApprovedFrameworkById_whenUserWithoutPermission() {
         // given
         long frameworkId = 1;
         when(frameworkRepository.findById(any()))
@@ -203,7 +201,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfUserWithoutPermissionTriesToGetNonApprovedFrameworkById() {
+    void getFrameworkById_throwsException_whenUserWithoutPermissionTriesToGetNonApprovedFrameworkById() {
         // given
         long frameworkId = 1;
         when(frameworkRepository.findById(any()))
@@ -211,13 +209,12 @@ class FrameworkServiceImplTest {
 
         // when
         // then
-        assertThatThrownBy(
-                () -> underTest.getFrameworkById(frameworkId)
-        ).isInstanceOf(NotEnoughPermissionException.class);
+        assertThatThrownBy(() -> underTest.getFrameworkById(frameworkId))
+                .isInstanceOf(NotEnoughPermissionException.class);
     }
 
     @Test
-    void userWithPermissionCanGetNonApprovedFrameworkById() {
+    void getFrameworkById_canGetNonApprovedFrameworkById_whenUserWithPermission() {
         // given
         long frameworkId = 1;
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
@@ -233,7 +230,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfFrameworkDoesNotExistWithId() {
+    void getFrameworkById_throwsException_whenFrameworkDoesNotExistWithId() {
         // given
         long frameworkId = 1;
 
@@ -246,7 +243,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfLanguageIdIsNullOnRequestDto() {
+    void addFramework_throwsException_whenLanguageIdIsNullOnRequestDto() {
         // given
         FrameworkRequestDTO requestDto = new FrameworkRequestDTO("Test", "Test", 1L);
 
@@ -259,7 +256,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithOnlyCreatePermissionCreatesFrameworkWithWaitingState() {
+    void addFramework_createsFrameworkWithWaitingState_whenUserWithOnlyCreatePermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK));
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
@@ -282,7 +279,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithCreateAndSetStatePermissionsCreatesFrameworkWithApprovedState() {
+    void addFramework_createsFrameworkWithApprovedState_whenUserWithCreateAndSetStatePermissions() {
         // given
         Role role = new Role(List.of(Permission.CAN_CREATE_FRAMEWORK, Permission.CAN_SET_FRAMEWORK_STATE));
         AppUser user = new AppUser("user@mail.com", role);
@@ -306,7 +303,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfFrameworkExistsWithName() {
+    void addFramework_throwsException_whenFrameworkExistsWithName() {
         // given
         String name = "test";
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO(name, "", 1, 1L);
@@ -322,7 +319,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
+    void addFramework_throwsException_whenLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, languageId);
@@ -339,7 +336,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void authorWithOnlyUpdateOwnPermissionCanUpdateFramework() {
+    void updateFramework_canUpdateFramework_whenAuthorWithOnlyUpdateOwnPermission() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -371,7 +368,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void authorWithUpdateOwnAndSetStatePermissionsCanUpdateFramework() {
+    void updateFramework_canUpdateFramework_whenAuthorWithUpdateOwnAndSetStatePermissions() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -397,7 +394,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfAuthorWithoutUpdateOwnPermissionUpdatesFramework() {
+    void updateFramework_throwsException_whenAuthorWithoutUpdateOwnPermissionUpdatesFramework() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -416,7 +413,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void nonAuthorWithOnlyUpdateOthersPermissionCanUpdateFramework() {
+    void updateFramework_canUpdateFramework_whenNonAuthorWithOnlyUpdateOthersPermission() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -442,7 +439,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void nonAuthorWithUpdateOthersAndSetStatePermissionsCanUpdateOthersFramework() {
+    void updateFramework_canUpdateOthersFramework_whenNonAuthorWithUpdateOthersAndSetStatePermissions() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -468,7 +465,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfNonAuthorWithoutUpdateOthersPermissionUpdatesFramework() {
+    void updateFramework_throwsException_whenNonAuthorWithoutUpdateOthersPermissionUpdatesFramework() {
         // given
         AppUser user = new AppUser(1, new Role(Collections.emptyList()));
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
@@ -485,7 +482,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfFrameworkToUpdateDoesNotExistWithId() {
+    void updateFramework_throwsException_whenFrameworkToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);
@@ -501,7 +498,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfFrameworkToUpdateExistsWithName() {
+    void updateFramework_throwsException_whenFrameworkToUpdateExistsWithName() {
         // given
         String name = "test name";
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
@@ -522,7 +519,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfImageOfFrameworkToUpdateDoesNotExistWithId() {
+    void updateFramework_throwsException_whenImageOfFrameworkToUpdateDoesNotExistWithId() {
         // given
         long imageId = 1;
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
@@ -542,7 +539,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void canDeleteFrameworkById() {
+    void deleteFramework_canDeleteFrameworkById_whenIdIsValid() {
         // given
         long frameworkId = 1;
         when(frameworkRepository.existsById(any())).thenReturn(true);
@@ -556,7 +553,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfFrameworkToDeleteDoesNotExistWithId() {
+    void deleteFramework_throwsException_whenFrameworkToDeleteDoesNotExistWithId() {
         // given
         long frameworkId = 1;
 
@@ -570,7 +567,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void canSetFrameworkState() {
+    void setFrameworkState_canSetFrameworkState_whenSetResourceStateRequestDTO() {
         // given
         long frameworkId = 1;
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
@@ -588,7 +585,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfFrameworkToSetStateDoesNotExistWithId() {
+    void setFrameworkState_throwsException_whenFrameworkToSetStateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);

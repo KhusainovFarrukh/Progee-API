@@ -32,7 +32,7 @@ class FrameworkMappersTest {
     private ImageRepository imageRepository;
 
     @Test
-    void returnsNullIfFrameworkIsNull() {
+    void toFrameworkResponseDTO_returnsNull_whenFrameworkIsNull() {
         // given
         Framework framework = null;
 
@@ -44,7 +44,7 @@ class FrameworkMappersTest {
     }
 
     @Test
-    void canMapFrameworkToFrameworkResponseDTO() {
+    void toFrameworkResponseDTO_canMap_whenFrameworkIsValid() {
         // given
         Framework framework = new Framework(
                 1,
@@ -73,7 +73,7 @@ class FrameworkMappersTest {
     }
 
     @Test
-    void returnsNullIfFrameworkRequestDTOIsNull() {
+    void toFramework_returnsNull_whenFrameworkRequestDTOIsNull() {
         // given
         FrameworkRequestDTO frameworkRequestDTO = null;
 
@@ -85,7 +85,7 @@ class FrameworkMappersTest {
     }
 
     @Test
-    void canMapFrameworkRequestDTOtoFramework() {
+    void toFramework_canMap_whenFrameworkRequestDTOIsValid() {
         // given
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(1)));
@@ -109,7 +109,7 @@ class FrameworkMappersTest {
     }
 
     @Test
-    void throwsExceptionIfLanguageDoesNotExist() {
+    void toFramework_throwsException_whenLanguageDoesNotExist() {
         // given
         when(languageRepository.findById(any())).thenReturn(Optional.empty());
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(1)));
@@ -129,7 +129,7 @@ class FrameworkMappersTest {
     }
 
     @Test
-    void throwsExceptionIfImageDoesNotExist() {
+    void toFramework_throwsException_whenImageDoesNotExist() {
         // given
         when(imageRepository.findById(any())).thenReturn(Optional.empty());
         FrameworkRequestDTO frameworkRequestDTO = new FrameworkRequestDTO(

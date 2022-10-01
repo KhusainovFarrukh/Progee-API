@@ -28,7 +28,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnValidDataIfLanguageIdIsNullAndStataIsNull() {
+    void repository_returnsValidData_whenLanguageIdIsNullAndStataIsNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -54,7 +54,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNotNullAndStateIsNull() {
+    void repository_returnsValidData_whenLanguageIdIsNotNullAndStateIsNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -80,7 +80,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNullAndStateIsNotNull() {
+    void repository_returnsValidData_whenLanguageIdIsNullAndStateIsNotNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -106,7 +106,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNotNullAndStateIsNotNull() {
+    void repository_returnsValidData_whenLanguageIdIsNotNullAndStateIsNotNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -132,7 +132,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsTrueIfBothLanguageIdAndStateAreNull() {
+    void equals_returnsTrue_whenBothLanguageIdAndStateAreNull() {
         // given
         FrameworkSpecification frameworkSpecification1 = new FrameworkSpecification(null, null);
         FrameworkSpecification frameworkSpecification2 = new FrameworkSpecification(null, null);
@@ -145,7 +145,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsTrueIfBothLanguageIdAndStateAreEqual() {
+    void equals_returnsTrue_whenBothLanguageIdAndStateAreEqual() {
         // given
         FrameworkSpecification frameworkSpecification1 = new FrameworkSpecification(1L, ResourceState.APPROVED);
         FrameworkSpecification frameworkSpecification2 = new FrameworkSpecification(1L, ResourceState.APPROVED);
@@ -158,7 +158,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsFalseIfLanguageIdIsNotEqual() {
+    void equals_returnsFalse_whenLanguageIdIsNotEqual() {
         // given
         FrameworkSpecification frameworkSpecification1 = new FrameworkSpecification(1L, ResourceState.APPROVED);
         FrameworkSpecification frameworkSpecification2 = new FrameworkSpecification(2L, ResourceState.APPROVED);
@@ -171,7 +171,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsFalseIfStateIsNotEqual() {
+    void equals_returnsFalse_whenStateIsNotEqual() {
         // given
         FrameworkSpecification frameworkSpecification1 = new FrameworkSpecification(1L, ResourceState.APPROVED);
         FrameworkSpecification frameworkSpecification2 = new FrameworkSpecification(1L, ResourceState.WAITING);
@@ -184,7 +184,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsTrueIfSameObject() {
+    void equals_returnsTrue_whenSameObject() {
         // given
         FrameworkSpecification frameworkSpecification = new FrameworkSpecification(1L, ResourceState.APPROVED);
 
@@ -196,7 +196,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void returnsFalseIfObjectIsNull() {
+    void equals_returnsFalse_whenObjectIsNull() {
         // given
         FrameworkSpecification frameworkSpecification = new FrameworkSpecification(1L, ResourceState.APPROVED);
 

@@ -19,7 +19,7 @@ class FrameworkRepositoryTest {
     }
 
     @Test
-    void returnsTrueIfFrameworkExistsByName() {
+    void existsByName_returnsTrue_whenFrameworkExistsByName() {
         // given
         String name = "Spring Boot";
         Framework framework = new Framework(name);
@@ -33,7 +33,7 @@ class FrameworkRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfFrameworkDoesNotExistByName() {
+    void existsByName_returnsFalse_whenFrameworkDoesNotExistWithName() {
         // given
         String name = "Spring Boot";
         Framework framework = new Framework("Ktor");
@@ -47,7 +47,7 @@ class FrameworkRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfNameIsEmpty() {
+    void existsByName_returnsFalse_whenNameIsEmpty() {
         // given
         Framework framework = new Framework("Spring Boot");
         underTest.save(framework);
@@ -60,7 +60,7 @@ class FrameworkRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfNameIsNull() {
+    void existsByName_returnsFalse_whenNameIsNull() {
         // given
         Framework framework = new Framework("Spring Boot");
         underTest.save(framework);
