@@ -23,8 +23,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +37,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SecurityTestExecutionListeners
+@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 class LanguageServiceImplTest {
 
@@ -48,9 +52,9 @@ class LanguageServiceImplTest {
     private LanguageServiceImpl underTest;
 
     @Test
+    @WithAnonymousUser
     void unauthenticatedUserCanGetApprovedLanguages() {
         // given
-        SecurityContextHolder.clearContext();
         when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -69,10 +73,8 @@ class LanguageServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void unauthenticatedUserCanNotGetLanguagesFilteredByState() {
-        // given
-        SecurityContextHolder.clearContext();
-
         // when
         // then
         assertThatThrownBy(() -> underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC"))
@@ -158,6 +160,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetApprovedLanguageById() {
         // given
         long id = 1;
@@ -171,9 +174,12 @@ class LanguageServiceImplTest {
     }
 
     @Test
+    @WithMockUser
     void throwsExceptionIfUserWithoutRequiredPermissionTriesToGetsNonApprovedLanguageById() {
         // given
         long id = 1;
+        Role role = new Role(Collections.emptyList());
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language("test", ResourceState.WAITING)));
 
         // when
@@ -183,6 +189,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void throwsExceptionIfLanguageDoesNotExistWithId() {
         // given
         long id = 1;
@@ -236,7 +243,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageExistsWithName() {
         // given
         String name = "test";
@@ -392,7 +399,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -408,7 +415,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageToUpdateExistsWithName() {
         // given
         String name = "test name";
@@ -429,7 +436,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfImageOfLanguageToUpdateDoesNotExistWithId() {
         // given
         long imageId = 1;
@@ -449,7 +456,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void canDeleteLanguageById() {
         // given
         long languageId = 1;
@@ -463,7 +470,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -477,7 +484,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void canSetLanguageState() {
         // given
         long languageId = 1;
@@ -495,7 +502,7 @@ class LanguageServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageToSetStateDoesNotExistWithId() {
         // given
         long languageId = 1;

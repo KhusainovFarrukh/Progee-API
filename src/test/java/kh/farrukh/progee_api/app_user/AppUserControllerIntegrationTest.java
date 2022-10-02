@@ -3,6 +3,7 @@ package kh.farrukh.progee_api.app_user;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.app_user.payloads.*;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
@@ -16,10 +17,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class AppUserControllerIntegrationTest {
 
     @Autowired
@@ -51,6 +54,9 @@ class AppUserControllerIntegrationTest {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
     @AfterEach
     void tearDown() {
         appUserRepository.deleteAll();
@@ -58,7 +64,7 @@ class AppUserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithAnonymousUser
     void getUsers_canGetUsers() throws Exception {
         // given
         List<AppUser> users = List.of(
@@ -88,7 +94,7 @@ class AppUserControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithAnonymousUser
     void getUserById_canGetUserById() throws Exception {
         // given
         AppUser existingUser = appUserRepository.save(new AppUser());
@@ -127,7 +133,10 @@ class AppUserControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(put(ENDPOINT_USER + "/" + existingUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
+                        .content(objectMapper.writeValueAsString(userDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -145,11 +154,16 @@ class AppUserControllerIntegrationTest {
     @WithMockUser(username = "user@mail.com")
     void deleteUserById_canDeleteUserById() throws Exception {
         // given
-        AppUser existingUser = appUserRepository.save(new AppUser());
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_USER)));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser user = appUserRepository.save(new AppUser());
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_USER + "/" + existingUser.getId()))
+        mvc.perform(delete(ENDPOINT_USER + "/" + user.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -170,7 +184,10 @@ class AppUserControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/image")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(imageDTO)))
+                        .content(objectMapper.writeValueAsString(imageDTO))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -185,8 +202,8 @@ class AppUserControllerIntegrationTest {
     @WithMockUser(username = "user@mail.com")
     void setUserRole_canSetUserRole() throws Exception {
         // given
-        Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
-        Role newRole = roleRepository.save(new Role("2", false, Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
+        Role existingRole = roleRepository.save(new Role("1", false, Collections.singletonList(Permission.CAN_SET_USER_ROLE)));
+        Role newRole = roleRepository.save(new Role("2", false, Collections.singletonList(Permission.CAN_SET_USER_ROLE)));
         AppUser existingUser = appUserRepository.save(new AppUser(
                 "user@mail.com", "test", existingRole.getId(), roleRepository
         ));
@@ -196,7 +213,10 @@ class AppUserControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/role")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(roleDto)))
+                        .content(objectMapper.writeValueAsString(roleDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -222,7 +242,10 @@ class AppUserControllerIntegrationTest {
         // when
         mvc.perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(passwordDto)))
+                        .content(objectMapper.writeValueAsString(passwordDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk());
 

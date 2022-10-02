@@ -107,10 +107,11 @@ public class RoleServiceImpl implements RoleService {
             throw new DefaultRoleDeletionException();
         }
 
-        // Getting the default role and setting all the users with the role to be deleted to the default role.
-        Role defaultRole = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role", "isDefault", true));
-        if (role.getUsers() != null) {
+        if (role.getUsers() != null && !role.getUsers().isEmpty()) {
+            // Getting the default role and setting all the users with the role to be deleted to the default role.
+            Role defaultRole = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role", "isDefault", true));
+
             role.getUsers().forEach(user -> {
                 user.setRole(defaultRole);
                 appUserRepository.save(user);

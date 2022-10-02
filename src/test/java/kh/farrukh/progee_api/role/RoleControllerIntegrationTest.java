@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.role.payloads.RoleRequestDTO;
 import kh.farrukh.progee_api.role.payloads.RoleResponseDTO;
@@ -16,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class RoleControllerIntegrationTest {
 
     @Autowired
@@ -40,6 +42,9 @@ class RoleControllerIntegrationTest {
 
     @Autowired
     private AppUserRepository appUserRepository;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @AfterEach
     void tearDown() {
@@ -56,11 +61,14 @@ class RoleControllerIntegrationTest {
                 new Role("USER", false, Collections.emptyList())
         );
         roles = roleRepository.saveAll(roles);
-        appUserRepository.save(new AppUser("test@mail.com", roles.get(0)));
+        AppUser existingUser = appUserRepository.save(new AppUser("test@mail.com", roles.get(0)));
 
         // when
         MvcResult result = mvc.perform(get(ENDPOINT_ROLE)
-                        .param("page_size", String.valueOf(roles.size())))
+                        .param("page_size", String.valueOf(roles.size()))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -80,10 +88,13 @@ class RoleControllerIntegrationTest {
         Role role = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_VIEW_ROLE))
         );
-        appUserRepository.save(new AppUser("test@mail.com", role));
+        AppUser existingUser = appUserRepository.save(new AppUser("test@mail.com", role));
 
         // when
-        MvcResult result = mvc.perform(get(ENDPOINT_ROLE + "/" + role.getId()))
+        MvcResult result = mvc.perform(get(ENDPOINT_ROLE + "/" + role.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -102,14 +113,17 @@ class RoleControllerIntegrationTest {
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_CREATE_ROLE))
         );
-        appUserRepository.save(new AppUser("test@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("test@mail.com", existingRole));
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO("USER", false, Collections.emptyList());
 
         // when
         MvcResult result = mvc.perform(
                         post(ENDPOINT_ROLE)
                                 .contentType("application/json")
-                                .content(objectMapper.writeValueAsString(roleRequestDTO)))
+                                .content(objectMapper.writeValueAsString(roleRequestDTO))
+                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                                )))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -129,7 +143,7 @@ class RoleControllerIntegrationTest {
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_UPDATE_ROLE))
         );
-        appUserRepository.save(new AppUser("test@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("test@mail.com", existingRole));
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
                 "SUPER_ADMIN", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
         );
@@ -138,7 +152,10 @@ class RoleControllerIntegrationTest {
         MvcResult result = mvc.perform(
                         put(ENDPOINT_ROLE + "/" + existingRole.getId())
                                 .contentType("application/json")
-                                .content(objectMapper.writeValueAsString(roleRequestDTO)))
+                                .content(objectMapper.writeValueAsString(roleRequestDTO))
+                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                                )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -156,15 +173,18 @@ class RoleControllerIntegrationTest {
     @WithMockUser(username = "test@mail.com")
     void canDeleteRole() throws Exception {
         // given
-        roleRepository.save(new Role("USER", true, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_DELETE_ROLE))
         );
-        appUserRepository.save(new AppUser("test@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("test@mail.com", existingRole));
+        Role role = roleRepository.save(new Role("USER", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)));
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_ROLE + "/" + existingRole.getId()))
+        mvc.perform(delete(ENDPOINT_ROLE + "/" + role.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }

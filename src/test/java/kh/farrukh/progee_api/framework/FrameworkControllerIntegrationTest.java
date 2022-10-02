@@ -8,6 +8,7 @@ import kh.farrukh.progee_api.framework.payloads.FrameworkRequestDTO;
 import kh.farrukh.progee_api.framework.payloads.FrameworkResponseDTO;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
@@ -22,10 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class FrameworkControllerIntegrationTest {
 
     @Autowired
@@ -63,6 +66,9 @@ class FrameworkControllerIntegrationTest {
     @Autowired
     private FrameworkService frameworkService;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
     @AfterEach
     void tearDown() {
         frameworkRepository.deleteAll();
@@ -72,6 +78,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void getFrameworks_canGetFrameworks_withoutStateAndLanguageIdFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
@@ -109,7 +116,7 @@ class FrameworkControllerIntegrationTest {
     void getFrameworks_canGetFrameworks_withStateAndWithoutLanguageIdFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         List<Framework> waitingFrameworks = List.of(
                 new Framework("test2", ResourceState.WAITING, existingLanguage),
@@ -127,6 +134,9 @@ class FrameworkControllerIntegrationTest {
                         get(ENDPOINT_FRAMEWORK)
                                 .param("page_size", String.valueOf(waitingFrameworks.size() + approvedFrameworks.size()))
                                 .param("state", ResourceState.WAITING.name())
+                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                                ))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -148,6 +158,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void getFrameworks_canGetFrameworks_withoutStateAndWithLanguageIdFilter() throws Exception {
         // given
         Language existingLanguage1 = languageRepository.save(new Language());
@@ -193,7 +204,7 @@ class FrameworkControllerIntegrationTest {
     void getFrameworks_canGetFrameworks_withStateAndLanguageIdFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage1 = languageRepository.save(new Language());
         Language existingLanguage2 = languageRepository.save(new Language());
         List<Framework> language1ApprovedFrameworks = List.of(
@@ -227,6 +238,9 @@ class FrameworkControllerIntegrationTest {
                                                 language2WaitingFrameworks.size()
                                 ))
                                 .param("state", ResourceState.WAITING.name())
+                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                                ))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -252,6 +266,7 @@ class FrameworkControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void getFrameworkById_canGetFrameworkById_whenIdIsValid() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
@@ -276,7 +291,7 @@ class FrameworkControllerIntegrationTest {
     void addFramework_canAddFramework_whenFrameworkRequestDTOIsValid() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_FRAMEWORK)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkRequestDTO languageDto = new FrameworkRequestDTO("test", "test", existingImage.getId(), existingLanguage.getId());
@@ -285,7 +300,10 @@ class FrameworkControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(post(ENDPOINT_FRAMEWORK)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(languageDto)))
+                        .content(objectMapper.writeValueAsString(languageDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -302,7 +320,7 @@ class FrameworkControllerIntegrationTest {
     void updateFramework_canUpdateFramework_whenFrameworkRequestDTOIsValid() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_FRAMEWORK)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkResponseDTO existingFramework = frameworkService.addFramework(
@@ -314,7 +332,10 @@ class FrameworkControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(put(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(frameworkRequestDto)))
+                        .content(objectMapper.writeValueAsString(frameworkRequestDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -332,7 +353,7 @@ class FrameworkControllerIntegrationTest {
     void deleteFramework_canDeleteFrameworkById_whenIdIsValid() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_FRAMEWORK)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
         FrameworkResponseDTO existingFramework = frameworkService.addFramework(
@@ -341,7 +362,10 @@ class FrameworkControllerIntegrationTest {
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId()))
+        mvc.perform(delete(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -350,6 +374,8 @@ class FrameworkControllerIntegrationTest {
     @WithMockUser(username = "user@mail.com")
     void setFrameworkState_canSetFrameworkState_whenSetResourceStateRequestDTOIsValid() throws Exception {
         // given
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_SET_FRAMEWORK_STATE)));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Framework existingFramework = frameworkRepository.save(new Framework("", ResourceState.WAITING, existingLanguage));
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
@@ -359,7 +385,11 @@ class FrameworkControllerIntegrationTest {
                 .perform(patch(ENDPOINT_FRAMEWORK + "/"
                         + existingFramework.getId() + "/state")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(stateDto)))
+                        .content(objectMapper.writeValueAsString(stateDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        ))
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();

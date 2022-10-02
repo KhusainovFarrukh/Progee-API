@@ -146,7 +146,6 @@ class RoleServiceImplTest {
         // given
         long id = 1L;
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
-        when(roleRepository.findFirstByIsDefaultIsTrueAndIdNot(any())).thenReturn(Optional.of(new Role()));
 
         // when
         underTest.deleteRoleById(id);

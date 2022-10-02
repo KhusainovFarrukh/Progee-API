@@ -22,6 +22,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static kh.farrukh.progee_api.app_user.AppUserConstants.ENDPOINT_USER;
 import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REFRESH_TOKEN;
 import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REGISTRATION;
 import static kh.farrukh.progee_api.framework.FrameworkConstants.ENDPOINT_FRAMEWORK;
@@ -29,6 +30,7 @@ import static kh.farrukh.progee_api.global.security.utils.AuthenticationFilterCo
 import static kh.farrukh.progee_api.home.HomeConstants.ENDPOINT_HOME;
 import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
 import static kh.farrukh.progee_api.language.LanguageConstants.ENDPOINT_LANGUAGE;
+import static kh.farrukh.progee_api.review.ReviewConstants.ENDPOINT_REVIEW;
 
 /**
  * If the request is not for the login or refresh token endpoints, then decode the JWT and set the authentication in the
@@ -73,6 +75,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
                 // refresh token request
                 request.getRequestURI().equals(ENDPOINT_REFRESH_TOKEN) ||
+
+                // get users request
+                (request.getRequestURI().contains(ENDPOINT_USER) && request.getMethod().equals(HttpMethod.GET.name())) ||
+
+                // get reviews request
+                (request.getRequestURI().contains(ENDPOINT_REVIEW) && request.getMethod().equals(HttpMethod.GET.name())) ||
 
                 // upload or download image request
                 (request.getRequestURI().contains(ENDPOINT_IMAGE) && (request.getMethod().equals(HttpMethod.GET.name()) || request.getMethod().equals(HttpMethod.POST.name()))) ||

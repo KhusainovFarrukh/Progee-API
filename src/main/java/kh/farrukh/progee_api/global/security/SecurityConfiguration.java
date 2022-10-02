@@ -72,7 +72,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.DELETE, withChildEndpoints(ENDPOINT_IMAGE)).hasAuthority(Permission.CAN_DELETE_IMAGE.name())
                 //review endpoints
                 .antMatchers(HttpMethod.GET, withChildEndpoints(ENDPOINT_REVIEW)).permitAll()
-                .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_REVIEW_VOTE)).hasAuthority(Permission.CAN_VOTE_REVIEW.name())
+                .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_REVIEW_VOTE)).hasAuthority(Permission.CAN_VOTE_REVIEW.name())
                 .antMatchers(HttpMethod.POST, withChildEndpoints(ENDPOINT_REVIEW)).hasAuthority(Permission.CAN_CREATE_REVIEW.name())
                 .antMatchers(HttpMethod.PUT, withChildEndpoints(ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())
                 .antMatchers(HttpMethod.PATCH, withChildEndpoints(ENDPOINT_REVIEW)).hasAnyAuthority(Permission.CAN_UPDATE_OWN_REVIEW.name(), Permission.CAN_UPDATE_OTHERS_REVIEW.name())

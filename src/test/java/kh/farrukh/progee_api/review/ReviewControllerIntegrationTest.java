@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.language.Language;
 import kh.farrukh.progee_api.language.LanguageRepository;
@@ -23,10 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class ReviewControllerIntegrationTest {
 
     @Autowired
@@ -61,6 +64,9 @@ class ReviewControllerIntegrationTest {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
     @BeforeEach
     void setUp() {
         SimpleModule module = new SimpleModule();
@@ -78,6 +84,7 @@ class ReviewControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewsWithoutFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
@@ -109,6 +116,7 @@ class ReviewControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewsWithFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
@@ -145,6 +153,7 @@ class ReviewControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewById() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
@@ -169,7 +178,7 @@ class ReviewControllerIntegrationTest {
     void canAddReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_REVIEW)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId());
 
@@ -177,7 +186,10 @@ class ReviewControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(post(ENDPOINT_REVIEW)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reviewRequestDto)))
+                        .content(objectMapper.writeValueAsString(reviewRequestDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -193,7 +205,7 @@ class ReviewControllerIntegrationTest {
     void canUpdateReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewResponseDTO existingReview = reviewService.addReview(
                 new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
@@ -204,7 +216,10 @@ class ReviewControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(put(ENDPOINT_REVIEW + "/" + existingReview.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(reviewRequestDto)))
+                        .content(objectMapper.writeValueAsString(reviewRequestDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -221,7 +236,7 @@ class ReviewControllerIntegrationTest {
     void canDeleteReviewById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         ReviewResponseDTO existingReview = reviewService.addReview(
                 new ReviewRequestDTO("test body", ReviewValue.LIKE, existingLanguage.getId())
@@ -229,7 +244,10 @@ class ReviewControllerIntegrationTest {
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_REVIEW + "/" + existingReview.getId()))
+        mvc.perform(delete(ENDPOINT_REVIEW + "/" + existingReview.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
@@ -238,7 +256,7 @@ class ReviewControllerIntegrationTest {
     @WithMockUser(username = "user@mail.com")
     void canVoteReview() throws Exception {
         // given
-        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VOTE_REVIEW)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewRepository.save(new Review("", ReviewValue.LIKE, existingLanguage));
@@ -249,7 +267,10 @@ class ReviewControllerIntegrationTest {
                 .perform(post(ENDPOINT_REVIEW + "/"
                         + existingReview.getId() + "/vote")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(voteDTO)))
+                        .content(objectMapper.writeValueAsString(voteDTO))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();

@@ -1,28 +1,29 @@
 package kh.farrukh.progee_api.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.app_user.payloads.AppUserResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.auth.payloads.LoginRequestDTO;
 import kh.farrukh.progee_api.auth.payloads.RegistrationRequestDTO;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
 import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.role.Role;
 import kh.farrukh.progee_api.role.RoleRepository;
-import kh.farrukh.progee_api.app_user.AppUser;
-import kh.farrukh.progee_api.app_user.AppUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 
 import static kh.farrukh.progee_api.auth.AuthConstants.ENDPOINT_REFRESH_TOKEN;
@@ -55,6 +56,9 @@ class AuthControllerIntegrationTest {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     @AfterEach
     void tearDown() {
@@ -125,30 +129,17 @@ class AuthControllerIntegrationTest {
     void refreshToken_canRefreshToken() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_ROLE)));
-        AppUser user = appUserRepository.save(
+        AppUser existingUser = appUserRepository.save(
                 new AppUser("user@mail.com", existingRole.getId(), passwordEncoder.encode("12345678"), roleRepository)
-        );
-        LoginRequestDTO request = new LoginRequestDTO(user.getEmail(), "12345678");
-
-        MvcResult loginResult = mvc
-                .perform(
-                        post(ENDPOINT_LOGIN)
-                                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                .content(objectMapper.writeValueAsString(request))
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-
-        AuthResponseDTO loginResponse = objectMapper.readValue(
-                loginResult.getResponse().getContentAsString(), AuthResponseDTO.class
         );
 
         // when
         MvcResult result = mvc
                 .perform(
                         get(ENDPOINT_REFRESH_TOKEN)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + loginResponse.getRefreshToken())
+                                .header("Authorization", "Bearer " + tokenProvider.createRefreshToken(
+                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getRefreshTokenValidityInSeconds())
+                                ))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -158,6 +149,8 @@ class AuthControllerIntegrationTest {
         AuthResponseDTO response = objectMapper.readValue(
                 result.getResponse().getContentAsString(), AuthResponseDTO.class
         );
-        assertThat(response.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
+        assertThat(response.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
+        assertThat(response.getAccessToken()).isNotNull();
+        assertThat(response.getRefreshToken()).isNotNull();
     }
 }

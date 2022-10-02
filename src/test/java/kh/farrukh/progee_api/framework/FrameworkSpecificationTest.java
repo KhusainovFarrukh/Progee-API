@@ -28,7 +28,7 @@ public class FrameworkSpecificationTest {
     }
 
     @Test
-    void repository_returnsValidData_whenLanguageIdIsNullAndStataIsNull() {
+    void repository_returnsValidData_whenLanguageIdIsNullAndStateIsNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),

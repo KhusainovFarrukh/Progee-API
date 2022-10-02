@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.token_exceptions.MissingTokenException;
 import kh.farrukh.progee_api.role.RoleMappers;
 import lombok.Getter;
@@ -48,8 +48,8 @@ public class TokenProvider implements InitializingBean {
 
         return new AuthResponseDTO(
                 RoleMappers.toRoleResponseDTO(user.getRole()),
-                createToken(user, accessExpireDate, accessTokenAlgorithm),
-                createToken(user, refreshExpireDate, refreshTokenAlgorithm),
+                createAccessToken(user, accessExpireDate),
+                createRefreshToken(user, refreshExpireDate),
                 accessExpireDate,
                 refreshExpireDate
         );
@@ -75,6 +75,28 @@ public class TokenProvider implements InitializingBean {
         } else {
             throw new MissingTokenException();
         }
+    }
+
+    /**
+     * It creates a access token for the user with the given expiration date and the access token algorithm
+     *
+     * @param user The user for whom the token is being created.
+     * @param expireDate The date and time when the token expires.
+     * @return A token
+     */
+    public String createAccessToken(AppUser user, ZonedDateTime expireDate) {
+        return createToken(user, expireDate, accessTokenAlgorithm);
+    }
+
+    /**
+     * It creates a refresh token for the user with the given expiration date and the refresh token algorithm
+     *
+     * @param user The user for whom the token is being created.
+     * @param expireDate The date and time when the token expires.
+     * @return A token
+     */
+    public String createRefreshToken(AppUser user, ZonedDateTime expireDate) {
+        return createToken(user, expireDate, refreshTokenAlgorithm);
     }
 
     /**

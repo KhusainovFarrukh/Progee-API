@@ -6,6 +6,7 @@ import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.resource_state.ResourceState;
 import kh.farrukh.progee_api.global.resource_state.SetResourceStateRequestDTO;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.Image;
 import kh.farrukh.progee_api.image.ImageRepository;
@@ -20,10 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class LanguageControllerIntegrationTest {
 
     @Autowired
@@ -58,6 +61,9 @@ class LanguageControllerIntegrationTest {
     @Autowired
     private LanguageService languageService;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
 
     @AfterEach
     void tearDown() {
@@ -68,6 +74,7 @@ class LanguageControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetLanguagesWithoutFilter() throws Exception {
         // given
         List<Language> approvedLanguages = List.of(
@@ -101,7 +108,7 @@ class LanguageControllerIntegrationTest {
     void canGetLanguagesWithFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         List<Language> waitingLanguages = List.of(
                 new Language("test2", ResourceState.WAITING),
                 new Language("test3", ResourceState.WAITING)
@@ -117,6 +124,9 @@ class LanguageControllerIntegrationTest {
                         get(ENDPOINT_LANGUAGE)
                                 .param("page_size", String.valueOf(waitingLanguages.size() + approvedLanguages.size()))
                                 .param("state", ResourceState.WAITING.name())
+                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                                ))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -135,6 +145,7 @@ class LanguageControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetLanguageById() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language("test", ResourceState.APPROVED));
@@ -156,7 +167,7 @@ class LanguageControllerIntegrationTest {
     void canAddLanguage() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test", "test", existingImage.getId());
 
@@ -164,7 +175,10 @@ class LanguageControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(post(ENDPOINT_LANGUAGE)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(languageRequestDto)))
+                        .content(objectMapper.writeValueAsString(languageRequestDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -181,7 +195,7 @@ class LanguageControllerIntegrationTest {
     void canUpdateLanguage() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageResponseDTO existingLanguage = languageService.addLanguage(new LanguageRequestDTO("test", "test", existingImage.getId()));
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("test-update", "test-update", existingImage.getId());
@@ -190,7 +204,10 @@ class LanguageControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(put(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(languageRequestDto)))
+                        .content(objectMapper.writeValueAsString(languageRequestDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -208,21 +225,26 @@ class LanguageControllerIntegrationTest {
     void canDeleteUserById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_LANGUAGE)));
-        appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         LanguageResponseDTO existingLanguage = languageService.addLanguage(new LanguageRequestDTO("", "", existingImage.getId()));
 
         // when
         // then
-        mvc.perform(delete(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId()))
+        mvc.perform(delete(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
+    @WithMockUser(username = "user@mail.com")
     void canSetLanguageState() throws Exception {
         // given
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_SET_LANGUAGE_STATE)));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language("", ResourceState.WAITING));
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
 
@@ -230,7 +252,10 @@ class LanguageControllerIntegrationTest {
         MvcResult result = mvc
                 .perform(patch(ENDPOINT_LANGUAGE + "/" + existingLanguage.getId() + "/state")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(stateDto)))
+                        .content(objectMapper.writeValueAsString(stateDto))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();

@@ -23,8 +23,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -35,6 +37,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SecurityTestExecutionListeners
+@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceImplTest {
 
@@ -48,9 +52,9 @@ class ReviewServiceImplTest {
     private ReviewServiceImpl underTest;
 
     @Test
+    @WithAnonymousUser
     void canGetReviewsWithoutLanguageIdAndReviewValueFilter() {
         // given
-        SecurityContextHolder.clearContext();
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -69,9 +73,9 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewsWithoutLanguageIdAndWithReviewValueFilter() {
         // given
-        SecurityContextHolder.clearContext();
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -90,9 +94,9 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewsWithLanguageIdAndWithoutReviewValueFilter() {
         // given
-        SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -112,9 +116,9 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewsWithLanguageIdAndReviewValueFilter() {
         // given
-        SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -134,9 +138,9 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void throwsExceptionIfLanguageOfReviewsDoesNotExistWithId() {
         // given
-        SecurityContextHolder.clearContext();
         long languageId = 1;
 
         // when
@@ -151,6 +155,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void canGetReviewById() {
         // given
         long reviewId = 1;
@@ -164,6 +169,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void throwsExceptionIfReviewDoesNotExistWithId() {
         // given
         long reviewId = 1;
@@ -177,7 +183,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void canCreateReview() {
         // given
         String body = "test review";
@@ -201,7 +207,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageIdIsNull() {
         // given
         String body = "test review";
@@ -216,7 +222,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
@@ -232,7 +238,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void authorWithUpdateOwnPermissionCanUpdateReview() {
         // given
         String body = "test review";
@@ -256,7 +262,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfAuthorWithoutUpdateOwnPermissionUpdatesReview() {
         // given
         String body = "test review";
@@ -275,7 +281,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void userWithUpdateOthersPermissionCanUpdateReview() {
         // given
         String body = "test review";
@@ -299,7 +305,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfUserWithoutUpdateOthersPermissionUpdatesReview() {
         // given
         String body = "test review";
@@ -318,7 +324,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
+    @WithMockUser
     void throwsExceptionIfReviewToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
@@ -334,7 +340,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void userWithDeleteOthersPermissionCanDeleteReviewById() {
         // given
         long reviewId = 1;
@@ -352,7 +358,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfUserWithoutDeleteOthersPermissionDeletesReviewById() {
         // given
         long reviewId = 1;
@@ -369,7 +375,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void authorWithDeleteOwnPermissionCanDeleteReviewById() {
         // given
         long reviewId = 1;
@@ -387,7 +393,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void throwsExceptionIfAuthorWithoutDeleteOwnPermissionDeletesReviewById() {
         // given
         long reviewId = 1;
@@ -404,7 +410,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
+    @WithMockUser
     void throwsExceptionIfReviewToDeleteDoesNotExistWithId() {
         // given
         long reviewId = 1;
@@ -418,7 +424,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void canUpvoteReview() {
         // given
         long reviewId = 1;
@@ -438,7 +444,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void canDownvoteReview() {
         // given
         long reviewId = 1;
@@ -458,7 +464,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void canChangeDownvoteToUpvoteReview() {
         // given
         long reviewId = 1;
@@ -480,7 +486,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void canChangeUpvoteToDownvoteReview() {
         // given
         long reviewId = 1;
@@ -502,7 +508,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void throwsExceptionIfUpvotesAlreadyUpvotedReview() {
         // given
         long reviewId = 1;
@@ -521,7 +527,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void throwsExceptionIfDownvotesAlreadyDownvotedReview() {
         // given
         long reviewId = 1;
@@ -540,7 +546,7 @@ class ReviewServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "user")
+    @WithMockUser
     void throwsExceptionIfReviewToVoteDoesNotExistWithId() {
         // given
         long reviewId = 1;

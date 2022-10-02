@@ -26,8 +26,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +41,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SecurityTestExecutionListeners
+@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 class FrameworkServiceImplTest {
 
@@ -54,9 +58,9 @@ class FrameworkServiceImplTest {
     private FrameworkServiceImpl underTest;
 
     @Test
+    @WithAnonymousUser
     void getFrameworks_canGetApprovedFrameworks_whenUnauthenticatedUser() {
         // given
-        SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
         when(frameworkRepository.findAll(any(FrameworkSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -76,9 +80,9 @@ class FrameworkServiceImplTest {
     }
 
     @Test
+    @WithAnonymousUser
     void getFrameworks_canGetFrameworksFilteredByState_whenUnauthenticatedUser() {
         // given
-        SecurityContextHolder.clearContext();
         when(languageRepository.existsById(any())).thenReturn(true);
 
         // when
@@ -123,7 +127,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "test@mail.com")
+    @WithMockUser
     void getFrameworks_canGetAllFrameworks_whenUserWithRequiredPermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE));
@@ -187,6 +191,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
+    @WithMockUser
     void getFrameworkById_canGetApprovedFrameworkById_whenUserWithoutPermission() {
         // given
         long frameworkId = 1;
@@ -201,9 +206,12 @@ class FrameworkServiceImplTest {
     }
 
     @Test
-    void getFrameworkById_throwsException_whenUserWithoutPermissionTriesToGetNonApprovedFrameworkById() {
+    @WithMockUser
+    void getFrameworkById_throwsException_whenUserWithoutPermission() {
         // given
         long frameworkId = 1;
+        Role role = new Role(Collections.emptyList());
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
         when(frameworkRepository.findById(any()))
                 .thenReturn(Optional.of(new Framework("test", ResourceState.WAITING, new Language(1))));
 
@@ -214,6 +222,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
+    @WithMockUser
     void getFrameworkById_canGetNonApprovedFrameworkById_whenUserWithPermission() {
         // given
         long frameworkId = 1;
@@ -243,6 +252,7 @@ class FrameworkServiceImplTest {
     }
 
     @Test
+    @WithMockUser
     void addFramework_throwsException_whenLanguageIdIsNullOnRequestDto() {
         // given
         FrameworkRequestDTO requestDto = new FrameworkRequestDTO("Test", "Test", 1L);
@@ -465,7 +475,7 @@ class FrameworkServiceImplTest {
 
     @Test
     @WithMockUser
-    void updateFramework_throwsException_whenNonAuthorWithoutUpdateOthersPermissionUpdatesFramework() {
+    void updateFramework_throwsException_whenNonAuthorWithoutUpdateOthersPermission() {
         // given
         AppUser user = new AppUser(1, new Role(Collections.emptyList()));
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("", "", 1, 1L);

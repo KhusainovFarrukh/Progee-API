@@ -1,9 +1,9 @@
 package kh.farrukh.progee_api.global.utils.user;
 
-import kh.farrukh.progee_api.role.Permission;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.role.Permission;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -17,9 +17,9 @@ public class CurrentUserUtils {
      * permissionToChangeOthers.
      *
      * @param permissionToChangeOthers The permission that the user needs to have to change other users' resources.
-     * @param permissionToChangeOwn The permission that the user needs to have to change their own resources.
-     * @param authorId The id of the author of the resource you're trying to change.
-     * @param appUserRepository The repository that contains the current user.
+     * @param permissionToChangeOwn    The permission that the user needs to have to change their own resources.
+     * @param authorId                 The id of the author of the resource you're trying to change.
+     * @param appUserRepository        The repository that contains the current user.
      * @return A boolean value.
      */
     public static boolean hasPermissionOrIsAuthor(
@@ -38,9 +38,9 @@ public class CurrentUserUtils {
     }
 
     /**
-     * If the current user has the given permission, return true, otherwise return false."
+     * If the current user has the given permission, return true, otherwise return false.
      *
-     * @param permission The permission you want to check for.
+     * @param permission        The permission you want to check for.
      * @param appUserRepository The repository that contains the current user.
      * @return A boolean value.
      */
@@ -71,19 +71,14 @@ public class CurrentUserUtils {
      * @return The email of the user that is currently logged in.
      */
     private static String getEmail() {
-        try {
-            Object principal = SecurityContextHolder.getContext()
-                    .getAuthentication()
-                    .getPrincipal();
+        Object principal = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-            if (principal instanceof User) {
-                return ((User) principal).getUsername();
-            } else {
-                return (String) principal;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        if (principal instanceof User) {
+            return ((User) principal).getUsername();
+        } else {
+            return (String) principal;
         }
     }
 }

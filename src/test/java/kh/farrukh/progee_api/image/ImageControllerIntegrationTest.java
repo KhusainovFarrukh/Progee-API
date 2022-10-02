@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class ImageControllerIntegrationTest {
 
     @Autowired
@@ -30,6 +31,7 @@ class ImageControllerIntegrationTest {
     private ImageRepository imageRepository;
 
     @Test
+    @WithAnonymousUser
     void getImageById_canGetImageById() throws Exception {
         // given
         Image existingImage = imageRepository.save(new Image());
@@ -47,6 +49,7 @@ class ImageControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void uploadImage_canUploadImage() throws Exception {
         // given
         MockMultipartFile mockImage = new MockMultipartFile("image", "test".getBytes());
@@ -62,6 +65,7 @@ class ImageControllerIntegrationTest {
     }
 
     @Test
+    @WithAnonymousUser
     void downloadImageById_canDownloadImage() throws Exception {
         // given
         Image existingImage = imageRepository.save(new Image("test".getBytes()));
