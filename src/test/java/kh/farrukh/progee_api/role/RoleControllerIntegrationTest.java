@@ -54,7 +54,7 @@ class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "test@mail.com")
-    void canGetRoles() throws Exception {
+    void getRoles_canGetRoles() throws Exception {
         // given
         List<Role> roles = List.of(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)),
@@ -83,7 +83,7 @@ class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "test@mail.com")
-    void canGetRoleById() throws Exception {
+    void getRoleById_canGetRoleById() throws Exception {
         // given
         Role role = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_VIEW_ROLE))
@@ -108,7 +108,7 @@ class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "test@mail.com")
-    void canAddRole() throws Exception {
+    void addRole_canAddRole() throws Exception {
         // given
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_CREATE_ROLE))
@@ -138,7 +138,7 @@ class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "test@mail.com")
-    void canUpdateRole() throws Exception {
+    void updateRole_canUpdateRole() throws Exception {
         // given
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_UPDATE_ROLE))
@@ -171,7 +171,7 @@ class RoleControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "test@mail.com")
-    void canDeleteRole() throws Exception {
+    void deleteRole_canDeleteRole() throws Exception {
         // given
         Role existingRole = roleRepository.save(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_DELETE_ROLE))

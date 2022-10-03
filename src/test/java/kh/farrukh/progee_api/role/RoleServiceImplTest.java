@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +39,7 @@ class RoleServiceImplTest {
     private RoleServiceImpl underTest;
 
     @Test
-    void canGetAllRoles() {
+    void getRoles_canGetAllRoles() {
         // given
         when(roleRepository.findAll(any(Pageable.class))).thenReturn(Page.empty(Pageable.ofSize(10)));
 
@@ -54,7 +54,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void canGetRoleById() {
+    void getRoleById_canGetRoleById() {
         // given
         long id = 1L;
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
@@ -67,7 +67,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void canAddRole() {
+    void addRole_canAddRole() {
         // given
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO("User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE));
         when(roleRepository.save(any())).thenReturn(new Role());
@@ -86,7 +86,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void canUpdateRole() {
+    void updateRole_canUpdateRole_whenRoleRequestDTOIsValid() {
         // given
         long id = 1L;
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
@@ -109,7 +109,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRoleWithTitleExists() {
+    void updateRole_throwsException_whenRoleWithTitleExists() {
         // given
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
                 "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
@@ -126,7 +126,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRoleToUpdateDoesNotExist() {
+    void updateRole_throwsException_whenRoleToUpdateDoesNotExist() {
         // given
         long id = 1L;
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
@@ -142,7 +142,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void canDeleteRole() {
+    void deleteRoleById_canDeleteRole_whenIdIsValid() {
         // given
         long id = 1L;
         when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
@@ -155,7 +155,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void canDeleteDefaultRoleIfThereAreUsersWithThisRole() {
+    void deleteRoleById_canDeleteDefaultRole_whenThereAreUsersWithThisRole() {
         // given
         long id = 1L;
         List<AppUser> users = List.of(
@@ -179,7 +179,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRoleToDeleteDoesNotExist() {
+    void deleteRoleById_throwsException_whenRoleToDeleteDoesNotExist() {
         // given
         long id = 1L;
 
@@ -192,7 +192,7 @@ class RoleServiceImplTest {
     }
 
     @Test
-    void throwsExceptionIfRoleToDeleteIsSingleDefault() {
+    void deleteRoleById_throwsException_whenRoleToDeleteIsSingleDefault() {
         // given
         long id = 1L;
         when(roleRepository.findById(any()))

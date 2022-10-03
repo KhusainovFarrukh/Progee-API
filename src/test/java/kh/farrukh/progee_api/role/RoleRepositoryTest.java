@@ -23,7 +23,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsTrueIfRoleExistsByTitle() {
+    void existsByTitle_returnsTrue_whenRoleExistsByTitle() {
         // given
         String title = "user";
         Role role = new Role(title, false, Collections.emptyList());
@@ -37,7 +37,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfRoleDoesNotExistByTitle() {
+    void existsByTitle_returnsFalse_whenRoleDoesNotExistByTitle() {
         // given
         String title = "user";
         Role role = new Role("admin", false, Collections.emptyList());
@@ -51,7 +51,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfTitleIsEmpty() {
+    void existsByTitle_returnsFalse_whenTitleIsEmpty() {
         // given
         String title = "";
         Role role = new Role("admin", false, Collections.emptyList());
@@ -65,7 +65,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfTitleIsNull() {
+    void existsByTitle_returnsFalse_whenTitleIsNull() {
         // given
         String title = null;
         Role role = new Role("admin", false, Collections.emptyList());
@@ -79,7 +79,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfDoesNotContainAnyRole() {
+    void findFirstByIsDefaultIsTrue_returnsEmptyData_whenDoesNotContainAnyRole() {
         // when
         Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrue();
 
@@ -88,7 +88,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsOnlySingleDefaultRole() {
+    void findFirstByIsDefaultIsTrue_returnsValidData_whenContainsOnlySingleDefaultRole() {
         // given
         Role role = new Role("test", true, Collections.emptyList());
         roleRepository.save(role);
@@ -102,7 +102,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfContainsOnlyNonDefaultRole() {
+    void findFirstByIsDefaultIsTrue_returnsEmptyData_whenContainsOnlyNonDefaultRole() {
         // given
         Role role = new Role("test", false, Collections.emptyList());
         roleRepository.save(role);
@@ -115,7 +115,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsNonDefaultAndSingleDefaultRole() {
+    void findFirstByIsDefaultIsTrue_returnsValidData_whenContainsNonDefaultAndSingleDefaultRole() {
         // given
         List<Role> roles = List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -133,7 +133,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsNonDefaultAndMultipleDefaultRole() {
+    void findFirstByIsDefaultIsTrue_returnsValidData_whenContainsNonDefaultAndMultipleDefaultRole() {
         // given
         List<Role> roles = List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -152,7 +152,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfContainsOnlySingleDefaultRoleAndIdIsSame() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsEmptyData_whenContainsOnlySingleDefaultRoleAndIdIsSame() {
         // given
         Role role = roleRepository.save(new Role("test", true, Collections.emptyList()));
 
@@ -164,7 +164,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsOnlySingleDefaultRoleAndIdIsDifferent() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsValidData_whenContainsOnlySingleDefaultRoleAndIdIsDifferent() {
         // given
         Role role = roleRepository.save(new Role("test", true, Collections.emptyList()));
 
@@ -177,7 +177,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfContainsOnlyNonDefaultRoleAndIdIsSame() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsEmptyData_whenContainsOnlyNonDefaultRoleAndIdIsSame() {
         // given
         Role role = roleRepository.save(new Role("test", false, Collections.emptyList()));
 
@@ -189,7 +189,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfContainsOnlyNonDefaultRoleAndIdIsDifferent() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsEmptyData_whenContainsOnlyNonDefaultRoleAndIdIsDifferent() {
         // given
         Role role = roleRepository.save(new Role("test", false, Collections.emptyList()));
 
@@ -201,7 +201,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsNonDefaultAndSingleDefaultRoleAndIdIsSame() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsValidData_whenContainsNonDefaultAndSingleDefaultRoleAndIdIsSame() {
         // given
         List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -217,7 +217,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsNonDefaultAndSingleDefaultRoleAndIdIsDifferent() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsValidData_whenContainsNonDefaultAndSingleDefaultRoleAndIdIsDifferent() {
         // given
         List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -234,7 +234,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfContainsNonDefaultAndMultipleDefaultRoleAndIdIsSame() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsEmptyData_whenContainsNonDefaultAndMultipleDefaultRoleAndIdIsSame() {
         // given
         List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -252,7 +252,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsNonDefaultAndMultipleDefaultRoleAndIdIsDifferent() {
+    void findFirstByIsDefaultIsTrueAndIdNot_returnsValidData_whenContainsNonDefaultAndMultipleDefaultRoleAndIdIsDifferent() {
         // given
         List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -270,7 +270,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnZeroIfNoRoleExists() {
+    void countByIsDefaultIsTrue_returnZero_whenNoRoleExists() {
         // when
         long count = roleRepository.countByIsDefaultIsTrue();
 
@@ -279,7 +279,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnOneIfOneDefaultRoleExists() {
+    void countByIsDefaultIsTrue_returnsOne_whenOneDefaultRoleExists() {
         // given
         Role role = new Role("test", true, Collections.emptyList());
         roleRepository.save(role);
@@ -292,7 +292,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnZeroIfOneNonDefaultRoleExists() {
+    void countByIsDefaultIsTrue_returnZero_whenOneNonDefaultRoleExists() {
         // given
         Role role = new Role("test", false, Collections.emptyList());
         roleRepository.save(role);
@@ -305,7 +305,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnOneIfOneDefaultAndOneNonDefaultRoleExists() {
+    void countByIsDefaultIsTrue_returnsOne_whenOneDefaultAndOneNonDefaultRoleExists() {
         // given
         List<Role> roles = List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -321,7 +321,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnOneIfOneDefaultAndMultipleNonDefaultRoleExists() {
+    void countByIsDefaultIsTrue_returnsOne_whenOneDefaultAndMultipleNonDefaultRoleExists() {
         // given
         List<Role> roles = List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -338,7 +338,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnValidCountIfMultipleDefaultAndOneNonDefaultRoleExists() {
+    void countByIsDefaultIsTrue_returnsValidCount_whenMultipleDefaultAndOneNonDefaultRoleExists() {
         // given
         List<Role> roles = List.of(
                 new Role("test1", false, Collections.emptyList()),
@@ -355,7 +355,7 @@ class RoleRepositoryTest {
     }
 
     @Test
-    void returnValidCountIfMultipleDefaultAndMultipleNonDefaultRoleExists() {
+    void countByIsDefaultIsTrue_returnsValidCount_whenMultipleDefaultAndMultipleNonDefaultRoleExists() {
         // given
         List<Role> roles = List.of(
                 new Role("test1", false, Collections.emptyList()),

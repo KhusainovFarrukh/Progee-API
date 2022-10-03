@@ -11,7 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class RoleMappersTest {
 
     @Test
-    void returnsNullIfRoleIsNull() {
+    void toRoleResponseDTO_returnsNull_whenRoleIsNull() {
         // given
         Role role = null;
 
@@ -23,7 +23,7 @@ class RoleMappersTest {
     }
 
     @Test
-    void canMapRoleToRoleResponseDTO() {
+    void toRoleResponseDTO_canMap_whenRoleIsValid() {
         // given
         Role role = new Role(1L, "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE));
 
@@ -39,7 +39,7 @@ class RoleMappersTest {
     }
 
     @Test
-    void returnsNullIfRoleResponseDTOIsNull() {
+    void toRole_returnsNull_whenRoleResponseDTOIsNull() {
         // given
         RoleResponseDTO roleResponseDTO = null;
 
@@ -51,7 +51,7 @@ class RoleMappersTest {
     }
 
     @Test
-    void canMapRoleResponseDTOToRole() {
+    void toRole_canMap_whenRoleResponseDTOIsValid() {
         // given
         RoleResponseDTO roleResponseDTO = new RoleResponseDTO(
                 1L, "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
@@ -69,7 +69,7 @@ class RoleMappersTest {
     }
 
     @Test
-    void returnsNullIfRoleRequestDTOIsNull() {
+    void toRole_returnsNull_whenRoleRequestDTOIsNull() {
         // given
         RoleRequestDTO roleRequestDTO = null;
 
@@ -81,7 +81,7 @@ class RoleMappersTest {
     }
 
     @Test
-    void canMapRoleRequestDTOToRole() {
+    void toRole_canMap_whenRoleRequestDTOisValid() {
         // given
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
                 "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
