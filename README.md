@@ -1,5 +1,7 @@
 # Progee-API
 
+**WARNING:** Latest changes are committed to [alpha branch](https://github.com/KhusainovFarrukh/Progee-API/tree/alpha). But production (deployed) version is in [master branch](https://github.com/KhusainovFarrukh/Progee-API/tree/master). The changes in alpha branch will be pushed to master after testing and  additional refactoring. 
+
 ---
 
 <a href="https://img.shields.io/badge/Version-0.2.1--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-0.2.1--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-deployed (heroku)-success"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-deployed (heroku)-success"></a>
