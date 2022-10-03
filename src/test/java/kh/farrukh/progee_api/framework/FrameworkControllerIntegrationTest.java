@@ -64,9 +64,6 @@ class FrameworkControllerIntegrationTest {
     private ImageRepository imageRepository;
 
     @Autowired
-    private FrameworkService frameworkService;
-
-    @Autowired
     private TokenProvider tokenProvider;
 
     @AfterEach
@@ -82,32 +79,29 @@ class FrameworkControllerIntegrationTest {
     void getFrameworks_canGetFrameworks_withoutStateAndLanguageIdFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
-        List<Framework> approvedFrameworks = List.of(
+        List<Framework> approvedFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test1", ResourceState.APPROVED, existingLanguage),
                 new Framework("test2", ResourceState.APPROVED, existingLanguage),
                 new Framework("test3", ResourceState.APPROVED, existingLanguage)
-        );
-        frameworkRepository.saveAll(approvedFrameworks);
+        ));
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_FRAMEWORK)
-                                .param("page_size", String.valueOf(approvedFrameworks.size()))
-                )
+                .perform(get(ENDPOINT_FRAMEWORK)
+                        .param("page_size", String.valueOf(approvedFrameworks.size())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(approvedFrameworks.size());
-        assertThat(approvedFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
-                        .contains(framework.getName())
+        assertThat(actual.getTotalItems()).isEqualTo(approvedFrameworks.size());
+        List<Long> expectedIds = approvedFrameworks.stream().map(Framework::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(
+                frameworkResponseDTO -> expectedIds.contains(frameworkResponseDTO.getId())
         )).isTrue();
     }
 
@@ -118,42 +112,36 @@ class FrameworkControllerIntegrationTest {
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_FRAMEWORKS_BY_STATE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage = languageRepository.save(new Language());
-        List<Framework> waitingFrameworks = List.of(
+        List<Framework> waitingFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test2", ResourceState.WAITING, existingLanguage),
                 new Framework("test3", ResourceState.WAITING, existingLanguage)
-        );
-        List<Framework> approvedFrameworks = List.of(
+        ));
+        List<Framework> approvedFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test1", ResourceState.APPROVED, existingLanguage)
-        );
-        frameworkRepository.saveAll(waitingFrameworks);
-        frameworkRepository.saveAll(approvedFrameworks);
+        ));
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_FRAMEWORK)
-                                .param("page_size", String.valueOf(waitingFrameworks.size() + approvedFrameworks.size()))
-                                .param("state", ResourceState.WAITING.name())
-                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
-                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
-                                ))
-                )
+                .perform(get(ENDPOINT_FRAMEWORK)
+                        .param("page_size", String.valueOf(waitingFrameworks.size() + approvedFrameworks.size()))
+                        .param("state", ResourceState.WAITING.name())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(waitingFrameworks.size());
-        assertThat(waitingFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
-                        .contains(framework.getName())
-        )).isTrue();
-        assertThat(response.getItems().stream().allMatch(
-                framework -> framework.getState().equals(ResourceState.WAITING)
+        assertThat(actual.getTotalItems()).isEqualTo(waitingFrameworks.size());
+        List<Long> expectedIds = waitingFrameworks.stream().map(Framework::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(
+                frameworkResponseDTO -> expectedIds.contains(frameworkResponseDTO.getId()) &&
+                        frameworkResponseDTO.getState().equals(ResourceState.WAITING)
         )).isTrue();
     }
 
@@ -163,39 +151,33 @@ class FrameworkControllerIntegrationTest {
         // given
         Language existingLanguage1 = languageRepository.save(new Language());
         Language existingLanguage2 = languageRepository.save(new Language());
-        List<Framework> language1Frameworks = List.of(
+        List<Framework> language1Frameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test2", ResourceState.APPROVED, existingLanguage1),
                 new Framework("test3", ResourceState.APPROVED, existingLanguage1)
-        );
-        List<Framework> language2Frameworks = List.of(
+        ));
+        List<Framework> language2Frameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test1", ResourceState.APPROVED, existingLanguage2)
-        );
-        frameworkRepository.saveAll(language1Frameworks);
-        frameworkRepository.saveAll(language2Frameworks);
+        ));
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_FRAMEWORK)
-                                .param("language_id", String.valueOf(existingLanguage1.getId()))
-                                .param("page_size", String.valueOf(language1Frameworks.size() + language2Frameworks.size()))
-                )
+                .perform(get(ENDPOINT_FRAMEWORK)
+                        .param("language_id", String.valueOf(existingLanguage1.getId()))
+                        .param("page_size", String.valueOf(language1Frameworks.size() + language2Frameworks.size())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(language1Frameworks.size());
-        assertThat(language1Frameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
-                        .contains(framework.getName())
-        )).isTrue();
-        assertThat(response.getItems().stream().allMatch(
-                framework -> framework.getLanguage().getId() == existingLanguage1.getId()
+        assertThat(actual.getTotalItems()).isEqualTo(language1Frameworks.size());
+        List<Long> expectedIds = language1Frameworks.stream().map(Framework::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(
+                frameworkResponseDTO -> expectedIds.contains(frameworkResponseDTO.getId()) &&
+                        frameworkResponseDTO.getLanguage().getId() == existingLanguage1.getId()
         )).isTrue();
     }
 
@@ -207,61 +189,51 @@ class FrameworkControllerIntegrationTest {
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Language existingLanguage1 = languageRepository.save(new Language());
         Language existingLanguage2 = languageRepository.save(new Language());
-        List<Framework> language1ApprovedFrameworks = List.of(
+        List<Framework> language1ApprovedFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test1", ResourceState.APPROVED, existingLanguage1),
                 new Framework("test2", ResourceState.APPROVED, existingLanguage1)
-        );
-        List<Framework> language1WaitingFrameworks = List.of(
+        ));
+        List<Framework> language1WaitingFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test3", ResourceState.WAITING, existingLanguage1),
                 new Framework("test4", ResourceState.WAITING, existingLanguage1)
-        );
-        List<Framework> language2ApprovedFrameworks = List.of(
+        ));
+        List<Framework> language2ApprovedFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test5", ResourceState.APPROVED, existingLanguage2)
-        );
-        List<Framework> language2WaitingFrameworks = List.of(
+        ));
+        List<Framework> language2WaitingFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("test6", ResourceState.WAITING, existingLanguage2)
-        );
-        frameworkRepository.saveAll(language1WaitingFrameworks);
-        frameworkRepository.saveAll(language1ApprovedFrameworks);
-        frameworkRepository.saveAll(language2WaitingFrameworks);
-        frameworkRepository.saveAll(language2ApprovedFrameworks);
+        ));
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_FRAMEWORK)
-                                .param("language_id", String.valueOf(existingLanguage1.getId()))
-                                .param("page_size", String.valueOf(
-                                        language1ApprovedFrameworks.size() +
-                                                language1WaitingFrameworks.size() +
-                                                language2ApprovedFrameworks.size() +
-                                                language2WaitingFrameworks.size()
-                                ))
-                                .param("state", ResourceState.WAITING.name())
-                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
-                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
-                                ))
-                )
+                .perform(get(ENDPOINT_FRAMEWORK)
+                        .param("language_id", String.valueOf(existingLanguage1.getId()))
+                        .param("page_size", String.valueOf(
+                                language1ApprovedFrameworks.size() +
+                                        language1WaitingFrameworks.size() +
+                                        language2ApprovedFrameworks.size() +
+                                        language2WaitingFrameworks.size()
+                        ))
+                        .param("state", ResourceState.WAITING.name())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        PagingResponse<FrameworkResponseDTO> response = objectMapper.readValue(
+        PagingResponse<FrameworkResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
 
-        assertThat(response.getTotalItems()).isEqualTo(language1WaitingFrameworks.size());
-        assertThat(language1WaitingFrameworks.stream().allMatch(framework ->
-                response.getItems().stream().map(FrameworkResponseDTO::getName).toList()
-                        .contains(framework.getName())
-        )).isTrue();
-        assertThat(response.getItems().stream().allMatch(
-                framework -> framework.getLanguage().getId() == existingLanguage1.getId()
-        )).isTrue();
-        assertThat(response.getItems().stream().allMatch(
-                framework -> framework.getState().equals(ResourceState.WAITING)
+        assertThat(actual.getTotalItems()).isEqualTo(language1WaitingFrameworks.size());
+        List<Long> expectedIds = language1WaitingFrameworks.stream().map(Framework::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(
+                frameworkResponseDTO -> expectedIds.contains(frameworkResponseDTO.getId()) &&
+                        frameworkResponseDTO.getState().equals(ResourceState.WAITING) &&
+                        frameworkResponseDTO.getLanguage().getId() == existingLanguage1.getId()
         )).isTrue();
     }
 
@@ -282,8 +254,8 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
-        assertThat(framework.getId()).isEqualTo(existingFramework.getId());
+        FrameworkResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingFramework.getId());
     }
 
     @Test
@@ -309,10 +281,10 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
-        assertThat(framework.getName()).isEqualTo(languageDto.getName());
-        assertThat(framework.getDescription()).isEqualTo(languageDto.getDescription());
-        assertThat(framework.getImage().getId()).isEqualTo(languageDto.getImageId());
+        FrameworkResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
+        assertThat(actual.getName()).isEqualTo(languageDto.getName());
+        assertThat(actual.getDescription()).isEqualTo(languageDto.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(languageDto.getImageId());
     }
 
     @Test
@@ -323,8 +295,8 @@ class FrameworkControllerIntegrationTest {
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
         Image existingImage = imageRepository.save(new Image());
         Language existingLanguage = languageRepository.save(new Language());
-        FrameworkResponseDTO existingFramework = frameworkService.addFramework(
-                new FrameworkRequestDTO("test", "test", existingImage.getId(), existingLanguage.getId())
+        Framework existingFramework = frameworkRepository.save(
+                new Framework("test", "test", existingImage, existingUser, ZonedDateTime.now(), existingLanguage)
         );
         FrameworkRequestDTO frameworkRequestDto = new FrameworkRequestDTO("test-update", "test-update", existingImage.getId());
 
@@ -341,11 +313,11 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
-        assertThat(framework.getId()).isEqualTo(existingFramework.getId());
-        assertThat(framework.getName()).isEqualTo(frameworkRequestDto.getName());
-        assertThat(framework.getDescription()).isEqualTo(frameworkRequestDto.getDescription());
-        assertThat(framework.getImage().getId()).isEqualTo(frameworkRequestDto.getImageId());
+        FrameworkResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingFramework.getId());
+        assertThat(actual.getName()).isEqualTo(frameworkRequestDto.getName());
+        assertThat(actual.getDescription()).isEqualTo(frameworkRequestDto.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(frameworkRequestDto.getImageId());
     }
 
     @Test
@@ -354,11 +326,7 @@ class FrameworkControllerIntegrationTest {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_FRAMEWORK)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
-        Image existingImage = imageRepository.save(new Image());
-        Language existingLanguage = languageRepository.save(new Language());
-        FrameworkResponseDTO existingFramework = frameworkService.addFramework(
-                new FrameworkRequestDTO("", "", existingImage.getId(), existingLanguage.getId())
-        );
+        Framework existingFramework = frameworkRepository.save(new Framework());
 
         // when
         // then
@@ -376,14 +344,12 @@ class FrameworkControllerIntegrationTest {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_SET_FRAMEWORK_STATE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
-        Language existingLanguage = languageRepository.save(new Language());
-        Framework existingFramework = frameworkRepository.save(new Framework("", ResourceState.WAITING, existingLanguage));
+        Framework existingFramework = frameworkRepository.save(new Framework(ResourceState.WAITING));
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
 
         // when
         MvcResult result = mvc
-                .perform(patch(ENDPOINT_FRAMEWORK + "/"
-                        + existingFramework.getId() + "/state")
+                .perform(patch(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId() + "/state")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(stateDto))
                         .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
@@ -395,8 +361,8 @@ class FrameworkControllerIntegrationTest {
                 .andReturn();
 
         // then
-        FrameworkResponseDTO framework = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
-        assertThat(framework.getId()).isEqualTo(existingFramework.getId());
-        assertThat(framework.getState()).isEqualTo(stateDto.getState());
+        FrameworkResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), FrameworkResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingFramework.getId());
+        assertThat(actual.getState()).isEqualTo(stateDto.getState());
     }
 }

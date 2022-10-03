@@ -22,53 +22,49 @@ class FrameworkRepositoryTest {
     void existsByName_returnsTrue_whenFrameworkExistsByName() {
         // given
         String name = "Spring Boot";
-        Framework framework = new Framework(name);
-        underTest.save(framework);
+        underTest.save(new Framework(name));
 
         // when
-        boolean exists = underTest.existsByName(name);
+        boolean actual = underTest.existsByName(name);
 
         // then
-        assertThat(exists).isTrue();
+        assertThat(actual).isTrue();
     }
 
     @Test
     void existsByName_returnsFalse_whenFrameworkDoesNotExistWithName() {
         // given
         String name = "Spring Boot";
-        Framework framework = new Framework("Ktor");
-        underTest.save(framework);
+        underTest.save(new Framework("Ktor"));
 
         // when
-        boolean exists = underTest.existsByName(name);
+        boolean actual = underTest.existsByName(name);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByName_returnsFalse_whenNameIsEmpty() {
         // given
-        Framework framework = new Framework("Spring Boot");
-        underTest.save(framework);
+        underTest.save(new Framework("Spring Boot"));
 
         // when
-        boolean exists = underTest.existsByName("");
+        boolean actual = underTest.existsByName("");
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByName_returnsFalse_whenNameIsNull() {
         // given
-        Framework framework = new Framework("Spring Boot");
-        underTest.save(framework);
+        underTest.save(new Framework("Spring Boot"));
 
         // when
-        boolean exists = underTest.existsByName(null);
+        boolean actual = underTest.existsByName(null);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 }

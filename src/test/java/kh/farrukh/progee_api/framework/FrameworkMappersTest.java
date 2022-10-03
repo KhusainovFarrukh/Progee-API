@@ -19,7 +19,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,10 +36,10 @@ class FrameworkMappersTest {
         Framework framework = null;
 
         // when
-        FrameworkResponseDTO frameworkResponseDTO = FrameworkMappers.toFrameworkResponseDTO(framework);
+        FrameworkResponseDTO actual = FrameworkMappers.toFrameworkResponseDTO(framework);
 
         // then
-        assertThat(frameworkResponseDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -58,18 +57,18 @@ class FrameworkMappersTest {
         );
 
         // when
-        FrameworkResponseDTO frameworkResponseDTO = FrameworkMappers.toFrameworkResponseDTO(framework);
+        FrameworkResponseDTO actual = FrameworkMappers.toFrameworkResponseDTO(framework);
 
         // then
-        assertThat(frameworkResponseDTO).isNotNull();
-        assertThat(frameworkResponseDTO.getId()).isEqualTo(framework.getId());
-        assertThat(frameworkResponseDTO.getState()).isEqualTo(framework.getState());
-        assertThat(frameworkResponseDTO.getName()).isEqualTo(framework.getName());
-        assertThat(frameworkResponseDTO.getDescription()).isEqualTo(framework.getDescription());
-        assertThat(frameworkResponseDTO.getCreatedAt()).isEqualTo(framework.getCreatedAt());
-        assertThat(frameworkResponseDTO.getLanguage().getId()).isEqualTo(framework.getLanguage().getId());
-        assertThat(frameworkResponseDTO.getImage().getId()).isEqualTo(framework.getImage().getId());
-        assertThat(frameworkResponseDTO.getAuthor().getId()).isEqualTo(framework.getAuthor().getId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(framework.getId());
+        assertThat(actual.getState()).isEqualTo(framework.getState());
+        assertThat(actual.getName()).isEqualTo(framework.getName());
+        assertThat(actual.getDescription()).isEqualTo(framework.getDescription());
+        assertThat(actual.getCreatedAt()).isEqualTo(framework.getCreatedAt());
+        assertThat(actual.getLanguage().getId()).isEqualTo(framework.getLanguage().getId());
+        assertThat(actual.getImage().getId()).isEqualTo(framework.getImage().getId());
+        assertThat(actual.getAuthor().getId()).isEqualTo(framework.getAuthor().getId());
     }
 
     @Test
@@ -78,47 +77,51 @@ class FrameworkMappersTest {
         FrameworkRequestDTO frameworkRequestDTO = null;
 
         // when
-        Framework framework = FrameworkMappers.toFramework(frameworkRequestDTO, languageRepository, imageRepository);
+        Framework actual = FrameworkMappers.toFramework(frameworkRequestDTO, languageRepository, imageRepository);
 
         // then
-        assertThat(framework).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
     void toFramework_canMap_whenFrameworkRequestDTOIsValid() {
         // given
-        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(1)));
         FrameworkRequestDTO frameworkRequestDTO = new FrameworkRequestDTO(
                 "Test",
                 "Test",
                 1L,
                 1L
         );
+        when(languageRepository.findById(frameworkRequestDTO.getLanguageId()))
+                .thenReturn(Optional.of(new Language(frameworkRequestDTO.getLanguageId())));
+        when(imageRepository.findById(frameworkRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(frameworkRequestDTO.getImageId())));
 
         // when
-        Framework framework = FrameworkMappers.toFramework(frameworkRequestDTO, languageRepository, imageRepository);
+        Framework actual = FrameworkMappers.toFramework(frameworkRequestDTO, languageRepository, imageRepository);
 
         // then
-        assertThat(framework).isNotNull();
-        assertThat(framework.getId()).isEqualTo(0L);
-        assertThat(framework.getName()).isEqualTo(frameworkRequestDTO.getName());
-        assertThat(framework.getDescription()).isEqualTo(frameworkRequestDTO.getDescription());
-        assertThat(framework.getLanguage().getId()).isEqualTo(frameworkRequestDTO.getLanguageId());
-        assertThat(framework.getImage().getId()).isEqualTo(frameworkRequestDTO.getImageId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(0L);
+        assertThat(actual.getName()).isEqualTo(frameworkRequestDTO.getName());
+        assertThat(actual.getDescription()).isEqualTo(frameworkRequestDTO.getDescription());
+        assertThat(actual.getLanguage().getId()).isEqualTo(frameworkRequestDTO.getLanguageId());
+        assertThat(actual.getImage().getId()).isEqualTo(frameworkRequestDTO.getImageId());
     }
 
     @Test
     void toFramework_throwsException_whenLanguageDoesNotExist() {
         // given
-        when(languageRepository.findById(any())).thenReturn(Optional.empty());
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(1)));
         FrameworkRequestDTO frameworkRequestDTO = new FrameworkRequestDTO(
                 "Test",
                 "Test",
                 1L,
                 1L
         );
+        when(languageRepository.findById(frameworkRequestDTO.getLanguageId()))
+                .thenReturn(Optional.empty());
+        when(imageRepository.findById(frameworkRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(frameworkRequestDTO.getImageId())));
 
         // when
         // then
@@ -131,13 +134,13 @@ class FrameworkMappersTest {
     @Test
     void toFramework_throwsException_whenImageDoesNotExist() {
         // given
-        when(imageRepository.findById(any())).thenReturn(Optional.empty());
         FrameworkRequestDTO frameworkRequestDTO = new FrameworkRequestDTO(
                 "Test",
                 "Test",
                 1L,
                 1L
         );
+        when(imageRepository.findById(frameworkRequestDTO.getImageId())).thenReturn(Optional.empty());
 
         // when
         // then

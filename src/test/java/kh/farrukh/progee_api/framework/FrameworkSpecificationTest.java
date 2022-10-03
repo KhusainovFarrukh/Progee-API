@@ -30,20 +30,18 @@ public class FrameworkSpecificationTest {
     @Test
     void repository_returnsValidData_whenLanguageIdIsNullAndStateIsNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Framework> frameworks = List.of(
+        ));
+        List<Framework> frameworks = frameworkRepository.saveAll(List.of(
                 new Framework("Spring", ResourceState.APPROVED, languages.get(0)),
                 new Framework("Django", ResourceState.APPROVED, languages.get(1)),
                 new Framework("React", ResourceState.APPROVED, languages.get(2)),
                 new Framework("Angular", ResourceState.WAITING, languages.get(2)),
                 new Framework("Vue", ResourceState.DECLINED, languages.get(2))
-        );
-        frameworks = frameworkRepository.saveAll(frameworks);
+        ));
         FrameworkSpecification frameworkSpecification = new FrameworkSpecification(null, null);
 
         // when
@@ -56,79 +54,89 @@ public class FrameworkSpecificationTest {
     @Test
     void repository_returnsValidData_whenLanguageIdIsNotNullAndStateIsNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Framework> frameworks = List.of(
+        ));
+        frameworkRepository.saveAll(List.of(
                 new Framework("Spring", ResourceState.APPROVED, languages.get(0)),
+                new Framework("Hibernate", ResourceState.APPROVED, languages.get(0))
+        ));
+        frameworkRepository.saveAll(List.of(
                 new Framework("Django", ResourceState.APPROVED, languages.get(1)),
+                new Framework("Flask", ResourceState.APPROVED, languages.get(1))
+        ));
+        List<Framework> language2Frameworks = frameworkRepository.saveAll(List.of(
                 new Framework("React", ResourceState.APPROVED, languages.get(2)),
                 new Framework("Angular", ResourceState.WAITING, languages.get(2)),
                 new Framework("Vue", ResourceState.DECLINED, languages.get(2))
-        );
-        frameworks = frameworkRepository.saveAll(frameworks);
+        ));
         FrameworkSpecification frameworkSpecification = new FrameworkSpecification(languages.get(2).getId(), null);
 
         // when
         List<Framework> actual = frameworkRepository.findAll(frameworkSpecification);
 
         // then
-        assertThat(actual.size()).isEqualTo(3);
+        assertThat(actual.size()).isEqualTo(language2Frameworks.size());
     }
 
     @Test
     void repository_returnsValidData_whenLanguageIdIsNullAndStateIsNotNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Framework> frameworks = List.of(
+        ));
+        List<Framework> approvedFrameworks = frameworkRepository.saveAll(List.of(
                 new Framework("Spring", ResourceState.APPROVED, languages.get(0)),
                 new Framework("Django", ResourceState.APPROVED, languages.get(1)),
-                new Framework("React", ResourceState.APPROVED, languages.get(2)),
-                new Framework("Angular", ResourceState.WAITING, languages.get(2)),
+                new Framework("React", ResourceState.APPROVED, languages.get(2))
+
+        ));
+        frameworkRepository.saveAll(List.of(
+                new Framework("Angular", ResourceState.WAITING, languages.get(2))
+        ));
+        frameworkRepository.saveAll(List.of(
                 new Framework("Vue", ResourceState.DECLINED, languages.get(2))
-        );
-        frameworks = frameworkRepository.saveAll(frameworks);
+        ));
         FrameworkSpecification frameworkSpecification = new FrameworkSpecification(null, ResourceState.APPROVED);
 
         // when
         List<Framework> actual = frameworkRepository.findAll(frameworkSpecification);
 
         // then
-        assertThat(actual.size()).isEqualTo(3);
+        assertThat(actual.size()).isEqualTo(approvedFrameworks.size());
     }
 
     @Test
     void repository_returnsValidData_whenLanguageIdIsNotNullAndStateIsNotNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Framework> frameworks = List.of(
-                new Framework("Spring", ResourceState.APPROVED, languages.get(0)),
+        ));
+        frameworkRepository.saveAll(List.of(
                 new Framework("Django", ResourceState.APPROVED, languages.get(1)),
-                new Framework("React", ResourceState.APPROVED, languages.get(2)),
-                new Framework("Angular", ResourceState.WAITING, languages.get(2)),
-                new Framework("Vue", ResourceState.DECLINED, languages.get(2))
-        );
-        frameworks = frameworkRepository.saveAll(frameworks);
+                new Framework("Flask", ResourceState.APPROVED, languages.get(1))
+        ));
+        List<Framework> language2ApprovedFrameworks = frameworkRepository.saveAll(List.of(
+                new Framework("React", ResourceState.APPROVED, languages.get(2))
+        ));
+        frameworkRepository.saveAll(List.of(
+                new Framework("Vue", ResourceState.WAITING, languages.get(2)),
+                new Framework("Svelte", ResourceState.WAITING, languages.get(2))
+        ));
+
         FrameworkSpecification frameworkSpecification = new FrameworkSpecification(languages.get(2).getId(), ResourceState.APPROVED);
 
         // when
         List<Framework> actual = frameworkRepository.findAll(frameworkSpecification);
 
         // then
-        assertThat(actual.size()).isEqualTo(1);
+        assertThat(actual.size()).isEqualTo(language2ApprovedFrameworks.size());
     }
 
     @Test

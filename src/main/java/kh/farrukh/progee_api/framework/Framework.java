@@ -93,4 +93,8 @@ public class Framework extends EntityWithResourceState {
         this.createdAt = createdAt;
         this.language = language;
     }
+
+    public Framework(ResourceState state) {
+        super.setState(state);
+    }
 }

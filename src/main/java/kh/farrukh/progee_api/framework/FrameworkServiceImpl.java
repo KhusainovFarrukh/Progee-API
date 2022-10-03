@@ -148,7 +148,7 @@ public class FrameworkServiceImpl implements FrameworkService {
 
             // It checks if the name of the framework is changed and if the new name is already taken.
             if (!frameworkRequestDto.getName().equals(framework.getName()) &&
-                    languageRepository.existsByName(frameworkRequestDto.getName())) {
+                    frameworkRepository.existsByName(frameworkRequestDto.getName())) {
                 throw new DuplicateResourceException("Framework", "name", frameworkRequestDto.getName());
             }
 
