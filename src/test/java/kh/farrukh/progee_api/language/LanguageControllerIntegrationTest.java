@@ -75,7 +75,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithAnonymousUser
-    void canGetLanguagesWithoutFilter() throws Exception {
+    void getLanguages_canGetLanguagesWithoutFilter() throws Exception {
         // given
         List<Language> approvedLanguages = List.of(
                 new Language("test1", ResourceState.APPROVED),
@@ -105,7 +105,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canGetLanguagesWithFilter() throws Exception {
+    void getLanguages_canGetLanguagesWithFilter() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -146,7 +146,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithAnonymousUser
-    void canGetLanguageById() throws Exception {
+    void getLanguageById_canGetLanguageById() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language("test", ResourceState.APPROVED));
 
@@ -164,7 +164,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canAddLanguage() throws Exception {
+    void addLanguage_canAddLanguage() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -192,7 +192,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canUpdateLanguage() throws Exception {
+    void updateLanguage_canUpdateLanguage() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -222,7 +222,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canDeleteUserById() throws Exception {
+    void deleteLanguage_canDeleteLanguageById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_LANGUAGE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -241,7 +241,7 @@ class LanguageControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canSetLanguageState() throws Exception {
+    void setLanguageState_canSetLanguageState() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_SET_LANGUAGE_STATE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));

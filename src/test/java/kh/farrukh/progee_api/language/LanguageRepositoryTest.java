@@ -24,7 +24,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsTrueIfLanguageExistsByName() {
+    void existsByName_returnsTrue_whenLanguageExistsByName() {
         // given
         String name = "Java";
         Language language = new Language(name);
@@ -38,7 +38,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfLanguageDoesNotExistByName() {
+    void existsByName_returnsFalse_whenLanguageDoesNotExistByName() {
         // given
         String name = "Java";
         Language language = new Language("Kotlin");
@@ -52,7 +52,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfNameIsEmpty() {
+    void existsByName_returnsFalse_whenNameIsEmpty() {
         // given
         Language language = new Language("Java");
         underTest.save(language);
@@ -65,7 +65,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsFalseIfNameIsNull() {
+    void existsByName_returnsFalse_whenNameIsNull() {
         // given
         Language language = new Language("Java");
         underTest.save(language);
@@ -78,7 +78,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsOnlyOneStateLanguages() {
+    void findByState_returnsValidData_whenContainsOnlyOneStateLanguages() {
         // given
         ResourceState state = ResourceState.APPROVED;
 
@@ -103,7 +103,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsValidDataIfContainsMultipleStateLanguages() {
+    void findByState_returnsValidData_whenContainsMultipleStateLanguages() {
         // given
         ResourceState state1 = ResourceState.APPROVED;
         ResourceState state2 = ResourceState.WAITING;
@@ -144,7 +144,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfContainsOnlyOtherStateLanguages() {
+    void findByState_returnsEmptyData_whenContainsOnlyOtherStateLanguages() {
         // given
         ResourceState state1 = ResourceState.APPROVED;
         ResourceState state2 = ResourceState.WAITING;
@@ -183,7 +183,7 @@ class LanguageRepositoryTest {
     }
 
     @Test
-    void returnsEmptyDataIfDoesNotContainAnyLanguage() {
+    void findByState_returnsEmptyData_whenDoesNotContainAnyLanguage() {
         // given
         ResourceState state = ResourceState.APPROVED;
 

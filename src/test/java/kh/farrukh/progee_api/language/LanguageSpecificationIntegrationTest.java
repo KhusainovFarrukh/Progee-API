@@ -22,7 +22,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsValidDataIfStateIsNull() {
+    void repository_returnsValidData_whenStateIsNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -40,7 +40,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsValidDataIfStateIsNotNull() {
+    void repository_returnsValidData_whenStateIsNotNull() {
         // given
         List<Language> approvedLanguages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -63,7 +63,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsTrueIfStateIsNull() {
+    void equals_returnsTrue_whenStateIsNull() {
         // given
         LanguageSpecification languageSpecification1 = new LanguageSpecification(null);
         LanguageSpecification languageSpecification2 = new LanguageSpecification(null);
@@ -76,7 +76,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsTrueIfStateIsEqual() {
+    void equals_returnsTrue_whenStateIsEqual() {
         // given
         LanguageSpecification languageSpecification1 = new LanguageSpecification(ResourceState.APPROVED);
         LanguageSpecification languageSpecification2 = new LanguageSpecification(ResourceState.APPROVED);
@@ -89,7 +89,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsFalseIfStateIsNotEqual() {
+    void equals_returnsFalse_whenStateIsNotEqual() {
         // given
         LanguageSpecification languageSpecification1 = new LanguageSpecification(ResourceState.APPROVED);
         LanguageSpecification languageSpecification2 = new LanguageSpecification(ResourceState.WAITING);
@@ -102,7 +102,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsTrueIfSameObject() {
+    void equals_returnsTrue_whenSameObject() {
         // given
         LanguageSpecification languageSpecification = new LanguageSpecification(ResourceState.APPROVED);
 
@@ -114,7 +114,7 @@ class LanguageSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsFalseIfObjectIsNull() {
+    void equals_returnsFalse_whenObjectIsNull() {
         // given
         LanguageSpecification languageSpecification = new LanguageSpecification(ResourceState.APPROVED);
 
@@ -124,5 +124,4 @@ class LanguageSpecificationIntegrationTest {
         // then
         assertThat(actual).isFalse();
     }
-
 }

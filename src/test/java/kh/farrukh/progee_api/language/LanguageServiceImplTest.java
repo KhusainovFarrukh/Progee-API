@@ -53,7 +53,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void unauthenticatedUserCanGetApprovedLanguages() {
+    void getLanguages_canGetApprovedLanguages_whenUnauthenticatedUser() {
         // given
         when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -74,7 +74,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void unauthenticatedUserCanNotGetLanguagesFilteredByState() {
+    void getLanguages_throwsException_whenUnauthenticatedUserTriesToFilterLanguagesByState() {
         // when
         // then
         assertThatThrownBy(() -> underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC"))
@@ -84,7 +84,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithoutRequiredPermissionCanGetApprovedLanguages() {
+    void getLanguages_canGetApprovedLanguages_whenUserWithoutRequiredPermission() {
         // given
         when(languageRepository.findAll(any(LanguageSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -105,7 +105,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfUserWithoutRequiredPermissionFiltersLanguagesByState() {
+    void getLanguages_throwsException_whenUserWithoutRequiredPermissionFiltersLanguagesByState() {
         // when
         // then
         assertThatThrownBy(() -> underTest.getLanguages(ResourceState.WAITING, 1, 10, "id", "ASC"))
@@ -115,7 +115,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithRequiredPermissionCanGetLanguagesFilteredByState() {
+    void getLanguages_canGetLanguagesFilteredByState_whenUserWithRequiredPermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
@@ -138,7 +138,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithRequiredPermissionCanGetAllLanguages() {
+    void getLanguages_canGetAllLanguages_whenUserWithRequiredPermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
@@ -161,7 +161,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void canGetApprovedLanguageById() {
+    void getLanguageById_canGetLanguageById_whenStateIsApproved() {
         // given
         long id = 1;
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language("test", ResourceState.APPROVED)));
@@ -175,7 +175,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfUserWithoutRequiredPermissionTriesToGetsNonApprovedLanguageById() {
+    void getLanguageById_throwsException_whenUserWithoutRequiredPermissionTriesToGetsNonApprovedLanguageById() {
         // given
         long id = 1;
         Role role = new Role(Collections.emptyList());
@@ -190,7 +190,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void throwsExceptionIfLanguageDoesNotExistWithId() {
+    void getLanguageById_throwsException_whenLanguageDoesNotExistWithId() {
         // given
         long id = 1;
 
@@ -204,7 +204,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithOnlyCreatePermissionCreatesLanguageWithWaitingState() {
+    void addLanguage_createsLanguageWithWaitingState_whenUserWithOnlyCreatePermission() {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
@@ -224,7 +224,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithCreateAndSetStatePermissionsCreatesLanguageWithApprovedState() {
+    void addLanguage_createsLanguageWithApprovedState_whenUserWithCreateAndSetStatePermissions() {
         // given
         Role role = new Role(List.of(Permission.CAN_CREATE_LANGUAGE, Permission.CAN_SET_LANGUAGE_STATE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
@@ -244,7 +244,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageExistsWithName() {
+    void addLanguage_throwsException_whenLanguageExistsWithName() {
         // given
         String name = "test";
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO(name, "", 1);
@@ -260,7 +260,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void authorWithOnlyUpdateOwnPermissionCanUpdateLanguage() {
+    void updateLanguage_canUpdateLanguageAndSetWaitingState_whenAuthorWithOnlyUpdateOwnPermission() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -286,7 +286,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void authorWithUpdateOwnAndSetStatePermissionsCanUpdateLanguage() {
+    void updateLanguage_canUpdateLanguageAndSetApprovedState_whenAuthorWithUpdateOwnAndSetStatePermissions() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -312,7 +312,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfAuthorWithoutUpdateOwnPermissionUpdatesLanguage() {
+    void updateLanguage_throwsException_whenAuthorWithoutUpdateOwnPermissionUpdatesLanguage() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -331,7 +331,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void nonAuthorWithOnlyUpdateOthersPermissionCanUpdateLanguage() {
+    void updateLanguage_canUpdateLanguageAndSetWaitingState_whenNonAuthorWithOnlyUpdateOthersPermission() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -357,7 +357,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void nonAuthorWithUpdateOthersAndSetStatePermissionsCanUpdateOthersLanguage() {
+    void updateLanguage_canUpdateOthersLanguageAndSetApprovedState_whenNonAuthorWithUpdateOthersAndSetStatePermissions() {
         // given
         String name = "test name";
         String desc = "test desc";
@@ -383,7 +383,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfNonAuthorWithoutUpdateOthersPermissionUpdatesLanguage() {
+    void updateLanguage_throwsException_whenNonAuthorWithoutUpdateOthersPermission() {
         // given
         AppUser user = new AppUser(1, new Role(Collections.emptyList()));
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO("", "", 1);
@@ -400,7 +400,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageToUpdateDoesNotExistWithId() {
+    void updateLanguage_throwsException_whenLanguageToUpdateDoesNotExistWithId() {
         // given
         long languageId = 1;
         LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", 1);
@@ -416,7 +416,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageToUpdateExistsWithName() {
+    void updateLanguage_throwsException_whenLanguageToUpdateExistsWithName() {
         // given
         String name = "test name";
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
@@ -437,7 +437,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfImageOfLanguageToUpdateDoesNotExistWithId() {
+    void updateLanguage_throwsException_whenImageOfLanguageToUpdateDoesNotExistWithId() {
         // given
         long imageId = 1;
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
@@ -457,7 +457,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void canDeleteLanguageById() {
+    void deleteLanguage_canDeleteLanguageById_whenIdIsValid() {
         // given
         long languageId = 1;
         when(languageRepository.existsById(any())).thenReturn(true);
@@ -471,7 +471,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageToDeleteDoesNotExistWithId() {
+    void deleteLanguage_throwsException_whenLanguageToDeleteDoesNotExistWithId() {
         // given
         long languageId = 1;
 
@@ -485,7 +485,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void canSetLanguageState() {
+    void setLanguageState_canSetLanguageState() {
         // given
         long languageId = 1;
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
@@ -503,7 +503,7 @@ class LanguageServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageToSetStateDoesNotExistWithId() {
+    void setLanguageState_throwsException_whenLanguageToSetStateDoesNotExistWithId() {
         // given
         long languageId = 1;
         SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);

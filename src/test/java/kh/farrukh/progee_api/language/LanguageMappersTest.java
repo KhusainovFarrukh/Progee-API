@@ -27,7 +27,7 @@ class LanguageMappersTest {
     private ImageRepository imageRepository;
 
     @Test
-    void returnsNullIfLanguageIsNull() {
+    void toLanguageResponseDTO_returnsNull_whenLanguageIsNull() {
         // given
         Language language = null;
 
@@ -39,7 +39,7 @@ class LanguageMappersTest {
     }
 
     @Test
-    void canMapLanguageToLanguageResponseDTO() {
+    void toLanguageResponseDTO_canMap_whenLanguageIsValid() {
         // given
         Language language = new Language(
                 1,
@@ -66,7 +66,7 @@ class LanguageMappersTest {
     }
 
     @Test
-    void returnsNullIfLanguageRequestDTOIsNull() {
+    void toLanguage_returnsNull_whenLanguageRequestDTOIsNull() {
         // given
         LanguageRequestDTO languageRequestDTO = null;
 
@@ -78,7 +78,7 @@ class LanguageMappersTest {
     }
 
     @Test
-    void canMapLanguageRequestDTOToLanguage() {
+    void toLanguage_canMap_whenLanguageRequestDTOIsValid() {
         // given
         when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(1)));
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(
@@ -98,7 +98,7 @@ class LanguageMappersTest {
     }
 
     @Test
-    void throwsExceptionIfImageDoesNotExist() {
+    void toLanguage_throwsException_whenImageDoesNotExist() {
         // given
         when(imageRepository.findById(any())).thenReturn(Optional.empty());
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(
