@@ -53,7 +53,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewsWithoutLanguageIdAndReviewValueFilter() {
+    void getReviews_canGetReviews_whenWithoutLanguageIdAndReviewValueFilter() {
         // given
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -74,7 +74,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewsWithoutLanguageIdAndWithReviewValueFilter() {
+    void getReviews_canGetReviews_whenWithoutLanguageIdAndWithReviewValueFilter() {
         // given
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -95,7 +95,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewsWithLanguageIdAndWithoutReviewValueFilter() {
+    void getReviews_canGetReviews_whenWithLanguageIdAndWithoutReviewValueFilter() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
@@ -117,7 +117,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewsWithLanguageIdAndReviewValueFilter() {
+    void getReviews_canGetReviews_whenWithLanguageIdAndReviewValueFilter() {
         // given
         when(languageRepository.existsById(any())).thenReturn(true);
         when(reviewRepository.findAll(any(ReviewSpecification.class), any(Pageable.class)))
@@ -139,7 +139,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void throwsExceptionIfLanguageOfReviewsDoesNotExistWithId() {
+    void getReviews_throwsException_whenLanguageOfReviewsDoesNotExistWithId() {
         // given
         long languageId = 1;
 
@@ -156,7 +156,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewById() {
+    void getReviewById_canGetReviewById_whenIdIsValid() {
         // given
         long reviewId = 1;
         when(reviewRepository.findById(any())).thenReturn(Optional.of(new Review()));
@@ -170,7 +170,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithAnonymousUser
-    void throwsExceptionIfReviewDoesNotExistWithId() {
+    void getReviewById_throwsException_whenReviewDoesNotExistWithId() {
         // given
         long reviewId = 1;
 
@@ -184,7 +184,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void canCreateReview() {
+    void addReview_canCreateReview_whenReviewRequestDTOIsValid() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
@@ -208,7 +208,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageIdIsNull() {
+    void addReview_throwsException_whenLanguageIdIsNull() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
@@ -223,7 +223,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfLanguageOfFrameworkToCreateDoesNotExistWithId() {
+    void addReview_throwsException_whenLanguageOfFrameworkToCreateDoesNotExistWithId() {
         // given
         long languageId = 1;
         ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("", ReviewValue.LIKE, languageId);
@@ -239,7 +239,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void authorWithUpdateOwnPermissionCanUpdateReview() {
+    void updateReview_canUpdateReview_whenAuthorWithUpdateOwnPermission() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
@@ -263,7 +263,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfAuthorWithoutUpdateOwnPermissionUpdatesReview() {
+    void updateReview_throwsException_whenAuthorWithoutUpdateOwnPermissionUpdatesReview() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
@@ -282,7 +282,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithUpdateOthersPermissionCanUpdateReview() {
+    void updateReview_canUpdateReview_whenUserWithUpdateOthersPermission() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
@@ -306,7 +306,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfUserWithoutUpdateOthersPermissionUpdatesReview() {
+    void anUpdateReview_throwsException_whenUserWithoutUpdateOthersPermissionUpdatesReview() {
         // given
         String body = "test review";
         ReviewValue reviewValue = ReviewValue.LIKE;
@@ -325,7 +325,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfReviewToUpdateDoesNotExistWithId() {
+    void anUpdateReview_throwsException_whenReviewToUpdateDoesNotExistWithId() {
         // given
         long frameworkId = 1;
         ReviewRequestDTO reviewRequestDto = new ReviewRequestDTO("", ReviewValue.LIKE);
@@ -341,7 +341,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void userWithDeleteOthersPermissionCanDeleteReviewById() {
+    void deleteReview_canDeleteReviewById_whenUserWithDeleteOthersPermission() {
         // given
         long reviewId = 1;
         AppUser user = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OTHERS_REVIEW)));
@@ -359,7 +359,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfUserWithoutDeleteOthersPermissionDeletesReviewById() {
+    void deleteReview_throwsException_whenUserWithoutDeleteOthersPermission() {
         // given
         long reviewId = 1;
         AppUser user = new AppUser("test@mail.com", new Role(Collections.emptyList()));
@@ -376,7 +376,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void authorWithDeleteOwnPermissionCanDeleteReviewById() {
+    void deleteReview_canDeleteReviewById_whenAuthorWithDeleteOwnPermission() {
         // given
         long reviewId = 1;
         AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
@@ -394,7 +394,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfAuthorWithoutDeleteOwnPermissionDeletesReviewById() {
+    void deleteReview_throwsException_whenAuthorWithoutDeleteOwnPermission() {
         // given
         long reviewId = 1;
         AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
@@ -411,7 +411,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfReviewToDeleteDoesNotExistWithId() {
+    void deleteReview_throwsException_whenReviewToDeleteDoesNotExistWithId() {
         // given
         long reviewId = 1;
 
@@ -425,7 +425,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void canUpvoteReview() {
+    void voteReview_canUpvoteReview_whenDidNotVoteEarlier() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
@@ -445,7 +445,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void canDownvoteReview() {
+    void voteReview_canDownvoteReview_whenDidNotVoteEarlier() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
@@ -465,7 +465,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void canChangeDownvoteToUpvoteReview() {
+    void voteReview_canChangeDownvoteToUpvoteReview_whenDownvotedEarlier() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
@@ -487,7 +487,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void canChangeUpvoteToDownvoteReview() {
+    void voteReview_canChangeUpvoteToDownvoteReview_whenUpvotedEarlier() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
@@ -509,7 +509,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfUpvotesAlreadyUpvotedReview() {
+    void voteReview_throwsException_whenUpvotesAlreadyUpvotedReview() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(true);
@@ -528,7 +528,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfDownvotesAlreadyDownvotedReview() {
+    void voteReview_throwsException_whenDownvotesAlreadyDownvotedReview() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO voteDto = new ReviewVoteRequestDTO(false);
@@ -547,7 +547,7 @@ class ReviewServiceImplTest {
 
     @Test
     @WithMockUser
-    void throwsExceptionIfReviewToVoteDoesNotExistWithId() {
+    void voteReview_throwsException_whenReviewToVoteDoesNotExistWithId() {
         // given
         long reviewId = 1;
         ReviewVoteRequestDTO stateDto = new ReviewVoteRequestDTO(true);

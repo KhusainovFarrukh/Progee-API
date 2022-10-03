@@ -28,7 +28,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNullAndReviewValueIsNull() {
+    void repository_returnsValidData_whenLanguageIdIsNullAndReviewValueIsNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -54,7 +54,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNotNullAndReviewValueIsNull() {
+    void repository_returnsValidData_whenLanguageIdIsNotNullAndReviewValueIsNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -80,7 +80,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNullAndReviewValueIsNotNull() {
+    void repository_returnsValidData_whenLanguageIdIsNullAndReviewValueIsNotNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -106,7 +106,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsValidDataIfLanguageIdIsNotNullAndReviewValueIsNotNull() {
+    void repository_returnsValidData_whenLanguageIdIsNotNullAndReviewValueIsNotNull() {
         // given
         List<Language> languages = List.of(
                 new Language("Java", ResourceState.APPROVED),
@@ -132,7 +132,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsTrueIfBothLanguageIdAndStateAreNull() {
+    void equals_returnsTrue_whenBothLanguageIdAndReviewValueAreNull() {
         // given
         ReviewSpecification reviewSpecification1 = new ReviewSpecification(null, null);
         ReviewSpecification reviewSpecification2 = new ReviewSpecification(null, null);
@@ -145,7 +145,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsTrueIfBothLanguageIdAndReviewValueAreEqual() {
+    void equals_returnsTrue_whenBothLanguageIdAndReviewValueAreEqual() {
         // given
         ReviewSpecification reviewSpecification1 = new ReviewSpecification(1L, ReviewValue.LIKE);
         ReviewSpecification reviewSpecification2 = new ReviewSpecification(1L, ReviewValue.LIKE);
@@ -158,7 +158,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsFalseIfLanguageIdIsNotEqual() {
+    void equals_returnsFalse_whenLanguageIdIsNotEqual() {
         // given
         ReviewSpecification reviewSpecification1 = new ReviewSpecification(1L, ReviewValue.LIKE);
         ReviewSpecification reviewSpecification2 = new ReviewSpecification(2L, ReviewValue.LIKE);
@@ -171,8 +171,8 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsFalseIfReviewValueIsNotEqual() {
-        // given
+    void equals_returnsFalse_whenReviewValueIsNotEqual() {
+        // givn
         ReviewSpecification reviewSpecification1 = new ReviewSpecification(1L, ReviewValue.LIKE);
         ReviewSpecification reviewSpecification2 = new ReviewSpecification(1L, ReviewValue.DISLIKE);
 
@@ -184,7 +184,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsTrueIfSameObject() {
+    void equals_returnsTrue_whenSameObject() {
         // given
         ReviewSpecification reviewSpecification = new ReviewSpecification(1L, ReviewValue.LIKE);
 
@@ -196,7 +196,7 @@ class ReviewSpecificationIntegrationTest {
     }
 
     @Test
-    void returnsFalseIfObjectIsNull() {
+    void equals_returnsFalse_whenObjectIsNull() {
         // given
         ReviewSpecification reviewSpecification = new ReviewSpecification(1L, ReviewValue.LIKE);
 

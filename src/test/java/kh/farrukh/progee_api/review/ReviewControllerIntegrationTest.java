@@ -85,7 +85,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewsWithoutFilter() throws Exception {
+    void getReviews_canGetReviewsWithoutFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         List<Review> reviews = List.of(
@@ -117,7 +117,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewsWithFilter() throws Exception {
+    void getReviews_canGetReviewsWithFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         List<Review> likeReviews = List.of(
@@ -154,7 +154,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithAnonymousUser
-    void canGetReviewById() throws Exception {
+    void getReviewById_canGetReviewById() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
         Review existingReview = reviewRepository.save(
@@ -175,7 +175,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canAddReview() throws Exception {
+    void addReview_canAddReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_CREATE_REVIEW)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -202,7 +202,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canUpdateReview() throws Exception {
+    void updateReview_canUpdateReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_REVIEW)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -233,7 +233,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canDeleteReviewById() throws Exception {
+    void deleteReview_canDeleteReviewById() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_OWN_REVIEW)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
@@ -254,7 +254,7 @@ class ReviewControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    void canVoteReview() throws Exception {
+    void voteReview_canVoteReview() throws Exception {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VOTE_REVIEW)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));

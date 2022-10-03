@@ -15,7 +15,7 @@ class ReviewValueConverterTest {
     }
 
     @Test
-    void returnsScoreIfReviewValueIsValid() {
+    void convertToDatabaseColumn_returnsScore_whenReviewValueIsValid() {
         // given
         ReviewValue reviewValue = ReviewValue.LIKE;
 
@@ -27,7 +27,7 @@ class ReviewValueConverterTest {
     }
 
     @Test
-    void returnsDefaultScoreIfReviewValueIsNull() {
+    void convertToDatabaseColumn_returnsDefaultScore_whenReviewValueIsNull() {
         // given
         ReviewValue reviewValue = null;
 
@@ -39,7 +39,7 @@ class ReviewValueConverterTest {
     }
 
     @Test
-    void returnsReviewValueIfScoreIsValid() {
+    void convertToEntityAttribute_returnsReviewValue_whenScoreIsValid() {
         // given
         ReviewValue reviewValue = ReviewValue.LIKE;
         Integer score = reviewValue.getScore();
@@ -52,7 +52,7 @@ class ReviewValueConverterTest {
     }
 
     @Test
-    void returnsDefaultReviewValueIfScoreIsInvalid() {
+    void convertToEntityAttribute_returnsDefaultReviewValue_whenScoreIsInvalid() {
         // given
         Integer score = 99;
 
@@ -64,7 +64,7 @@ class ReviewValueConverterTest {
     }
 
     @Test
-    void returnsDefaultReviewValueIfScoreIsNull() {
+    void convertToEntityAttribute_returnsDefaultReviewValue_whenScoreIsNull() {
         // given
         Integer score = null;
 

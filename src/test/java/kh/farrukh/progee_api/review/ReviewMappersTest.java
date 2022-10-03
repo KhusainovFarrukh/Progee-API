@@ -27,7 +27,7 @@ class ReviewMappersTest {
     private LanguageRepository languageRepository;
 
     @Test
-    void returnsNullIfReview() {
+    void toReviewResponseDTO_returnsNull_whenReviewIsNull() {
         // given
         Review review = null;
 
@@ -39,7 +39,7 @@ class ReviewMappersTest {
     }
 
     @Test
-    void canMapReviewToReviewResponseDTO() {
+    void toReviewResponseDTO_canMap_whenReviewIsValid() {
         // given
         Review review = new Review(
                 1,
@@ -70,7 +70,7 @@ class ReviewMappersTest {
     }
 
     @Test
-    void returnsNullIfReviewRequestDTO() {
+    void toReview_returnsNull_whenReviewRequestDTOIsNull() {
         // given
         ReviewRequestDTO reviewRequestDTO = null;
 
@@ -82,7 +82,7 @@ class ReviewMappersTest {
     }
 
     @Test
-    void canMapReviewRequestDTOToReview() {
+    void toReview_canMap_whenReviewRequestDTOIsValid() {
         // given
         when(languageRepository.findById(any())).thenReturn(Optional.of(new Language(1)));
         ReviewRequestDTO reviewRequestDTO = new ReviewRequestDTO(
@@ -102,7 +102,7 @@ class ReviewMappersTest {
     }
 
     @Test
-    void throwsExceptionIfLanguageDoesNotExist() {
+    void toReview_throwsException_whenLanguageDoesNotExist() {
         // given
         when(languageRepository.findById(any())).thenReturn(Optional.empty());
         ReviewRequestDTO reviewRequestDTO = new ReviewRequestDTO(
