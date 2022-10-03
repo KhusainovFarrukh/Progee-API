@@ -35,18 +35,18 @@ class AuthMappersTest {
         );
 
         // when
-        AppUserRequestDTO appUserRequestDTO = AuthMappers.toAppUserRequestDTO(registrationRequestDTO, roleRepository);
+        AppUserRequestDTO actual = AuthMappers.toAppUserRequestDTO(registrationRequestDTO, roleRepository);
 
         // then
-        assertThat(appUserRequestDTO).isNotNull();
-        assertThat(appUserRequestDTO.getName()).isEqualTo(registrationRequestDTO.getName());
-        assertThat(appUserRequestDTO.getUniqueUsername()).isEqualTo(registrationRequestDTO.getUniqueUsername());
-        assertThat(appUserRequestDTO.getEmail()).isEqualTo(registrationRequestDTO.getEmail());
-        assertThat(appUserRequestDTO.getPassword()).isEqualTo(registrationRequestDTO.getPassword());
-        assertThat(appUserRequestDTO.getImageId()).isEqualTo(registrationRequestDTO.getImageId());
-        assertThat(appUserRequestDTO.isEnabled()).isTrue();
-        assertThat(appUserRequestDTO.isLocked()).isFalse();
-        assertThat(appUserRequestDTO.getRoleId()).isEqualTo(1);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getName()).isEqualTo(registrationRequestDTO.getName());
+        assertThat(actual.getUniqueUsername()).isEqualTo(registrationRequestDTO.getUniqueUsername());
+        assertThat(actual.getEmail()).isEqualTo(registrationRequestDTO.getEmail());
+        assertThat(actual.getPassword()).isEqualTo(registrationRequestDTO.getPassword());
+        assertThat(actual.getImageId()).isEqualTo(registrationRequestDTO.getImageId());
+        assertThat(actual.isEnabled()).isTrue();
+        assertThat(actual.isLocked()).isFalse();
+        assertThat(actual.getRoleId()).isEqualTo(1);
     }
 
     @Test
@@ -55,10 +55,10 @@ class AuthMappersTest {
         RegistrationRequestDTO registrationRequestDTO = null;
 
         // when
-        AppUserRequestDTO appUserRequestDTO = AuthMappers.toAppUserRequestDTO(registrationRequestDTO, roleRepository);
+        AppUserRequestDTO actual = AuthMappers.toAppUserRequestDTO(registrationRequestDTO, roleRepository);
 
         // then
-        assertThat(appUserRequestDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test

@@ -21,10 +21,10 @@ class EmailValidatorTest {
         String email = "farrukh@mail.com";
 
         // when
-        boolean isValid = validator.test(email);
+        boolean actual = validator.test(email);
 
         // then
-        assertThat(isValid).isTrue();
+        assertThat(actual).isTrue();
     }
 
     @Test
@@ -33,10 +33,10 @@ class EmailValidatorTest {
         String email = "farrukh.mail.com";
 
         // when
-        boolean isValid = validator.test(email);
+        boolean actual = validator.test(email);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
@@ -45,10 +45,10 @@ class EmailValidatorTest {
         String email = "";
 
         // when
-        boolean isValid = validator.test(email);
+        boolean actual = validator.test(email);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
@@ -57,9 +57,9 @@ class EmailValidatorTest {
         String email = null;
 
         // when
-        boolean isValid = validator.test(email);
+        boolean actual = validator.test(email);
 
         // then
-        assertThat(isValid).isFalse();
+        assertThat(actual).isFalse();
     }
 }

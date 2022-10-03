@@ -88,12 +88,12 @@ class AuthControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUserResponseDTO user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
-        assertThat(user.getName()).isEqualTo(request.getName());
-        assertThat(user.getUniqueUsername()).isEqualTo(request.getUniqueUsername());
-        assertThat(user.getEmail()).isEqualTo(request.getEmail());
-        assertThat(user.getImage().getId()).isEqualTo(request.getImageId());
-        assertThat(user.getRole().getId()).isEqualTo(existingRole.getId());
+        AppUserResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
+        assertThat(actual.getName()).isEqualTo(request.getName());
+        assertThat(actual.getUniqueUsername()).isEqualTo(request.getUniqueUsername());
+        assertThat(actual.getEmail()).isEqualTo(request.getEmail());
+        assertThat(actual.getImage().getId()).isEqualTo(request.getImageId());
+        assertThat(actual.getRole().getId()).isEqualTo(existingRole.getId());
     }
 
     @Test
@@ -117,14 +117,13 @@ class AuthControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AuthResponseDTO response = objectMapper.readValue(
+        AuthResponseDTO actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), AuthResponseDTO.class
         );
 
-        assertThat(response.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
+        assertThat(actual.getRole().getTitle()).isEqualTo(user.getRole().getTitle());
     }
 
-    // TODO: 7/29/22 giving 403 error if refresh token is valid
     @Test
     void refreshToken_canRefreshToken() throws Exception {
         // given
@@ -146,11 +145,11 @@ class AuthControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AuthResponseDTO response = objectMapper.readValue(
+        AuthResponseDTO actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), AuthResponseDTO.class
         );
-        assertThat(response.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
-        assertThat(response.getAccessToken()).isNotNull();
-        assertThat(response.getRefreshToken()).isNotNull();
+        assertThat(actual.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
+        assertThat(actual.getAccessToken()).isNotNull();
+        assertThat(actual.getRefreshToken()).isNotNull();
     }
 }

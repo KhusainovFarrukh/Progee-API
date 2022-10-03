@@ -41,12 +41,16 @@ class AuthServiceImplTest {
 
     @Mock
     private EmailValidator emailValidator;
+
     @Mock
     private AppUserService appUserService;
+
     @Mock
     private RoleRepository roleRepository;
+
     @Mock
     private TokenProvider tokenProvider;
+
     @InjectMocks
     private AuthServiceImpl underTest;
 
@@ -56,7 +60,7 @@ class AuthServiceImplTest {
         RegistrationRequestDTO registrationRequestDTO = new RegistrationRequestDTO(
                 "test", "test_lover", "user@mail.com", "1234", 1
         );
-        when(emailValidator.test(any())).thenReturn(true);
+        when(emailValidator.test(registrationRequestDTO.getEmail())).thenReturn(true);
         when(roleRepository.findFirstByIsDefaultIsTrue()).thenReturn(Optional.of(new Role()));
 
         // when
@@ -66,12 +70,12 @@ class AuthServiceImplTest {
         ArgumentCaptor<AppUserRequestDTO> appUserDTOArgCaptor = ArgumentCaptor.forClass(AppUserRequestDTO.class);
         verify(appUserService).addUser(appUserDTOArgCaptor.capture());
 
-        AppUserRequestDTO capturedAppUSerRequestDto = appUserDTOArgCaptor.getValue();
-        assertThat(capturedAppUSerRequestDto.getEmail()).isEqualTo(registrationRequestDTO.getEmail());
-        assertThat(capturedAppUSerRequestDto.getUniqueUsername()).isEqualTo(registrationRequestDTO.getUniqueUsername());
-        assertThat(capturedAppUSerRequestDto.getName()).isEqualTo(registrationRequestDTO.getName());
-        assertThat(capturedAppUSerRequestDto.getPassword()).isEqualTo(registrationRequestDTO.getPassword());
-        assertThat(capturedAppUSerRequestDto.getImageId()).isEqualTo(registrationRequestDTO.getImageId());
+        AppUserRequestDTO actual = appUserDTOArgCaptor.getValue();
+        assertThat(actual.getEmail()).isEqualTo(registrationRequestDTO.getEmail());
+        assertThat(actual.getUniqueUsername()).isEqualTo(registrationRequestDTO.getUniqueUsername());
+        assertThat(actual.getName()).isEqualTo(registrationRequestDTO.getName());
+        assertThat(actual.getPassword()).isEqualTo(registrationRequestDTO.getPassword());
+        assertThat(actual.getImageId()).isEqualTo(registrationRequestDTO.getImageId());
     }
 
     @Test
@@ -117,10 +121,10 @@ class AuthServiceImplTest {
         );
 
         // when
-        AuthResponseDTO authResponseDTO = underTest.refreshToken("Bearer " + refreshToken);
+        AuthResponseDTO actual = underTest.refreshToken("Bearer " + refreshToken);
 
         // then
-        assertThat(authResponseDTO.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
+        assertThat(actual.getRole().getTitle()).isEqualTo(existingUser.getRole().getTitle());
     }
 
     @Test

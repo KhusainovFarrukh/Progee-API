@@ -49,17 +49,17 @@ class AppUserMappersTest {
         );
 
         // when
-        AppUserResponseDTO appUserResponseDTO = AppUserMappers.toAppUserResponseDTO(appUser);
+        AppUserResponseDTO actual = AppUserMappers.toAppUserResponseDTO(appUser);
 
         // then
-        assertThat(appUserResponseDTO).isNotNull();
-        assertThat(appUserResponseDTO.getName()).isEqualTo(appUser.getName());
-        assertThat(appUserResponseDTO.getEmail()).isEqualTo(appUser.getEmail());
-        assertThat(appUserResponseDTO.getUniqueUsername()).isEqualTo(appUser.getUniqueUsername());
-        assertThat(appUserResponseDTO.isEnabled()).isEqualTo(appUser.isEnabled());
-        assertThat(appUserResponseDTO.isLocked()).isEqualTo(appUser.isLocked());
-        assertThat(appUserResponseDTO.getRole().getId()).isEqualTo(appUser.getRole().getId());
-        assertThat(appUserResponseDTO.getImage().getId()).isEqualTo(appUser.getImage().getId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getName()).isEqualTo(appUser.getName());
+        assertThat(actual.getEmail()).isEqualTo(appUser.getEmail());
+        assertThat(actual.getUniqueUsername()).isEqualTo(appUser.getUniqueUsername());
+        assertThat(actual.isEnabled()).isEqualTo(appUser.isEnabled());
+        assertThat(actual.isLocked()).isEqualTo(appUser.isLocked());
+        assertThat(actual.getRole().getId()).isEqualTo(appUser.getRole().getId());
+        assertThat(actual.getImage().getId()).isEqualTo(appUser.getImage().getId());
     }
 
     @Test
@@ -68,10 +68,10 @@ class AppUserMappersTest {
         AppUser appUser = null;
 
         // when
-        AppUserResponseDTO appUserResponseDTO = AppUserMappers.toAppUserResponseDTO(appUser);
+        AppUserResponseDTO actual = AppUserMappers.toAppUserResponseDTO(appUser);
 
         // then
-        assertThat(appUserResponseDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -89,17 +89,17 @@ class AppUserMappersTest {
         );
 
         // when
-        AppUser appUser = AppUserMappers.toAppUser(appUserResponseDTO);
+        AppUser actual = AppUserMappers.toAppUser(appUserResponseDTO);
 
         // then
-        assertThat(appUser).isNotNull();
-        assertThat(appUser.getName()).isEqualTo(appUserResponseDTO.getName());
-        assertThat(appUser.getEmail()).isEqualTo(appUserResponseDTO.getEmail());
-        assertThat(appUser.getUniqueUsername()).isEqualTo(appUserResponseDTO.getUniqueUsername());
-        assertThat(appUser.isEnabled()).isEqualTo(appUserResponseDTO.isEnabled());
-        assertThat(appUser.isLocked()).isEqualTo(appUserResponseDTO.isLocked());
-        assertThat(appUser.getRole().getId()).isEqualTo(appUserResponseDTO.getRole().getId());
-        assertThat(appUser.getImage().getId()).isEqualTo(appUserResponseDTO.getImage().getId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getName()).isEqualTo(appUserResponseDTO.getName());
+        assertThat(actual.getEmail()).isEqualTo(appUserResponseDTO.getEmail());
+        assertThat(actual.getUniqueUsername()).isEqualTo(appUserResponseDTO.getUniqueUsername());
+        assertThat(actual.isEnabled()).isEqualTo(appUserResponseDTO.isEnabled());
+        assertThat(actual.isLocked()).isEqualTo(appUserResponseDTO.isLocked());
+        assertThat(actual.getRole().getId()).isEqualTo(appUserResponseDTO.getRole().getId());
+        assertThat(actual.getImage().getId()).isEqualTo(appUserResponseDTO.getImage().getId());
     }
 
     @Test
@@ -108,10 +108,10 @@ class AppUserMappersTest {
         AppUserResponseDTO appUserResponseDTO = null;
 
         // when
-        AppUser appUser = AppUserMappers.toAppUser(appUserResponseDTO);
+        AppUser actual = AppUserMappers.toAppUser(appUserResponseDTO);
 
         // then
-        assertThat(appUser).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -131,17 +131,17 @@ class AppUserMappersTest {
         );
 
         // when
-        AppUser appUser = AppUserMappers.toAppUser(appUserRequestDTO, roleRepository, imageRepository);
+        AppUser actual = AppUserMappers.toAppUser(appUserRequestDTO, roleRepository, imageRepository);
 
         // then
-        assertThat(appUser).isNotNull();
-        assertThat(appUser.getName()).isEqualTo(appUserRequestDTO.getName());
-        assertThat(appUser.getEmail()).isEqualTo(appUserRequestDTO.getEmail());
-        assertThat(appUser.getUniqueUsername()).isEqualTo(appUserRequestDTO.getUniqueUsername());
-        assertThat(appUser.isEnabled()).isEqualTo(appUserRequestDTO.isEnabled());
-        assertThat(appUser.isLocked()).isEqualTo(appUserRequestDTO.isLocked());
-        assertThat(appUser.getRole().getId()).isEqualTo(appUserRequestDTO.getRoleId());
-        assertThat(appUser.getImage().getId()).isEqualTo(appUserRequestDTO.getImageId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getName()).isEqualTo(appUserRequestDTO.getName());
+        assertThat(actual.getEmail()).isEqualTo(appUserRequestDTO.getEmail());
+        assertThat(actual.getUniqueUsername()).isEqualTo(appUserRequestDTO.getUniqueUsername());
+        assertThat(actual.isEnabled()).isEqualTo(appUserRequestDTO.isEnabled());
+        assertThat(actual.isLocked()).isEqualTo(appUserRequestDTO.isLocked());
+        assertThat(actual.getRole().getId()).isEqualTo(appUserRequestDTO.getRoleId());
+        assertThat(actual.getImage().getId()).isEqualTo(appUserRequestDTO.getImageId());
     }
 
     @Test
@@ -150,10 +150,10 @@ class AppUserMappersTest {
         AppUserRequestDTO appUserRequestDTO = null;
 
         // when
-        AppUser appUser = AppUserMappers.toAppUser(appUserRequestDTO, roleRepository, imageRepository);
+        AppUser actual = AppUserMappers.toAppUser(appUserRequestDTO, roleRepository, imageRepository);
 
         // then
-        assertThat(appUser).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
