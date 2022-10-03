@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.annotation.SecurityTestExecutionListeners;
@@ -45,12 +46,16 @@ class AppUserServiceImplTest {
 
     @Mock
     private AppUserRepository appUserRepository;
+
     @Mock
     private ImageRepository imageRepository;
+
     @Mock
     private PasswordEncoder passwordEncoder;
+
     @Mock
     private RoleRepository roleRepository;
+
     @InjectMocks
     private AppUserServiceImpl underTest;
 
@@ -58,7 +63,7 @@ class AppUserServiceImplTest {
     void loadUserByUsername_canLoad_whenUsernameIsValid() {
         // given
         String username = "user@gmail.com";
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findByEmail(username)).thenReturn(Optional.of(new AppUser()));
 
         // when
         underTest.loadUserByUsername(username);
@@ -69,19 +74,18 @@ class AppUserServiceImplTest {
 
     @Test
     void loadUserByUsername_throwsException_whenUsernameIsWrong() {
-        // given
-        String username = "user@gmail.com";
-
         // when
         // then
-        assertThatThrownBy(() -> underTest.loadUserByUsername(username))
+        assertThatThrownBy(() -> underTest.loadUserByUsername("user@gmail.com"))
                 .isInstanceOf(UsernameNotFoundException.class);
     }
 
     @Test
     void getUsers_canGetUsers() {
         // given
-        when(appUserRepository.findAll(any(Pageable.class))).thenReturn(Page.empty(Pageable.ofSize(10)));
+        when(appUserRepository.findAll(PageRequest.of(0, 10, Sort.Direction.ASC, "id")))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
+
         // when
         underTest.getUsers(1, 10, "id", "ASC");
 
@@ -89,14 +93,13 @@ class AppUserServiceImplTest {
         verify(appUserRepository).findAll(
                 PageRequest.of(0, 10, SortUtils.parseDirection("ASC"), "id")
         );
-
     }
 
     @Test
     void getUserById_canGetUserById() {
         // given
         long userId = 1;
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser()));
 
         // when
         underTest.getUserById(userId);
@@ -122,7 +125,7 @@ class AppUserServiceImplTest {
     void getUserByEmail_canGetUserByEmail() {
         // given
         String email = "test@mail.com";
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser()));
+        when(appUserRepository.findByEmail(email)).thenReturn(Optional.of(new AppUser()));
 
         // when
         underTest.getUserByEmail(email);
@@ -157,9 +160,9 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(passwordEncoder.encode(any())).thenReturn("encoded-password");
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
-        when(roleRepository.findById(any())).thenReturn(Optional.of(new Role(Collections.emptyList())));
+        when(passwordEncoder.encode(userDto.getPassword())).thenReturn("encoded-password");
+        when(imageRepository.findById(userDto.getImageId())).thenReturn(Optional.of(new Image()));
+        when(roleRepository.findById(userDto.getRoleId())).thenReturn(Optional.of(new Role(Collections.emptyList())));
 
         // when
         underTest.addUser(userDto);
@@ -168,10 +171,10 @@ class AppUserServiceImplTest {
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
         verify(appUserRepository).save(userArgCaptor.capture());
 
-        AppUser capturedUser = userArgCaptor.getValue();
-        assertThat(capturedUser.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
-        assertThat(capturedUser.getEmail()).isEqualTo(userDto.getEmail());
-        assertThat(capturedUser.getPassword()).isEqualTo("encoded-password");
+        AppUser actual = userArgCaptor.getValue();
+        assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
+        assertThat(actual.getEmail()).isEqualTo(userDto.getEmail());
+        assertThat(actual.getPassword()).isEqualTo("encoded-password");
     }
 
     @Test
@@ -187,14 +190,15 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.existsByEmail(any())).thenReturn(true);
+        when(appUserRepository.existsByEmail(userDto.getEmail())).thenReturn(true);
 
         // when
         // then
         assertThatThrownBy(() -> underTest.addUser(userDto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("User")
-                .hasMessageContaining("email");
+                .hasMessageContaining("email")
+                .hasMessageContaining(userDto.getEmail());
     }
 
     @Test
@@ -210,20 +214,22 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.existsByUniqueUsername(any())).thenReturn(true);
+        when(appUserRepository.existsByUniqueUsername(userDto.getUniqueUsername())).thenReturn(true);
 
         // when
         // then
         assertThatThrownBy(() -> underTest.addUser(userDto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("User")
-                .hasMessageContaining("username");
+                .hasMessageContaining("username")
+                .hasMessageContaining(userDto.getUniqueUsername());
     }
 
     @Test
     @WithMockUser(username = "user@mail.com")
     void updateUser_canUpdateUser_whenUserWithUpdateOwnPermission() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -235,12 +241,12 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER));
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(imageRepository.findById(userDto.getImageId())).thenReturn(Optional.of(new Image()));
 
         // when
-        underTest.updateUser(1, userDto);
+        underTest.updateUser(userId, userDto);
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
@@ -255,6 +261,7 @@ class AppUserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void updateUser_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -266,12 +273,12 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.emptyList());
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(1, existingRole)));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateUser(1, userDto))
+        assertThatThrownBy(() -> underTest.updateUser(userId, userDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -279,6 +286,7 @@ class AppUserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void updateUser_canUpdateUser_whenUserWithUpdateOthersPermission() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -290,12 +298,12 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER));
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, existingRole)));
+        when(imageRepository.findById(userDto.getImageId())).thenReturn(Optional.of(new Image()));
 
         // when
-        underTest.updateUser(2, userDto);
+        underTest.updateUser(userId, userDto);
 
         // then
         ArgumentCaptor<AppUser> userArgCaptor = ArgumentCaptor.forClass(AppUser.class);
@@ -310,6 +318,7 @@ class AppUserServiceImplTest {
     @WithMockUser(username = "user@mail.com")
     void updateUser_throwsException_whenUserWithoutUpdateOthersPermissionUpdatesUser() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -321,18 +330,19 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.emptyList());
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, existingRole)));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateUser(2, userDto))
+        assertThatThrownBy(() -> underTest.updateUser(userId, userDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
     @Test
     void updateUser_throwsException_whenUserToUpdateDoesNotExistWithId() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -343,19 +353,21 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.findById(any())).thenReturn(Optional.empty());
+        when(appUserRepository.findById(userId)).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateUser(1, userDto))
+        assertThatThrownBy(() -> underTest.updateUser(userId, userDto))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("User");
+                .hasMessageContaining("User")
+                .hasMessageContaining(String.valueOf(userId));
     }
 
     @Test
     @WithMockUser(username = "user@mail.com")
     void updateUser_throwsException_whenUsernameOfUserToUpdateIsAlreadyUsed() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -366,22 +378,24 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.existsByUniqueUsername(any())).thenReturn(true);
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.existsByUniqueUsername(userDto.getUniqueUsername())).thenReturn(true);
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateUser(1, userDto))
+        assertThatThrownBy(() -> underTest.updateUser(userId, userDto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("User")
-                .hasMessageContaining("username");
+                .hasMessageContaining("username")
+                .hasMessageContaining(userDto.getUniqueUsername());
     }
 
     @Test
     @WithMockUser(username = "user@mail.com")
     void updateUser_throwsException_whenEmailOfUserToUpdateIsAlreadyUsed() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -392,22 +406,24 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.existsByEmail(any())).thenReturn(true);
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.existsByEmail(userDto.getEmail())).thenReturn(true);
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateUser(1, userDto))
+        assertThatThrownBy(() -> underTest.updateUser(userId, userDto))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("User")
-                .hasMessageContaining("email");
+                .hasMessageContaining("email")
+                .hasMessageContaining(userDto.getEmail());
     }
 
     @Test
     @WithMockUser(username = "user@mail.com")
     void updateUser_throwsException_whenImageOfUserToUpdateDoesNotExistWithId() {
         // given
+        long userId = 1;
         AppUserRequestDTO userDto = new AppUserRequestDTO(
                 "user",
                 "user@mail.com",
@@ -418,22 +434,23 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateUser(1, userDto))
+        assertThatThrownBy(() -> underTest.updateUser(userId, userDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
-                .hasMessageContaining("id");
+                .hasMessageContaining("id")
+                .hasMessageContaining(String.valueOf(userDto.getImageId()));
     }
 
     @Test
     void deleteById_canDeleteUserById() {
         // given
         long userId = 1;
-        when(appUserRepository.existsById(any())).thenReturn(true);
+        when(appUserRepository.existsById(userId)).thenReturn(true);
 
         // when
         underTest.deleteUser(userId);
@@ -483,20 +500,23 @@ class AppUserServiceImplTest {
         assertThatThrownBy(() -> underTest.setUserRole(1, roleDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Role")
-                .hasMessageContaining("id");
+                .hasMessageContaining("id")
+                .hasMessageContaining(String.valueOf(roleDto.getRoleId()));
     }
 
     @Test
     void setUserRole_throwsException_whenUserToSetRoleDoesNotExistWithId() {
         // given
+        long userId = 1;
         SetUserRoleRequestDTO roleDto = new SetUserRoleRequestDTO(1);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.setUserRole(1, roleDto))
+        assertThatThrownBy(() -> underTest.setUserRole(userId, roleDto))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("User")
-                .hasMessageContaining("id");
+                .hasMessageContaining("id")
+                .hasMessageContaining(String.valueOf(userId));
     }
 
     @Test
@@ -507,8 +527,8 @@ class AppUserServiceImplTest {
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(imageRepository.findById(imageDto.getImageId())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
 
         // when
         underTest.setUserImage(userId, imageDto);
@@ -543,8 +563,8 @@ class AppUserServiceImplTest {
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId)));
+        when(imageRepository.findById(imageDto.getImageId())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
 
         // when
         underTest.setUserImage(1, imageDto);
@@ -567,7 +587,7 @@ class AppUserServiceImplTest {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.setUserImage(1, imageDto))
+        assertThatThrownBy(() -> underTest.setUserImage(userId, imageDto))
                 .isInstanceOf(NotEnoughPermissionException.class);
     }
 
@@ -597,7 +617,7 @@ class AppUserServiceImplTest {
         SetUserImageRequestDTO imageDto = new SetUserImageRequestDTO(1);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -605,7 +625,7 @@ class AppUserServiceImplTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
                 .hasMessageContaining("id")
-                .hasMessageContaining(String.valueOf(userId));
+                .hasMessageContaining(String.valueOf(imageDto.getImageId()));
     }
 
     @Test
@@ -618,9 +638,9 @@ class AppUserServiceImplTest {
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(any(), any())).thenReturn(true);
-        when(passwordEncoder.encode(any())).thenReturn(newPassword);
+        when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
 
         // when
         underTest.setUserPassword(userId, passwordDto);
@@ -659,9 +679,9 @@ class AppUserServiceImplTest {
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(new AppUser(userId)));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId)));
         when(passwordEncoder.matches(any(), any())).thenReturn(true);
-        when(passwordEncoder.encode(any())).thenReturn(newPassword);
+        when(passwordEncoder.encode(newPassword)).thenReturn(newPassword);
 
         // when
         underTest.setUserPassword(userId, passwordDto);
@@ -700,7 +720,7 @@ class AppUserServiceImplTest {
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO(currentPassword, newPassword);
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.of(user));
+        when(appUserRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // when
         // then
@@ -717,7 +737,7 @@ class AppUserServiceImplTest {
         SetUserPasswordRequestDTO passwordDto = new SetUserPasswordRequestDTO("", "");
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(appUserRepository.findById(any())).thenReturn(Optional.empty());
+        when(appUserRepository.findById(userId)).thenReturn(Optional.empty());
 
         // when
         // then

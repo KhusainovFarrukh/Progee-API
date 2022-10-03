@@ -21,125 +21,116 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void findByEmail_returnsUser_whenUserExistsByEmail() {
+    void findByEmail_returnsValidData_whenUserExistsByEmail() {
         // given
         String email = "test@mail.com";
-        AppUser user = new AppUser(email);
-        underTest.save(user);
+        underTest.save(new AppUser(email));
 
         // when
-        Optional<AppUser> userOptional = underTest.findByEmail(email);
+        Optional<AppUser> actual = underTest.findByEmail(email);
 
         // then
-        assertThat(userOptional.isPresent()).isTrue();
+        assertThat(actual.isPresent()).isTrue();
     }
 
     @Test
-    void findByEmail_returnsNull_whenUserDoesNotExistByEmail() {
+    void findByEmail_returnsEmptyData_whenUserDoesNotExistByEmail() {
         // given
         String email = "test@mail.com";
-        AppUser user = new AppUser("other-email@mail.com");
-        underTest.save(user);
+        underTest.save(new AppUser("other-email@mail.com"));
 
         // when
-        Optional<AppUser> userOptional = underTest.findByEmail(email);
+        Optional<AppUser> actual = underTest.findByEmail(email);
 
         // then
-        assertThat(userOptional.isEmpty()).isTrue();
+        assertThat(actual.isEmpty()).isTrue();
     }
 
     @Test
-    void findByEmail_returnsNull_whenEmailIsEmpty() {
+    void findByEmail_returnsEmptyData_whenEmailIsEmpty() {
         // given
-        AppUser user = new AppUser("test@mail.com");
-        underTest.save(user);
+        underTest.save(new AppUser("test@mail.com"));
 
         // when
-        Optional<AppUser> userOptional = underTest.findByEmail("");
+        Optional<AppUser> actual = underTest.findByEmail("");
 
         // then
-        assertThat(userOptional.isEmpty()).isTrue();
+        assertThat(actual.isEmpty()).isTrue();
     }
 
     @Test
-    void findByEmail_returnsNull_whenEmailIsNull() {
+    void findByEmail_returnsEmptyData_whenEmailIsNull() {
         // given
-        AppUser user = new AppUser("test@mail.com");
-        underTest.save(user);
+        underTest.save(new AppUser("test@mail.com"));
 
         // when
-        Optional<AppUser> userOptional = underTest.findByEmail(null);
+        Optional<AppUser> actual = underTest.findByEmail(null);
 
         // then
-        assertThat(userOptional.isEmpty()).isTrue();
+        assertThat(actual.isEmpty()).isTrue();
     }
 
     @Test
     void existsByEmail_returnsTrue_whenUserExistsByEmail() {
         // given
         String email = "test@mail.com";
-        AppUser user = new AppUser(email);
-        underTest.save(user);
+        underTest.save(new AppUser(email));
 
         // when
-        boolean exists = underTest.existsByEmail(email);
+        boolean actual = underTest.existsByEmail(email);
 
         // then
-        assertThat(exists).isTrue();
+        assertThat(actual).isTrue();
     }
 
     @Test
     void existsByEmail_returnsFalse_whenUserDoesNotExistByEmail() {
         // given
         String email = "test@mail.com";
-        AppUser user = new AppUser("other-email@mail.com");
-        underTest.save(user);
+        underTest.save(new AppUser("other-email@mail.com"));
 
         // when
-        boolean exists = underTest.existsByEmail(email);
+        boolean actual = underTest.existsByEmail(email);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByEmail_returnsFalse_whenEmailIsEmpty() {
         // given
-        AppUser user = new AppUser("test@mail.com");
-        underTest.save(user);
+        underTest.save(new AppUser("test@mail.com"));
 
         // when
-        boolean exists = underTest.existsByEmail("");
+        boolean actual = underTest.existsByEmail("");
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByEmail_returnsFalse_whenEmailIsNull() {
         // given
-        AppUser user = new AppUser("test@mail.com");
-        underTest.save(user);
+        underTest.save(new AppUser("test@mail.com"));
 
         // when
-        boolean exists = underTest.existsByEmail(null);
+        boolean actual = underTest.existsByEmail(null);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByUniqueUsername_returnsTrue_whenUserExistsByUsername() {
         // given
         String username = "test_user";
-        AppUser user = new AppUser("", username);
-        underTest.save(user);
+        underTest.save(new AppUser("", username));
 
         // when
-        boolean exists = underTest.existsByUniqueUsername(username);
+        boolean actual = underTest.existsByUniqueUsername(username);
 
         // then
-        assertThat(exists).isTrue();
+        assertThat(actual).isTrue();
     }
 
     @Test
@@ -148,37 +139,35 @@ class AppUserRepositoryTest {
         String username = "test_user";
 
         // when
-        boolean exists = underTest.existsByUniqueUsername(username);
+        boolean actual = underTest.existsByUniqueUsername(username);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByUniqueUsername_returnsFalse_whenUsernameIsEmpty() {
         // given
         String username = "test_user";
-        AppUser user = new AppUser("", username);
-        underTest.save(user);
+        underTest.save(new AppUser("", username));
 
         // when
-        boolean exists = underTest.existsByUniqueUsername("");
+        boolean actual = underTest.existsByUniqueUsername("");
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void existsByUniqueUsername_returnsFalse_whenUsernameIsNull() {
         // given
         String username = "test_user";
-        AppUser user = new AppUser("", username);
-        underTest.save(user);
+        underTest.save(new AppUser("", username));
 
         // when
-        boolean exists = underTest.existsByUniqueUsername(null);
+        boolean actual = underTest.existsByUniqueUsername(null);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 }

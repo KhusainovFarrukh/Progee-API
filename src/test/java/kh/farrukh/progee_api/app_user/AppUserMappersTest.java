@@ -159,8 +159,8 @@ class AppUserMappersTest {
     @Test
     void toAppUser_throwsException_whenRoleDoesNotExistWithId() {
         // given
-        when(roleRepository.findById(any())).thenReturn(Optional.empty());
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image(2L)));
+        when(roleRepository.findById(1L)).thenReturn(Optional.empty());
+        when(imageRepository.findById(2L)).thenReturn(Optional.of(new Image(2L)));
         AppUserRequestDTO appUserRequestDTO = new AppUserRequestDTO(
                 "Test",
                 "test@mail.com",
@@ -182,7 +182,7 @@ class AppUserMappersTest {
     @Test
     void toAppUser_throwsException_whenImageDoesNotExistWithId() {
         // given
-        when(imageRepository.findById(any())).thenReturn(Optional.empty());
+        when(imageRepository.findById(2L)).thenReturn(Optional.empty());
         AppUserRequestDTO appUserRequestDTO = new AppUserRequestDTO(
                 "Test",
                 "test@mail.com",

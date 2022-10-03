@@ -67,12 +67,7 @@ class AppUserControllerIntegrationTest {
     @WithAnonymousUser
     void getUsers_canGetUsers() throws Exception {
         // given
-        List<AppUser> users = List.of(
-                new AppUser("user1@mail.com"),
-                new AppUser("user2@mail.com"),
-                new AppUser("user3@mail.com")
-        );
-        appUserRepository.saveAll(users);
+        List<AppUser> users = appUserRepository.saveAll(List.of(new AppUser(), new AppUser(), new AppUser()));
 
         // when
         MvcResult result = mvc
@@ -82,15 +77,13 @@ class AppUserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<AppUserResponseDTO> response = objectMapper.readValue(
+        PagingResponse<AppUserResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(users.size());
-        assertThat(users.stream().allMatch(user ->
-                response.getItems().stream().map(AppUserResponseDTO::getEmail).toList()
-                        .contains(user.getEmail())
-        )).isTrue();
+        assertThat(actual.getTotalItems()).isEqualTo(users.size());
+        List<Long> expectedIds = users.stream().map(AppUser::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(userDTO -> expectedIds.contains(userDTO.getId()))).isTrue();
     }
 
     @Test
@@ -107,8 +100,10 @@ class AppUserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUserResponseDTO user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
-        assertThat(user.getId()).isEqualTo(user.getId());
+        AppUserResponseDTO actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(), AppUserResponseDTO.class
+        );
+        assertThat(actual.getId()).isEqualTo(actual.getId());
     }
 
     @Test
@@ -142,12 +137,12 @@ class AppUserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUserResponseDTO user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
-        assertThat(user.getId()).isEqualTo(existingUser.getId());
-        assertThat(user.getName()).isEqualTo(userDto.getName());
-        assertThat(user.getEmail()).isEqualTo(userDto.getEmail());
-        assertThat(user.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
-        assertThat(user.getImage().getId()).isEqualTo(userDto.getImageId());
+        AppUserResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingUser.getId());
+        assertThat(actual.getName()).isEqualTo(userDto.getName());
+        assertThat(actual.getEmail()).isEqualTo(userDto.getEmail());
+        assertThat(actual.getUniqueUsername()).isEqualTo(userDto.getUniqueUsername());
+        assertThat(actual.getImage().getId()).isEqualTo(userDto.getImageId());
     }
 
     @Test
@@ -166,6 +161,8 @@ class AppUserControllerIntegrationTest {
                         )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+
+        assertThat(appUserRepository.existsById(user.getId())).isFalse();
     }
 
     @Test
@@ -193,9 +190,9 @@ class AppUserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUserResponseDTO user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
-        assertThat(user.getId()).isEqualTo(existingUser.getId());
-        assertThat(user.getImage().getId()).isEqualTo(imageDTO.getImageId());
+        AppUserResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingUser.getId());
+        assertThat(actual.getImage().getId()).isEqualTo(imageDTO.getImageId());
     }
 
     @Test
@@ -222,9 +219,9 @@ class AppUserControllerIntegrationTest {
                 .andReturn();
 
         // then
-        AppUserResponseDTO user = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
-        assertThat(user.getId()).isEqualTo(existingUser.getId());
-        assertThat(user.getRole().getId()).isEqualTo(roleDto.getRoleId());
+        AppUserResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), AppUserResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingUser.getId());
+        assertThat(actual.getRole().getId()).isEqualTo(roleDto.getRoleId());
     }
 
     @Test
