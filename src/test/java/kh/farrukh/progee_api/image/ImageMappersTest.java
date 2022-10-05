@@ -13,10 +13,10 @@ class ImageMappersTest {
         Image image = null;
 
         // when
-        ImageResponseDTO imageResponseDTO = ImageMappers.toImageResponseDto(image);
+        ImageResponseDTO actual = ImageMappers.toImageResponseDto(image);
 
         // then
-        assertThat(imageResponseDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -25,11 +25,11 @@ class ImageMappersTest {
         Image image = new Image(1, null);
 
         // when
-        ImageResponseDTO imageResponseDTO = ImageMappers.toImageResponseDto(image);
+        ImageResponseDTO actual = ImageMappers.toImageResponseDto(image);
 
         // then
-        assertThat(imageResponseDTO).isNotNull();
-        assertThat(imageResponseDTO.getId()).isEqualTo(image.getId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(image.getId());
     }
 
     @Test
@@ -38,10 +38,10 @@ class ImageMappersTest {
         ImageResponseDTO imageResponseDTO = null;
 
         // when
-        Image image = ImageMappers.toImage(imageResponseDTO);
+        Image actual = ImageMappers.toImage(imageResponseDTO);
 
         // then
-        assertThat(image).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -50,10 +50,10 @@ class ImageMappersTest {
         ImageResponseDTO imageResponseDTO = new ImageResponseDTO(1);
 
         // when
-        Image image = ImageMappers.toImage(imageResponseDTO);
+        Image actual = ImageMappers.toImage(imageResponseDTO);
 
         // then
-        assertThat(image).isNotNull();
-        assertThat(image.getId()).isEqualTo(imageResponseDTO.getId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(imageResponseDTO.getId());
     }
 }

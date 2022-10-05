@@ -44,24 +44,26 @@ class ImageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        ImageResponseDTO image = new ObjectMapper().readValue(result.getResponse().getContentAsString(), ImageResponseDTO.class);
-        assertThat(image.getId()).isEqualTo(image.getId());
+        ImageResponseDTO actual = new ObjectMapper().readValue(result.getResponse().getContentAsString(), ImageResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingImage.getId());
     }
 
     @Test
     @WithAnonymousUser
     void uploadImage_canUploadImage() throws Exception {
         // given
-        MockMultipartFile mockImage = new MockMultipartFile("image", "test".getBytes());
+        byte[] bytes = "test".getBytes();
+        MockMultipartFile mockFile = new MockMultipartFile("image", bytes);
 
         // when
-        mvc.perform(multipart(ENDPOINT_IMAGE).file(mockImage))
+        mvc.perform(multipart(ENDPOINT_IMAGE).file(mockFile))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         // then
-        assertThat(imageRepository.findAll().stream().anyMatch(image ->
-                Arrays.equals(image.getContent(), "test".getBytes()))).isTrue();
+        assertThat(imageRepository.findAll().stream().anyMatch(
+                image -> Arrays.equals(image.getContent(), bytes))
+        ).isTrue();
     }
 
     @Test
@@ -78,7 +80,7 @@ class ImageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        byte[] content = result.getResponse().getContentAsByteArray();
-        assertThat(content).isEqualTo(existingImage.getContent());
+        byte[] actual = result.getResponse().getContentAsByteArray();
+        assertThat(actual).isEqualTo(existingImage.getContent());
     }
 }

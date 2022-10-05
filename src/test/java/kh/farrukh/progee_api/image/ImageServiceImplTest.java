@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,27 +32,27 @@ class ImageServiceImplTest {
     @Test
     void addImage_canAddImage_whenFileIsValid() throws IOException {
         // given
-        MultipartFile multipartImage = new MockMultipartFile("test.png", new byte[]{});
+        MultipartFile mockFile = new MockMultipartFile("test.png", new byte[]{});
 
         // when
-        underTest.addImage(multipartImage);
+        underTest.addImage(mockFile);
 
         // then
         ArgumentCaptor<Image> imageArgCaptor = ArgumentCaptor.forClass(Image.class);
         verify(imageRepository).save(imageArgCaptor.capture());
 
-        Image capturedImage = imageArgCaptor.getValue();
-        assertThat(capturedImage.getContent()).isEqualTo(multipartImage.getBytes());
+        Image actual = imageArgCaptor.getValue();
+        assertThat(actual.getContent()).isEqualTo(mockFile.getBytes());
     }
 
     @Test
     void addImage_throwsException_whenFileIsNull() {
         // given
-        MultipartFile multipartImage = null;
+        MultipartFile mockFile = null;
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addImage(multipartImage))
+        assertThatThrownBy(() -> underTest.addImage(mockFile))
                 .isInstanceOf(RuntimeException.class);
     }
 
@@ -61,7 +60,7 @@ class ImageServiceImplTest {
     void getImageById_canGetImageById_whenIdIsValid() {
         // given
         long id = 1;
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(imageRepository.findById(id)).thenReturn(Optional.of(new Image()));
 
         // when
         underTest.getImageById(id);
@@ -74,24 +73,26 @@ class ImageServiceImplTest {
     void getImageById_throwsException_whenImageDoesNotExistWithId() {
         // given
         long id = 1;
-        when(imageRepository.findById(any())).thenReturn(Optional.empty());
+        when(imageRepository.findById(id)).thenReturn(Optional.empty());
 
         // when
         // then
         assertThatThrownBy(() -> underTest.getImageById(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(id));
     }
 
     @Test
     void downloadImage_canDownloadImage_whenIdIsValid() {
         // given
-        Image existingImage = new Image(1, new byte[]{});
-        when(imageRepository.findById(any())).thenReturn(Optional.of(existingImage));
+        long id = 1;
+        Image existingImage = new Image(id, new byte[]{});
+        when(imageRepository.findById(id)).thenReturn(Optional.of(existingImage));
 
         // when
-        Resource actual = underTest.downloadImage(existingImage.getId());
+        Resource actual = underTest.downloadImage(id);
 
         // then
         assertThat(actual).isEqualTo(new ByteArrayResource(existingImage.getContent()));
@@ -100,15 +101,15 @@ class ImageServiceImplTest {
     @Test
     void downloadImage_throwsException_whenImageToDownloadDoesNotExist() {
         // given
-        long imageId = 1;
-        when(imageRepository.findById(any())).thenReturn(Optional.empty());
+        long id = 1;
+        when(imageRepository.findById(id)).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.downloadImage(imageId))
+        assertThatThrownBy(() -> underTest.downloadImage(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
                 .hasMessageContaining("id")
-                .hasMessageContaining(String.valueOf(imageId));
+                .hasMessageContaining(String.valueOf(id));
     }
 }
