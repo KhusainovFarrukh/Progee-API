@@ -226,7 +226,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_canUpdateUser_whenUserWithUpdateOwnPermission() {
         // given
         long userId = 1;
@@ -241,7 +241,7 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER));
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(1, existingRole)));
         when(imageRepository.findById(userDto.getImageId())).thenReturn(Optional.of(new Image()));
 
@@ -258,7 +258,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
         long userId = 1;
@@ -273,7 +273,7 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.emptyList());
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(1, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(1, existingRole)));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(1, existingRole)));
 
         // when
@@ -283,7 +283,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_canUpdateUser_whenUserWithUpdateOthersPermission() {
         // given
         long userId = 1;
@@ -298,7 +298,7 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER));
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, existingRole)));
         when(imageRepository.findById(userDto.getImageId())).thenReturn(Optional.of(new Image()));
 
@@ -315,7 +315,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_throwsException_whenUserWithoutUpdateOthersPermissionUpdatesUser() {
         // given
         long userId = 1;
@@ -330,7 +330,7 @@ class AppUserServiceImplTest {
                 1
         );
         Role existingRole = new Role(Collections.emptyList());
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(2, existingRole)));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(2, existingRole)));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, existingRole)));
 
         // when
@@ -364,7 +364,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_throwsException_whenUsernameOfUserToUpdateIsAlreadyUsed() {
         // given
         long userId = 1;
@@ -379,7 +379,7 @@ class AppUserServiceImplTest {
                 1
         );
         when(appUserRepository.existsByUniqueUsername(userDto.getUniqueUsername())).thenReturn(true);
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
@@ -392,7 +392,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_throwsException_whenEmailOfUserToUpdateIsAlreadyUsed() {
         // given
         long userId = 1;
@@ -407,7 +407,7 @@ class AppUserServiceImplTest {
                 1
         );
         when(appUserRepository.existsByEmail(userDto.getEmail())).thenReturn(true);
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
@@ -420,7 +420,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void updateUser_throwsException_whenImageOfUserToUpdateDoesNotExistWithId() {
         // given
         long userId = 1;
@@ -434,7 +434,7 @@ class AppUserServiceImplTest {
                 1,
                 1
         );
-        when(appUserRepository.findByEmail(userDto.getEmail())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
+        when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)))));
 
         // when
@@ -520,7 +520,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserImage_canSetUserImage_whenUserWithUpdateOwnPermission() {
         // given
         long userId = 1;
@@ -541,7 +541,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserImage_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
         long userId = 1;
@@ -556,7 +556,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserImage_canSetUserImage_whenUserWithUpdateOtherPermission() {
         // given
         long userId = 1;
@@ -577,7 +577,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserImage_throwsException_whenUserWithoutUpdateOtherPermission() {
         // given
         long userId = 1;
@@ -592,7 +592,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserImage_throwsException_whenUserToSetImageDoesNotExistWithId() {
         // given
         long userId = 1;
@@ -610,7 +610,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserImage_throwsException_when_ImageToSetDoesNotExistWithId() {
         // given
         long userId = 1;
@@ -629,7 +629,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserPassword_canSetPassword_whenUserWithUpdateOwnPermission() {
         // given
         long userId = 1;
@@ -653,7 +653,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserPassword_throwsException_whenUserWithoutUpdateOwnPermission() {
         // given
         long userId = 1;
@@ -670,7 +670,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserPassword_canSetPassword_whenUserWithUpdateOtherPermission() {
         // given
         long userId = 1;
@@ -694,7 +694,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserPassword_throwsException_whenUserWithoutUpdateOtherPermission() {
         // given
         long userId = 1;
@@ -711,7 +711,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com")
+    @WithMockUser
     void setUserPassword_throwsException_whenCurrentPasswordIsWrong() {
         // given
         long userId = 1;
@@ -730,7 +730,7 @@ class AppUserServiceImplTest {
     }
 
     @Test
-    @WithMockUser(username = "user@mail.com", authorities = "USER")
+    @WithMockUser
     void setUserPassword_throwsException_whenUserToSetPasswordDoesNotExistWithId() {
         // given
         long userId = 1;
