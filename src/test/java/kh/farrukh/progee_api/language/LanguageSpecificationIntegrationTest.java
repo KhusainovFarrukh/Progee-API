@@ -24,12 +24,11 @@ class LanguageSpecificationIntegrationTest {
     @Test
     void repository_returnsValidData_whenStateIsNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
+        ));
         LanguageSpecification languageSpecification = new LanguageSpecification(null);
 
         // when
@@ -42,17 +41,15 @@ class LanguageSpecificationIntegrationTest {
     @Test
     void repository_returnsValidData_whenStateIsNotNull() {
         // given
-        List<Language> approvedLanguages = List.of(
+        List<Language> approvedLanguages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        List<Language> waitingLanguages = List.of(
+        ));
+        languageRepository.saveAll(List.of(
                 new Language("C#", ResourceState.WAITING),
                 new Language("C++", ResourceState.WAITING)
-        );
-        approvedLanguages = languageRepository.saveAll(approvedLanguages);
-        waitingLanguages = languageRepository.saveAll(waitingLanguages);
+        ));
         LanguageSpecification languageSpecification = new LanguageSpecification(ResourceState.APPROVED);
 
         // when
@@ -60,6 +57,8 @@ class LanguageSpecificationIntegrationTest {
 
         // then
         assertThat(actual.size()).isEqualTo(approvedLanguages.size());
+        List<Long> expectedIds = approvedLanguages.stream().map(Language::getId).toList();
+        assertThat(actual.stream().allMatch(language -> expectedIds.contains(language.getId()))).isTrue();
     }
 
     @Test
@@ -104,10 +103,11 @@ class LanguageSpecificationIntegrationTest {
     @Test
     void equals_returnsTrue_whenSameObject() {
         // given
-        LanguageSpecification languageSpecification = new LanguageSpecification(ResourceState.APPROVED);
+        LanguageSpecification languageSpecification1 = new LanguageSpecification(ResourceState.APPROVED);
+        LanguageSpecification languageSpecification2 = languageSpecification1;
 
         // when
-        boolean actual = languageSpecification.equals(languageSpecification);
+        boolean actual = languageSpecification1.equals(languageSpecification2);
 
         // then
         assertThat(actual).isTrue();

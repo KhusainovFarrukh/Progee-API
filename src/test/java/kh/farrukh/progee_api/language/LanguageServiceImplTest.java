@@ -44,10 +44,13 @@ class LanguageServiceImplTest {
 
     @Mock
     private LanguageRepository languageRepository;
+
     @Mock
     private ImageRepository imageRepository;
+
     @Mock
     private AppUserRepository appUserRepository;
+
     @InjectMocks
     private LanguageServiceImpl underTest;
 
@@ -164,7 +167,8 @@ class LanguageServiceImplTest {
     void getLanguageById_canGetLanguageById_whenStateIsApproved() {
         // given
         long id = 1;
-        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language("test", ResourceState.APPROVED)));
+        when(languageRepository.findById(id))
+                .thenReturn(Optional.of(new Language("test", ResourceState.APPROVED)));
 
         // when
         underTest.getLanguageById(id);
@@ -180,7 +184,7 @@ class LanguageServiceImplTest {
         long id = 1;
         Role role = new Role(Collections.emptyList());
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
-        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language("test", ResourceState.WAITING)));
+        when(languageRepository.findById(id)).thenReturn(Optional.of(new Language("test", ResourceState.WAITING)));
 
         // when
         // then
@@ -199,6 +203,7 @@ class LanguageServiceImplTest {
         assertThatThrownBy(() -> underTest.getLanguageById(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(id));
     }
 
@@ -208,18 +213,22 @@ class LanguageServiceImplTest {
         // given
         Role role = new Role(Collections.singletonList(Permission.CAN_CREATE_LANGUAGE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", 1);
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO("test", "test", 1);
+        when(imageRepository.findById(languageRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(languageRequestDTO.getImageId())));
 
         // when
-        underTest.addLanguage(languageRequestDto);
+        underTest.addLanguage(languageRequestDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
 
-        Language capturedLanguage = languageArgCaptor.getValue();
-        assertThat(capturedLanguage.getState()).isEqualTo(ResourceState.WAITING);
+        Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
+        assertThat(actual.getName()).isEqualTo(languageRequestDTO.getName());
+        assertThat(actual.getDescription()).isEqualTo(languageRequestDTO.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
@@ -228,18 +237,22 @@ class LanguageServiceImplTest {
         // given
         Role role = new Role(List.of(Permission.CAN_CREATE_LANGUAGE, Permission.CAN_SET_LANGUAGE_STATE));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(new AppUser("test@mail.com", role)));
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", 1);
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO("test", "test", 1);
+        when(imageRepository.findById(languageRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(languageRequestDTO.getImageId())));
 
         // when
-        underTest.addLanguage(languageRequestDto);
+        underTest.addLanguage(languageRequestDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
 
-        Language capturedLanguage = languageArgCaptor.getValue();
-        assertThat(capturedLanguage.getState()).isEqualTo(ResourceState.APPROVED);
+        Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
+        assertThat(actual.getName()).isEqualTo(languageRequestDTO.getName());
+        assertThat(actual.getDescription()).isEqualTo(languageRequestDTO.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
@@ -247,14 +260,15 @@ class LanguageServiceImplTest {
     void addLanguage_throwsException_whenLanguageExistsWithName() {
         // given
         String name = "test";
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO(name, "", 1);
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, "test", 1);
         when(languageRepository.existsByName(name)).thenReturn(true);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.addLanguage(languageRequestDto))
+        assertThatThrownBy(() -> underTest.addLanguage(languageRequestDTO))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("Language")
+                .hasMessageContaining("name")
                 .hasMessageContaining(name);
     }
 
@@ -262,258 +276,281 @@ class LanguageServiceImplTest {
     @WithMockUser
     void updateLanguage_canUpdateLanguageAndSetWaitingState_whenAuthorWithOnlyUpdateOwnPermission() {
         // given
+        long id = 1;
         String name = "test name";
         String desc = "test desc";
         AppUser author = new AppUser("test@mail.com", new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO(name, desc, 1);
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(author);
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, desc, 1);
+        Language existingLanguage = new Language(author);
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(imageRepository.findById(languageRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(languageRequestDTO.getImageId())));
 
         // when
-        underTest.updateLanguage(1, languageRequestDto);
+        underTest.updateLanguage(id, languageRequestDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
+
         Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
-        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_canUpdateLanguageAndSetApprovedState_whenAuthorWithUpdateOwnAndSetStatePermissions() {
         // given
+        long id = 1;
         String name = "test name";
         String desc = "test desc";
         AppUser author = new AppUser("test@mail.com", new Role(List.of(Permission.CAN_UPDATE_OWN_LANGUAGE, Permission.CAN_SET_LANGUAGE_STATE)));
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO(name, desc, 1);
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(author);
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, desc, 1);
+        Language existingLanguage = new Language(author);
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(imageRepository.findById(languageRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(languageRequestDTO.getImageId())));
 
         // when
-        underTest.updateLanguage(1, languageRequestDto);
+        underTest.updateLanguage(id, languageRequestDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
+
         Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
-        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_throwsException_whenAuthorWithoutUpdateOwnPermissionUpdatesLanguage() {
         // given
+        long id = 1;
         String name = "test name";
         String desc = "test desc";
         AppUser author = new AppUser("test@mail.com", new Role(Collections.emptyList()));
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, desc, 1);
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(author);
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        Language existingLanguage = new Language(author);
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(author));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateLanguage(1, languageRequestDTO))
+        assertThatThrownBy(() -> underTest.updateLanguage(id, languageRequestDTO))
                 .isInstanceOf(NotEnoughPermissionException.class);
+        verify(languageRepository, never()).save(any());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_canUpdateLanguageAndSetWaitingState_whenNonAuthorWithOnlyUpdateOthersPermission() {
         // given
+        long id = 1;
         String name = "test name";
         String desc = "test desc";
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHERS_LANGUAGE)));
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, desc, 1);
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(new AppUser(1));
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        Language existingLanguage = new Language(new AppUser(1));
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(imageRepository.findById(languageRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(languageRequestDTO.getImageId())));
 
         // when
-        underTest.updateLanguage(1, languageRequestDTO);
+        underTest.updateLanguage(id, languageRequestDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
+
         Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
-        assertThat(actual.getState()).isEqualTo(ResourceState.WAITING);
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_canUpdateOthersLanguageAndSetApprovedState_whenNonAuthorWithUpdateOthersAndSetStatePermissions() {
         // given
+        long id = 1;
         String name = "test name";
         String desc = "test desc";
         AppUser user = new AppUser(2, new Role(List.of(Permission.CAN_UPDATE_OTHERS_LANGUAGE, Permission.CAN_SET_LANGUAGE_STATE)));
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, desc, 1);
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(new AppUser(1));
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        Language existingLanguage = new Language(new AppUser(1));
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        when(imageRepository.findById(any())).thenReturn(Optional.of(new Image()));
+        when(imageRepository.findById(languageRequestDTO.getImageId()))
+                .thenReturn(Optional.of(new Image(languageRequestDTO.getImageId())));
 
         // when
-        underTest.updateLanguage(1, languageRequestDTO);
+        underTest.updateLanguage(id, languageRequestDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
+
         Language actual = languageArgCaptor.getValue();
+        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getDescription()).isEqualTo(desc);
-        assertThat(actual.getState()).isEqualTo(ResourceState.APPROVED);
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_throwsException_whenNonAuthorWithoutUpdateOthersPermission() {
         // given
+        long id = 1;
         AppUser user = new AppUser(1, new Role(Collections.emptyList()));
         LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO("", "", 1);
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(new AppUser(2));
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        Language existingLanguage = new Language(new AppUser(2));
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateLanguage(1, languageRequestDTO))
+        assertThatThrownBy(() -> underTest.updateLanguage(id, languageRequestDTO))
                 .isInstanceOf(NotEnoughPermissionException.class);
+        verify(languageRepository, never()).save(any());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_throwsException_whenLanguageToUpdateDoesNotExistWithId() {
         // given
-        long languageId = 1;
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", 1);
-        when(languageRepository.findById(any())).thenReturn(Optional.empty());
+        long id = 1;
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO("test", "test", 1);
+        when(languageRepository.findById(id)).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateLanguage(languageId, languageRequestDto))
+        assertThatThrownBy(() -> underTest.updateLanguage(id, languageRequestDTO))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
+                .hasMessageContaining("id")
+                .hasMessageContaining(String.valueOf(id));
+        verify(languageRepository, never()).save(any());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_throwsException_whenLanguageToUpdateExistsWithName() {
         // given
+        long id = 1;
         String name = "test name";
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(user);
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO(name, "", 1);
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
-        when(languageRepository.existsByName(any())).thenReturn(true);
+        Language existingLanguage = new Language(user);
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO(name, "test", 1);
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
+        when(languageRepository.existsByName(name)).thenReturn(true);
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateLanguage(1, languageRequestDto))
+        assertThatThrownBy(() -> underTest.updateLanguage(1, languageRequestDTO))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("Language")
+                .hasMessageContaining("name")
                 .hasMessageContaining(name);
+        verify(languageRepository, never()).save(any());
     }
 
     @Test
     @WithMockUser
     void updateLanguage_throwsException_whenImageOfLanguageToUpdateDoesNotExistWithId() {
         // given
+        long id = 1;
         long imageId = 1;
         AppUser user = new AppUser(1, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_LANGUAGE)));
-        Language existingLanguage = new Language();
-        existingLanguage.setAuthor(user);
-        LanguageRequestDTO languageRequestDto = new LanguageRequestDTO("", "", imageId);
-        when(languageRepository.findById(any())).thenReturn(Optional.of(existingLanguage));
+        Language existingLanguage = new Language(user);
+        LanguageRequestDTO languageRequestDTO = new LanguageRequestDTO("test", "test", imageId);
+        when(languageRepository.findById(id)).thenReturn(Optional.of(existingLanguage));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateLanguage(1, languageRequestDto))
+        assertThatThrownBy(() -> underTest.updateLanguage(1, languageRequestDTO))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(imageId));
+        verify(languageRepository, never()).save(any());
     }
 
     @Test
     @WithMockUser
     void deleteLanguage_canDeleteLanguageById_whenIdIsValid() {
         // given
-        long languageId = 1;
-        when(languageRepository.existsById(any())).thenReturn(true);
+        long id = 1;
+        when(languageRepository.existsById(id)).thenReturn(true);
 
         // when
-        underTest.deleteLanguage(languageId);
+        underTest.deleteLanguage(id);
 
         // then
-        verify(languageRepository).deleteById(languageId);
+        verify(languageRepository).deleteById(id);
     }
 
     @Test
     @WithMockUser
     void deleteLanguage_throwsException_whenLanguageToDeleteDoesNotExistWithId() {
         // given
-        long languageId = 1;
+        long id = 1;
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.deleteLanguage(languageId))
+        assertThatThrownBy(() -> underTest.deleteLanguage(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
+                .hasMessageContaining("id")
+                .hasMessageContaining(String.valueOf(id));
     }
 
     @Test
     @WithMockUser
     void setLanguageState_canSetLanguageState() {
         // given
-        long languageId = 1;
-        SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
-        when(languageRepository.findById(any())).thenReturn(Optional.of(new Language()));
+        long id = 1;
+        SetResourceStateRequestDTO stateDTO = new SetResourceStateRequestDTO(ResourceState.APPROVED);
+        when(languageRepository.findById(id)).thenReturn(Optional.of(new Language()));
 
         // when
-        underTest.setLanguageState(languageId, stateDto);
+        underTest.setLanguageState(id, stateDTO);
 
         // then
         ArgumentCaptor<Language> languageArgCaptor = ArgumentCaptor.forClass(Language.class);
         verify(languageRepository).save(languageArgCaptor.capture());
+
         Language actual = languageArgCaptor.getValue();
-        assertThat(actual.getState()).isEqualTo(stateDto.getState());
+        assertThat(actual.getState()).isEqualTo(stateDTO.getState());
     }
 
     @Test
     @WithMockUser
     void setLanguageState_throwsException_whenLanguageToSetStateDoesNotExistWithId() {
         // given
-        long languageId = 1;
-        SetResourceStateRequestDTO stateDto = new SetResourceStateRequestDTO(ResourceState.APPROVED);
-        when(languageRepository.findById(any())).thenReturn(Optional.empty());
+        long id = 1;
+        SetResourceStateRequestDTO stateDTO = new SetResourceStateRequestDTO(ResourceState.APPROVED);
+        when(languageRepository.findById(id)).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.setLanguageState(languageId, stateDto))
+        assertThatThrownBy(() -> underTest.setLanguageState(id, stateDTO))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
-                .hasMessageContaining(String.valueOf(languageId));
+                .hasMessageContaining("id")
+                .hasMessageContaining(String.valueOf(id));
     }
 }

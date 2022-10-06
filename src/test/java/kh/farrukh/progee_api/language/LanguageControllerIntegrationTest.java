@@ -64,7 +64,6 @@ class LanguageControllerIntegrationTest {
     @Autowired
     private TokenProvider tokenProvider;
 
-
     @AfterEach
     void tearDown() {
         languageRepository.deleteAll();
@@ -77,12 +76,11 @@ class LanguageControllerIntegrationTest {
     @WithAnonymousUser
     void getLanguages_canGetLanguagesWithoutFilter() throws Exception {
         // given
-        List<Language> approvedLanguages = List.of(
+        List<Language> approvedLanguages = languageRepository.saveAll(List.of(
                 new Language("test1", ResourceState.APPROVED),
                 new Language("test2", ResourceState.APPROVED),
                 new Language("test3", ResourceState.APPROVED)
-        );
-        languageRepository.saveAll(approvedLanguages);
+        ));
 
         // when
         MvcResult result = mvc
@@ -92,15 +90,13 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<LanguageResponseDTO> response = objectMapper.readValue(
+        PagingResponse<LanguageResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(approvedLanguages.size());
-        assertThat(approvedLanguages.stream().allMatch(language ->
-                response.getItems().stream().map(LanguageResponseDTO::getName).toList()
-                        .contains(language.getName())
-        )).isTrue();
+        assertThat(actual.getTotalItems()).isEqualTo(approvedLanguages.size());
+        List<Long> expectedIds = approvedLanguages.stream().map(Language::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(language -> expectedIds.contains(language.getId()))).isTrue();
     }
 
     @Test
@@ -109,39 +105,34 @@ class LanguageControllerIntegrationTest {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_VIEW_LANGUAGES_BY_STATE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
-        List<Language> waitingLanguages = List.of(
+        List<Language> waitingLanguages = languageRepository.saveAll(List.of(
                 new Language("test2", ResourceState.WAITING),
                 new Language("test3", ResourceState.WAITING)
-        );
-        List<Language> approvedLanguages = List.of(
+        ));
+        List<Language> approvedLanguages = languageRepository.saveAll(List.of(
                 new Language("test1", ResourceState.APPROVED)
-        );
-        languageRepository.saveAll(waitingLanguages);
+        ));
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_LANGUAGE)
-                                .param("page_size", String.valueOf(waitingLanguages.size() + approvedLanguages.size()))
-                                .param("state", ResourceState.WAITING.name())
-                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
-                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
-                                ))
-                )
+                .perform(get(ENDPOINT_LANGUAGE)
+                        .param("page_size", String.valueOf(waitingLanguages.size() + approvedLanguages.size()))
+                        .param("state", ResourceState.WAITING.name())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        PagingResponse<LanguageResponseDTO> response = objectMapper.readValue(
+        PagingResponse<LanguageResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(waitingLanguages.size());
-        assertThat(waitingLanguages.stream().allMatch(language ->
-                response.getItems().stream().map(LanguageResponseDTO::getName).toList()
-                        .contains(language.getName())
-        )).isTrue();
+        assertThat(actual.getTotalItems()).isEqualTo(waitingLanguages.size());
+        List<Long> expectedIds = waitingLanguages.stream().map(Language::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(language -> expectedIds.contains(language.getId()))).isTrue();
     }
 
     @Test
@@ -158,8 +149,8 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
-        assertThat(language.getId()).isEqualTo(existingLanguage.getId());
+        LanguageResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingLanguage.getId());
     }
 
     @Test
@@ -184,10 +175,10 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
-        assertThat(language.getName()).isEqualTo(languageRequestDto.getName());
-        assertThat(language.getDescription()).isEqualTo(languageRequestDto.getDescription());
-        assertThat(language.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
+        LanguageResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
+        assertThat(actual.getName()).isEqualTo(languageRequestDto.getName());
+        assertThat(actual.getDescription()).isEqualTo(languageRequestDto.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
     }
 
     @Test
@@ -213,11 +204,11 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
-        assertThat(language.getId()).isEqualTo(existingLanguage.getId());
-        assertThat(language.getName()).isEqualTo(languageRequestDto.getName());
-        assertThat(language.getDescription()).isEqualTo(languageRequestDto.getDescription());
-        assertThat(language.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
+        LanguageResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingLanguage.getId());
+        assertThat(actual.getName()).isEqualTo(languageRequestDto.getName());
+        assertThat(actual.getDescription()).isEqualTo(languageRequestDto.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDto.getImageId());
     }
 
     @Test
@@ -237,6 +228,8 @@ class LanguageControllerIntegrationTest {
                         )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+
+        assertThat(languageRepository.findById(existingLanguage.getId())).isEmpty();
     }
 
     @Test
@@ -261,8 +254,8 @@ class LanguageControllerIntegrationTest {
                 .andReturn();
 
         // then
-        LanguageResponseDTO language = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
-        assertThat(language.getId()).isEqualTo(existingLanguage.getId());
-        assertThat(language.getState()).isEqualTo(stateDto.getState());
+        LanguageResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), LanguageResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingLanguage.getId());
+        assertThat(actual.getState()).isEqualTo(stateDto.getState());
     }
 }

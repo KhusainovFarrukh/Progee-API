@@ -32,10 +32,10 @@ class LanguageMappersTest {
         Language language = null;
 
         // when
-        LanguageResponseDTO languageResponseDTO = LanguageMappers.toLanguageResponseDTO(language);
+        LanguageResponseDTO actual = LanguageMappers.toLanguageResponseDTO(language);
 
         // then
-        assertThat(languageResponseDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -53,16 +53,16 @@ class LanguageMappersTest {
         );
 
         // when
-        LanguageResponseDTO languageResponseDTO = LanguageMappers.toLanguageResponseDTO(language);
+        LanguageResponseDTO actual = LanguageMappers.toLanguageResponseDTO(language);
 
         // then
-        assertThat(languageResponseDTO).isNotNull();
-        assertThat(languageResponseDTO.getId()).isEqualTo(language.getId());
-        assertThat(languageResponseDTO.getName()).isEqualTo(language.getName());
-        assertThat(languageResponseDTO.getDescription()).isEqualTo(language.getDescription());
-        assertThat(languageResponseDTO.getImage().getId()).isEqualTo(language.getImage().getId());
-        assertThat(languageResponseDTO.getAuthor().getId()).isEqualTo(language.getAuthor().getId());
-        assertThat(languageResponseDTO.getCreatedAt()).isEqualTo(language.getCreatedAt());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(language.getId());
+        assertThat(actual.getName()).isEqualTo(language.getName());
+        assertThat(actual.getDescription()).isEqualTo(language.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(language.getImage().getId());
+        assertThat(actual.getAuthor().getId()).isEqualTo(language.getAuthor().getId());
+        assertThat(actual.getCreatedAt()).isEqualTo(language.getCreatedAt());
     }
 
     @Test
@@ -71,10 +71,10 @@ class LanguageMappersTest {
         LanguageRequestDTO languageRequestDTO = null;
 
         // when
-        Language language = LanguageMappers.toLanguage(languageRequestDTO, null);
+        Language actual = LanguageMappers.toLanguage(languageRequestDTO, null);
 
         // then
-        assertThat(language).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -88,13 +88,13 @@ class LanguageMappersTest {
         );
 
         // when
-        Language language = LanguageMappers.toLanguage(languageRequestDTO, imageRepository);
+        Language actual = LanguageMappers.toLanguage(languageRequestDTO, imageRepository);
 
         // then
-        assertThat(language).isNotNull();
-        assertThat(language.getName()).isEqualTo(languageRequestDTO.getName());
-        assertThat(language.getDescription()).isEqualTo(languageRequestDTO.getDescription());
-        assertThat(language.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getName()).isEqualTo(languageRequestDTO.getName());
+        assertThat(actual.getDescription()).isEqualTo(languageRequestDTO.getDescription());
+        assertThat(actual.getImage().getId()).isEqualTo(languageRequestDTO.getImageId());
     }
 
     @Test
@@ -112,6 +112,7 @@ class LanguageMappersTest {
         assertThatThrownBy(() -> LanguageMappers.toLanguage(languageRequestDTO, imageRepository))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(languageRequestDTO.getImageId()));
     }
 }

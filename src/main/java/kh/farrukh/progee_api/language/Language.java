@@ -96,4 +96,8 @@ public class Language extends EntityWithResourceState {
         this.name = name;
         super.setState(state);
     }
+
+    public Language(AppUser author) {
+        this.author = author;
+    }
 }
