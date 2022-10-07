@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -56,11 +57,10 @@ class RoleControllerIntegrationTest {
     @WithMockUser(username = "test@mail.com")
     void getRoles_canGetRoles() throws Exception {
         // given
-        List<Role> roles = List.of(
+        List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("ADMIN", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)),
                 new Role("USER", false, Collections.emptyList())
-        );
-        roles = roleRepository.saveAll(roles);
+        ));
         AppUser existingUser = appUserRepository.save(new AppUser("test@mail.com", roles.get(0)));
 
         // when
@@ -74,11 +74,13 @@ class RoleControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<RoleResponseDTO> response = objectMapper.readValue(
+        PagingResponse<RoleResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(roles.size());
+        assertThat(actual.getTotalItems()).isEqualTo(roles.size());
+        List<Long> expectedIds = roles.stream().map(Role::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(role -> expectedIds.contains(role.getId()))).isTrue();
     }
 
     @Test
@@ -100,10 +102,8 @@ class RoleControllerIntegrationTest {
                 .andReturn();
 
         // then
-        RoleResponseDTO response = objectMapper.readValue(
-                result.getResponse().getContentAsString(), RoleResponseDTO.class
-        );
-        assertThat(response.getId()).isEqualTo(role.getId());
+        RoleResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), RoleResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(role.getId());
     }
 
     @Test
@@ -117,23 +117,22 @@ class RoleControllerIntegrationTest {
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO("USER", false, Collections.emptyList());
 
         // when
-        MvcResult result = mvc.perform(
-                        post(ENDPOINT_ROLE)
-                                .contentType("application/json")
-                                .content(objectMapper.writeValueAsString(roleRequestDTO))
-                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
-                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
-                                )))
+        MvcResult result = mvc.perform(post(ENDPOINT_ROLE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roleRequestDTO))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andReturn();
 
         // then
-        RoleResponseDTO response = objectMapper.readValue(
+        RoleResponseDTO actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), RoleResponseDTO.class
         );
 
-        assertThat(response.getTitle()).isEqualTo(roleRequestDTO.getTitle());
+        assertThat(actual.getTitle()).isEqualTo(roleRequestDTO.getTitle());
     }
 
     @Test
@@ -149,24 +148,23 @@ class RoleControllerIntegrationTest {
         );
 
         // when
-        MvcResult result = mvc.perform(
-                        put(ENDPOINT_ROLE + "/" + existingRole.getId())
-                                .contentType("application/json")
-                                .content(objectMapper.writeValueAsString(roleRequestDTO))
-                                .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
-                                        existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
-                                )))
+        MvcResult result = mvc.perform(put(ENDPOINT_ROLE + "/" + existingRole.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roleRequestDTO))
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        RoleResponseDTO response = objectMapper.readValue(
+        RoleResponseDTO actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), RoleResponseDTO.class
         );
 
-        assertThat(response.getId()).isEqualTo(existingRole.getId());
-        assertThat(response.getTitle()).isEqualTo(roleRequestDTO.getTitle());
+        assertThat(actual.getId()).isEqualTo(existingRole.getId());
+        assertThat(actual.getTitle()).isEqualTo(roleRequestDTO.getTitle());
     }
 
     @Test
@@ -187,5 +185,6 @@ class RoleControllerIntegrationTest {
                         )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+        assertThat(roleRepository.findById(role.getId())).isEmpty();
     }
 }

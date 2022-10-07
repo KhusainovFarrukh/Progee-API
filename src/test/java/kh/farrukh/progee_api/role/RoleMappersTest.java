@@ -16,10 +16,10 @@ class RoleMappersTest {
         Role role = null;
 
         // when
-        RoleResponseDTO roleResponseDTO = RoleMappers.toRoleResponseDTO(role);
+        RoleResponseDTO actual = RoleMappers.toRoleResponseDTO(role);
 
         // then
-        assertThat(roleResponseDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -28,14 +28,14 @@ class RoleMappersTest {
         Role role = new Role(1L, "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE));
 
         // when
-        RoleResponseDTO roleResponseDTO = RoleMappers.toRoleResponseDTO(role);
+        RoleResponseDTO actual = RoleMappers.toRoleResponseDTO(role);
 
         // then
-        assertThat(roleResponseDTO).isNotNull();
-        assertThat(roleResponseDTO.getId()).isEqualTo(1L);
-        assertThat(roleResponseDTO.getTitle()).isEqualTo(role.getTitle());
-        assertThat(roleResponseDTO.isDefault()).isEqualTo(role.isDefault());
-        assertThat(roleResponseDTO.getPermissions()).isEqualTo(role.getPermissions());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(1L);
+        assertThat(actual.getTitle()).isEqualTo(role.getTitle());
+        assertThat(actual.isDefault()).isEqualTo(role.isDefault());
+        assertThat(actual.getPermissions()).isEqualTo(role.getPermissions());
     }
 
     @Test
@@ -44,10 +44,10 @@ class RoleMappersTest {
         RoleResponseDTO roleResponseDTO = null;
 
         // when
-        Role role = RoleMappers.toRole(roleResponseDTO);
+        Role actual = RoleMappers.toRole(roleResponseDTO);
 
         // then
-        assertThat(role).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -58,14 +58,14 @@ class RoleMappersTest {
         );
 
         // when
-        Role role = RoleMappers.toRole(roleResponseDTO);
+        Role actual = RoleMappers.toRole(roleResponseDTO);
 
         // then
-        assertThat(role).isNotNull();
-        assertThat(role.getId()).isEqualTo(1L);
-        assertThat(role.getTitle()).isEqualTo(roleResponseDTO.getTitle());
-        assertThat(role.isDefault()).isEqualTo(roleResponseDTO.isDefault());
-        assertThat(role.getPermissions()).isEqualTo(roleResponseDTO.getPermissions());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(1L);
+        assertThat(actual.getTitle()).isEqualTo(roleResponseDTO.getTitle());
+        assertThat(actual.isDefault()).isEqualTo(roleResponseDTO.isDefault());
+        assertThat(actual.getPermissions()).isEqualTo(roleResponseDTO.getPermissions());
     }
 
     @Test
@@ -74,10 +74,10 @@ class RoleMappersTest {
         RoleRequestDTO roleRequestDTO = null;
 
         // when
-        Role role = RoleMappers.toRole(roleRequestDTO);
+        Role actual = RoleMappers.toRole(roleRequestDTO);
 
         // then
-        assertThat(role).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -88,12 +88,12 @@ class RoleMappersTest {
         );
 
         // when
-        Role role = RoleMappers.toRole(roleRequestDTO);
+        Role actual = RoleMappers.toRole(roleRequestDTO);
 
         // then
-        assertThat(role).isNotNull();
-        assertThat(role.getTitle()).isEqualTo(roleRequestDTO.getTitle());
-        assertThat(role.isDefault()).isEqualTo(roleRequestDTO.isDefault());
-        assertThat(role.getPermissions()).isEqualTo(roleRequestDTO.getPermissions());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getTitle()).isEqualTo(roleRequestDTO.getTitle());
+        assertThat(actual.isDefault()).isEqualTo(roleRequestDTO.isDefault());
+        assertThat(actual.getPermissions()).isEqualTo(roleRequestDTO.getPermissions());
     }
 }

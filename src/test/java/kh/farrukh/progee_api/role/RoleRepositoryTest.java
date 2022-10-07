@@ -30,10 +30,10 @@ class RoleRepositoryTest {
         roleRepository.save(role);
 
         // when
-        boolean exists = roleRepository.existsByTitle(title);
+        boolean actual = roleRepository.existsByTitle(title);
 
         // then
-        assertThat(exists).isTrue();
+        assertThat(actual).isTrue();
     }
 
     @Test
@@ -44,10 +44,10 @@ class RoleRepositoryTest {
         roleRepository.save(role);
 
         // when
-        boolean exists = roleRepository.existsByTitle(title);
+        boolean actual = roleRepository.existsByTitle(title);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
@@ -58,10 +58,10 @@ class RoleRepositoryTest {
         roleRepository.save(role);
 
         // when
-        boolean exists = roleRepository.existsByTitle(title);
+        boolean actual = roleRepository.existsByTitle(title);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
@@ -72,19 +72,19 @@ class RoleRepositoryTest {
         roleRepository.save(role);
 
         // when
-        boolean exists = roleRepository.existsByTitle(title);
+        boolean actual = roleRepository.existsByTitle(title);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(actual).isFalse();
     }
 
     @Test
     void findFirstByIsDefaultIsTrue_returnsEmptyData_whenDoesNotContainAnyRole() {
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrue();
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrue();
 
         // then
-        assertThat(roleOptional.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -94,11 +94,11 @@ class RoleRepositoryTest {
         roleRepository.save(role);
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrue();
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrue();
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(role.getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(role.getTitle());
     }
 
     @Test
@@ -108,47 +108,45 @@ class RoleRepositoryTest {
         roleRepository.save(role);
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrue();
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrue();
 
         // then
-        assertThat(roleOptional.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
     void findFirstByIsDefaultIsTrue_returnsValidData_whenContainsNonDefaultAndSingleDefaultRole() {
         // given
-        List<Role> roles = List.of(
+        List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
                 new Role("test2", false, Collections.emptyList()),
                 new Role("test3", true, Collections.emptyList())
-        );
-        roleRepository.saveAll(roles);
+        ));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrue();
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrue();
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(roles.get(2).getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(roles.get(2).getTitle());
     }
 
     @Test
     void findFirstByIsDefaultIsTrue_returnsValidData_whenContainsNonDefaultAndMultipleDefaultRole() {
         // given
-        List<Role> roles = List.of(
+        List<Role> roles = roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
                 new Role("test2", false, Collections.emptyList()),
                 new Role("test3", true, Collections.emptyList()),
                 new Role("test4", true, Collections.emptyList())
-        );
-        roleRepository.saveAll(roles);
+        ));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrue();
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrue();
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(roles.get(2).getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(roles.get(2).getTitle());
     }
 
     @Test
@@ -157,10 +155,10 @@ class RoleRepositoryTest {
         Role role = roleRepository.save(new Role("test", true, Collections.emptyList()));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId());
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId());
 
         // then
-        assertThat(roleOptional.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -169,11 +167,11 @@ class RoleRepositoryTest {
         Role role = roleRepository.save(new Role("test", true, Collections.emptyList()));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId() + 1);
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId() + 1);
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(role.getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(role.getTitle());
     }
 
     @Test
@@ -182,10 +180,10 @@ class RoleRepositoryTest {
         Role role = roleRepository.save(new Role("test", false, Collections.emptyList()));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId());
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId());
 
         // then
-        assertThat(roleOptional.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -194,10 +192,10 @@ class RoleRepositoryTest {
         Role role = roleRepository.save(new Role("test", false, Collections.emptyList()));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId() + 1);
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(role.getId() + 1);
 
         // then
-        assertThat(roleOptional.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -210,10 +208,10 @@ class RoleRepositoryTest {
         ));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId());
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId());
 
         // then
-        assertThat(roleOptional.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -226,11 +224,11 @@ class RoleRepositoryTest {
         ));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId() + 1);
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId() + 1);
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(roles.get(2).getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(roles.get(2).getTitle());
     }
 
     @Test
@@ -244,11 +242,11 @@ class RoleRepositoryTest {
         ));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId());
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId());
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(roles.get(3).getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(roles.get(3).getTitle());
     }
 
     @Test
@@ -262,113 +260,107 @@ class RoleRepositoryTest {
         ));
 
         // when
-        Optional<Role> roleOptional = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId() + 1);
+        Optional<Role> actual = roleRepository.findFirstByIsDefaultIsTrueAndIdNot(roles.get(2).getId() + 1);
 
         // then
-        assertThat(roleOptional.isPresent()).isTrue();
-        assertThat(roleOptional.get().getTitle()).isEqualTo(roles.get(2).getTitle());
+        assertThat(actual).isPresent();
+        assertThat(actual.get().getTitle()).isEqualTo(roles.get(2).getTitle());
     }
 
     @Test
     void countByIsDefaultIsTrue_returnZero_whenNoRoleExists() {
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(0);
+        assertThat(actual).isEqualTo(0);
     }
 
     @Test
     void countByIsDefaultIsTrue_returnsOne_whenOneDefaultRoleExists() {
         // given
-        Role role = new Role("test", true, Collections.emptyList());
-        roleRepository.save(role);
+        roleRepository.save(new Role("test", true, Collections.emptyList()));
 
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(1);
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test
     void countByIsDefaultIsTrue_returnZero_whenOneNonDefaultRoleExists() {
         // given
-        Role role = new Role("test", false, Collections.emptyList());
-        roleRepository.save(role);
+        roleRepository.save(new Role("test", false, Collections.emptyList()));
 
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(0);
+        assertThat(actual).isEqualTo(0);
     }
 
     @Test
     void countByIsDefaultIsTrue_returnsOne_whenOneDefaultAndOneNonDefaultRoleExists() {
         // given
-        List<Role> roles = List.of(
+        roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
                 new Role("test2", true, Collections.emptyList())
-        );
-        roleRepository.saveAll(roles);
+        ));
 
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(1);
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test
     void countByIsDefaultIsTrue_returnsOne_whenOneDefaultAndMultipleNonDefaultRoleExists() {
         // given
-        List<Role> roles = List.of(
+        roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
                 new Role("test2", false, Collections.emptyList()),
                 new Role("test3", true, Collections.emptyList())
-        );
-        roleRepository.saveAll(roles);
+        ));
 
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(1);
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test
     void countByIsDefaultIsTrue_returnsValidCount_whenMultipleDefaultAndOneNonDefaultRoleExists() {
         // given
-        List<Role> roles = List.of(
+        roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
                 new Role("test2", true, Collections.emptyList()),
                 new Role("test3", true, Collections.emptyList())
-        );
-        roleRepository.saveAll(roles);
+        ));
 
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(2);
+        assertThat(actual).isEqualTo(2);
     }
 
     @Test
     void countByIsDefaultIsTrue_returnsValidCount_whenMultipleDefaultAndMultipleNonDefaultRoleExists() {
         // given
-        List<Role> roles = List.of(
+        roleRepository.saveAll(List.of(
                 new Role("test1", false, Collections.emptyList()),
                 new Role("test2", false, Collections.emptyList()),
                 new Role("test3", true, Collections.emptyList()),
                 new Role("test4", true, Collections.emptyList())
-        );
-        roleRepository.saveAll(roles);
+        ));
 
         // when
-        long count = roleRepository.countByIsDefaultIsTrue();
+        long actual = roleRepository.countByIsDefaultIsTrue();
 
         // then
-        assertThat(count).isEqualTo(2);
+        assertThat(actual).isEqualTo(2);
     }
 }

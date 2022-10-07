@@ -47,17 +47,14 @@ class RoleServiceImplTest {
         underTest.getRoles(1, 10);
 
         // then
-        verify(roleRepository).findAll(PageRequest.of(
-                0,
-                10
-        ));
+        verify(roleRepository).findAll(PageRequest.of(0, 10));
     }
 
     @Test
     void getRoleById_canGetRoleById() {
         // given
-        long id = 1L;
-        when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
+        long id = 1;
+        when(roleRepository.findById(id)).thenReturn(Optional.of(new Role()));
 
         // when
         underTest.getRoleById(id);
@@ -79,20 +76,20 @@ class RoleServiceImplTest {
         ArgumentCaptor<Role> roleArgumentCaptor = ArgumentCaptor.forClass(Role.class);
         verify(roleRepository).save(roleArgumentCaptor.capture());
 
-        Role capturedRole = roleArgumentCaptor.getValue();
-        assertThat(capturedRole.getTitle()).isEqualTo(roleRequestDTO.getTitle());
-        assertThat(capturedRole.getPermissions()).isEqualTo(roleRequestDTO.getPermissions());
-        assertThat(capturedRole.isDefault()).isEqualTo(roleRequestDTO.isDefault());
+        Role actual = roleArgumentCaptor.getValue();
+        assertThat(actual.getTitle()).isEqualTo(roleRequestDTO.getTitle());
+        assertThat(actual.getPermissions()).isEqualTo(roleRequestDTO.getPermissions());
+        assertThat(actual.isDefault()).isEqualTo(roleRequestDTO.isDefault());
     }
 
     @Test
     void updateRole_canUpdateRole_whenRoleRequestDTOIsValid() {
         // given
-        long id = 1L;
+        long id = 1;
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
                 "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
         );
-        when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
+        when(roleRepository.findById(id)).thenReturn(Optional.of(new Role()));
         when(roleRepository.save(any())).thenReturn(new Role());
 
         // when
@@ -102,33 +99,35 @@ class RoleServiceImplTest {
         ArgumentCaptor<Role> roleArgumentCaptor = ArgumentCaptor.forClass(Role.class);
         verify(roleRepository).save(roleArgumentCaptor.capture());
 
-        Role capturedRole = roleArgumentCaptor.getValue();
-        assertThat(capturedRole.getTitle()).isEqualTo(roleRequestDTO.getTitle());
-        assertThat(capturedRole.getPermissions()).isEqualTo(roleRequestDTO.getPermissions());
-        assertThat(capturedRole.isDefault()).isEqualTo(roleRequestDTO.isDefault());
+        Role actual = roleArgumentCaptor.getValue();
+        assertThat(actual.getTitle()).isEqualTo(roleRequestDTO.getTitle());
+        assertThat(actual.getPermissions()).isEqualTo(roleRequestDTO.getPermissions());
+        assertThat(actual.isDefault()).isEqualTo(roleRequestDTO.isDefault());
     }
 
     @Test
     void updateRole_throwsException_whenRoleWithTitleExists() {
         // given
+        long id = 1;
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
                 "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
         );
-        when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
-        when(roleRepository.existsByTitle("User")).thenReturn(true);
+        when(roleRepository.findById(id)).thenReturn(Optional.of(new Role()));
+        when(roleRepository.existsByTitle(roleRequestDTO.getTitle())).thenReturn(true);
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.updateRole(1, roleRequestDTO))
+        assertThatThrownBy(() -> underTest.updateRole(id, roleRequestDTO))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessageContaining("Role")
+                .hasMessageContaining("title")
                 .hasMessageContaining(roleRequestDTO.getTitle());
     }
 
     @Test
     void updateRole_throwsException_whenRoleToUpdateDoesNotExist() {
         // given
-        long id = 1L;
+        long id = 1;
         RoleRequestDTO roleRequestDTO = new RoleRequestDTO(
                 "User", false, Collections.singletonList(Permission.CAN_VIEW_ROLE)
         );
@@ -138,14 +137,15 @@ class RoleServiceImplTest {
         assertThatThrownBy(() -> underTest.updateRole(id, roleRequestDTO))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Role")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(id));
     }
 
     @Test
     void deleteRoleById_canDeleteRole_whenIdIsValid() {
         // given
-        long id = 1L;
-        when(roleRepository.findById(any())).thenReturn(Optional.of(new Role()));
+        long id = 1;
+        when(roleRepository.findById(id)).thenReturn(Optional.of(new Role()));
 
         // when
         underTest.deleteRoleById(id);
@@ -157,45 +157,46 @@ class RoleServiceImplTest {
     @Test
     void deleteRoleById_canDeleteDefaultRole_whenThereAreUsersWithThisRole() {
         // given
-        long id = 1L;
+        long id = 1;
         List<AppUser> users = List.of(
                 new AppUser("test1@mail.com"),
                 new AppUser("test2@mail.com"),
                 new AppUser("test3@mail.com")
         );
-        when(roleRepository.findById(any()))
+        when(roleRepository.findById(id))
                 .thenReturn(Optional.of(new Role(true, users)));
         when(roleRepository.countByIsDefaultIsTrue())
                 .thenReturn(2L);
-        when(roleRepository.findFirstByIsDefaultIsTrueAndIdNot(any()))
+        when(roleRepository.findFirstByIsDefaultIsTrueAndIdNot(id))
                 .thenReturn(Optional.of(new Role(true, Collections.emptyList())));
 
         // when
         underTest.deleteRoleById(id);
 
         // then
-        verify(appUserRepository, times(3)).save(any());
+        verify(appUserRepository, times(users.size())).save(any());
         verify(roleRepository).deleteById(id);
     }
 
     @Test
     void deleteRoleById_throwsException_whenRoleToDeleteDoesNotExist() {
         // given
-        long id = 1L;
+        long id = 1;
 
         // when
         // then
         assertThatThrownBy(() -> underTest.deleteRoleById(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Role")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(id));
     }
 
     @Test
     void deleteRoleById_throwsException_whenRoleToDeleteIsSingleDefault() {
         // given
-        long id = 1L;
-        when(roleRepository.findById(any()))
+        long id = 1;
+        when(roleRepository.findById(id))
                 .thenReturn(Optional.of(new Role("test", true, Collections.emptyList())));
 
         // when
@@ -203,5 +204,4 @@ class RoleServiceImplTest {
         assertThatThrownBy(() -> underTest.deleteRoleById(id))
                 .isInstanceOf(DefaultRoleDeletionException.class);
     }
-
 }
