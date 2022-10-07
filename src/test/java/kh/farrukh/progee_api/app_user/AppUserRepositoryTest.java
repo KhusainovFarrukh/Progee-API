@@ -30,7 +30,7 @@ class AppUserRepositoryTest {
         Optional<AppUser> actual = underTest.findByEmail(email);
 
         // then
-        assertThat(actual.isPresent()).isTrue();
+        assertThat(actual).isPresent();
     }
 
     @Test
@@ -43,7 +43,7 @@ class AppUserRepositoryTest {
         Optional<AppUser> actual = underTest.findByEmail(email);
 
         // then
-        assertThat(actual.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -55,7 +55,7 @@ class AppUserRepositoryTest {
         Optional<AppUser> actual = underTest.findByEmail("");
 
         // then
-        assertThat(actual.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -67,7 +67,7 @@ class AppUserRepositoryTest {
         Optional<AppUser> actual = underTest.findByEmail(null);
 
         // then
-        assertThat(actual.isEmpty()).isTrue();
+        assertThat(actual).isEmpty();
     }
 
     @Test
