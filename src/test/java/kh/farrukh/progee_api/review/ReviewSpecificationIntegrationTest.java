@@ -30,20 +30,18 @@ class ReviewSpecificationIntegrationTest {
     @Test
     void repository_returnsValidData_whenLanguageIdIsNullAndReviewValueIsNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Review> reviews = List.of(
+        ));
+        List<Review> reviews = reviewRepository.saveAll(List.of(
                 new Review("Spring", ReviewValue.LIKE, languages.get(0)),
                 new Review("Django", ReviewValue.DISLIKE, languages.get(1)),
                 new Review("React", ReviewValue.WANT_TO_LEARN, languages.get(2)),
                 new Review("Angular", ReviewValue.LIKE, languages.get(2)),
                 new Review("Vue", ReviewValue.DONT_HAVE_PRACTICE, languages.get(2))
-        );
-        reviews = reviewRepository.saveAll(reviews);
+        ));
         ReviewSpecification reviewSpecification = new ReviewSpecification(null, null);
 
         // when
@@ -56,79 +54,99 @@ class ReviewSpecificationIntegrationTest {
     @Test
     void repository_returnsValidData_whenLanguageIdIsNotNullAndReviewValueIsNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Review> reviews = List.of(
-                new Review("Spring", ReviewValue.LIKE, languages.get(0)),
-                new Review("Django", ReviewValue.DISLIKE, languages.get(1)),
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("Spring", ReviewValue.LIKE, languages.get(0))
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("Django", ReviewValue.DISLIKE, languages.get(1))
+        ));
+        List<Review> language2reviews = reviewRepository.saveAll(List.of(
                 new Review("React", ReviewValue.WANT_TO_LEARN, languages.get(2)),
                 new Review("Angular", ReviewValue.LIKE, languages.get(2)),
                 new Review("Vue", ReviewValue.DONT_HAVE_PRACTICE, languages.get(2))
-        );
-        reviews = reviewRepository.saveAll(reviews);
+        ));
         ReviewSpecification reviewSpecification = new ReviewSpecification(languages.get(2).getId(), null);
 
         // when
         List<Review> actual = reviewRepository.findAll(reviewSpecification);
 
         // then
-        assertThat(actual.size()).isEqualTo(3);
+        assertThat(actual.size()).isEqualTo(language2reviews.size());
+        List<Long> expectedIds = language2reviews.stream().map(Review::getId).toList();
+        assertThat(actual.stream().allMatch(review -> expectedIds.contains(review.getId()))).isTrue();
     }
 
     @Test
     void repository_returnsValidData_whenLanguageIdIsNullAndReviewValueIsNotNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Review> reviews = List.of(
+        ));
+        List<Review> likeReviews = reviewRepository.saveAll(List.of(
                 new Review("Spring", ReviewValue.LIKE, languages.get(0)),
-                new Review("Django", ReviewValue.DISLIKE, languages.get(1)),
-                new Review("React", ReviewValue.WANT_TO_LEARN, languages.get(2)),
-                new Review("Angular", ReviewValue.LIKE, languages.get(2)),
+                new Review("Angular", ReviewValue.LIKE, languages.get(2))
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("Django", ReviewValue.DISLIKE, languages.get(1))
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("React", ReviewValue.WANT_TO_LEARN, languages.get(2))
+        ));
+        reviewRepository.saveAll(List.of(
                 new Review("Vue", ReviewValue.DONT_HAVE_PRACTICE, languages.get(2))
-        );
-        reviews = reviewRepository.saveAll(reviews);
+        ));
         ReviewSpecification reviewSpecification = new ReviewSpecification(null, ReviewValue.LIKE);
 
         // when
         List<Review> actual = reviewRepository.findAll(reviewSpecification);
 
         // then
-        assertThat(actual.size()).isEqualTo(2);
+        assertThat(actual.size()).isEqualTo(likeReviews.size());
+        List<Long> expectedIds = likeReviews.stream().map(Review::getId).toList();
+        assertThat(actual.stream().allMatch(review -> expectedIds.contains(review.getId()))).isTrue();
     }
 
     @Test
     void repository_returnsValidData_whenLanguageIdIsNotNullAndReviewValueIsNotNull() {
         // given
-        List<Language> languages = List.of(
+        List<Language> languages = languageRepository.saveAll(List.of(
                 new Language("Java", ResourceState.APPROVED),
                 new Language("Python", ResourceState.APPROVED),
                 new Language("JavaScript", ResourceState.APPROVED)
-        );
-        languages = languageRepository.saveAll(languages);
-        List<Review> reviews = List.of(
-                new Review("Spring", ReviewValue.LIKE, languages.get(0)),
-                new Review("Django", ReviewValue.DISLIKE, languages.get(1)),
-                new Review("React", ReviewValue.WANT_TO_LEARN, languages.get(2)),
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("Spring", ReviewValue.LIKE, languages.get(0))
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("Django", ReviewValue.DISLIKE, languages.get(1))
+        ));
+        List<Review> language2LikeReviews = reviewRepository.saveAll(List.of(
                 new Review("Angular", ReviewValue.LIKE, languages.get(2)),
+                new Review("Vue", ReviewValue.LIKE, languages.get(2))
+        ));
+        reviewRepository.saveAll(List.of(
+                new Review("React", ReviewValue.WANT_TO_LEARN, languages.get(2))
+        ));
+        reviewRepository.saveAll(List.of(
                 new Review("Vue", ReviewValue.DONT_HAVE_PRACTICE, languages.get(2))
-        );
-        reviews = reviewRepository.saveAll(reviews);
+        ));
+
         ReviewSpecification reviewSpecification = new ReviewSpecification(languages.get(2).getId(), ReviewValue.LIKE);
 
         // when
         List<Review> actual = reviewRepository.findAll(reviewSpecification);
 
         // then
-        assertThat(actual.size()).isEqualTo(1);
+        assertThat(actual.size()).isEqualTo(language2LikeReviews.size());
+        List<Long> expectedIds = language2LikeReviews.stream().map(Review::getId).toList();
+        assertThat(actual.stream().allMatch(review -> expectedIds.contains(review.getId()))).isTrue();
     }
 
     @Test
@@ -172,7 +190,7 @@ class ReviewSpecificationIntegrationTest {
 
     @Test
     void equals_returnsFalse_whenReviewValueIsNotEqual() {
-        // givn
+        // given
         ReviewSpecification reviewSpecification1 = new ReviewSpecification(1L, ReviewValue.LIKE);
         ReviewSpecification reviewSpecification2 = new ReviewSpecification(1L, ReviewValue.DISLIKE);
 
@@ -186,10 +204,11 @@ class ReviewSpecificationIntegrationTest {
     @Test
     void equals_returnsTrue_whenSameObject() {
         // given
-        ReviewSpecification reviewSpecification = new ReviewSpecification(1L, ReviewValue.LIKE);
+        ReviewSpecification reviewSpecification1 = new ReviewSpecification(1L, ReviewValue.LIKE);
+        ReviewSpecification reviewSpecification2 = reviewSpecification1;
 
         // when
-        boolean actual = reviewSpecification.equals(reviewSpecification);
+        boolean actual = reviewSpecification1.equals(reviewSpecification2);
 
         // then
         assertThat(actual).isTrue();

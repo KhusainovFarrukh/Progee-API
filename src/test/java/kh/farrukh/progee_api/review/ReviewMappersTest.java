@@ -32,10 +32,10 @@ class ReviewMappersTest {
         Review review = null;
 
         // when
-        ReviewResponseDTO reviewResponseDTO = ReviewMappers.toReviewResponseDTO(review);
+        ReviewResponseDTO actual = ReviewMappers.toReviewResponseDTO(review);
 
         // then
-        assertThat(reviewResponseDTO).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -54,19 +54,19 @@ class ReviewMappersTest {
         );
 
         // when
-        ReviewResponseDTO reviewResponseDTO = ReviewMappers.toReviewResponseDTO(review);
+        ReviewResponseDTO actual = ReviewMappers.toReviewResponseDTO(review);
 
         // then
-        assertThat(reviewResponseDTO).isNotNull();
-        assertThat(reviewResponseDTO.getId()).isEqualTo(review.getId());
-        assertThat(reviewResponseDTO.getBody()).isEqualTo(review.getBody());
-        assertThat(reviewResponseDTO.getReviewValue()).isEqualTo(review.getReviewValue());
-        assertThat(reviewResponseDTO.getUpVotes()).isEqualTo(review.getUpVotes());
-        assertThat(reviewResponseDTO.getDownVotes()).isEqualTo(review.getDownVotes());
-        assertThat(reviewResponseDTO.getScore()).isEqualTo(review.getScore());
-        assertThat(reviewResponseDTO.getLanguage().getId()).isEqualTo(review.getLanguage().getId());
-        assertThat(reviewResponseDTO.getAuthor().getId()).isEqualTo(review.getAuthor().getId());
-        assertThat(reviewResponseDTO.getCreatedAt()).isEqualTo(review.getCreatedAt());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getId()).isEqualTo(review.getId());
+        assertThat(actual.getBody()).isEqualTo(review.getBody());
+        assertThat(actual.getReviewValue()).isEqualTo(review.getReviewValue());
+        assertThat(actual.getUpVotes()).isEqualTo(review.getUpVotes());
+        assertThat(actual.getDownVotes()).isEqualTo(review.getDownVotes());
+        assertThat(actual.getScore()).isEqualTo(review.getScore());
+        assertThat(actual.getLanguage().getId()).isEqualTo(review.getLanguage().getId());
+        assertThat(actual.getAuthor().getId()).isEqualTo(review.getAuthor().getId());
+        assertThat(actual.getCreatedAt()).isEqualTo(review.getCreatedAt());
     }
 
     @Test
@@ -75,10 +75,10 @@ class ReviewMappersTest {
         ReviewRequestDTO reviewRequestDTO = null;
 
         // when
-        Review review = ReviewMappers.toReview(reviewRequestDTO, languageRepository);
+        Review actual = ReviewMappers.toReview(reviewRequestDTO, languageRepository);
 
         // then
-        assertThat(review).isNull();
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -92,13 +92,13 @@ class ReviewMappersTest {
         );
 
         // when
-        Review review = ReviewMappers.toReview(reviewRequestDTO, languageRepository);
+        Review actual = ReviewMappers.toReview(reviewRequestDTO, languageRepository);
 
         // then
-        assertThat(review).isNotNull();
-        assertThat(review.getBody()).isEqualTo(reviewRequestDTO.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDTO.getReviewValue());
-        assertThat(review.getLanguage().getId()).isEqualTo(reviewRequestDTO.getLanguageId());
+        assertThat(actual).isNotNull();
+        assertThat(actual.getBody()).isEqualTo(reviewRequestDTO.getBody());
+        assertThat(actual.getReviewValue()).isEqualTo(reviewRequestDTO.getReviewValue());
+        assertThat(actual.getLanguage().getId()).isEqualTo(reviewRequestDTO.getLanguageId());
     }
 
     @Test
@@ -116,6 +116,7 @@ class ReviewMappersTest {
         assertThatThrownBy(() -> ReviewMappers.toReview(reviewRequestDTO, languageRepository))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Language")
+                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(reviewRequestDTO.getLanguageId()));
     }
 }

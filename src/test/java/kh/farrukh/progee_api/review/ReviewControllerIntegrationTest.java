@@ -88,12 +88,11 @@ class ReviewControllerIntegrationTest {
     void getReviews_canGetReviewsWithoutFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
-        List<Review> reviews = List.of(
+        List<Review> reviews = reviewRepository.saveAll(List.of(
                 new Review("test body1", ReviewValue.LIKE, existingLanguage),
                 new Review("test body2", ReviewValue.LIKE, existingLanguage),
                 new Review("test body3", ReviewValue.LIKE, existingLanguage)
-        );
-        reviewRepository.saveAll(reviews);
+        ));
 
         // when
         MvcResult result = mvc
@@ -104,15 +103,13 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        PagingResponse<ReviewResponseDTO> response = objectMapper.readValue(
+        PagingResponse<ReviewResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(reviews.size());
-        assertThat(reviews.stream().allMatch(review ->
-                response.getItems().stream().map(ReviewResponseDTO::getBody).toList()
-                        .contains(review.getBody())
-        )).isTrue();
+        assertThat(actual.getTotalItems()).isEqualTo(reviews.size());
+        List<Long> expectedIds = reviews.stream().map(Review::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(review -> expectedIds.contains(review.getId()))).isTrue();
     }
 
     @Test
@@ -120,36 +117,31 @@ class ReviewControllerIntegrationTest {
     void getReviews_canGetReviewsWithFilter() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
-        List<Review> likeReviews = List.of(
+        List<Review> likeReviews = reviewRepository.saveAll(List.of(
                 new Review("test body1", ReviewValue.LIKE, existingLanguage),
                 new Review("test body2", ReviewValue.LIKE, existingLanguage)
-        );
-        List<Review> dislikeReviews = List.of(
+        ));
+        List<Review> dislikeReviews = reviewRepository.saveAll(List.of(
                 new Review("test body3", ReviewValue.DISLIKE, existingLanguage)
-        );
-        reviewRepository.saveAll(likeReviews);
+        ));
 
         // when
         MvcResult result = mvc
-                .perform(
-                        get(ENDPOINT_REVIEW)
-                                .param("page_size", String.valueOf(likeReviews.size() + dislikeReviews.size()))
-                                .param("state", String.valueOf(ReviewValue.LIKE.getScore()))
-                )
+                .perform(get(ENDPOINT_REVIEW)
+                        .param("page_size", String.valueOf(likeReviews.size() + dislikeReviews.size()))
+                        .param("value", ReviewValue.LIKE.name()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        PagingResponse<ReviewResponseDTO> response = objectMapper.readValue(
+        PagingResponse<ReviewResponseDTO> actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), new TypeReference<>() {
                 }
         );
-        assertThat(response.getTotalItems()).isEqualTo(likeReviews.size());
-        assertThat(likeReviews.stream().allMatch(review ->
-                response.getItems().stream().map(ReviewResponseDTO::getBody).toList()
-                        .contains(review.getBody())
-        )).isTrue();
+        assertThat(actual.getTotalItems()).isEqualTo(likeReviews.size());
+        List<Long> expectedIds = likeReviews.stream().map(Review::getId).toList();
+        assertThat(actual.getItems().stream().allMatch(review -> expectedIds.contains(review.getId()))).isTrue();
     }
 
     @Test
@@ -157,9 +149,7 @@ class ReviewControllerIntegrationTest {
     void getReviewById_canGetReviewById() throws Exception {
         // given
         Language existingLanguage = languageRepository.save(new Language());
-        Review existingReview = reviewRepository.save(
-                new Review("test body", ReviewValue.LIKE, existingLanguage)
-        );
+        Review existingReview = reviewRepository.save(new Review("test body", ReviewValue.LIKE, existingLanguage));
 
         // when
         MvcResult result = mvc
@@ -169,8 +159,8 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
-        assertThat(review.getId()).isEqualTo(existingReview.getId());
+        ReviewResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingReview.getId());
     }
 
     @Test
@@ -195,9 +185,9 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
-        assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
+        ReviewResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
+        assertThat(actual.getBody()).isEqualTo(reviewRequestDto.getBody());
+        assertThat(actual.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
     }
 
     @Test
@@ -225,10 +215,10 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
-        assertThat(review.getId()).isEqualTo(existingReview.getId());
-        assertThat(review.getBody()).isEqualTo(reviewRequestDto.getBody());
-        assertThat(review.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
+        ReviewResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingReview.getId());
+        assertThat(actual.getBody()).isEqualTo(reviewRequestDto.getBody());
+        assertThat(actual.getReviewValue()).isEqualTo(reviewRequestDto.getReviewValue());
     }
 
     @Test
@@ -250,6 +240,7 @@ class ReviewControllerIntegrationTest {
                         )))
                 .andDo(print())
                 .andExpect(status().isNoContent());
+        assertThat(reviewRepository.findById(existingReview.getId())).isEmpty();
     }
 
     @Test
@@ -264,8 +255,7 @@ class ReviewControllerIntegrationTest {
 
         // when
         MvcResult result = mvc
-                .perform(post(ENDPOINT_REVIEW + "/"
-                        + existingReview.getId() + "/vote")
+                .perform(post(ENDPOINT_REVIEW + "/" + existingReview.getId() + "/vote")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteDTO))
                         .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
@@ -276,9 +266,9 @@ class ReviewControllerIntegrationTest {
                 .andReturn();
 
         // then
-        ReviewResponseDTO review = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
-        assertThat(review.getId()).isEqualTo(existingReview.getId());
-        assertThat(existingUser.getId()).isIn(review.getUpVotes());
-        assertThat(existingUser.getId()).isNotIn(review.getDownVotes());
+        ReviewResponseDTO actual = objectMapper.readValue(result.getResponse().getContentAsString(), ReviewResponseDTO.class);
+        assertThat(actual.getId()).isEqualTo(existingReview.getId());
+        assertThat(existingUser.getId()).isIn(actual.getUpVotes());
+        assertThat(existingUser.getId()).isNotIn(actual.getDownVotes());
     }
 }

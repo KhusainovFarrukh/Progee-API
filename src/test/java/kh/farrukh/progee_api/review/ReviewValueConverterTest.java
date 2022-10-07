@@ -1,16 +1,16 @@
 package kh.farrukh.progee_api.review;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ReviewValueConverterTest {
 
-    private ReviewValueConverter underTest;
+    private static ReviewValueConverter underTest;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         underTest = new ReviewValueConverter();
     }
 
