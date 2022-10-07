@@ -78,7 +78,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     /**
-     * It creates a access token for the user with the given expiration date and the access token algorithm
+     * It creates an access token for the user with the given expiration date and the access token algorithm
      *
      * @param user The user for whom the token is being created.
      * @param expireDate The date and time when the token expires.

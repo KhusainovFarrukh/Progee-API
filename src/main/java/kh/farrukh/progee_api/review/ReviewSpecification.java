@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,9 +25,9 @@ public class ReviewSpecification implements Specification<Review> {
 
     @Override
     public Predicate toPredicate(
-            Root<Review> root,
-            CriteriaQuery<?> query,
-            CriteriaBuilder criteriaBuilder
+            @NonNull Root<Review> root,
+            @NonNull CriteriaQuery<?> query,
+            @NonNull CriteriaBuilder criteriaBuilder
     ) {
         Predicate predicate = criteriaBuilder.conjunction();
 

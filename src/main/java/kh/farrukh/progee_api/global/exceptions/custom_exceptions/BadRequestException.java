@@ -9,7 +9,7 @@ import static kh.farrukh.progee_api.global.exceptions.ExceptionMessages.EXCEPTIO
 /**
  * `BadRequestException` is a subclass of `ApiException` that is thrown
  * when a required value is not valid
- *
+ * <p>
  * HttpStatus of the response will be BAD_REQUEST
  */
 @Getter

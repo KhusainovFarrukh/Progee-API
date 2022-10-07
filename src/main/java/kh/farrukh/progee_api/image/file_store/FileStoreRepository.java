@@ -25,7 +25,7 @@ import java.util.Objects;
 public class FileStoreRepository {
 
     // Getting the path of the resources' folder.
-    String RESOURCES_DIR = Objects.requireNonNull(FileStoreRepository.class.getResource("/")).getPath();
+    private final String RESOURCES_DIR = Objects.requireNonNull(FileStoreRepository.class.getResource("/")).getPath();
 
     /**
      * It creates a new file in the `resources` directory, writes the content to it, and returns the absolute path to the

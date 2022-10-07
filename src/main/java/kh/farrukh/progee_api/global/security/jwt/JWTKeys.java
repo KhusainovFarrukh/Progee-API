@@ -6,6 +6,4 @@ package kh.farrukh.progee_api.global.security.jwt;
 public class JWTKeys {
 
     public static final String KEY_ROLE_ID = "role_id";
-    public static final String KEY_ACCESS_TOKEN = "access_token";
-    public static final String KEY_REFRESH_TOKEN = "refresh_token";
 }

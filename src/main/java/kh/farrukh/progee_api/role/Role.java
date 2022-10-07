@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static kh.farrukh.progee_api.global.base_entity.EntityWithId.GENERATOR_NAME;

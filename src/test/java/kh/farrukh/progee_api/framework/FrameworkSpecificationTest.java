@@ -194,10 +194,11 @@ public class FrameworkSpecificationTest {
     @Test
     void equals_returnsTrue_whenSameObject() {
         // given
-        FrameworkSpecification frameworkSpecification = new FrameworkSpecification(1L, ResourceState.APPROVED);
+        FrameworkSpecification frameworkSpecification1 = new FrameworkSpecification(1L, ResourceState.APPROVED);
+        FrameworkSpecification frameworkSpecification2 = frameworkSpecification1;
 
         // when
-        boolean actual = frameworkSpecification.equals(frameworkSpecification);
+        boolean actual = frameworkSpecification1.equals(frameworkSpecification2);
 
         // then
         assertThat(actual).isTrue();

@@ -9,7 +9,7 @@ import static kh.farrukh.progee_api.global.exceptions.ExceptionMessages.EXCEPTIO
 /**
  * `EndpointAccessDeniedException` is a subclass of `ApiException` that is thrown
  * when a user doesn't have enough permission/role to access the endpoint
- *
+ * <p>
  * HttpStatus of the response will be FORBIDDEN
  */
 @Getter

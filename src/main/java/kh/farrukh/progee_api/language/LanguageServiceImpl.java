@@ -58,7 +58,7 @@ public class LanguageServiceImpl implements LanguageService {
         checkSortParams(pageable, List.of("id", "name", "description", "state", "createdAt"));
 
         // If the user doesn't have the permission to view languages by state, then if the state is not null, then throw an
-        // exception, otherwise set the state to APPROVED.
+        // exception, otherwise set the APPROVED state.
         if (!CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
             if (state != null) throw new NotEnoughPermissionException();
             state = ResourceState.APPROVED;
@@ -84,7 +84,7 @@ public class LanguageServiceImpl implements LanguageService {
 
         // It checks if the user has the permission to view languages by state. If the user doesn't have the permission,
         // then if the state is not null, then throw an
-        // exception, otherwise set the state to APPROVED.
+        // exception, otherwise set the APPROVED state.
         if (language.getState() != ResourceState.APPROVED &&
                 !CurrentUserUtils.hasPermission(Permission.CAN_VIEW_LANGUAGES_BY_STATE, appUserRepository)) {
             throw new NotEnoughPermissionException();

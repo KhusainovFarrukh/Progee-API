@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 /**
  * It's a custom exception class that extends the ApiException class,
  * and thrown when there is already another resource with some unique field
- *
+ * <p>
  * HttpStatus of the response will be BAD_REQUEST
  */
 @Getter

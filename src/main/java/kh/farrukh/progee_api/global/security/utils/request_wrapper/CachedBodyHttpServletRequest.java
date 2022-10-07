@@ -9,7 +9,7 @@ import java.io.*;
 
 public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
-    private byte[] cachedBody;
+    private final byte[] cachedBody;
 
     /**
      * Constructs a request object wrapping the given request.

@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
  * It's a custom exception class that extends the ApiException class
  * and is used to throw a ResourceNotFoundException when a resource
  * is not found
- *
+ * <p>
  * HttpStatus of the response will be NOT_FOUND
  */
 @Getter

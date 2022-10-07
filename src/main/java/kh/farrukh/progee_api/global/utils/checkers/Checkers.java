@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * It contains static methods that check if a resource exists in the database,
- * is unique, request parameter is valid and etc.
+ * resource is unique, request parameter is valid, etc.
  */
 public class Checkers {
 

@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.global.security.utils.request_wrapper;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,8 +22,8 @@ public class LoginRequestWrapperFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
         CachedBodyHttpServletRequest cachedBodyHttpServletRequest =

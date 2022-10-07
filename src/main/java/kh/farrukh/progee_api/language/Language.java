@@ -18,7 +18,7 @@ import static kh.farrukh.progee_api.language.LanguageConstants.SEQUENCE_NAME_LAN
 import static kh.farrukh.progee_api.language.LanguageConstants.TABLE_NAME_LANGUAGE;
 
 /**
- * It's a Entity class that represents a language
+ * It's an Entity class that represents a language
  */
 @Getter
 @Setter

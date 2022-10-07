@@ -1,10 +1,10 @@
 package kh.farrukh.progee_api.global.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
-import kh.farrukh.progee_api.auth.payloads.LoginRequestDTO;
 import kh.farrukh.progee_api.app_user.AppUser;
 import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.auth.payloads.AuthResponseDTO;
+import kh.farrukh.progee_api.auth.payloads.LoginRequestDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.EmailPasswordWrongException;
 import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.security.utils.SecurityUtils;
@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -87,7 +86,7 @@ public class EmailPasswordAuthenticationFilter extends UsernamePasswordAuthentic
      * @param failed The AuthenticationException that was thrown by the authentication provider.
      */
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException{
         LoginRequestDTO loginRequestDTO = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDTO.class);
         EmailPasswordWrongException.Type type;
         if (appUserRepository.existsByEmail(loginRequestDTO.getEmail())) {

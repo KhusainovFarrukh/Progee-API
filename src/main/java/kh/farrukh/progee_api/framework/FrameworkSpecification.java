@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,8 +28,8 @@ public class FrameworkSpecification implements Specification<Framework> {
 
     @Override
     public Predicate toPredicate(
-            Root<Framework> root,
-            CriteriaQuery<?> query,
+            @NonNull Root<Framework> root,
+            @NonNull CriteriaQuery<?> query,
             CriteriaBuilder criteriaBuilder
     ) {
         Predicate predicate = criteriaBuilder.conjunction();

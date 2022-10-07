@@ -10,7 +10,7 @@ import static kh.farrukh.progee_api.global.exceptions.ExceptionMessages.EXCEPTIO
  * It's a custom exception that extends the ApiException class
  * and is thrown when a user tries to vote on a review that
  * they've already voted on
- *
+ * <p>
  * HttpStatus of the response will be BAD_REQUEST
  */
 @Getter
