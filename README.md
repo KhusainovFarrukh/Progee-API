@@ -34,7 +34,7 @@ Progee API is currently deployed and working. Base url is: https://progee-api-v1
 Progee API includes 5 main entities: Language (for programming language), Framework (for framework of programming language), AppUser (for user of application), Role (for signed user's role) and Review (for users' review about programming language).
 And here is relations between tables of PostgreSQL database:
 
-![progee-db-relations](https://user-images.githubusercontent.com/68108113/173758913-519f58af-5285-4658-953c-0a658963c909.png)
+![progee-db-relations](https://user-images.githubusercontent.com/68108113/195850414-389e10cc-640a-45f9-b425-899d07bd9497.png)
 
 ## Frontend (Android client)
 
