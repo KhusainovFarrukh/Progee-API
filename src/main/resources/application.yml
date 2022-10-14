@@ -21,10 +21,10 @@ spring:
     use-code-as-default-message: false
   flyway:
     placeholders:
-      DEFAULT_ENCRYPTED_PASSWORD: ${DEFAULT_ENCRYPTED_PASSWORD}
+      DEFAULT_ENCRYPTED_PASSWORD: ${DEFAULT_ENCRYPTED_PASSWORD:$2a$10$u.olISwSqjbaZCHADL0fIuw7eBijpqzvfSavgXnPcfniJTwORGNvm}
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:secret}
   access-token-validity-in-seconds: 1800
   refresh-token-validity-in-seconds: 604800
 
