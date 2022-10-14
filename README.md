@@ -27,6 +27,8 @@ Currently working features: **auth, languages, frameworks, reviews, dynamic role
 
 Documentation for the Progee API is available at Postman Documenter: [See docs](https://documenter.getpostman.com/view/14256972/UzBgwAPQ)
 
+Or you can download Postman collection: [Download](https://github.com/KhusainovFarrukh/Progee-API/blob/master/Progee-API%20(v1).postman_collection.json)
+
 Progee API is currently deployed and working. Base url is: https://progee-api-v1.herokuapp.com (See API docs above to understand where to use base-url)
 
 ## Database relations map
