@@ -2,7 +2,7 @@
 
 ---
 
-<a href="https://img.shields.io/badge/Version-1.0.0--RC-informational"><img alt="Version" src="https://img.shields.io/badge/Version-1.0.0--RC-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-release--candidate-yellow"><img alt="Project state" src="https://img.shields.io/badge/State-release--candidate-yellow"></a> <a href="https://img.shields.io/badge/Deploy-deployed (heroku)-success"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-deployed (heroku)-success"></a>
+<a href="https://img.shields.io/badge/Version-1.0.0-informational"><img alt="Version" src="https://img.shields.io/badge/Version-1.0.0-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-stable-success"><img alt="Project state" src="https://img.shields.io/badge/State-stable-success"></a> <a href="https://img.shields.io/badge/Deploy-deployed (heroku)-success"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-deployed (heroku)-success"></a>
 
 
 ## Table of Contents
@@ -21,7 +21,7 @@
 
 Hi! This is **Progee-API v1**. 
 Progee-API is a REST API for providing information about programming languages, and frameworks, their popularity, and respect for them among the community of developers (with reviews and scores). 
-Currently working features: **auth, languages, frameworks, reviews**.
+Currently working features: **auth, languages, frameworks, reviews, dynamic roles with permissions**.
 
 ## API docs
 
@@ -31,7 +31,7 @@ Progee API is currently deployed and working. Base url is: https://progee-api-v1
 
 ## Database relations map
 
-Progee API includes 4 main entities: Language (for programming language), Framework (for framework of programming language), AppUser (for user of application) and Review (users' review about programming language).
+Progee API includes 5 main entities: Language (for programming language), Framework (for framework of programming language), AppUser (for user of application), Role (for signed user's role) and Review (for users' review about programming language).
 And here is relations between tables of PostgreSQL database:
 
 ![progee-db-relations](https://user-images.githubusercontent.com/68108113/173758913-519f58af-5285-4658-953c-0a658963c909.png)
@@ -44,21 +44,19 @@ Currently, there is Android client app for testing Progee-API main features. Pro
 
 This REST API is developed using Java programming language and Spring Boot starter of Spring framework. The full tech stack:
 
-  - **Spring Boot**
-  - **PostgreSQL** for Database
-  - **Spring Data JPA** for data access layers
-  - **Spring Security** for authentication and authorization
-  - **JWT** for tokens and share security information between two parties — a client and a server
-  - **JUnit 5** for unit and integration tests
-  - **Jakarta Validation API** for expressing and validating application constraints
-  - **Lombok** for reducing boilerplate code
+  - [Spring Boot](https://spring.io/projects/spring-boot)
+  - [PostgreSQL](https://www.postgresql.org/) for Database
+  - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) for data access layers
+  - [Spring Security](https://spring.io/projects/spring-security) for authentication and authorization
+  - [JWT](https://auth0.com/docs/secure/tokens/json-web-tokens) for tokens and share security information between two parties — a client and a server
+  - [JUnit 5](https://junit.org/junit5/) for unit and integration tests
+  - [Lombok](https://projectlombok.org/) for reducing boilerplate code
+  - [FlywayDB](https://flywaydb.org/) for Database migrations
   - and etc.
 
 ## Usage
 
-**Attention!** This project uses IntelliJ IDEA environment variables for some configuration properties (secret key of HMAC256 algorithm used to encode/decode JWT token). Define your environment variables or paste your values directly to places where environment variables are used:
-
-- System.getenv("MY_JWT_SECRET") at JWTUtils: line 34
+**Attention!** This project uses environment variables for some configuration properties (JWT_SECRET and DEFAULT_ENCRYPTED_PASSWORD). Define your environment variables in application.yml file. Otherwise default values will be used
 
 ## Contribution
 
