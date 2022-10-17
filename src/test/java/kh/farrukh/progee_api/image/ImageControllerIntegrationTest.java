@@ -61,8 +61,8 @@ class ImageControllerIntegrationTest {
                 .andExpect(status().isCreated());
 
         // then
-//        assertThat(imageRepository.findAll().stream().anyMatch(
-//                image -> Arrays.equals(image.getContent(), bytes))
-//        ).isTrue();
+        assertThat(imageRepository.findAll().stream().anyMatch(
+                image -> image.getName().contains(mockFile.getName()))
+        ).isTrue();
     }
 }
