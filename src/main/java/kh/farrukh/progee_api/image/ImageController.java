@@ -26,7 +26,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<PagingResponse<ImageResponseDTO>> getLanguages(
+    public ResponseEntity<PagingResponse<ImageResponseDTO>> getImages(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "page_size", defaultValue = "10") int pageSize
     ) {
