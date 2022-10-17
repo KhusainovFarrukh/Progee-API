@@ -68,21 +68,6 @@ public class ImageServiceImpl implements ImageService {
                 .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id));
     }
 
-    /**
-     * Find the image in the db and return its content as a resource.
-     *
-     * @param id The id of the image you want to download.
-     * @return A resource
-     */
-    @Override
-    public Resource downloadImage(long id) {
-        byte[] content = imageRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id))
-                .getContent();
-
-        return new ByteArrayResource(content);
-    }
-
     @Override
     public void deleteImage(long id) {
         Image image = imageRepository.findById(id)

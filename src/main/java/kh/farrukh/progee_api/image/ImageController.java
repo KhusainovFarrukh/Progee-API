@@ -57,17 +57,6 @@ public class ImageController {
         return ResponseEntity.ok(imageService.getImageById(id));
     }
 
-    /**
-     * It takes an id, finds the image with that id, and returns its content as a resource
-     *
-     * @param id The id of the image to download
-     * @return A Resource object.
-     */
-    @GetMapping(value = "{id}/download", produces = MediaType.IMAGE_JPEG_VALUE)
-    public Resource downloadImageById(@PathVariable long id) {
-        return imageService.downloadImage(id);
-    }
-
     @DeleteMapping(value = "{id}")
     public ResponseEntity<Void> deleteImageById(@PathVariable long id) {
         imageService.deleteImage(id);
