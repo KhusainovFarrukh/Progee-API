@@ -69,4 +69,12 @@ public class ImageServiceImpl implements ImageService {
 
         return new ByteArrayResource(content);
     }
+
+    @Override
+    public void deleteImage(long id) {
+        Image image = imageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id));
+        s3Repository.deleteObject(IMAGES_FOLDER + "/" + image.getName());
+        imageRepository.deleteById(id);
+    }
 }

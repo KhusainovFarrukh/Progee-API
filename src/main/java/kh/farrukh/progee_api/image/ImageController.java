@@ -58,4 +58,10 @@ public class ImageController {
     public Resource downloadImageById(@PathVariable long id) {
         return imageService.downloadImage(id);
     }
+
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<Void> deleteImageById(@PathVariable long id) {
+        imageService.deleteImage(id);
+        return ResponseEntity.noContent().build();
+    }
 }

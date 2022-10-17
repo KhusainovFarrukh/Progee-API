@@ -16,4 +16,6 @@ public interface ImageService {
     ImageResponseDTO getImageById(long id);
 
     Resource downloadImage(long id);
+
+    void deleteImage(long id);
 }
