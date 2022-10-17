@@ -35,7 +35,7 @@ class ImageServiceImplTest {
     private ImageServiceImpl underTest;
 
     @Test
-    void getUsers_canGetUsers() {
+    void getImages_canGetImages() {
         // given
         when(imageRepository.findAll(PageRequest.of(0, 10)))
                 .thenReturn(Page.empty(Pageable.ofSize(10)));
@@ -93,7 +93,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void deleteById_canDeleteUserById() {
+    void deleteById_canDeleteImageById() {
         // given
         long id = 1;
         when(imageRepository.findById(id)).thenReturn(Optional.of(new Image(id, "test.png", "https://test.com", 0.0f)));
@@ -107,7 +107,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void deleteById_throwsException_whenUserToDeleteDoesNotExistWithId() {
+    void deleteById_throwsException_whenImageToDeleteDoesNotExistWithId() {
         // given
         long id = 1;
 
