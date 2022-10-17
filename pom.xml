@@ -10,7 +10,7 @@
     </parent>
     <groupId>kh.farrukh</groupId>
     <artifactId>progee-api</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-alpha</version>
     <name>Progee API</name>
     <description>Progee-API is a REST API for providing information about programming languages, and frameworks, their
         popularity, and respect for them among the community of developers (with reviews and scores)
@@ -86,6 +86,16 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-aws</artifactId>
+            <version>2.2.6.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
         </dependency>
     </dependencies>
 

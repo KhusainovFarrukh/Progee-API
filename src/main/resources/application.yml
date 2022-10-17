@@ -23,6 +23,20 @@ spring:
     placeholders:
       DEFAULT_ENCRYPTED_PASSWORD: ${DEFAULT_ENCRYPTED_PASSWORD:$2a$10$u.olISwSqjbaZCHADL0fIuw7eBijpqzvfSavgXnPcfniJTwORGNvm}
 
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+
+aws:
+  s3:
+    bucket: progee-api-v1
+
 jwt:
   secret: ${JWT_SECRET:secret}
   access-token-validity-in-seconds: 1800

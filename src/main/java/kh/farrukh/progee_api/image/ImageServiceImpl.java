@@ -1,7 +1,8 @@
 package kh.farrukh.progee_api.image;
 
-import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import kh.farrukh.progee_api.global.exceptions.custom_exceptions.ResourceNotFoundException;
+import kh.farrukh.progee_api.global.utils.file.FileUtils;
+import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -18,7 +19,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
+    private final S3Repository s3Repository;
     private final ImageRepository imageRepository;
+
+    public static final String IMAGES_FOLDER = "images";
 
     /**
      * We're taking a multipart file, saving image to the image repository
@@ -29,9 +33,12 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageResponseDTO addImage(MultipartFile multipartImage) {
         try {
-            return ImageMappers.toImageResponseDto(imageRepository.save(new Image(multipartImage.getBytes())));
-        } catch (IOException exception) {
-            throw new RuntimeException("Error on image upload: " + exception.getMessage());
+            String name = FileUtils.getUniqueImageName(multipartImage);
+            String url = s3Repository.savePublicReadObject(multipartImage.getInputStream(), IMAGES_FOLDER + "/" + name);
+            Image image = new Image(name, url, multipartImage.getSize() / 1024f / 1024f);
+            return ImageMappers.toImageResponseDto(imageRepository.save(image));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

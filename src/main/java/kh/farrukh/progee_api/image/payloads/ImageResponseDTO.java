@@ -15,4 +15,7 @@ import lombok.Setter;
 public class ImageResponseDTO {
 
     private long id;
+    private String name;
+    private String url;
+    private Float size;
 }
