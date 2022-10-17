@@ -7,21 +7,26 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Optional;
 
+import static kh.farrukh.progee_api.image.ImageServiceImpl.IMAGES_FOLDER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ImageServiceImplTest {
+
+    @Mock
+    private S3Repository s3Repository;
 
     @Mock
     private ImageRepository imageRepository;
@@ -30,9 +35,23 @@ class ImageServiceImplTest {
     private ImageServiceImpl underTest;
 
     @Test
-    void addImage_canAddImage_whenFileIsValid() throws IOException {
+    void getUsers_canGetUsers() {
+        // given
+        when(imageRepository.findAll(PageRequest.of(0, 10)))
+                .thenReturn(Page.empty(Pageable.ofSize(10)));
+
+        // when
+        underTest.getImages(1, 10);
+
+        // then
+        verify(imageRepository).findAll(PageRequest.of(0, 10));
+    }
+
+    @Test
+    void addImage_canAddImage_whenFileIsValid() {
         // given
         MultipartFile mockFile = new MockMultipartFile("test.png", new byte[]{});
+        when(s3Repository.savePublicReadObject(any(), any())).thenReturn("https://test.com");
 
         // when
         underTest.addImage(mockFile);
@@ -42,18 +61,7 @@ class ImageServiceImplTest {
         verify(imageRepository).save(imageArgCaptor.capture());
 
         Image actual = imageArgCaptor.getValue();
-        assertThat(actual.getContent()).isEqualTo(mockFile.getBytes());
-    }
-
-    @Test
-    void addImage_throwsException_whenFileIsNull() {
-        // given
-        MultipartFile mockFile = null;
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.addImage(mockFile))
-                .isInstanceOf(RuntimeException.class);
+        assertThat(actual.getUrl()).isEqualTo("https://test.com");
     }
 
     @Test
@@ -85,31 +93,29 @@ class ImageServiceImplTest {
     }
 
     @Test
-    void downloadImage_canDownloadImage_whenIdIsValid() {
+    void deleteById_canDeleteUserById() {
         // given
         long id = 1;
-        Image existingImage = new Image(id, new byte[]{});
-        when(imageRepository.findById(id)).thenReturn(Optional.of(existingImage));
+        when(imageRepository.findById(id)).thenReturn(Optional.of(new Image(id, "test.png", "https://test.com", 0.0f)));
 
         // when
-        Resource actual = underTest.downloadImage(id);
+        underTest.deleteImage(id);
 
         // then
-        assertThat(actual).isEqualTo(new ByteArrayResource(existingImage.getContent()));
+        verify(imageRepository).deleteById(id);
+        verify(s3Repository).deleteObject(IMAGES_FOLDER + "/" + "test.png");
     }
 
     @Test
-    void downloadImage_throwsException_whenImageToDownloadDoesNotExist() {
+    void deleteById_throwsException_whenUserToDeleteDoesNotExistWithId() {
         // given
         long id = 1;
-        when(imageRepository.findById(id)).thenReturn(Optional.empty());
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.downloadImage(id))
+        assertThatThrownBy(() -> underTest.deleteImage(id))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("Image")
-                .hasMessageContaining("id")
                 .hasMessageContaining(String.valueOf(id));
     }
 }

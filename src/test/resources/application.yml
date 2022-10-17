@@ -18,6 +18,19 @@ spring:
   flyway:
     enabled: false
 
+cloud:
+  aws:
+    credentials:
+      use-default-aws-credentials-chain: false
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+
+aws:
+  s3:
+    bucket: progee-api-v1
+
 jwt:
   secret: test
   access-token-validity-in-seconds: 1800

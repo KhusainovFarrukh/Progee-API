@@ -41,4 +41,11 @@ public class Image extends EntityWithId {
         this.url = url;
         this.size = size;
     }
+
+    public Image(Long id, String name, String url, Float size) {
+        super.setId(id);
+        this.name = name;
+        this.url = url;
+        this.size = size;
+    }
 }

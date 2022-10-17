@@ -22,7 +22,7 @@ class ImageMappersTest {
     @Test
     void toImageResponseDto_canMap_whenImageIsValid() {
         // given
-        Image image = new Image(1, null);
+        Image image = new Image(1);
 
         // when
         ImageResponseDTO actual = ImageMappers.toImageResponseDto(image);
@@ -47,7 +47,7 @@ class ImageMappersTest {
     @Test
     void toImage_canMap_whenImageResponseDTOIsValid() {
         // given
-        ImageResponseDTO imageResponseDTO = new ImageResponseDTO(1);
+        ImageResponseDTO imageResponseDTO = new ImageResponseDTO(1, "test.png", "", 1f);
 
         // when
         Image actual = ImageMappers.toImage(imageResponseDTO);
@@ -55,5 +55,8 @@ class ImageMappersTest {
         // then
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isEqualTo(imageResponseDTO.getId());
+        assertThat(actual.getName()).isEqualTo(imageResponseDTO.getName());
+        assertThat(actual.getUrl()).isEqualTo(imageResponseDTO.getUrl());
+        assertThat(actual.getSize()).isEqualTo(imageResponseDTO.getSize());
     }
 }

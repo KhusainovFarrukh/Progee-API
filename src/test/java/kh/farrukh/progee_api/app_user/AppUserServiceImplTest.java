@@ -528,7 +528,7 @@ class AppUserServiceImplTest {
         AppUser user = new AppUser(userId, new Role(Collections.singletonList(Permission.CAN_UPDATE_OWN_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(imageRepository.findById(imageDto.getImageId())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
+        when(imageRepository.findById(imageDto.getImageId())).thenReturn(Optional.of(new Image(imageDto.getImageId())));
 
         // when
         underTest.setUserImage(userId, imageDto);
@@ -564,7 +564,7 @@ class AppUserServiceImplTest {
         AppUser user = new AppUser(2, new Role(Collections.singletonList(Permission.CAN_UPDATE_OTHER_USER)));
         when(appUserRepository.findByEmail(any())).thenReturn(Optional.of(user));
         when(appUserRepository.findById(userId)).thenReturn(Optional.of(new AppUser(userId)));
-        when(imageRepository.findById(imageDto.getImageId())).thenReturn(Optional.of(new Image(imageDto.getImageId(), null)));
+        when(imageRepository.findById(imageDto.getImageId())).thenReturn(Optional.of(new Image(imageDto.getImageId())));
 
         // when
         underTest.setUserImage(1, imageDto);
