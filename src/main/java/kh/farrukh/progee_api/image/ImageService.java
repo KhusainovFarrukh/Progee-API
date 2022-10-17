@@ -1,5 +1,6 @@
 package kh.farrukh.progee_api.image;
 
+import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
  * Methods implemented in ImageServiceImpl
  */
 public interface ImageService {
+
+    PagingResponse<ImageResponseDTO> getImages(int page, int pageSize);
 
     ImageResponseDTO addImage(MultipartFile multipartImage);
 

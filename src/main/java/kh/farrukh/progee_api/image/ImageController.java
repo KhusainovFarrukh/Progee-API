@@ -1,6 +1,7 @@
 package kh.farrukh.progee_api.image;
 
 import kh.farrukh.progee_api.global.utils.file.NotEmptyFile;
+import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -23,6 +24,14 @@ import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
 public class ImageController {
 
     private final ImageService imageService;
+
+    @GetMapping
+    public ResponseEntity<PagingResponse<ImageResponseDTO>> getLanguages(
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "page_size", defaultValue = "10") int pageSize
+    ) {
+        return ResponseEntity.ok(imageService.getImages(page, pageSize));
+    }
 
     /**
      * It takes a multipart image, adds it to the database, and returns the image as a response entity
