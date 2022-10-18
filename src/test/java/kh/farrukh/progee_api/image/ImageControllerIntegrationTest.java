@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -18,8 +19,7 @@ import java.util.List;
 
 import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,5 +94,12 @@ class ImageControllerIntegrationTest {
         assertThat(imageRepository.findAll().stream().anyMatch(
                 image -> image.getName().contains(mockFile.getName()))
         ).isTrue();
+    }
+
+    @Test
+    @WithMockUser(username = "user@mail.com")
+    @Disabled
+    void deleteImage_canDeleteImage() {
+
     }
 }

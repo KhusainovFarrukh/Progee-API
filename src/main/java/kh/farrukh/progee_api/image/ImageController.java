@@ -23,6 +23,13 @@ public class ImageController {
 
     private final ImageService imageService;
 
+    /**
+     * Get a list of images, with pagination.
+     *
+     * @param page     The page number of the images to be returned.
+     * @param pageSize The number of items to be returned in a page.
+     * @return A list of images
+     */
     @GetMapping
     public ResponseEntity<PagingResponse<ImageResponseDTO>> getImages(
             @RequestParam(name = "page", defaultValue = "1") int page,
@@ -32,10 +39,11 @@ public class ImageController {
     }
 
     /**
-     * It takes a multipart image, adds it to the database, and returns the image as a response entity
+     * It takes a multipart image, saves it, and then returns a response entity with the status code of 201 and the
+     * body of the image response DTO
      *
      * @param multipartImage The image file that is being uploaded.
-     * @return The ImageResponseDTO object is being returned.
+     * @return A ResponseEntity object is being returned.
      */
     @PostMapping
     public ResponseEntity<ImageResponseDTO> uploadImage(@NotEmptyFile @RequestParam("image") MultipartFile multipartImage) {
@@ -55,6 +63,12 @@ public class ImageController {
         return ResponseEntity.ok(imageService.getImageById(id));
     }
 
+    /**
+     * The function deletes an image by id
+     *
+     * @param id The id of the image to be deleted.
+     * @return ResponseEntity.noContent().build();
+     */
     @DeleteMapping(value = "{id}")
     public ResponseEntity<Void> deleteImageById(@PathVariable long id) {
         imageService.deleteImage(id);

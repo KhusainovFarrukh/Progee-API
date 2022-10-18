@@ -15,7 +15,7 @@ import static kh.farrukh.progee_api.image.ImageConstants.SEQUENCE_NAME_IMAGE_ID;
 import static kh.farrukh.progee_api.image.ImageConstants.TABLE_NAME_IMAGE;
 
 /**
- * It's a simple entity with a byte array field for storing images.
+ * It's a simple entity with a url and name of stored image.
  */
 @Entity
 @Getter

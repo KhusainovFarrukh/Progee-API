@@ -24,8 +24,16 @@ public class ImageServiceImpl implements ImageService {
     private final S3Repository s3Repository;
     private final ImageRepository imageRepository;
 
+    // A folder that is being used to save the images in the S3 bucket.
     public static final String IMAGES_FOLDER = "images";
 
+    /**
+     * Get all images from the database, convert them to DTOs, and return them in a paged response.
+     *
+     * @param page     The page number to return.
+     * @param pageSize The number of items to return per page.
+     * @return A PagingResponse object is being returned.
+     */
     @Override
     public PagingResponse<ImageResponseDTO> getImages(int page, int pageSize) {
         checkPageNumber(page);
@@ -36,10 +44,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     /**
-     * We're taking a multipart file, saving image to the image repository
+     * It takes a multipart image, saves it to S3, creates an image object, saves it to the database, and returns an image
+     * response DTO
      *
      * @param multipartImage The image file that is being uploaded.
-     * @return The ImageResponseDTO object is being returned.
+     * @return ImageResponseDTO
      */
     @Override
     public ImageResponseDTO addImage(MultipartFile multipartImage) {
@@ -66,6 +75,11 @@ public class ImageServiceImpl implements ImageService {
                 .orElseThrow(() -> new ResourceNotFoundException("Image", "id", id));
     }
 
+    /**
+     * It deletes an image from the database and from the S3 bucket
+     *
+     * @param id The id of the image to be deleted.
+     */
     @Override
     public void deleteImage(long id) {
         Image image = imageRepository.findById(id)
