@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
+import static kh.farrukh.progee_api.image.ImageServiceImpl.IMAGES_FOLDER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -59,6 +60,9 @@ class ImageControllerIntegrationTest {
             DockerImageName.parse("localstack/localstack:1.2.0")
     ).withServices(LocalStackContainer.Service.S3);
 
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
+
     @Autowired
     private MockMvc mvc;
 
@@ -69,6 +73,9 @@ class ImageControllerIntegrationTest {
     private TokenProvider tokenProvider;
 
     @Autowired
+    private AmazonS3Client s3Client;
+
+    @Autowired
     private ImageRepository imageRepository;
 
     @Autowired
@@ -76,6 +83,9 @@ class ImageControllerIntegrationTest {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ImageService imageService;
 
     @AfterEach
     void tearDown() {
@@ -147,10 +157,13 @@ class ImageControllerIntegrationTest {
         // given
         Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_IMAGE)));
         AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
-        Image existingImage = imageRepository.save(new Image());
+
+        byte[] bytes = "test".getBytes();
+        MockMultipartFile mockFile = new MockMultipartFile("image", "image.png", "image/png", bytes);
+        ImageResponseDTO imageResponseDTO = imageService.addImage(mockFile);
 
         // when
-        mvc.perform(delete(ENDPOINT_IMAGE + "/" + existingImage.getId())
+        mvc.perform(delete(ENDPOINT_IMAGE + "/" + imageResponseDTO.getId())
                         .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
@@ -158,7 +171,8 @@ class ImageControllerIntegrationTest {
                 .andExpect(status().isNoContent());
 
         // then
-        assertThat(imageRepository.findById(existingImage.getId())).isEmpty();
+        assertThat(imageRepository.findById(imageResponseDTO.getId())).isEmpty();
+        assertThat(s3Client.doesObjectExist(bucketName, IMAGES_FOLDER + "/" + imageResponseDTO.getName())).isFalse();
     }
 
     /**
