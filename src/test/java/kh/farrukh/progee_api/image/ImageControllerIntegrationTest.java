@@ -8,10 +8,15 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kh.farrukh.progee_api.app_user.AppUser;
+import kh.farrukh.progee_api.app_user.AppUserRepository;
+import kh.farrukh.progee_api.global.security.jwt.TokenProvider;
 import kh.farrukh.progee_api.global.utils.paging_sorting.PagingResponse;
 import kh.farrukh.progee_api.image.payloads.ImageResponseDTO;
+import kh.farrukh.progee_api.role.Permission;
+import kh.farrukh.progee_api.role.Role;
+import kh.farrukh.progee_api.role.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,12 +35,13 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static kh.farrukh.progee_api.image.ImageConstants.ENDPOINT_IMAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,7 +62,16 @@ class ImageControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
     private ImageRepository imageRepository;
+
+    @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @AfterEach
     void tearDown() {
@@ -124,9 +139,22 @@ class ImageControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "user@mail.com")
-    @Disabled
-    void deleteImage_canDeleteImage() {
+    void deleteImage_canDeleteImage() throws Exception {
+        // given
+        Role existingRole = roleRepository.save(new Role(Collections.singletonList(Permission.CAN_DELETE_IMAGE)));
+        AppUser existingUser = appUserRepository.save(new AppUser("user@mail.com", existingRole));
+        Image existingImage = imageRepository.save(new Image());
 
+        // when
+        mvc.perform(delete(ENDPOINT_IMAGE + "/" + existingImage.getId())
+                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                                existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
+                        )))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        // then
+        assertThat(imageRepository.findById(existingImage.getId())).isEmpty();
     }
 
     /**
