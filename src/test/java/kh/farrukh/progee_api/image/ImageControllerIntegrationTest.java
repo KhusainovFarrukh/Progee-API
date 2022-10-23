@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -164,7 +165,7 @@ class ImageControllerIntegrationTest {
 
         // when
         mvc.perform(delete(ENDPOINT_IMAGE + "/" + imageResponseDTO.getId())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())

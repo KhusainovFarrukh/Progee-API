@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -125,7 +126,7 @@ class FrameworkControllerIntegrationTest {
                 .perform(get(ENDPOINT_FRAMEWORK)
                         .param("page_size", String.valueOf(waitingFrameworks.size() + approvedFrameworks.size()))
                         .param("state", ResourceState.WAITING.name())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -215,7 +216,7 @@ class FrameworkControllerIntegrationTest {
                                         language2WaitingFrameworks.size()
                         ))
                         .param("state", ResourceState.WAITING.name())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -273,7 +274,7 @@ class FrameworkControllerIntegrationTest {
                 .perform(post(ENDPOINT_FRAMEWORK)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(languageDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -305,7 +306,7 @@ class FrameworkControllerIntegrationTest {
                 .perform(put(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(frameworkRequestDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -331,7 +332,7 @@ class FrameworkControllerIntegrationTest {
         // when
         // then
         mvc.perform(delete(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -352,7 +353,7 @@ class FrameworkControllerIntegrationTest {
                 .perform(patch(ENDPOINT_FRAMEWORK + "/" + existingFramework.getId() + "/state")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(stateDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         ))
                 )

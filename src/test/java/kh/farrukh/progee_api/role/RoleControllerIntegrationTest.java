@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -66,7 +67,7 @@ class RoleControllerIntegrationTest {
         // when
         MvcResult result = mvc.perform(get(ENDPOINT_ROLE)
                         .param("page_size", String.valueOf(roles.size()))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -94,7 +95,7 @@ class RoleControllerIntegrationTest {
 
         // when
         MvcResult result = mvc.perform(get(ENDPOINT_ROLE + "/" + role.getId())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -120,7 +121,7 @@ class RoleControllerIntegrationTest {
         MvcResult result = mvc.perform(post(ENDPOINT_ROLE)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(roleRequestDTO))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -151,7 +152,7 @@ class RoleControllerIntegrationTest {
         MvcResult result = mvc.perform(put(ENDPOINT_ROLE + "/" + existingRole.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(roleRequestDTO))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -180,7 +181,7 @@ class RoleControllerIntegrationTest {
         // when
         // then
         mvc.perform(delete(ENDPOINT_ROLE + "/" + role.getId())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())

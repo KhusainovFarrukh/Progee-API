@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -177,7 +178,7 @@ class ReviewControllerIntegrationTest {
                 .perform(post(ENDPOINT_REVIEW)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reviewRequestDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -207,7 +208,7 @@ class ReviewControllerIntegrationTest {
                 .perform(put(ENDPOINT_REVIEW + "/" + existingReview.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reviewRequestDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -235,7 +236,7 @@ class ReviewControllerIntegrationTest {
         // when
         // then
         mvc.perform(delete(ENDPOINT_REVIEW + "/" + existingReview.getId())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -258,7 +259,7 @@ class ReviewControllerIntegrationTest {
                 .perform(post(ENDPOINT_REVIEW + "/" + existingReview.getId() + "/vote")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(voteDTO))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -129,7 +130,7 @@ class AppUserControllerIntegrationTest {
                 .perform(put(ENDPOINT_USER + "/" + existingUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -156,7 +157,7 @@ class AppUserControllerIntegrationTest {
         // when
         // then
         mvc.perform(delete(ENDPOINT_USER + "/" + user.getId())
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -182,7 +183,7 @@ class AppUserControllerIntegrationTest {
                 .perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/image")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(imageDTO))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -211,7 +212,7 @@ class AppUserControllerIntegrationTest {
                 .perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/role")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(roleDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
@@ -240,7 +241,7 @@ class AppUserControllerIntegrationTest {
         mvc.perform(patch(ENDPOINT_USER + "/" + existingUser.getId() + "/password")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(passwordDto))
-                        .header("Authorization", "Bearer " + tokenProvider.createAccessToken(
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenProvider.createAccessToken(
                                 existingUser, ZonedDateTime.now().plusSeconds(tokenProvider.getJwtConfiguration().getAccessTokenValidityInSeconds())
                         )))
                 .andDo(print())
