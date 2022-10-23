@@ -15,7 +15,7 @@ public class FileUtils {
     public static String getUniqueImageName(MultipartFile image) {
         String originalFilename = image.getOriginalFilename();
         String nameWithoutExtension = FilenameUtils.removeExtension(originalFilename);
-        if (nameWithoutExtension == null) nameWithoutExtension = "image";
+        if (nameWithoutExtension == null || nameWithoutExtension.isEmpty()) nameWithoutExtension = "image";
         nameWithoutExtension = nameWithoutExtension.replace(" ", "_");
         return nameWithoutExtension + "-" + System.currentTimeMillis() + "." + FilenameUtils.getExtension(originalFilename);
     }

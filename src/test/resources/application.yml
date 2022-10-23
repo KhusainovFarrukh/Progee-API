@@ -21,7 +21,8 @@ spring:
 cloud:
   aws:
     credentials:
-      use-default-aws-credentials-chain: false
+        accessKey: test-key
+        secretKey: test-key
     region:
       static: us-east-1
     stack:
@@ -29,7 +30,7 @@ cloud:
 
 aws:
   s3:
-    bucket: progee-api-v1
+    bucket: test-progee-api-v1
 
 jwt:
   secret: test
