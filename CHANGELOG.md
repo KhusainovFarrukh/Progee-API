@@ -12,6 +12,8 @@
 **Minor changes:**
   - Code refactor
 
+[Full Changelog](https://github.com/KhusainovFarrukh/Progee-API/compare/v1.0.0...v1.0.1)
+
 -----------------------------------------------------------
 
 ## [v1.0.0](https://github.com/KhusainovFarrukh/Progee-API/releases/tag/v1.0.0) (October 14, 2022)
