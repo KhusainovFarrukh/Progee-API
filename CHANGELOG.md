@@ -22,3 +22,28 @@
 
 **Implemented:**
   - Basic app functionality related to languages, frameworks, reviews, users, roles and images
+
+[Full Changelog](https://github.com/KhusainovFarrukh/Progee-API/compare/v0.1.0...v1.0.0)
+
+-----------------------------------------------------------
+
+## [v0.1.0](https://github.com/KhusainovFarrukh/Progee-API/releases/tag/v0.1.0) (July 7, 2022)
+
+First pre-release before v1.0.0
+
+**Implemented:**
+  - Added tests
+  - Added some new endpoints
+
+**Minor changes:**
+  - Version naming changes
+  - Code refactor
+  - Minor bug fixes
+
+[Full Changelog](https://github.com/KhusainovFarrukh/Progee-API/compare/v0.0.1-RC...v0.1.0)
+
+-----------------------------------------------------------
+
+## [v0.0.1-RC](https://github.com/KhusainovFarrukh/Progee-API/releases/tag/v0.0.1-RC) (June 17, 2022)
+
+Created. Tested. Deployed. Tested. Released
