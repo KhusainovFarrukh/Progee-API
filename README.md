@@ -2,7 +2,7 @@
 
 ---
 
-<a href="https://img.shields.io/badge/Version-1.0.0-informational"><img alt="Version" src="https://img.shields.io/badge/Version-1.0.0-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Test coverage-85%25-yellow"><img alt="Test coverage" src="https://img.shields.io/badge/Test coverage-85%25-yellow"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-stable-success"><img alt="Project state" src="https://img.shields.io/badge/State-stable-success"></a> <a href="https://img.shields.io/badge/Deploy-deployed (heroku)-success"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-deployed (heroku)-success"></a>
+<a href="https://img.shields.io/badge/Version-1.0.1-informational"><img alt="Version" src="https://img.shields.io/badge/Version-1.0.1-informational"></a> <a href="https://img.shields.io/badge/Java-100%25-red"><img alt="Java use" src="https://img.shields.io/badge/Java-100%25-red"></a> <a href="https://img.shields.io/badge/Test coverage-86%25-yellow"><img alt="Test coverage" src="https://img.shields.io/badge/Test coverage-86%25-yellow"></a> <a href="https://img.shields.io/badge/Used-Spring%20Boot-success"><img alt="Spring Boot use" src="https://img.shields.io/badge/Used-Spring%20Boot-success"></a> <a href="https://img.shields.io/badge/Used-PostgreSQL-success"><img alt="PostgreSQL use" src="https://img.shields.io/badge/Used-PostgreSQL-success"></a> <a href="https://img.shields.io/badge/State-stable-success"><img alt="Project state" src="https://img.shields.io/badge/State-stable-success"></a> <a href="https://img.shields.io/badge/Deploy-deployed (heroku)-success"><img alt="Deploy state" src="https://img.shields.io/badge/Deploy-deployed (heroku)-success"></a>
 
 
 ## Table of Contents
@@ -47,18 +47,28 @@ Currently, there is Android client app for testing Progee-API main features. Pro
 This REST API is developed using Java programming language and Spring Boot starter of Spring framework. The full tech stack:
 
   - [Spring Boot](https://spring.io/projects/spring-boot)
-  - [PostgreSQL](https://www.postgresql.org/) for Database
-  - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) for data access layers
   - [Spring Security](https://spring.io/projects/spring-security) for authentication and authorization
   - [JWT](https://auth0.com/docs/secure/tokens/json-web-tokens) for tokens and share security information between two parties — a client and a server
+  - [AWS S3](https://aws.amazon.com/s3/) for storing images and other files
   - [JUnit 5](https://junit.org/junit5/) for unit and integration tests
-  - [Lombok](https://projectlombok.org/) for reducing boilerplate code
+  - [TestContainer](https://www.testcontainers.org/) for using Docker images in integration tests
+  - [Localstack](https://github.com/localstack/localstack) for mocking AWS services in integration tests
+  - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) for data access layers
+  - [PostgreSQL](https://www.postgresql.org/) for Database
   - [FlywayDB](https://flywaydb.org/) for Database migrations
+  - [Lombok](https://projectlombok.org/) for reducing boilerplate code
   - and etc.
 
 ## Usage
 
-**Attention!** This project uses environment variables for some configuration properties (JWT_SECRET and DEFAULT_ENCRYPTED_PASSWORD). Define your environment variables in application.yml file. Otherwise default values will be used
+**Attention!** This project uses environment variables for some configuration properties. Define your environment variables in application.yml file. Otherwise default values will be used.
+
+  - JWT_SECRET
+  - DEFAULT_ENCRYPTED_PASSWORD
+  - AWS_ACCESS_KEY
+  - AWS_SECRET_KEY
+
+**Hint**: Get AWS access and secret keys from your [Amazon Web Services console](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html)
 
 ## Contribution
 
