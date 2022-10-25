@@ -132,7 +132,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 4,\n    \"name\": \"Arthur Smith\",\n    \"email\": \"arthur.king@mail.uk\",\n    \"role\": \"USER\",\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"\"\n    },\n    \"username\": \"kotlin_lover\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
+							"body": "{\n    \"id\": 4,\n    \"name\": \"Arthur Smith\",\n    \"email\": \"arthur.king@mail.uk\",\n    \"role\": \"USER\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"username\": \"kotlin_lover\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
 						},
 						{
 							"name": "Register: Duplicate username",
@@ -775,17 +775,16 @@
 								"header": [
 									{
 										"key": "Accept-Language",
-										"value": "fjasfjaskfkgaskhgf",
+										"value": "en",
+										"description": "Language of error messages. Currently supported languages: uz, en.",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8080/api/v1/languages?state=approved&page=1&page_size=10&sort_by=id&order_by=asc",
-									"protocol": "http",
+									"raw": "{{base_url}}/api/v1/languages?state=approved&page=1&page_size=10&sort_by=id&order_by=asc",
 									"host": [
-										"localhost"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -800,22 +799,22 @@
 										{
 											"key": "page",
 											"value": "1",
-											"description": "The page number to return. One-based index."
+											"description": "The page number to return. One-based index"
 										},
 										{
 											"key": "page_size",
 											"value": "10",
-											"description": "The number of items to return per page. Default is 10."
+											"description": "The number of items to return per page. Default is 10"
 										},
 										{
 											"key": "sort_by",
 											"value": "id",
-											"description": "The field to sort by. Allowed values: id, name, description, state, createdAt. Default is id."
+											"description": "The field to sort by. Allowed values: id, name, description, state, createdAt. Default is id"
 										},
 										{
 											"key": "order_by",
 											"value": "asc",
-											"description": "The order in which the results are returned. Allowed values: asc, desc. Default is asc."
+											"description": "The order in which the results are returned. Allowed values: asc, desc. Default is asc"
 										}
 									]
 								}
@@ -858,7 +857,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 13 Jun 2022 20:09:44 GMT"
+									"value": "Tue, 25 Oct 2022 16:02:10 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -870,7 +869,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"Java\",\n            \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n            \"created_at\": \"2022-06-14T00:47:08+05:00\"\n        },\n        {\n            \"id\": 2,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"Kotlin\",\n            \"description\": \"A modern programming language that makes developers happier. · Multiplatform Mobile · Server-side · Web Frontend · Android.\",\n            \"created_at\": \"2022-06-14T00:47:08+05:00\"\n        },\n        {\n            \"id\": 3,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"Python\",\n            \"description\": \"Python is a high-level, interpreted, general-purpose programming language.\",\n            \"created_at\": \"2022-06-14T00:47:08+05:00\"\n        },\n        {\n            \"id\": 4,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"JavaScript\",\n            \"description\": \"JavaScript often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS.\",\n            \"created_at\": \"2022-06-14T00:47:08+05:00\"\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 4\n}"
+							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"name\": \"Java\",\n            \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Kotlin\",\n            \"description\": \"A modern programming language that makes developers happier. · Multiplatform Mobile · Server-side · Web Frontend · Android.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Python\",\n            \"description\": \"Python is a high-level, interpreted, general-purpose programming language.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"JavaScript\",\n            \"description\": \"JavaScript often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 4\n}"
 						},
 						{
 							"name": "Languages list: Wrong sort_by value",
@@ -1087,14 +1086,19 @@
 							"name": "Language by ID: Successful",
 							"originalRequest": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "en",
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"type": "text"
+									}
+								],
 								"url": {
-									"raw": "http://localhost:8080/api/v1/languages/1",
-									"protocol": "http",
+									"raw": "{{base_url}}/api/v1/languages/1",
 									"host": [
-										"localhost"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -1141,7 +1145,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 13 Jun 2022 20:13:24 GMT"
+									"value": "Tue, 25 Oct 2022 16:02:50 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -1153,7 +1157,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh\",\n        \"email\": \"farrukh@mail.com\",\n        \"role\": \"SUPER_ADMIN\",\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"fake.jpeg\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Java\",\n    \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n    \"created_at\": \"2022-06-14T00:47:08+05:00\"\n}"
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Java\",\n    \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n    \"state\": \"APPROVED\",\n    \"image\": null,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n}"
 						}
 					]
 				},
@@ -1216,7 +1220,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\":\"Test\",\n    \"description\": \"test for testing\",\n    \"image_id\":1\n}",
+									"raw": "{\n    \"name\":\"Test\",\n    \"description\": \"test for testing\",\n    \"image_id\":152\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1224,12 +1228,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/v1/languages",
-									"protocol": "http",
+									"raw": "{{base_url}}/api/v1/languages",
 									"host": [
-										"localhost"
+										"{{base_url}}"
 									],
-									"port": "8080",
 									"path": [
 										"api",
 										"v1",
@@ -1275,7 +1277,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 13 Jun 2022 20:15:52 GMT"
+									"value": "Tue, 25 Oct 2022 16:05:09 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -1287,7 +1289,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 5,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Test\",\n    \"description\": \"test for testing\",\n    \"created_at\": \"2022-06-14T01:15:52.212747+05:00\"\n}"
+							"body": "{\n    \"id\": 5,\n    \"name\": \"Test\",\n    \"description\": \"test for testing\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-25T21:05:09.29757779+05:00\"\n}"
 						},
 						{
 							"name": "Create language: Duplicate name",
@@ -1502,87 +1504,6 @@
 							"body": "{\n    \"message\": \"Language not found with id: 11\",\n    \"timestamp\": \"2022-06-14T01:22:17.785877+05:00\",\n    \"http_status\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
 						},
 						{
-							"name": "Update language: Successful",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\":\"Put test\",\n    \"description\":\"Test for testing\",\n    \"image_id\":1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/api/v1/languages/1",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"v1",
-										"languages",
-										"1"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Mon, 13 Jun 2022 20:20:13 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Put test\",\n    \"description\": \"Test for testing\",\n    \"created_at\": \"2022-06-14T00:47:08+05:00\"\n}"
-						},
-						{
 							"name": "Update language: Duplicate name",
 							"originalRequest": {
 								"method": "PUT",
@@ -1658,6 +1579,92 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"Language exists with name: Test\",\n    \"timestamp\": \"2022-06-14T01:21:58.076799+05:00\",\n    \"http_status\": \"BAD_REQUEST\",\n    \"http_code\": 400\n}"
+						},
+						{
+							"name": "Update language: Successful",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "en",
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"Test lang\",\n    \"description\":\"Test for testing\",\n    \"image_id\":152\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/languages/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"languages",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:05:56 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Test lang\",\n    \"description\": \"Test for testing\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n}"
 						}
 					]
 				},
@@ -1708,6 +1715,93 @@
 						"description": "This function sets the state of the language with the given id, to the state given in the request body."
 					},
 					"response": [
+						{
+							"name": "Set language state (approve/decline): Successful",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "en",
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"state\":\"APPROVED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/languages/1/state",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"languages",
+										"1",
+										"state"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:06:27 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Test lang\",\n    \"description\": \"Test for testing\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n}"
+						},
 						{
 							"name": "Set language state (approve/decline): Not found",
 							"originalRequest": {
@@ -1789,88 +1883,6 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"Language not found with id: 11\",\n    \"timestamp\": \"2022-06-14T01:28:05.860263+05:00\",\n    \"http_status\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
-						},
-						{
-							"name": "Set language state (approve/decline): Successful",
-							"originalRequest": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"state\":\"APPROVED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8080/api/v1/languages/1/state",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"v1",
-										"languages",
-										"1",
-										"state"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Mon, 13 Jun 2022 20:26:47 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh\",\n        \"email\": \"farrukh@mail.com\",\n        \"role\": \"SUPER_ADMIN\",\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"fake.jpeg\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Put test\",\n    \"description\": \"Test for testing\",\n    \"created_at\": \"2022-06-14T00:47:08+05:00\"\n}"
 						}
 					]
 				},
@@ -2339,7 +2351,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{base_url}}/api/v1/frameworks?state=approved&page=1&page_size=10&sort_by=id&order_by=asc",
+									"raw": "{{base_url}}/api/v1/frameworks?state=approved&language_id=1&page=1&page_size=10&sort_by=id&order_by=asc",
 									"host": [
 										"{{base_url}}"
 									],
@@ -2351,28 +2363,27 @@
 									"query": [
 										{
 											"key": "state",
-											"value": "approved",
-											"description": "The state of the resource. (Only for admins. Requires access token)"
+											"value": "approved"
+										},
+										{
+											"key": "language_id",
+											"value": "1"
 										},
 										{
 											"key": "page",
-											"value": "1",
-											"description": "The page number to return. One-based index"
+											"value": "1"
 										},
 										{
 											"key": "page_size",
-											"value": "10",
-											"description": "The number of items to return per page. Default is 10"
+											"value": "10"
 										},
 										{
 											"key": "sort_by",
-											"value": "id",
-											"description": "The field to sort by. Allowed values: id, name, description, state, createdAt. Default is id"
+											"value": "id"
 										},
 										{
 											"key": "order_by",
-											"value": "asc",
-											"description": "The order in which the results are returned. Allowed values: asc, desc. Default is asc"
+											"value": "asc"
 										}
 									]
 								}
@@ -2415,7 +2426,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:13:08 GMT"
+									"value": "Tue, 25 Oct 2022 16:06:51 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -2427,7 +2438,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"Spring Boot\",\n            \"description\": \"Spring Boot — The Spring Framework is an application framework and inversion of control container for the Java platform.\",\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\"\n        },\n        {\n            \"id\": 2,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam\",\n                \"email\": \"hamdam@mail.com\",\n                \"role\": \"ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"hamdam_u\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"JRockit\",\n            \"description\": \"Java profiling tool for performance Tuning.\",\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\"\n        },\n        {\n            \"id\": 3,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"state\": \"APPROVED\",\n            \"name\": \"JSoup\",\n            \"description\": \"Java HTML parser library. Supports extracting and manipulating data using DOM, CSS, and JQuery methods.\",\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\"\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 3\n}"
+							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"name\": \"Spring Boot\",\n            \"description\": \"Spring Boot — The Spring Framework is an application framework for the Java platform.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"language\": {\n                \"id\": 1,\n                \"name\": \"Test lang\",\n                \"description\": \"Test for testing\",\n                \"state\": \"APPROVED\",\n                \"image\": {\n                    \"id\": 152,\n                    \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n                    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n                    \"size\": 0.18983555\n                },\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh Khusainov\",\n                    \"role\": {\n                        \"id\": 1,\n                        \"title\": \"Super admin\",\n                        \"permissions\": [\n                            \"CAN_CREATE_LANGUAGE\",\n                            \"CAN_DELETE_LANGUAGE\",\n                            \"CAN_CREATE_FRAMEWORK\",\n                            \"CAN_DELETE_FRAMEWORK\",\n                            \"CAN_CREATE_REVIEW\",\n                            \"CAN_DELETE_USER\",\n                            \"CAN_VIEW_ROLE\",\n                            \"CAN_CREATE_ROLE\",\n                            \"CAN_UPDATE_ROLE\",\n                            \"CAN_DELETE_ROLE\",\n                            \"CAN_UPDATE_IMAGE\",\n                            \"CAN_DELETE_IMAGE\",\n                            \"CAN_SET_LANGUAGE_STATE\",\n                            \"CAN_SET_FRAMEWORK_STATE\",\n                            \"CAN_UPDATE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OTHER_USER\",\n                            \"CAN_SET_USER_ROLE\",\n                            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OWN_LANGUAGE\",\n                            \"CAN_UPDATE_OWN_FRAMEWORK\",\n                            \"CAN_UPDATE_OWN_REVIEW\",\n                            \"CAN_UPDATE_OWN_USER\",\n                            \"CAN_DELETE_OWN_REVIEW\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_VOTE_REVIEW\"\n                        ],\n                        \"is_default\": false\n                    },\n                    \"image\": null,\n                    \"email\": \"farrukhbekkhusainov@gmail.com\",\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n            },\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.895622+05:00\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"JRockit\",\n            \"description\": \"Java profiling tool for performance Tuning.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"language\": {\n                \"id\": 1,\n                \"name\": \"Test lang\",\n                \"description\": \"Test for testing\",\n                \"state\": \"APPROVED\",\n                \"image\": {\n                    \"id\": 152,\n                    \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n                    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n                    \"size\": 0.18983555\n                },\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh Khusainov\",\n                    \"role\": {\n                        \"id\": 1,\n                        \"title\": \"Super admin\",\n                        \"permissions\": [\n                            \"CAN_CREATE_LANGUAGE\",\n                            \"CAN_DELETE_LANGUAGE\",\n                            \"CAN_CREATE_FRAMEWORK\",\n                            \"CAN_DELETE_FRAMEWORK\",\n                            \"CAN_CREATE_REVIEW\",\n                            \"CAN_DELETE_USER\",\n                            \"CAN_VIEW_ROLE\",\n                            \"CAN_CREATE_ROLE\",\n                            \"CAN_UPDATE_ROLE\",\n                            \"CAN_DELETE_ROLE\",\n                            \"CAN_UPDATE_IMAGE\",\n                            \"CAN_DELETE_IMAGE\",\n                            \"CAN_SET_LANGUAGE_STATE\",\n                            \"CAN_SET_FRAMEWORK_STATE\",\n                            \"CAN_UPDATE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OTHER_USER\",\n                            \"CAN_SET_USER_ROLE\",\n                            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OWN_LANGUAGE\",\n                            \"CAN_UPDATE_OWN_FRAMEWORK\",\n                            \"CAN_UPDATE_OWN_REVIEW\",\n                            \"CAN_UPDATE_OWN_USER\",\n                            \"CAN_DELETE_OWN_REVIEW\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_VOTE_REVIEW\"\n                        ],\n                        \"is_default\": false\n                    },\n                    \"image\": null,\n                    \"email\": \"farrukhbekkhusainov@gmail.com\",\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n            },\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.895622+05:00\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"JSoup\",\n            \"description\": \"Java HTML parser library. Supports extracting and manipulating data using DOM, CSS, and JQuery methods.\",\n            \"state\": \"APPROVED\",\n            \"image\": null,\n            \"language\": {\n                \"id\": 1,\n                \"name\": \"Test lang\",\n                \"description\": \"Test for testing\",\n                \"state\": \"APPROVED\",\n                \"image\": {\n                    \"id\": 152,\n                    \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n                    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n                    \"size\": 0.18983555\n                },\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh Khusainov\",\n                    \"role\": {\n                        \"id\": 1,\n                        \"title\": \"Super admin\",\n                        \"permissions\": [\n                            \"CAN_CREATE_LANGUAGE\",\n                            \"CAN_DELETE_LANGUAGE\",\n                            \"CAN_CREATE_FRAMEWORK\",\n                            \"CAN_DELETE_FRAMEWORK\",\n                            \"CAN_CREATE_REVIEW\",\n                            \"CAN_DELETE_USER\",\n                            \"CAN_VIEW_ROLE\",\n                            \"CAN_CREATE_ROLE\",\n                            \"CAN_UPDATE_ROLE\",\n                            \"CAN_DELETE_ROLE\",\n                            \"CAN_UPDATE_IMAGE\",\n                            \"CAN_DELETE_IMAGE\",\n                            \"CAN_SET_LANGUAGE_STATE\",\n                            \"CAN_SET_FRAMEWORK_STATE\",\n                            \"CAN_UPDATE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OTHER_USER\",\n                            \"CAN_SET_USER_ROLE\",\n                            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OWN_LANGUAGE\",\n                            \"CAN_UPDATE_OWN_FRAMEWORK\",\n                            \"CAN_UPDATE_OWN_REVIEW\",\n                            \"CAN_UPDATE_OWN_USER\",\n                            \"CAN_DELETE_OWN_REVIEW\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_VOTE_REVIEW\"\n                        ],\n                        \"is_default\": false\n                    },\n                    \"image\": null,\n                    \"email\": \"farrukhbekkhusainov@gmail.com\",\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n            },\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:27.895622+05:00\"\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 3\n}"
 						},
 						{
 							"name": "Frameworks list: Wrong sort_by value",
@@ -2630,7 +2641,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:14:05 GMT"
+									"value": "Tue, 25 Oct 2022 16:08:21 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -2642,7 +2653,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh\",\n        \"email\": \"farrukh@mail.com\",\n        \"role\": \"SUPER_ADMIN\",\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"fake.jpeg\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Spring Boot\",\n    \"description\": \"Spring Boot — The Spring Framework is an application framework and inversion of control container for the Java platform.\",\n    \"language\": {\n        \"id\": 1,\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh\",\n            \"email\": \"farrukh@mail.com\",\n            \"role\": \"SUPER_ADMIN\",\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"state\": \"APPROVED\",\n        \"name\": \"Java\",\n        \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n        \"created_at\": \"2022-06-14T17:11:00+05:00\"\n    },\n    \"created_at\": \"2022-06-14T17:11:01+05:00\"\n}"
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Spring Boot\",\n    \"description\": \"Spring Boot — The Spring Framework is an application framework for the Java platform\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:27.895622+05:00\"\n}"
 						},
 						{
 							"name": "Framework by ID: Not found",
@@ -2782,7 +2793,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\":\"Test\",\n    \"description\": \"test for testing\",\n    \"image_id\":1\n}",
+									"raw": "{\n    \"name\":\"Test\",\n    \"description\": \"test for testing\",\n    \"language_id\":1,\n    \"image_id\":152\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2839,7 +2850,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:14:40 GMT"
+									"value": "Tue, 25 Oct 2022 16:08:42 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -2851,7 +2862,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 8,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Test\",\n    \"description\": \"test for testing\",\n    \"language\": {\n        \"id\": 1,\n        \"author\": null,\n        \"image\": null,\n        \"state\": \"WAITING\",\n        \"name\": null,\n        \"description\": null,\n        \"created_at\": null\n    },\n    \"created_at\": \"2022-06-14T17:14:40.90286+05:00\"\n}"
+							"body": "{\n    \"id\": 8,\n    \"name\": \"Test\",\n    \"description\": \"test for testing\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-25T21:08:42.54674637+05:00\"\n}"
 						},
 						{
 							"name": "Create framework: Duplicate name",
@@ -3157,92 +3168,6 @@
 					},
 					"response": [
 						{
-							"name": "Update framework: Successful",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Accept-Language",
-										"value": "en",
-										"description": "Language of error messages. Currently supported languages: uz, en.",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\":\"Test\",\n    \"description\":\"Test for testing\",\n    \"image_id\":1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/frameworks/8",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"frameworks",
-										"8"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:15:41 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 8,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Test\",\n    \"description\": \"Test for testing\",\n    \"language\": {\n        \"id\": 1,\n        \"author\": null,\n        \"image\": null,\n        \"state\": \"WAITING\",\n        \"name\": null,\n        \"description\": null,\n        \"created_at\": null\n    },\n    \"created_at\": \"2022-06-14T17:14:40+05:00\"\n}"
-						},
-						{
 							"name": "Update framework: Duplicate name",
 							"originalRequest": {
 								"method": "PUT",
@@ -3323,6 +3248,92 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"Framework exists with name: Java\",\n    \"timestamp\": \"2022-06-14T17:16:14.648085+05:00\",\n    \"http_status\": \"BAD_REQUEST\",\n    \"http_code\": 400\n}"
+						},
+						{
+							"name": "Update framework: Successful",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept-Language",
+										"value": "en",
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"Test\",\n    \"description\":\"Test for testing\",\n    \"image_id\":152\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/frameworks/8",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"frameworks",
+										"8"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:09:02 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 8,\n    \"name\": \"Test\",\n    \"description\": \"Test for testing\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-25T21:08:42.546746+05:00\"\n}"
 						},
 						{
 							"name": "Update framework: Bad request values",
@@ -3564,7 +3575,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{base_url}}/api/v1/frameworks/8/state",
+									"raw": "{{base_url}}/api/v1/frameworks/1/state",
 									"host": [
 										"{{base_url}}"
 									],
@@ -3572,7 +3583,7 @@
 										"api",
 										"v1",
 										"frameworks",
-										"8",
+										"1",
 										"state"
 									]
 								}
@@ -3615,7 +3626,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:16:35 GMT"
+									"value": "Tue, 25 Oct 2022 16:09:18 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -3627,7 +3638,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 8,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh\",\n        \"email\": \"farrukh@mail.com\",\n        \"role\": \"SUPER_ADMIN\",\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"image\": {\n        \"id\": 1,\n        \"location\": \"fake.jpeg\"\n    },\n    \"state\": \"APPROVED\",\n    \"name\": \"Test\",\n    \"description\": \"Test for testing\",\n    \"language\": {\n        \"id\": 1,\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh\",\n            \"email\": \"farrukh@mail.com\",\n            \"role\": \"SUPER_ADMIN\",\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"state\": \"APPROVED\",\n        \"name\": \"Java\",\n        \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n        \"created_at\": \"2022-06-14T17:11:00+05:00\"\n    },\n    \"created_at\": \"2022-06-14T17:14:40+05:00\"\n}"
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Spring Boot\",\n    \"description\": \"Spring Boot — The Spring Framework is an application framework for the Java platform\",\n    \"state\": \"APPROVED\",\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:27.895622+05:00\"\n}"
 						}
 					]
 				},
@@ -4025,6 +4036,113 @@
 							"body": "{\n    \"message\": \"Language not found with id: 11\",\n    \"timestamp\": \"2022-10-14T10:31:52.765930535Z\",\n    \"errors\": null,\n    \"http_status\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
 						},
 						{
+							"name": "Reviews list: Successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"key": "Accept-Language",
+										"type": "text",
+										"value": "en"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/reviews?value=LIKE&language_id=1&page=1&page_size=10&sort_by=id&order_by=asc",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"reviews"
+									],
+									"query": [
+										{
+											"key": "value",
+											"value": "LIKE",
+											"description": "ReviewValue to filter by (optional). Default is null"
+										},
+										{
+											"key": "language_id",
+											"value": "1"
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"description": "The page number to return. One-based index"
+										},
+										{
+											"key": "page_size",
+											"value": "10",
+											"description": "The number of items to return per page. Default is 10"
+										},
+										{
+											"key": "sort_by",
+											"value": "id",
+											"description": "The field to sort. Default is id"
+										},
+										{
+											"key": "order_by",
+											"value": "asc",
+											"description": "The order in which the results are returned. Allowed values: asc, desc. Default is asc"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:09:47 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"body\": \"Java is a great language. It has many features, it's safe, platform independent, and of course, it's slow\",\n            \"value\": \"LIKE\",\n            \"score\": 1,\n            \"language\": {\n                \"id\": 1,\n                \"name\": \"Test lang\",\n                \"description\": \"Test for testing\",\n                \"state\": \"APPROVED\",\n                \"image\": {\n                    \"id\": 152,\n                    \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n                    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n                    \"size\": 0.18983555\n                },\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh Khusainov\",\n                    \"role\": {\n                        \"id\": 1,\n                        \"title\": \"Super admin\",\n                        \"permissions\": [\n                            \"CAN_CREATE_LANGUAGE\",\n                            \"CAN_DELETE_LANGUAGE\",\n                            \"CAN_CREATE_FRAMEWORK\",\n                            \"CAN_DELETE_FRAMEWORK\",\n                            \"CAN_CREATE_REVIEW\",\n                            \"CAN_DELETE_USER\",\n                            \"CAN_VIEW_ROLE\",\n                            \"CAN_CREATE_ROLE\",\n                            \"CAN_UPDATE_ROLE\",\n                            \"CAN_DELETE_ROLE\",\n                            \"CAN_UPDATE_IMAGE\",\n                            \"CAN_DELETE_IMAGE\",\n                            \"CAN_SET_LANGUAGE_STATE\",\n                            \"CAN_SET_FRAMEWORK_STATE\",\n                            \"CAN_UPDATE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OTHER_USER\",\n                            \"CAN_SET_USER_ROLE\",\n                            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OWN_LANGUAGE\",\n                            \"CAN_UPDATE_OWN_FRAMEWORK\",\n                            \"CAN_UPDATE_OWN_REVIEW\",\n                            \"CAN_UPDATE_OWN_USER\",\n                            \"CAN_DELETE_OWN_REVIEW\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_VOTE_REVIEW\"\n                        ],\n                        \"is_default\": false\n                    },\n                    \"image\": null,\n                    \"email\": \"farrukhbekkhusainov@gmail.com\",\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n            },\n            \"up_votes\": [\n                2\n            ],\n            \"down_votes\": [],\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh Khusainov\",\n                \"role\": {\n                    \"id\": 1,\n                    \"title\": \"Super admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_DELETE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_DELETE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_DELETE_USER\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_CREATE_ROLE\",\n                        \"CAN_UPDATE_ROLE\",\n                        \"CAN_DELETE_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_SET_USER_ROLE\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"farrukhbekkhusainov@gmail.com\",\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:28.023027+05:00\"\n        },\n        {\n            \"id\": 2,\n            \"body\": \"I have been working in Java technologies for more than 10 years\",\n            \"value\": \"LIKE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"name\": \"Test lang\",\n                \"description\": \"Test for testing\",\n                \"state\": \"APPROVED\",\n                \"image\": {\n                    \"id\": 152,\n                    \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n                    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n                    \"size\": 0.18983555\n                },\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh Khusainov\",\n                    \"role\": {\n                        \"id\": 1,\n                        \"title\": \"Super admin\",\n                        \"permissions\": [\n                            \"CAN_CREATE_LANGUAGE\",\n                            \"CAN_DELETE_LANGUAGE\",\n                            \"CAN_CREATE_FRAMEWORK\",\n                            \"CAN_DELETE_FRAMEWORK\",\n                            \"CAN_CREATE_REVIEW\",\n                            \"CAN_DELETE_USER\",\n                            \"CAN_VIEW_ROLE\",\n                            \"CAN_CREATE_ROLE\",\n                            \"CAN_UPDATE_ROLE\",\n                            \"CAN_DELETE_ROLE\",\n                            \"CAN_UPDATE_IMAGE\",\n                            \"CAN_DELETE_IMAGE\",\n                            \"CAN_SET_LANGUAGE_STATE\",\n                            \"CAN_SET_FRAMEWORK_STATE\",\n                            \"CAN_UPDATE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OTHER_USER\",\n                            \"CAN_SET_USER_ROLE\",\n                            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_UPDATE_OWN_LANGUAGE\",\n                            \"CAN_UPDATE_OWN_FRAMEWORK\",\n                            \"CAN_UPDATE_OWN_REVIEW\",\n                            \"CAN_UPDATE_OWN_USER\",\n                            \"CAN_DELETE_OWN_REVIEW\",\n                            \"CAN_DELETE_OTHERS_REVIEW\",\n                            \"CAN_VOTE_REVIEW\"\n                        ],\n                        \"is_default\": false\n                    },\n                    \"image\": null,\n                    \"email\": \"farrukhbekkhusainov@gmail.com\",\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n            },\n            \"up_votes\": [],\n            \"down_votes\": [],\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam Xudayberganov\",\n                \"role\": {\n                    \"id\": 2,\n                    \"title\": \"Admin\",\n                    \"permissions\": [\n                        \"CAN_CREATE_LANGUAGE\",\n                        \"CAN_CREATE_FRAMEWORK\",\n                        \"CAN_CREATE_REVIEW\",\n                        \"CAN_VIEW_ROLE\",\n                        \"CAN_UPDATE_IMAGE\",\n                        \"CAN_DELETE_IMAGE\",\n                        \"CAN_SET_LANGUAGE_STATE\",\n                        \"CAN_SET_FRAMEWORK_STATE\",\n                        \"CAN_UPDATE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OTHER_USER\",\n                        \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                        \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                        \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                        \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_UPDATE_OWN_LANGUAGE\",\n                        \"CAN_UPDATE_OWN_FRAMEWORK\",\n                        \"CAN_UPDATE_OWN_REVIEW\",\n                        \"CAN_UPDATE_OWN_USER\",\n                        \"CAN_DELETE_OWN_REVIEW\",\n                        \"CAN_DELETE_OTHERS_REVIEW\",\n                        \"CAN_VOTE_REVIEW\"\n                    ],\n                    \"is_default\": false\n                },\n                \"image\": null,\n                \"email\": \"hamdam@mail.com\",\n                \"username\": \"hamdam_x\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"created_at\": \"2022-10-07T23:33:28.023027+05:00\"\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 2\n}"
+						},
+						{
 							"name": "Reviews list: Wrong sort_by value",
 							"originalRequest": {
 								"method": "GET",
@@ -4117,104 +4235,6 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"The following sort fields [wrong] are not within the allowed fields. Allowed sort fields are: [id,body,value,upVotes,downVotes,createdAt]\",\n    \"timestamp\": \"2022-06-14T17:17:56.318591+05:00\",\n    \"http_status\": \"BAD_REQUEST\",\n    \"http_code\": 400\n}"
-						},
-						{
-							"name": "Reviews list: Successful",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Language of error messages. Currently supported languages: uz, en.",
-										"key": "Accept-Language",
-										"type": "text",
-										"value": "en"
-									}
-								],
-								"url": {
-									"raw": "{{base_url}}/api/v1/reviews?page=1&page_size=10&sort_by=id&order_by=asc",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"reviews"
-									],
-									"query": [
-										{
-											"key": "page",
-											"value": "1",
-											"description": "The page number to return. One-based index"
-										},
-										{
-											"key": "page_size",
-											"value": "10",
-											"description": "The number of items to return per page. Default is 10"
-										},
-										{
-											"key": "sort_by",
-											"value": "id",
-											"description": "The field to sort. Default is id"
-										},
-										{
-											"key": "order_by",
-											"value": "asc",
-											"description": "The order in which the results are returned. Allowed values: asc, desc. Default is asc"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:17:42 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 1 review for language (like)\",\n            \"value\": \"LIKE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 2,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam\",\n                \"email\": \"hamdam@mail.com\",\n                \"role\": \"ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"hamdam_u\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 1 review for language (don't have pratice)\",\n            \"value\": \"DONT_HAVE_PRACTICE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 4,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 2 review for language (like)\",\n            \"value\": \"LIKE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 5,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam\",\n                \"email\": \"hamdam@mail.com\",\n                \"role\": \"ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"hamdam_u\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 2 review for language (don't have pratice)\",\n            \"value\": \"DONT_HAVE_PRACTICE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 7,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 3 review for language (like)\",\n            \"value\": \"LIKE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 8,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam\",\n                \"email\": \"hamdam@mail.com\",\n                \"role\": \"ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"hamdam_u\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 3 review for language (don't have pratice)\",\n            \"value\": \"DONT_HAVE_PRACTICE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 10,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 4 review for language (like)\",\n            \"value\": \"LIKE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 11,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam\",\n                \"email\": \"hamdam@mail.com\",\n                \"role\": \"ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"hamdam_u\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 4 review for language (don't have pratice)\",\n            \"value\": \"DONT_HAVE_PRACTICE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 13,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Farrukh\",\n                \"email\": \"farrukh@mail.com\",\n                \"role\": \"SUPER_ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"farrukh_kh\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 5 review for language (like)\",\n            \"value\": \"LIKE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        },\n        {\n            \"id\": 14,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Hamdam\",\n                \"email\": \"hamdam@mail.com\",\n                \"role\": \"ADMIN\",\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"username\": \"hamdam_u\",\n                \"is_enabled\": true,\n                \"is_locked\": false\n            },\n            \"body\": \"This is 5 review for language (don't have pratice)\",\n            \"value\": \"DONT_HAVE_PRACTICE\",\n            \"score\": 0,\n            \"language\": {\n                \"id\": 1,\n                \"author\": {\n                    \"id\": 1,\n                    \"name\": \"Farrukh\",\n                    \"email\": \"farrukh@mail.com\",\n                    \"role\": \"SUPER_ADMIN\",\n                    \"image\": {\n                        \"id\": 1,\n                        \"location\": \"fake.jpeg\"\n                    },\n                    \"username\": \"farrukh_kh\",\n                    \"is_enabled\": true,\n                    \"is_locked\": false\n                },\n                \"image\": {\n                    \"id\": 1,\n                    \"location\": \"fake.jpeg\"\n                },\n                \"state\": \"APPROVED\",\n                \"name\": \"Java\",\n                \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n                \"created_at\": \"2022-06-14T17:11:00+05:00\"\n            },\n            \"created_at\": \"2022-06-14T17:11:01+05:00\",\n            \"up_votes\": [],\n            \"down_votes\": []\n        }\n    ],\n    \"next_page\": 2,\n    \"prev_page\": null,\n    \"total_pages\": 10,\n    \"total_items\": 98\n}"
 						}
 					]
 				},
@@ -4395,7 +4415,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:18:17 GMT"
+									"value": "Tue, 25 Oct 2022 16:10:03 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -4407,7 +4427,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh\",\n        \"email\": \"farrukh@mail.com\",\n        \"role\": \"SUPER_ADMIN\",\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"body\": \"This is 1 review for language (like)\",\n    \"value\": \"LIKE\",\n    \"score\": 0,\n    \"language\": {\n        \"id\": 1,\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh\",\n            \"email\": \"farrukh@mail.com\",\n            \"role\": \"SUPER_ADMIN\",\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"state\": \"APPROVED\",\n        \"name\": \"Java\",\n        \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n        \"created_at\": \"2022-06-14T17:11:00+05:00\"\n    },\n    \"created_at\": \"2022-06-14T17:11:01+05:00\",\n    \"up_votes\": [],\n    \"down_votes\": []\n}"
+							"body": "{\n    \"id\": 1,\n    \"body\": \"Java is a great language. It has many features, it's safe, platform independent, and of course, it's slow\",\n    \"value\": \"LIKE\",\n    \"score\": 1,\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"up_votes\": [\n        2\n    ],\n    \"down_votes\": [],\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:28.023027+05:00\"\n}"
 						}
 					]
 				},
@@ -4551,7 +4571,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"body\":\"Test\",\n    \"value\": 2\n}",
+									"raw": "{\n    \"body\": \"It is the best programming language\",\n    \"language_id\": 1,\n    \"value\": 2\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4608,7 +4628,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:18:45 GMT"
+									"value": "Tue, 25 Oct 2022 16:10:21 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -4620,7 +4640,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 148,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"body\": \"Test\",\n    \"value\": \"LIKE\",\n    \"score\": 0,\n    \"language\": {\n        \"id\": 1,\n        \"author\": null,\n        \"image\": null,\n        \"state\": \"WAITING\",\n        \"name\": null,\n        \"description\": null,\n        \"created_at\": null\n    },\n    \"created_at\": \"2022-06-14T17:18:45.340876+05:00\",\n    \"up_votes\": [],\n    \"down_votes\": []\n}"
+							"body": "{\n    \"id\": 6,\n    \"body\": \"It is the best programming language\",\n    \"value\": \"LIKE\",\n    \"score\": 0,\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"up_votes\": [],\n    \"down_votes\": [],\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-25T21:10:21.767999134+05:00\"\n}"
 						},
 						{
 							"name": "Create review: Wrong language_id ",
@@ -4764,92 +4784,6 @@
 						"description": "Update review by its ID "
 					},
 					"response": [
-						{
-							"name": "Update review: Successful",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Accept-Language",
-										"value": "en",
-										"description": "Language of error messages. Currently supported languages: uz, en.",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"body\":\"Test\",\n    \"value\": 2,\n    \"author_id\":1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/reviews/1",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"reviews",
-										"1"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:19:22 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"body\": \"Test\",\n    \"value\": \"LIKE\",\n    \"score\": 0,\n    \"language\": {\n        \"id\": 1,\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh\",\n            \"email\": \"farrukh@mail.com\",\n            \"role\": \"SUPER_ADMIN\",\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"state\": \"APPROVED\",\n        \"name\": \"Java\",\n        \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n        \"created_at\": \"2022-06-14T17:11:00+05:00\"\n    },\n    \"created_at\": \"2022-06-14T17:11:01+05:00\",\n    \"up_votes\": [],\n    \"down_votes\": []\n}"
-						},
 						{
 							"name": "Update review: Not found",
 							"originalRequest": {
@@ -5017,6 +4951,93 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"body must not be null\",\n    \"timestamp\": \"2022-06-14T17:19:49.665012+05:00\",\n    \"http_status\": \"BAD_REQUEST\",\n    \"http_code\": 400\n}"
+						},
+						{
+							"name": "Vote review: Successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"key": "Accept-Language",
+										"type": "text",
+										"value": "en"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vote\":true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/reviews/1/vote",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"reviews",
+										"1",
+										"vote"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:10:56 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"body\": \"Java is a great language. It has many features, it's safe, platform independent, and of course, it's slow\",\n    \"value\": \"LIKE\",\n    \"score\": 2,\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"up_votes\": [\n        1,\n        2\n    ],\n    \"down_votes\": [],\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:28.023027+05:00\"\n}"
 						}
 					]
 				},
@@ -5080,7 +5101,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"body\":\"Test\",\n    \"value\": 2,\n    \"author_id\":1\n}",
+									"raw": "{\n    \"body\":\"Maybe it's good, but I don't have practice\",\n    \"value\": 0\n    }",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -5138,7 +5159,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:19:22 GMT"
+									"value": "Tue, 25 Oct 2022 16:11:13 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -5150,7 +5171,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": null,\n        \"email\": null,\n        \"role\": null,\n        \"image\": null,\n        \"username\": null,\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"body\": \"Test\",\n    \"value\": \"LIKE\",\n    \"score\": 0,\n    \"language\": {\n        \"id\": 1,\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh\",\n            \"email\": \"farrukh@mail.com\",\n            \"role\": \"SUPER_ADMIN\",\n            \"image\": {\n                \"id\": 1,\n                \"location\": \"fake.jpeg\"\n            },\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"image\": {\n            \"id\": 1,\n            \"location\": \"fake.jpeg\"\n        },\n        \"state\": \"APPROVED\",\n        \"name\": \"Java\",\n        \"description\": \"Java is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible.\",\n        \"created_at\": \"2022-06-14T17:11:00+05:00\"\n    },\n    \"created_at\": \"2022-06-14T17:11:01+05:00\",\n    \"up_votes\": [],\n    \"down_votes\": []\n}"
+							"body": "{\n    \"id\": 1,\n    \"body\": \"Maybe it's good, but I don't have practice\",\n    \"value\": \"DONT_HAVE_PRACTICE\",\n    \"score\": 2,\n    \"language\": {\n        \"id\": 1,\n        \"name\": \"Test lang\",\n        \"description\": \"Test for testing\",\n        \"state\": \"APPROVED\",\n        \"image\": {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        \"created_at\": \"2022-10-07T23:33:27.689006+05:00\"\n    },\n    \"up_votes\": [\n        1,\n        2\n    ],\n    \"down_votes\": [],\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Farrukh Khusainov\",\n        \"role\": {\n            \"id\": 1,\n            \"title\": \"Super admin\",\n            \"permissions\": [\n                \"CAN_CREATE_LANGUAGE\",\n                \"CAN_DELETE_LANGUAGE\",\n                \"CAN_CREATE_FRAMEWORK\",\n                \"CAN_DELETE_FRAMEWORK\",\n                \"CAN_CREATE_REVIEW\",\n                \"CAN_DELETE_USER\",\n                \"CAN_VIEW_ROLE\",\n                \"CAN_CREATE_ROLE\",\n                \"CAN_UPDATE_ROLE\",\n                \"CAN_DELETE_ROLE\",\n                \"CAN_UPDATE_IMAGE\",\n                \"CAN_DELETE_IMAGE\",\n                \"CAN_SET_LANGUAGE_STATE\",\n                \"CAN_SET_FRAMEWORK_STATE\",\n                \"CAN_UPDATE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OTHER_USER\",\n                \"CAN_SET_USER_ROLE\",\n                \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_UPDATE_OWN_LANGUAGE\",\n                \"CAN_UPDATE_OWN_FRAMEWORK\",\n                \"CAN_UPDATE_OWN_REVIEW\",\n                \"CAN_UPDATE_OWN_USER\",\n                \"CAN_DELETE_OWN_REVIEW\",\n                \"CAN_DELETE_OTHERS_REVIEW\",\n                \"CAN_VOTE_REVIEW\"\n            ],\n            \"is_default\": false\n        },\n        \"image\": null,\n        \"email\": \"farrukhbekkhusainov@gmail.com\",\n        \"username\": \"farrukh_kh\",\n        \"is_enabled\": true,\n        \"is_locked\": false\n    },\n    \"created_at\": \"2022-10-07T23:33:28.023027+05:00\"\n}"
 						},
 						{
 							"name": "Update review: Bad request values",
@@ -5534,6 +5555,144 @@
 			"name": "Image",
 			"item": [
 				{
+					"name": "Images list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"description": "Language of error messages. Currently supported languages: uz, en.",
+								"key": "Accept-Language",
+								"type": "text",
+								"value": "en"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/images?page=1&page_size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"images"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "The page number to return. One-based index"
+								},
+								{
+									"key": "page_size",
+									"value": "10",
+									"description": "The number of items to return per page. Default is 10"
+								}
+							]
+						},
+						"description": "It returns a list (with pagination) of images."
+					},
+					"response": [
+						{
+							"name": "Images list: Successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"key": "Accept-Language",
+										"type": "text",
+										"value": "en"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/images?page=1&page_size=10",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"images"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "The page number to return. One-based index"
+										},
+										{
+											"key": "page_size",
+											"value": "10",
+											"description": "The number of items to return per page. Default is 10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:18:58 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 54,\n            \"name\": \"0810f780-543d-11eb-9d54-0f45b3d2cd74-1666003681393.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/0810f780-543d-11eb-9d54-0f45b3d2cd74-1666003681393.png\",\n            \"size\": 0.019945145\n        },\n        {\n            \"id\": 102,\n            \"name\": \"java-1666009335805.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/java-1666009335805.png\",\n            \"size\": 0.015929222\n        },\n        {\n            \"id\": 152,\n            \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n            \"size\": 0.18983555\n        },\n        {\n            \"id\": 153,\n            \"name\": \"Kotlin_Icon.svg-1666714594960.png\",\n            \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666714594960.png\",\n            \"size\": 0.18983555\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 4\n}"
+						}
+					]
+				},
+				{
 					"name": "Upload image",
 					"request": {
 						"auth": {
@@ -5597,7 +5756,7 @@
 											"key": "image",
 											"description": "Image as file",
 											"type": "file",
-											"src": "/home/farrukh_kh/Desktop/photo_2022-04-28_21-01-12.jpg"
+											"src": "/home/farrukh_kh/Desktop/progee/Kotlin_Icon.svg.png"
 										}
 									],
 									"options": {
@@ -5656,7 +5815,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:20:53 GMT"
+									"value": "Tue, 25 Oct 2022 16:16:36 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -5668,7 +5827,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 2,\n    \"location\": \"/home/farrukh_kh/IdeaProjects/Progee%20API/target/classes/1655209253411\"\n}"
+							"body": "{\n    \"id\": 153,\n    \"name\": \"Kotlin_Icon.svg-1666714594960.png\",\n    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666714594960.png\",\n    \"size\": 0.18983555\n}"
 						}
 					]
 				},
@@ -5722,7 +5881,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{base_url}}/api/v1/images/2",
+									"raw": "{{base_url}}/api/v1/images/152",
 									"host": [
 										"{{base_url}}"
 									],
@@ -5730,7 +5889,7 @@
 										"api",
 										"v1",
 										"images",
-										"2"
+										"152"
 									]
 								}
 							},
@@ -5772,7 +5931,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:22:02 GMT"
+									"value": "Tue, 25 Oct 2022 16:16:57 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -5784,7 +5943,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 2,\n    \"location\": \"/home/farrukh_kh/IdeaProjects/Progee%20API/target/classes/1655209253411\"\n}"
+							"body": "{\n    \"id\": 152,\n    \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n    \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n    \"size\": 0.18983555\n}"
 						},
 						{
 							"name": "Image by ID: Not found",
@@ -5866,7 +6025,7 @@
 					]
 				},
 				{
-					"name": "Download image",
+					"name": "Delete image",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -5878,7 +6037,7 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "DELETE",
 						"header": [
 							{
 								"description": "Language of error messages. Currently supported languages: uz, en.",
@@ -5888,7 +6047,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/images/1/download",
+							"raw": "{{base_url}}/api/v1/images/1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -5896,17 +6055,16 @@
 								"api",
 								"v1",
 								"images",
-								"1",
-								"download"
+								"1"
 							]
 						},
-						"description": "Download image as file by its ID"
+						"description": "Delete image by its ID"
 					},
 					"response": [
 						{
-							"name": "Download image: Not found",
+							"name": "Delete image: Successful",
 							"originalRequest": {
-								"method": "GET",
+								"method": "DELETE",
 								"header": [
 									{
 										"description": "Language of error messages. Currently supported languages: uz, en.",
@@ -5916,7 +6074,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{base_url}}/api/v1/images/11/download",
+									"raw": "{{base_url}}/api/v1/images/54",
 									"host": [
 										"{{base_url}}"
 									],
@@ -5924,8 +6082,76 @@
 										"api",
 										"v1",
 										"images",
-										"11",
-										"download"
+										"54"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 25 Oct 2022 16:20:24 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Delete image: Not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "Language of error messages. Currently supported languages: uz, en.",
+										"key": "Accept-Language",
+										"type": "text",
+										"value": "en"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/images/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"images",
+										"1"
 									]
 								}
 							},
@@ -5967,7 +6193,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 14 Jun 2022 12:22:48 GMT"
+									"value": "Tue, 25 Oct 2022 16:20:37 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -5979,38 +6205,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"message\": \"Image not found with id: 11\",\n    \"timestamp\": \"2022-06-14T17:22:48.873671+05:00\",\n    \"http_status\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
-						},
-						{
-							"name": "Download image: Successful",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "Language of error messages. Currently supported languages: uz, en.",
-										"key": "Accept-Language",
-										"type": "text",
-										"value": "en"
-									}
-								],
-								"url": {
-									"raw": "{{base_url}}/api/v1/images/2/download",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"images",
-										"2",
-										"download"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
+							"body": "{\n    \"message\": \"Image not found with id: 1\",\n    \"timestamp\": \"2022-10-25T21:20:37.638465075+05:00\",\n    \"errors\": null,\n    \"http_status\": \"NOT_FOUND\",\n    \"http_code\": 404\n}"
 						}
 					]
 				}
@@ -6243,19 +6438,11 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
-									"key": "Server",
-									"value": "Cowboy"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
 									"key": "X-Content-Type-Options",
 									"value": "nosniff"
 								},
 								{
-									"key": "X-Xss-Protection",
+									"key": "X-XSS-Protection",
 									"value": "1; mode=block"
 								},
 								{
@@ -6271,10 +6458,6 @@
 									"value": "0"
 								},
 								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=31536000 ; includeSubDomains"
-								},
-								{
 									"key": "X-Frame-Options",
 									"value": "DENY"
 								},
@@ -6288,15 +6471,19 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 14 Oct 2022 11:00:09 GMT"
+									"value": "Tue, 25 Oct 2022 16:13:38 GMT"
 								},
 								{
-									"key": "Via",
-									"value": "1.1 vegur"
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Hamdam Xudayberganov\",\n            \"role\": {\n                \"id\": 2,\n                \"title\": \"Admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"hamdam@mail.com\",\n            \"username\": \"hamdam_x\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        {\n            \"id\": 3,\n            \"name\": \"User Tester\",\n            \"role\": {\n                \"id\": 3,\n                \"title\": \"User\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": true\n            },\n            \"image\": null,\n            \"email\": \"user@mail.com\",\n            \"username\": \"user_tester\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 3\n}"
+							"body": "{\n    \"page\": 1,\n    \"items\": [\n        {\n            \"id\": 1,\n            \"name\": \"Farrukh Khusainov\",\n            \"role\": {\n                \"id\": 1,\n                \"title\": \"Super admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_DELETE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_DELETE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_DELETE_USER\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_CREATE_ROLE\",\n                    \"CAN_UPDATE_ROLE\",\n                    \"CAN_DELETE_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_SET_USER_ROLE\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"farrukhbekkhusainov@gmail.com\",\n            \"username\": \"farrukh_kh\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Hamdam Xudayberganov\",\n            \"role\": {\n                \"id\": 2,\n                \"title\": \"Admin\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_UPDATE_IMAGE\",\n                    \"CAN_DELETE_IMAGE\",\n                    \"CAN_SET_LANGUAGE_STATE\",\n                    \"CAN_SET_FRAMEWORK_STATE\",\n                    \"CAN_UPDATE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OTHER_USER\",\n                    \"CAN_UPDATE_OTHERS_LANGUAGE\",\n                    \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n                    \"CAN_VIEW_LANGUAGES_BY_STATE\",\n                    \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_DELETE_OTHERS_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": false\n            },\n            \"image\": null,\n            \"email\": \"hamdam@mail.com\",\n            \"username\": \"hamdam_x\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        {\n            \"id\": 3,\n            \"name\": \"User Tester\",\n            \"role\": {\n                \"id\": 3,\n                \"title\": \"User\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": true\n            },\n            \"image\": null,\n            \"email\": \"user@mail.com\",\n            \"username\": \"user_tester\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Arthur Smith\",\n            \"role\": {\n                \"id\": 3,\n                \"title\": \"User\",\n                \"permissions\": [\n                    \"CAN_CREATE_LANGUAGE\",\n                    \"CAN_CREATE_FRAMEWORK\",\n                    \"CAN_CREATE_REVIEW\",\n                    \"CAN_VIEW_ROLE\",\n                    \"CAN_UPDATE_OWN_LANGUAGE\",\n                    \"CAN_UPDATE_OWN_FRAMEWORK\",\n                    \"CAN_UPDATE_OWN_REVIEW\",\n                    \"CAN_UPDATE_OWN_USER\",\n                    \"CAN_DELETE_OWN_REVIEW\",\n                    \"CAN_VOTE_REVIEW\"\n                ],\n                \"is_default\": true\n            },\n            \"image\": {\n                \"id\": 152,\n                \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n                \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n                \"size\": 0.18983555\n            },\n            \"email\": \"arthur.king@mail.uk\",\n            \"username\": \"kotlin_lover\",\n            \"is_enabled\": true,\n            \"is_locked\": false\n        }\n    ],\n    \"next_page\": null,\n    \"prev_page\": null,\n    \"total_pages\": 1,\n    \"total_items\": 4\n}"
 						}
 					]
 				},
@@ -6444,19 +6631,11 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
-									"key": "Server",
-									"value": "Cowboy"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
 									"key": "X-Content-Type-Options",
 									"value": "nosniff"
 								},
 								{
-									"key": "X-Xss-Protection",
+									"key": "X-XSS-Protection",
 									"value": "1; mode=block"
 								},
 								{
@@ -6472,10 +6651,6 @@
 									"value": "0"
 								},
 								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=31536000 ; includeSubDomains"
-								},
-								{
 									"key": "X-Frame-Options",
 									"value": "DENY"
 								},
@@ -6489,11 +6664,15 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 14 Oct 2022 11:00:26 GMT"
+									"value": "Tue, 25 Oct 2022 16:13:52 GMT"
 								},
 								{
-									"key": "Via",
-									"value": "1.1 vegur"
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
 								}
 							],
 							"cookie": [],
@@ -6561,7 +6740,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\":\"Farrukh Khusainov\",\n    \"email\":\"farrukhbekkhusainov@gmail.com\",\n    \"username\":\"farrukh_kh\",\n    \"image_id\":2\n}",
+									"raw": "{\n    \"name\":\"Farrukh Khusainov\",\n    \"email\":\"farrukhbekkhusainov@gmail.com\",\n    \"username\":\"farrukh_kh\",\n    \"image_id\":152\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -6586,19 +6765,11 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
-									"key": "Server",
-									"value": "Cowboy"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
 									"key": "X-Content-Type-Options",
 									"value": "nosniff"
 								},
 								{
-									"key": "X-Xss-Protection",
+									"key": "X-XSS-Protection",
 									"value": "1; mode=block"
 								},
 								{
@@ -6614,10 +6785,6 @@
 									"value": "0"
 								},
 								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=31536000 ; includeSubDomains"
-								},
-								{
 									"key": "X-Frame-Options",
 									"value": "DENY"
 								},
@@ -6631,15 +6798,19 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 14 Oct 2022 11:01:58 GMT"
+									"value": "Tue, 25 Oct 2022 16:14:16 GMT"
 								},
 								{
-									"key": "Via",
-									"value": "1.1 vegur"
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"name\": \"Farrukh Khusainov\",\n    \"role\": {\n        \"id\": 1,\n        \"title\": \"Super admin\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_DELETE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_DELETE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_DELETE_USER\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_CREATE_ROLE\",\n            \"CAN_UPDATE_ROLE\",\n            \"CAN_DELETE_ROLE\",\n            \"CAN_UPDATE_IMAGE\",\n            \"CAN_DELETE_IMAGE\",\n            \"CAN_SET_LANGUAGE_STATE\",\n            \"CAN_SET_FRAMEWORK_STATE\",\n            \"CAN_UPDATE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OTHER_USER\",\n            \"CAN_SET_USER_ROLE\",\n            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": false\n    },\n    \"image\": {\n        \"id\": 2\n    },\n    \"email\": \"farrukhbekkhusainov@gmail.com\",\n    \"username\": \"farrukh_kh\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Farrukh Khusainov\",\n    \"role\": {\n        \"id\": 1,\n        \"title\": \"Super admin\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_DELETE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_DELETE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_DELETE_USER\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_CREATE_ROLE\",\n            \"CAN_UPDATE_ROLE\",\n            \"CAN_DELETE_ROLE\",\n            \"CAN_UPDATE_IMAGE\",\n            \"CAN_DELETE_IMAGE\",\n            \"CAN_SET_LANGUAGE_STATE\",\n            \"CAN_SET_FRAMEWORK_STATE\",\n            \"CAN_UPDATE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OTHER_USER\",\n            \"CAN_SET_USER_ROLE\",\n            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": false\n    },\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"email\": \"farrukhbekkhusainov@gmail.com\",\n    \"username\": \"farrukh_kh\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
 						},
 						{
 							"name": "Update user: Not found",
@@ -7006,19 +7177,11 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
-									"key": "Server",
-									"value": "Cowboy"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
 									"key": "X-Content-Type-Options",
 									"value": "nosniff"
 								},
 								{
-									"key": "X-Xss-Protection",
+									"key": "X-XSS-Protection",
 									"value": "1; mode=block"
 								},
 								{
@@ -7034,10 +7197,6 @@
 									"value": "0"
 								},
 								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=31536000 ; includeSubDomains"
-								},
-								{
 									"key": "X-Frame-Options",
 									"value": "DENY"
 								},
@@ -7051,15 +7210,19 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 14 Oct 2022 11:04:52 GMT"
+									"value": "Tue, 25 Oct 2022 16:14:30 GMT"
 								},
 								{
-									"key": "Via",
-									"value": "1.1 vegur"
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"name\": \"Farrukh Khusainov\",\n    \"role\": {\n        \"id\": 1,\n        \"title\": \"Super admin\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_DELETE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_DELETE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_DELETE_USER\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_CREATE_ROLE\",\n            \"CAN_UPDATE_ROLE\",\n            \"CAN_DELETE_ROLE\",\n            \"CAN_UPDATE_IMAGE\",\n            \"CAN_DELETE_IMAGE\",\n            \"CAN_SET_LANGUAGE_STATE\",\n            \"CAN_SET_FRAMEWORK_STATE\",\n            \"CAN_UPDATE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OTHER_USER\",\n            \"CAN_SET_USER_ROLE\",\n            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": false\n    },\n    \"image\": {\n        \"id\": 2\n    },\n    \"email\": \"farrukhbekkhusainov@gmail.com\",\n    \"username\": \"farrukh_kh\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Farrukh Khusainov\",\n    \"role\": {\n        \"id\": 1,\n        \"title\": \"Super admin\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_DELETE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_DELETE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_DELETE_USER\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_CREATE_ROLE\",\n            \"CAN_UPDATE_ROLE\",\n            \"CAN_DELETE_ROLE\",\n            \"CAN_UPDATE_IMAGE\",\n            \"CAN_DELETE_IMAGE\",\n            \"CAN_SET_LANGUAGE_STATE\",\n            \"CAN_SET_FRAMEWORK_STATE\",\n            \"CAN_UPDATE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OTHER_USER\",\n            \"CAN_SET_USER_ROLE\",\n            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": false\n    },\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"email\": \"farrukhbekkhusainov@gmail.com\",\n    \"username\": \"farrukh_kh\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
 						}
 					]
 				},
@@ -7198,7 +7361,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"image_id\":1\n}",
+									"raw": "{\n    \"image_id\":152\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -7224,19 +7387,11 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
-									"key": "Server",
-									"value": "Cowboy"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
 									"key": "X-Content-Type-Options",
 									"value": "nosniff"
 								},
 								{
-									"key": "X-Xss-Protection",
+									"key": "X-XSS-Protection",
 									"value": "1; mode=block"
 								},
 								{
@@ -7252,10 +7407,6 @@
 									"value": "0"
 								},
 								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=31536000 ; includeSubDomains"
-								},
-								{
 									"key": "X-Frame-Options",
 									"value": "DENY"
 								},
@@ -7269,15 +7420,19 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 14 Oct 2022 11:06:44 GMT"
+									"value": "Tue, 25 Oct 2022 16:14:53 GMT"
 								},
 								{
-									"key": "Via",
-									"value": "1.1 vegur"
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"name\": \"Farrukh Khusainov\",\n    \"role\": {\n        \"id\": 1,\n        \"title\": \"Super admin\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_DELETE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_DELETE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_DELETE_USER\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_CREATE_ROLE\",\n            \"CAN_UPDATE_ROLE\",\n            \"CAN_DELETE_ROLE\",\n            \"CAN_UPDATE_IMAGE\",\n            \"CAN_DELETE_IMAGE\",\n            \"CAN_SET_LANGUAGE_STATE\",\n            \"CAN_SET_FRAMEWORK_STATE\",\n            \"CAN_UPDATE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OTHER_USER\",\n            \"CAN_SET_USER_ROLE\",\n            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": false\n    },\n    \"image\": {\n        \"id\": 1\n    },\n    \"email\": \"farrukhbekkhusainov@gmail.com\",\n    \"username\": \"farrukh_kh\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
+							"body": "{\n    \"id\": 1,\n    \"name\": \"Farrukh Khusainov\",\n    \"role\": {\n        \"id\": 1,\n        \"title\": \"Super admin\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_DELETE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_DELETE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_DELETE_USER\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_CREATE_ROLE\",\n            \"CAN_UPDATE_ROLE\",\n            \"CAN_DELETE_ROLE\",\n            \"CAN_UPDATE_IMAGE\",\n            \"CAN_DELETE_IMAGE\",\n            \"CAN_SET_LANGUAGE_STATE\",\n            \"CAN_SET_FRAMEWORK_STATE\",\n            \"CAN_UPDATE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OTHER_USER\",\n            \"CAN_SET_USER_ROLE\",\n            \"CAN_UPDATE_OTHERS_LANGUAGE\",\n            \"CAN_UPDATE_OTHERS_FRAMEWORK\",\n            \"CAN_VIEW_LANGUAGES_BY_STATE\",\n            \"CAN_VIEW_FRAMEWORKS_BY_STATE\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_DELETE_OTHERS_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": false\n    },\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"email\": \"farrukhbekkhusainov@gmail.com\",\n    \"username\": \"farrukh_kh\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
 						},
 						{
 							"name": "Set user image: Image id is not valid",
@@ -7522,19 +7677,11 @@
 							"_postman_previewlanguage": "json",
 							"header": [
 								{
-									"key": "Server",
-									"value": "Cowboy"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
 									"key": "X-Content-Type-Options",
 									"value": "nosniff"
 								},
 								{
-									"key": "X-Xss-Protection",
+									"key": "X-XSS-Protection",
 									"value": "1; mode=block"
 								},
 								{
@@ -7550,10 +7697,6 @@
 									"value": "0"
 								},
 								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=31536000 ; includeSubDomains"
-								},
-								{
 									"key": "X-Frame-Options",
 									"value": "DENY"
 								},
@@ -7567,15 +7710,19 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 14 Oct 2022 11:08:45 GMT"
+									"value": "Tue, 25 Oct 2022 16:16:09 GMT"
 								},
 								{
-									"key": "Via",
-									"value": "1.1 vegur"
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 3,\n    \"name\": \"User Tester\",\n    \"role\": {\n        \"id\": 3,\n        \"title\": \"User\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": true\n    },\n    \"image\": null,\n    \"email\": \"user@mail.com\",\n    \"username\": \"user_tester\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
+							"body": "{\n    \"id\": 3,\n    \"name\": \"User Tester\",\n    \"role\": {\n        \"id\": 3,\n        \"title\": \"User\",\n        \"permissions\": [\n            \"CAN_CREATE_LANGUAGE\",\n            \"CAN_CREATE_FRAMEWORK\",\n            \"CAN_CREATE_REVIEW\",\n            \"CAN_VIEW_ROLE\",\n            \"CAN_UPDATE_OWN_LANGUAGE\",\n            \"CAN_UPDATE_OWN_FRAMEWORK\",\n            \"CAN_UPDATE_OWN_REVIEW\",\n            \"CAN_UPDATE_OWN_USER\",\n            \"CAN_DELETE_OWN_REVIEW\",\n            \"CAN_VOTE_REVIEW\"\n        ],\n        \"is_default\": true\n    },\n    \"image\": {\n        \"id\": 152,\n        \"name\": \"Kotlin_Icon.svg-1666713562362.png\",\n        \"url\": \"https://progee-api-v1.s3.amazonaws.com/images/Kotlin_Icon.svg-1666713562362.png\",\n        \"size\": 0.18983555\n    },\n    \"email\": \"user@mail.com\",\n    \"username\": \"user_tester\",\n    \"is_enabled\": true,\n    \"is_locked\": false\n}"
 						},
 						{
 							"name": "Set user password: Current password is wrong",
