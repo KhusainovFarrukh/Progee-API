@@ -7,7 +7,7 @@
 **Implemented:**
   - Saving images to AWS S3
   - Testing AWS S3 with LocalStack and TestContainers
-  - 'Get all images' & 'Delete image by id' fundtionalities
+  - 'Get all images' & 'Delete image by id' functionalities
 
 **Minor changes:**
   - Code refactor
