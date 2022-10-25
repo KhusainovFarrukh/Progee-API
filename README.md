@@ -8,6 +8,7 @@
 ## Table of Contents
 
 - [Description](#description)
+- [Releases](#releases)
 - [API docs](#api-docs)
 - [Database relations map](#database-relations-map)
 - [Frontend (Android client)](#frontend-android-client)
@@ -22,6 +23,12 @@
 Hi! This is **Progee-API v1**. 
 Progee-API is a REST API for providing information about programming languages, and frameworks, their popularity, and respect for them among the community of developers (with reviews and scores). 
 Currently working features: **auth, languages, frameworks, reviews, dynamic roles with permissions**.
+
+## Releases
+
+Current version is v1.0.1.
+
+You can see changes and earlier versions on [CHANGELOG.md](https://github.com/KhusainovFarrukh/Progee-API/blob/master/CHANGELOG.md)
 
 ## API docs
 
