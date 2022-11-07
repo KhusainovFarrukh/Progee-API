@@ -57,6 +57,8 @@ This REST API is developed using Java programming language and Spring Boot start
   - [Spring Security](https://spring.io/projects/spring-security) for authentication and authorization
   - [JWT](https://auth0.com/docs/secure/tokens/json-web-tokens) for tokens and share security information between two parties — a client and a server
   - [AWS S3](https://aws.amazon.com/s3/) for storing images and other files
+  - [Docker](https://www.docker.com/) for packaging into container
+  - [GitHub Actions](https://github.com/features/actions) for CI/CD
   - [JUnit 5](https://junit.org/junit5/) for unit and integration tests
   - [TestContainer](https://www.testcontainers.org/) for using Docker images in integration tests
   - [Localstack](https://github.com/localstack/localstack) for mocking AWS services in integration tests
